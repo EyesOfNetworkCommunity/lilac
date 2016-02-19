@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<config>
+ <log>
+  <ident>lilac</ident>
+  <level>0</level>
+ </log>
+ <propel>
+  <datasources default="lilac">
+   <datasource id="lilac">
+    <!-- the Propel adapter will usually be the same as phptype of connection DSN -->
+    <adapter>mysql</adapter>
+    <connection>
+     <dsn>mysql:host=localhost;dbname=lilac</dsn>
+     <user>root</user>
+     <password></password>
+     <options>
+      <option id="ATTR_PERSISTENT">false</option>
+     </options>
+    </connection>
+   </datasource>
+  </datasources>
+ </propel>
+</config>

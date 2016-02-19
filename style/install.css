@@ -1,0 +1,132 @@
+html, body {
+	min-height: 100%;
+	height: 100%;
+	font-family: Helvetica, arial, sans-serif;
+	color: #222;
+}
+
+#main {
+	margin: 10px;
+}
+
+
+#install {
+	width: 900px;
+	margin: 0pt auto;
+	border-width: 0px 1px;
+	border-style: solid;
+	border-color: #000;
+	min-height: 100%;
+	background-color: #efefef;
+	padding-bottom: 20px;
+}
+
+#install #header {
+	background-image: url('../images/logo.gif');
+	background-repeat: no-repeat;
+	background-color: #aaa;
+	height: 50px;
+	color: #fff;
+	font-size: 26pt;
+	padding-left: 80px;
+	border-width: 0px 0px 1px 0px;
+	border-style: solid;
+	border-color: #000;
+}
+
+#install #header #version {
+	float: right;
+	font-size: 0.5em;
+}
+
+#install #body {
+	margin: 0pt 10px;
+}
+
+.notice {
+	background: #FFFF99;
+	padding: 5px;
+	margin: 10px;
+	border: 1px dashed #ccc;
+}
+
+.error {
+	background: #FF9999;
+	padding: 5px;
+	margin: 10px;
+	border: 1px dashed #ccc;
+}
+
+.complete {
+	background: #66CC66;
+	padding: 5px;
+	margin: 10px;
+	border: 1px dashed #ccc;
+}
+
+.checks {
+	margin: 5px;
+}
+
+.checks div {
+	margin: 5px 50px;
+}
+
+.failure {
+	background-image: url('../images/icons/cancel.png');
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+.success {
+	background-image: url('../images/icons/accept.png');
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+.warning {
+	background-image: url('../images/icons/error.png');
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	line-height: 16px;
+}
+
+h2 {
+	font-size: 1.2em;
+}
+
+fieldset {
+	margin: 1em 0;
+	padding: 1em;
+	border: 1px solid #ccc;
+	background: #f8f8f8;
+}
+
+legend {
+	font-weight: bold;
+	display: block;
+}
+
+fieldset label {
+	float: left;
+	width: 10em;
+	font-weight: bold;
+}
+
+fieldset.regform label {
+	width: 30em;
+}
+
+input {
+	width: 200px;
+}
+
+input.radio, input.checkbox, input.submit {
+	width: auto;
+}
+
+em {
+	font-style: italic;
+}

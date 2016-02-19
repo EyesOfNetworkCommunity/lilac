@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+
+<database name="lilac" defaultIdMethod="native">
+
+	<table name="lilac_configuration" description="Lilac Configuration">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="version" type="varchar" size="255" />
+	</table>
+
+	<table name="import_job" description="Import Job Information">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="name" type="varchar" size="255" required="true" />
+ 		<column name="description" type="varchar" size="255" required="true" />
+ 		<column name="config" type="LONGVARCHAR" required="true" />
+ 		<column name="start_time" type="timestamp" />
+ 		<column name="end_time" type="timestamp" />
+ 		<column name="status" type="varchar" size="255" />
+ 		<column name="status_code" type="integer" required="true" />
+ 		<column name="status_change_time" type="timestamp" />
+ 		<column name="stats" type="LONGVARCHAR" required="true" />
+ 		<column name="cmd" type="varchar" size="255" required="false" />
+	</table>
+	
+	<table name="export_job" description="Export Job Information">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="name" type="varchar" size="255" required="true" />
+ 		<column name="description" type="varchar" size="255" required="true" />
+ 		<column name="config" type="LONGVARCHAR" required="true" />
+ 		<column name="start_time" type="timestamp" />
+ 		<column name="end_time" type="timestamp" />
+ 		<column name="status" type="varchar" size="255" />
+  		<column name="status_code" type="integer" required="true" />
+ 		<column name="status_change_time" type="timestamp" />
+ 		<column name="stats" type="LONGVARCHAR" required="true" />
+ 		<column name="cmd" type="varchar" size="255" required="false" />
+	</table>	
+	
+	<table name="export_log_entry" description="Export Job Entry">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="job" type="integer" />
+		<foreign-key foreignTable="export_job" onDelete="cascade">
+			<reference local="job" foreign="id" />
+		</foreign-key>
+		<column name="time" type="timestamp" required="true" />
+		<column name="text" type="LONGVARCHAR" required="true" />
+		<column name="type" type="integer" required="true"  />
+	</table>	
+	
+	<table name="import_log_entry" description="Import Job Entry">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="job" type="integer" />
+		<foreign-key foreignTable="import_job" onDelete="cascade">
+			<reference local="job" foreign="id" />
+		</foreign-key>
+		<column name="time" type="timestamp" required="true" />
+		<column name="text" type="LONGVARCHAR" required="true" />
+		<column name="type" type="integer" required="true"  />
+	</table>
+
+	<table name="label" description="Language based labels">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="section" type="varchar" size="255" />
+		<column name="name" type="varchar" size="255" />
+		<column name="label" type="LONGVARCHAR" />
+	</table>
+
+	<table name="nagios_broker_module" description="Event Broker Modules">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="line" type="varchar" size="255" required="true" />
+	</table>
+	
+	<table name="nagios_cgi_configuration" description="CGI Configuration">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />	
+		<column name="physical_html_path" type="varchar" size="255" required="false" />
+		<column name="url_html_path" type="varchar" size="255" required="false" />
+		<column name="use_authentication" type="boolean" required="false" />
+		<column name="default_user_name" type="varchar" size="255" required="false" />
+		<column name="authorized_for_system_information" type="varchar" size="255" required="false" />
+		<column name="authorized_for_system_commands" type="varchar" size="255" required="false" />
+		<column name="authorized_for_configuration_information" type="varchar" size="255" required="false" />
+		<column name="authorized_for_all_hosts" type="varchar" size="255" required="false" />
+		<column name="authorized_for_all_host_commands" type="varchar" size="255" required="false" />
+		<column name="authorized_for_all_services" type="varchar" size="255" required="false" />
+		<column name="authorized_for_all_service_commands" type="varchar" size="255" required="false" />
+        <column name="lock_author_names" type="boolean" />
+		<column name="statusmap_background_image" type="varchar" size="255" required="false" />
+		<column name="default_statusmap_layout" type="tinyint" required="false" />
+		<column name="statuswrl_include" type="varchar" size="255" required="false" />
+		<column name="default_statuswrl_layout" type="tinyint" required="false" />
+		<column name="refresh_rate" type="integer" required="false" />
+		<column name="host_unreachable_sound" type="varchar" size="255" required="false" />
+		<column name="host_down_sound" type="varchar" size="255" required="false" />
+		<column name="service_critical_sound" type="varchar" size="255" required="false" />
+		<column name="service_warning_sound" type="varchar" size="255" required="false" />
+		<column name="service_unknown_sound" type="varchar" size="255" required="false" />
+		<column name="ping_syntax" type="varchar" size="255" required="false" />		
+		<column name="escape_html_tags" type="boolean" />
+	        <column name="notes_url_target" type="varchar" size="255" />
+        	<column name="action_url_target" type="varchar" size="255" />
+	        <column name="enable_splunk_integration" type="boolean" />
+        	<column name="splunk_url" type="varchar" size="255" />
+	</table>
+
+	<table name="nagios_command" description="Nagios Command">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="line" type="longvarchar" required="true" />		
+		<column name="description" type="LONGVARCHAR" size="255" required="false" />		
+	</table>
+	
+	<table name="nagios_timeperiod" description="Nagios Timeperiods">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />
+	</table>
+	
+	<table name="nagios_timeperiod_entry" description="Time Period Entries">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="timeperiod_id" type="integer" />
+		<column name="entry" type="varchar" size="255" required="true" />
+		<column name="value" type="varchar" size="255" required="true" />
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="timeperiod_id" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_timeperiod_exclude" description="Time Period Excludes">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="timeperiod_id" type="integer" />
+		<column name="excluded_timeperiod" type="integer" />
+		
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="timeperiod_id" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="excluded_timeperiod" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_contact" description="Nagios Contact">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />		
+		<column name="email" type="varchar" size="255" required="false" />		
+		<column name="pager" type="varchar" size="255" required="false" />
+		
+		<column name="host_notifications_enabled" type="boolean" required="true" />
+		<column name="service_notifications_enabled" type="boolean" required="true" />		
+		
+		<column name="host_notification_period" type="integer"  />
+		<column name="service_notification_period" type="integer"  />
+		
+		<column name="host_notification_on_down" type="boolean" required="true" />
+		<column name="host_notification_on_unreachable" type="boolean" required="true" />
+		<column name="host_notification_on_recovery" type="boolean" required="true" />
+		<column name="host_notification_on_flapping" type="boolean" required="true" />
+		<column name="host_notification_on_scheduled_downtime" type="boolean" required="true" />
+		<column name="service_notification_on_warning" type="boolean" required="true" />
+		<column name="service_notification_on_unknown" type="boolean" required="true" />
+		<column name="service_notification_on_critical" type="boolean" required="true" />
+		<column name="service_notification_on_recovery" type="boolean" required="true" />
+		<column name="service_notification_on_flapping" type="boolean" required="true" />
+		<column name="can_submit_commands" type="boolean" required="true" />
+		<column name="retain_status_information" type="boolean" required="true" />
+		<column name="retain_nonstatus_information" type="boolean" required="true" />
+		
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="host_notification_period" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">		
+			<reference local="service_notification_period" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_contact_address" description="Nagios Contact Address">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="contact" type="integer" required="true" />
+		<column name="address" type="varchar" size="255" required="true" />	
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_contact_group" description="Nagios Contact Group">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />		
+	</table>
+	
+	<table name="nagios_contact_group_member" description="Member of a Nagios Contact Group">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="contact" type="integer" required="true" />
+  		<column name="contactgroup" type="integer" required="true" />
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_contact_group" onDelete="cascade">
+			<reference local="contactgroup" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_contact_notification_command" description="Notification Command for a Nagios Contact">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="contact_id" type="integer" required="true" />
+		<column name="command" type="integer" required="true" />
+		<column name="type" type="varchar" size="255" required="true" />
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact_id" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="command" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_host_template" description="Nagios Host Template">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="description" type="varchar" size="255" required="false" />
+	    <columm name="display_name" type="varchar" size="255" required="true" />	
+
+        <column name="initial_state" type="varchar" size="1" />
+		
+		<column name="check_command" type="integer" />
+
+        <column name="retry_interval" type="integer" />
+        <column name="first_notification_delay" type="integer" />
+		
+		<column name="maximum_check_attempts" type="integer" />
+		<column name="check_interval" type="integer" />
+		<column name="passive_checks_enabled" type="boolean" />
+		<column name="check_period" type="integer" />
+
+		<column name="obsess_over_host" type="boolean" />
+		<column name="check_freshness" type="boolean" />
+		<column name="freshness_threshold" type="integer" />
+		<column name="active_checks_enabled" type="boolean" />
+		<column name="checks_enabled" type="boolean" />
+		<column name="event_handler" type="integer" />
+		<column name="event_handler_enabled" type="boolean" />
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="check_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="event_handler" foreign="id" />
+		</foreign-key>
+		
+		<column name="low_flap_threshold" type="integer" />
+		<column name="high_flap_threshold" type="integer" />
+		<column name="flap_detection_enabled" type="boolean" />
+		<column name="process_perf_data" type="boolean" />
+		<column name="retain_status_information" type="boolean" />
+		<column name="retain_nonstatus_information" type="boolean" />
+		<column name="notification_interval" type="integer" />
+		<column name="notification_period" type="integer" />
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="check_period" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="notification_period" foreign="id" />
+		</foreign-key>
+		<column name="notifications_enabled" type="boolean" />
+		<column name="notification_on_down" type="boolean" />
+		<column name="notification_on_unreachable" type="boolean" />
+		<column name="notification_on_recovery" type="boolean" />
+		<column name="notification_on_flapping" type="boolean" />
+        <column name="notification_on_scheduled_downtime" type="boolean" />
+        <column name="stalking_on_up" type="boolean" />
+		<column name="stalking_on_down" type="boolean" />
+		<column name="stalking_on_unreachable" type="boolean" />
+		<column name="failure_prediction_enabled" type="boolean" />
+
+        <column name="flap_detection_on_up" type="boolean" />
+        <column name="flap_detection_on_down" type="boolean" />
+        <column name="flap_detection_on_unreachable" type="boolean" />
+
+		<column name="notes" type="varchar" size="255" />
+		<column name="notes_url" type="varchar" size="255"  />
+		<column name="action_url" type="varchar" size="255"  />
+		<column name="icon_image" type="varchar" size="255"  />
+		<column name="icon_image_alt" type="varchar" size="255"  />
+		<column name="vrml_image" type="varchar" size="255"  />
+		<column name="statusmap_image" type="varchar" size="255"  />
+		<column name="two_d_coords" type="varchar" size="255"  />
+		<column name="three_d_coords" type="varchar" size="255"  />
+
+		
+		<!-- New AutoDiscovery Columns -->
+		<column name="autodiscovery_address_filter" type="varchar" size="255" />
+		<column name="autodiscovery_hostname_filter" type="varchar" size="255" />
+		<column name="autodiscovery_os_family_filter" type="varchar" size="255" />
+		<column name="autodiscovery_os_generation_filter" type="varchar" size="255" />
+		<column name="autodiscovery_os_vendor_filter" type="varchar" size="255" />
+	</table>
+	
+	<table name="nagios_host_template_autodiscovery_service">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="host_template" type="integer" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<column name="name" type="varchar" size="255" />
+		<column name="protocol" type="varchar" size="255" />
+		<column name="port" type="varchar" size="255" />
+		<column name="product" type="varchar" size="255" />
+		<column name="version" type="varchar" size="255" />
+		<column name="extra_information" type="varchar" size="255" />
+	</table>
+	
+	<table name="nagios_host" description="Nagios Host">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />
+        <column name="display_name" type="varchar" size="255" required="true" />
+        <column name="initial_state" type="varchar" size="1" />
+		<column name="address" type="varchar" size="255" required="true" />
+		<column name="check_command" type="integer" />
+        <column name="retry_interval" type="integer" />
+        <column name="first_notification_delay" type="integer" />
+		<column name="maximum_check_attempts" type="integer" />
+		<column name="check_interval" type="integer" />
+		<column name="passive_checks_enabled" type="boolean" />
+		<column name="check_period" type="integer" />
+		<column name="obsess_over_host" type="boolean" />
+		<column name="check_freshness" type="boolean" />
+		<column name="freshness_threshold" type="integer" />
+		<column name="active_checks_enabled" type="boolean" />
+		<column name="checks_enabled" type="boolean" />
+		<column name="event_handler" type="integer" />
+		<column name="event_handler_enabled" type="boolean" />
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="check_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="event_handler" foreign="id" />
+		</foreign-key>
+		<column name="low_flap_threshold" type="integer" />
+		<column name="high_flap_threshold" type="integer" />
+		<column name="flap_detection_enabled" type="boolean" />
+		<column name="process_perf_data" type="boolean" />
+		<column name="retain_status_information" type="boolean" />
+		<column name="retain_nonstatus_information" type="boolean" />
+		<column name="notification_interval" type="integer" />
+		<column name="notification_period" type="integer" />
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="check_period" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="notification_period" foreign="id" />
+		</foreign-key>
+		<column name="notifications_enabled" type="boolean" />
+		<column name="notification_on_down" type="boolean" />
+		<column name="notification_on_unreachable" type="boolean" />
+		<column name="notification_on_recovery" type="boolean" />
+		<column name="notification_on_flapping" type="boolean" />
+        <column name="notification_on_scheduled_downtime" type="boolean" />
+        <column name="stalking_on_up" type="boolean" />
+		<column name="stalking_on_down" type="boolean" />
+		<column name="stalking_on_unreachable" type="boolean" />
+		<column name="failure_prediction_enabled" type="boolean" />
+
+        <column name="flap_detection_on_up" type="boolean" />
+        <column name="flap_detection_on_down" type="boolean" />
+        <column name="flap_detection_on_unreachable" type="boolean" />
+
+		<column name="notes" type="varchar" size="255" />
+		<column name="notes_url" type="varchar" size="255"  />
+		<column name="action_url" type="varchar" size="255"  />
+		<column name="icon_image" type="varchar" size="255"  />
+		<column name="icon_image_alt" type="varchar" size="255"  />
+		<column name="vrml_image" type="varchar" size="255"  />
+		<column name="statusmap_image" type="varchar" size="255"  />
+		<column name="two_d_coords" type="varchar" size="255"  />
+		<column name="three_d_coords" type="varchar" size="255"  />
+
+	</table>
+
+	<table name="nagios_service_template" description="Nagios Service Template">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="description" type="varchar" size="255" required="false" />
+		<column name="initial_state" type="varchar" size="1" />
+		<column name="is_volatile" type="boolean" />
+		<column name="check_command" type="integer" />
+		<column name="maximum_check_attempts" type="integer" />
+		<column name="normal_check_interval" type="integer" />
+		<column name="retry_interval" type="integer" />
+		<column name="first_notification_delay" type="integer" />
+		<column name="active_checks_enabled" type="boolean" />
+		<column name="passive_checks_enabled" type="boolean" />
+		<column name="check_period" type="integer" />
+		<column name="parallelize_check" type="boolean" />
+		<column name="obsess_over_service" type="boolean" />
+		<column name="check_freshness" type="boolean" />
+		<column name="freshness_threshold" type="integer" />
+		<column name="event_handler" type="integer" />
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="check_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="event_handler" foreign="id" />
+		</foreign-key>
+		<column name="event_handler_enabled" type="boolean" />
+		<column name="low_flap_threshold" type="integer" />
+		<column name="high_flap_threshold" type="integer" />
+		<column name="flap_detection_enabled" type="boolean" />
+		<column name="flap_detection_on_ok" type="boolean" />
+		<column name="flap_detection_on_warning" type="boolean" />
+		<column name="flap_detection_on_critical" type="boolean" />
+		<column name="flap_detection_on_unknown" type="boolean" />
+		<column name="process_perf_data" type="boolean" />
+		<column name="retain_status_information" type="boolean" />
+		<column name="retain_nonstatus_information" type="boolean" />
+		<column name="notification_interval" type="integer" />
+		<column name="notification_period" type="integer" />
+		<column name="notification_on_warning" type="boolean" />
+		<column name="notification_on_unknown" type="boolean" />
+		<column name="notification_on_critical" type="boolean" />
+		<column name="notification_on_recovery" type="boolean" />
+		<column name="notification_on_flapping" type="boolean" />
+		<column name="notification_on_scheduled_downtime" type="boolean" />
+		<column name="notifications_enabled" type="boolean" />
+		<column name="stalking_on_ok" type="boolean" />
+		<column name="stalking_on_warning" type="boolean" />
+		<column name="stalking_on_unknown" type="boolean" />
+		<column name="stalking_on_critical" type="boolean" />
+		<column name="failure_prediction_enabled" type="boolean" />
+
+		<column name="notes" type="varchar" size="255" required="false" />
+		<column name="notes_url" type="varchar" size="255" required="false" />
+		<column name="action_url" type="varchar" size="255" required="false" />
+		<column name="icon_image" type="varchar" size="255" required="false" />
+		<column name="icon_image_alt" type="varchar" size="255" required="false" />
+
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="check_period" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="notification_period" foreign="id" />
+		</foreign-key>
+	</table>
+	
+			
+	<table name="nagios_service" description="Nagios Service">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="description" type="varchar" size="255" required="false" />
+        <column name="display_name" type="varchar" size="255" required="false" />
+		<column name="host" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<column name="host_template" type="integer" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>		
+		<column name="hostgroup" type="integer" />
+		<foreign-key foreignTable="nagios_hostgroup" onDelete="cascade">
+			<reference local="hostgroup" foreign="id" />
+		</foreign-key>		
+	    <column name="initial_state" type="varchar" size="1" />
+		<column name="is_volatile" type="boolean" />
+		<column name="check_command" type="integer" />
+		<column name="maximum_check_attempts" type="integer" />
+		<column name="normal_check_interval" type="integer" />
+		<column name="retry_interval" type="integer" />
+        <column name="first_notification_delay" type="integer" />
+		<column name="active_checks_enabled" type="boolean" />
+		<column name="passive_checks_enabled" type="boolean" />
+		<column name="check_period" type="integer" />
+		<column name="parallelize_check" type="boolean" />
+		<column name="obsess_over_service" type="boolean" />
+		<column name="check_freshness" type="boolean" />
+		<column name="freshness_threshold" type="integer" />
+		<column name="event_handler" type="integer" />
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="check_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="setnull">
+			<reference local="event_handler" foreign="id" />
+		</foreign-key>
+		<column name="event_handler_enabled" type="boolean" />
+		<column name="low_flap_threshold" type="integer" />
+		<column name="high_flap_threshold" type="integer" />
+		<column name="flap_detection_enabled" type="boolean" />
+        <column name="flap_detection_on_ok" type="boolean" />
+        <column name="flap_detection_on_warning" type="boolean" />
+        <column name="flap_detection_on_critical" type="boolean" />
+        <column name="flap_detection_on_unknown" type="boolean" />
+        <column name="process_perf_data" type="boolean" />
+		<column name="retain_status_information" type="boolean" />
+		<column name="retain_nonstatus_information" type="boolean" />
+		<column name="notification_interval" type="integer" />
+		<column name="notification_period" type="integer" />
+		<column name="notification_on_warning" type="boolean" />
+		<column name="notification_on_unknown" type="boolean" />
+		<column name="notification_on_critical" type="boolean" />
+		<column name="notification_on_recovery" type="boolean" />
+		<column name="notification_on_flapping" type="boolean" />
+        <column name="notification_on_scheduled_downtime" type="boolean" />
+        <column name="notifications_enabled" type="boolean" />
+		<column name="stalking_on_ok" type="boolean" />
+		<column name="stalking_on_warning" type="boolean" />
+		<column name="stalking_on_unknown" type="boolean" />
+		<column name="stalking_on_critical" type="boolean" />
+		<column name="failure_prediction_enabled" type="boolean" />
+
+        <column name="notes" type="varchar" size="255" required="false" />
+		<column name="notes_url" type="varchar" size="255" required="false" />
+		<column name="action_url" type="varchar" size="255" required="false" />
+		<column name="icon_image" type="varchar" size="255" required="false" />
+		<column name="icon_image_alt" type="varchar" size="255" required="false" />
+
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="check_period" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="notification_period" foreign="id" />
+		</foreign-key>
+	</table>
+
+	<table name="nagios_service_check_command_parameter" description="Parameter for check command for service or service template">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="service" type="integer" />
+		<column name="template" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="template" foreign="id" />
+		</foreign-key>
+		<column name="parameter" type="varchar" size="255" required="false" />
+	</table>
+
+	<table name="nagios_service_group" description="Nagios  Service Group">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />
+        <column name="notes" type="varchar" size="255" required="false" />
+		<column name="notes_url" type="varchar" size="255" required="false" />
+		<column name="action_url" type="varchar" size="255" required="false" />
+	</table>
+	
+
+	<table name="nagios_service_group_member">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="service" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+		<column name="template" type="integer" />
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="template" foreign="id" />
+		</foreign-key>
+ 		<column name="service_group" type="integer" />
+		<foreign-key foreignTable="nagios_service_group" onDelete="cascade">
+			<reference local="service_group" foreign="id" />
+		</foreign-key>
+	</table>
+
+ 	<table name="nagios_host_contact_member" description="Contacts which belong to host templates or hosts">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="host" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<column name="template" type="integer" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="template" foreign="id" />
+		</foreign-key>
+ 		<column name="contact" type="integer" />
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+	</table>
+
+ 	<table name="nagios_service_contact_member" description="Contacts which belong to service templates or services">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="service" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+		<column name="template" type="integer" />
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="template" foreign="id" />
+		</foreign-key>
+ 		<column name="contact" type="integer" />
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+	</table>
+
+	<table name="nagios_service_contact_group_member" description="Nagios  Service Group">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="service" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+		<column name="template" type="integer" />
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="template" foreign="id" />
+		</foreign-key>
+ 		<column name="contact_group" type="integer" />
+		<foreign-key foreignTable="nagios_contact_group" onDelete="cascade">
+			<reference local="contact_group" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_dependency" description="Nagios Dependency">
+	 	<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="host_template" type="integer" />
+		<column name="host" type="integer" />
+		<column name="service_template" type="integer" />
+		<column name="service" type="integer" />
+        <column name="hostgroup" type="integer" />
+        <column name="name" type="varchar" size="255" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="service_template" foreign="id" />
+		</foreign-key>
+        <foreign-key foreignTable="nagios_service" onDelete="cascade">
+         <reference local="service" foreign="id" />
+        </foreign-key>
+        <foreign-key foreignTable="nagios_hostgroup" onDelete="cascade">
+         <reference local="hostgroup" foreign="id" />
+        </foreign-key>
+        
+		<column name="execution_failure_criteria_up" type="boolean" />
+		<column name="execution_failure_criteria_down" type="boolean" />
+		<column name="execution_failure_criteria_unreachable" type="boolean" />
+		<column name="execution_failure_criteria_pending" type="boolean" />
+		<column name="execution_failure_criteria_ok" type="boolean" />
+		<column name="execution_failure_criteria_warning" type="boolean" />
+		<column name="execution_failure_criteria_unknown" type="boolean" />
+		<column name="execution_failure_criteria_critical" type="boolean" />
+		<column name="notification_failure_criteria_ok" type="boolean" />
+		<column name="notification_failure_criteria_warning" type="boolean" />
+		<column name="notification_failure_criteria_unknown" type="boolean" />
+		<column name="notification_failure_criteria_critical" type="boolean" />
+		<column name="notification_failure_criteria_pending" type="boolean" />
+		<column name="notification_failure_criteria_up" type="boolean" />
+		<column name="notification_failure_criteria_down" type="boolean" />
+		<column name="notification_failure_criteria_unreachable" type="boolean" />	
+		<column name="inherits_parent" type="boolean" />	
+        <column name="dependency_period" type="integer" />
+    	<foreign-key foreignTable="nagios_timeperiod" onDelete="cascade">
+			<reference local="dependency_period" foreign="id" />
+		</foreign-key>
+	</table>
+
+    <table name="nagios_dependency_target" description="Targets for a Dependency">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+        <column name="dependency" type="integer" />
+    	<foreign-key foreignTable="nagios_dependency" onDelete="cascade">
+			<reference local="dependency" foreign="id" />
+		</foreign-key>
+        <column name="target_host" type="integer" />
+        <column name="target_service" type="integer" />
+        <column name="target_hostgroup" type="integer" />
+      	<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="target_host" foreign="id" />
+		</foreign-key>
+    	<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="target_service" foreign="id" />
+		</foreign-key>
+    	<foreign-key foreignTable="nagios_hostgroup" onDelete="cascade">
+			<reference local="target_hostgroup" foreign="id" />
+		</foreign-key>
+    </table>
+	
+	<table name="nagios_escalation" description="Nagios Escalation">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="description" type="varchar" size="255" required="true" />
+		<column name="host_template" type="integer" />
+		<column name="host" type="integer" />
+        <column name="hostgroup" type="integer" />
+		<column name="service_template" type="integer" />
+		<column name="service" type="integer" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="service_template" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+        <foreign-key foreignTable="nagios_hostgroup" onDelete="cascade">
+            <reference local="hostgroup" foreign="id" />
+        </foreign-key>
+		<column name="first_notification" type="integer" />
+		<column name="last_notification" type="integer" />
+		<column name="notification_interval" type="integer" />
+		<column name="escalation_period" type="integer" />
+		<foreign-key foreignTable="nagios_timeperiod" onDelete="setnull">
+			<reference local="escalation_period" foreign="id" />
+		</foreign-key>
+		<column name="escalation_options_up" type="boolean" />
+		<column name="escalation_options_down" type="boolean" />
+		<column name="escalation_options_unreachable" type="boolean" />
+		<column name="escalation_options_ok" type="boolean" />
+		<column name="escalation_options_warning" type="boolean" />
+		<column name="escalation_options_unknown" type="boolean" />
+		<column name="escalation_options_critical" type="boolean" />
+	</table>
+	
+
+    <table name="nagios_escalation_contact" description="Contact Group for Escalation">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="escalation" type="integer" required="true" />
+  		<column name="contact" type="integer" required="true" />
+		<foreign-key foreignTable="nagios_escalation" onDelete="cascade">
+			<reference local="escalation" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+	</table>
+
+
+	<table name="nagios_escalation_contactgroup" description="Contact Group for Escalation">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="escalation" type="integer" required="true" />
+  		<column name="contactgroup" type="integer" required="true" />
+		<foreign-key foreignTable="nagios_escalation" onDelete="cascade">
+			<reference local="escalation" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_contact_group" onDelete="cascade">
+			<reference local="contactgroup" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_host_contactgroup" description="Contact Group for Host">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="host" type="integer" />
+ 		<column name="host_template" type="integer" />
+  		<column name="contactgroup" type="integer" required="true" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_contact_group" onDelete="cascade">
+			<reference local="contactgroup" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_hostgroup" description="Nagios Hostgroup">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="alias" type="varchar" size="255" required="true" />
+		<column name="notes" type="varchar" size="255" />
+		<column name="notes_url" type="varchar" size="255"  />
+		<column name="action_url" type="varchar" size="255"  />
+	</table>
+	
+	<table name="nagios_hostgroup_membership" description="Hostgroup Membership for Host">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="host" type="integer" />
+ 		<column name="host_template" type="integer" />
+  		<column name="hostgroup" type="integer" required="true" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_hostgroup" onDelete="cascade">
+			<reference local="hostgroup" foreign="id" />
+		</foreign-key>
+	</table>
+	
+	<table name="nagios_host_check_command_parameter" description="Parameter for Host Check Command">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="host" type="integer" />
+ 		<column name="host_template" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<column name="parameter" type="varchar" size="255" required="true" />
+	</table>
+	
+	<table name="nagios_host_parent" description="Nagios Additional Host Parent Relationship">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="child_host" type="integer" />
+		<column name="child_host_template" type="integer" />
+		<column name="parent_host" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="child_host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="parent_host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="child_host_template" foreign="id" />
+		</foreign-key>
+		
+	</table>
+
+	<table name="nagios_resource" description="Nagios Resource">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />	
+		<column name="user1" type="varchar" size="255" />
+		<column name="user2" type="varchar" size="255" />
+		<column name="user3" type="varchar" size="255" />
+		<column name="user4" type="varchar" size="255" />
+		<column name="user5" type="varchar" size="255" />
+		<column name="user6" type="varchar" size="255" />
+		<column name="user7" type="varchar" size="255" />
+		<column name="user8" type="varchar" size="255" />
+		<column name="user9" type="varchar" size="255" />
+		<column name="user10" type="varchar" size="255" />
+		<column name="user11" type="varchar" size="255" />
+		<column name="user12" type="varchar" size="255" />
+		<column name="user13" type="varchar" size="255" />
+		<column name="user14" type="varchar" size="255" />
+		<column name="user15" type="varchar" size="255" />
+		<column name="user16" type="varchar" size="255" />
+		<column name="user17" type="varchar" size="255" />
+		<column name="user18" type="varchar" size="255" />
+		<column name="user19" type="varchar" size="255" />
+		<column name="user20" type="varchar" size="255" />
+		<column name="user21" type="varchar" size="255" />
+		<column name="user22" type="varchar" size="255" />
+		<column name="user23" type="varchar" size="255" />
+		<column name="user24" type="varchar" size="255" />
+		<column name="user25" type="varchar" size="255" />
+		<column name="user26" type="varchar" size="255" />
+		<column name="user27" type="varchar" size="255" />
+		<column name="user28" type="varchar" size="255" />
+		<column name="user29" type="varchar" size="255" />
+		<column name="user30" type="varchar" size="255" />
+		<column name="user31" type="varchar" size="255" />
+		<column name="user32" type="varchar" size="255" />
+	</table>
+	
+	<table name="nagios_main_configuration" description="Nagios Main Configuration">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="config_dir" type="varchar" size="255" />
+		<column name="log_file" type="varchar" size="255" />
+		<column name="temp_file" type="varchar" size="255" />
+		<column name="status_file" type="varchar" size="255" />
+ 		<column name="status_update_interval" type="integer" />
+		<column name="nagios_user" type="varchar" size="255" />
+		<column name="nagios_group" type="varchar" size="255" />
+		<column name="enable_notifications" type="boolean" />
+		<column name="execute_service_checks" type="boolean" />
+		<column name="accept_passive_service_checks" type="boolean" />
+		<column name="enable_event_handlers" type="boolean" />
+		<column name="log_rotation_method" type="char" />
+		<column name="log_archive_path" type="varchar" size="255" />
+		<column name="check_external_commands" type="boolean" />
+		<column name="command_check_interval" type="varchar" size="255" />
+		<column name="command_file" type="varchar" size="255" />
+		<column name="lock_file" type="varchar" size="255" />
+		<column name="retain_state_information" type="boolean" />
+		<column name="state_retention_file" type="varchar" size="255" />
+		<column name="retention_update_interval" type="integer" />
+		<column name="use_retained_program_state" type="boolean" />
+		<column name="use_syslog" type="boolean" />
+		<column name="log_notifications" type="boolean" />
+		<column name="log_service_retries" type="boolean" />
+		<column name="log_host_retries" type="boolean" />
+		<column name="log_event_handlers" type="boolean" />
+		<column name="log_initial_states" type="boolean" />
+		<column name="log_external_commands" type="boolean" />
+		<column name="log_passive_checks" type="boolean" />
+		<column name="global_host_event_handler" type="integer" />
+		<column name="global_service_event_handler" type="integer" />
+		<column name="external_command_buffer_slots" type="integer" />
+		<column name="sleep_time" type="float" />
+		<column name="service_interleave_factor" type="char" />
+		<column name="max_concurrent_checks" type="integer" />
+		<column name="service_reaper_frequency" type="integer" />
+		<column name="interval_length" type="integer" />
+		<column name="use_aggressive_host_checking" type="boolean" />
+		<column name="enable_flap_detection" type="boolean" />
+		<column name="low_service_flap_threshold" type="float" />
+		<column name="high_service_flap_threshold" type="float" />
+		<column name="low_host_flap_threshold" type="float" />
+		<column name="high_host_flap_threshold" type="float" />
+		<column name="soft_state_dependencies" type="boolean" />
+		<column name="service_check_timeout" type="integer" />
+		<column name="host_check_timeout" type="integer" />
+		<column name="event_handler_timeout" type="integer" />
+		<column name="notification_timeout" type="integer" />
+		<column name="ocsp_timeout" type="integer" />
+		<column name="ohcp_timeout" type="integer" />
+		<column name="perfdata_timeout" type="integer" />
+		<column name="obsess_over_services" type="boolean" />
+		<column name="ocsp_command" type="integer" />
+		<column name="process_performance_data" type="boolean" />
+		<column name="check_for_orphaned_services" type="boolean" />
+		<column name="check_service_freshness" type="boolean" />
+		<column name="freshness_check_interval" type="integer" />
+		<column name="date_format" type="varchar" size="255" />
+		<column name="illegal_object_name_chars" type="varchar" size="255" />
+		<column name="illegal_macro_output_chars" type="varchar" size="255" />
+		<column name="admin_email" type="varchar" size="255" />
+		<column name="admin_pager" type="varchar" size="255" />
+		<column name="execute_host_checks" type="boolean" />
+		<column name="service_inter_check_delay_method" type="varchar" size="255" />
+		<column name="use_retained_scheduling_info" type="boolean" />
+		<column name="accept_passive_host_checks" type="boolean" />
+		<column name="max_service_check_spread" type="integer" />
+		<column name="host_inter_check_delay_method" type="varchar" size="255" />
+		<column name="max_host_check_spread" type="integer" />
+		<column name="auto_reschedule_checks" type="boolean" />
+		<column name="auto_rescheduling_interval" type="integer" />
+		<column name="auto_rescheduling_window" type="integer" />
+		<column name="ochp_timeout" type="integer" />
+		<column name="obsess_over_hosts" type="boolean" />
+		<column name="ochp_command" type="integer" />
+		<column name="check_host_freshness" type="boolean" />
+		<column name="host_freshness_check_interval" type="integer" />
+		<column name="service_freshness_check_interval" type="integer" />
+		<column name="use_regexp_matching" type="boolean" />
+		<column name="use_true_regexp_matching" type="boolean" />
+		<column name="event_broker_options" type="varchar" size="255" />
+		<column name="daemon_dumps_core" type="boolean" />
+		<column name="host_perfdata_command" type="integer" />
+		<column name="service_perfdata_command" type="integer" />
+		<column name="host_perfdata_file" type="varchar" size="255" />
+		<column name="host_perfdata_file_template" type="varchar" size="255" />
+		<column name="service_perfdata_file" type="varchar" size="255" />
+		<column name="service_perfdata_file_template" type="varchar" size="255" />
+		<column name="host_perfdata_file_mode" type="char" />
+		<column name="service_perfdata_file_mode" type="char" />
+		<column name="host_perfdata_file_processing_command" type="integer" />
+		<column name="service_perfdata_file_processing_command" type="integer" />
+		<column name="host_perfdata_file_processing_interval" type="integer" />
+		<column name="service_perfdata_file_processing_interval" type="integer" />
+
+        <!-- New in Nagios 3.x -->
+        <column name="object_cache_file" type="varchar" size="255" />
+        <column name="precached_object_file" type="varchar" size="255" />
+        <column name="retained_host_attribute_mask" type="integer" />
+        <column name="retained_service_attribute_mask" type="integer" />
+        <column name="retained_process_host_attribute_mask" type="integer" />
+        <column name="retained_process_service_attribute_mask" type="integer" />
+        <column name="retained_contact_host_attribute_mask" type="integer" />
+        <column name="retained_contact_service_attribute_mask" type="integer" />
+        <column name="check_result_reaper_frequency" type="integer" />
+        <column name="max_check_result_reaper_time" type="integer" />
+        <column name="check_result_path" type="varchar" size="255" />
+        <column name="max_check_result_file_age" type="integer" />
+        <column name="translate_passive_host_checks" type="boolean" />
+        <column name="passive_host_checks_are_soft" type="boolean" />
+        <column name="enable_predictive_host_dependency_checks" type="boolean" />
+        <column name="enable_predictive_service_dependency_checks" type="boolean" />
+        <column name="cached_host_check_horizon" type="integer" />
+        <column name="cached_service_check_horizon" type="integer" />
+        <column name="use_large_installation_tweaks" type="boolean" />
+        <column name="free_child_process_memory" type="boolean" /> 
+        <column name="child_processes_fork_twice" type="boolean" />
+        <column name="enable_environment_macros" type="boolean" />
+        <column name="additional_freshness_latency" type="integer" />
+        <column name="enable_embedded_perl" type="boolean" />
+        <column name="use_embedded_perl_implicitly" type="boolean" />
+        <column name="p1_file" type="varchar" size="255" />
+        <column name="use_timezone" type="varchar" size="255" />
+        <column name="debug_file" type="varchar" size="255" />
+        <column name="debug_level" type="integer" />
+        <column name="debug_verbosity" type="integer" />
+        <column name="max_debug_file_size" type="integer" />
+
+        <!-- End new in Nagios 3.x -->
+
+
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="ocsp_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="ochp_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="host_perfdata_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="service_perfdata_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="host_perfdata_file_processing_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="service_perfdata_file_processing_command" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="global_service_event_handler" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_command" onDelete="cascade">
+			<reference local="global_host_event_handler" foreign="id" />
+		</foreign-key>
+	</table>
+
+	<table name="nagios_host_template_inheritance" description="Nagios Host Template Inheritance">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="source_host" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="source_host" foreign="id" />
+		</foreign-key>
+		<column name="source_template" type="integer" />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="source_template" foreign="id" />
+		</foreign-key>	
+		<column name="target_template" type="integer" required="true"  />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="target_template" foreign="id" />
+		</foreign-key>
+		<column name="order" type="integer" required="true" />
+	</table>
+	
+	<table name="nagios_service_template_inheritance" description="Nagios service Template Inheritance">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+		<column name="source_service" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="source_service" foreign="id" />
+		</foreign-key>
+		<column name="source_template" type="integer" />
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="source_template" foreign="id" />
+		</foreign-key>	
+		<column name="target_template" type="integer" required="true"  />
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="target_template" foreign="id" />
+		</foreign-key>
+		<column name="order" type="integer" required="true" />
+	</table>
+
+	<!-- AutoDiscovery Tables -->
+
+	<table name="autodiscovery_job" description="AutoDiscovery Job Information">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="name" type="varchar" size="255" required="true" />
+ 		<column name="description" type="varchar" size="255" required="true" />
+ 		<column name="config" type="LONGVARCHAR" required="true" />
+ 		<column name="start_time" type="timestamp" />
+ 		<column name="end_time" type="timestamp" />
+ 		<column name="status" type="varchar" size="255" />
+ 		<column name="status_code" type="integer" required="true" />
+ 		<column name="status_change_time" type="timestamp" />
+ 		<column name="stats" type="LONGVARCHAR" required="true" />
+ 		<column name="cmd" type="varchar" size="255" required="false" />
+	</table>	
+	
+	<table name="autodiscovery_log_entry" description="Export Job Entry">
+ 		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="job" type="integer" />
+		<foreign-key foreignTable="autodiscovery_job" onDelete="cascade">
+			<reference local="job" foreign="id" />
+		</foreign-key>
+		<column name="time" type="timestamp" required="true" />
+		<column name="text" type="LONGVARCHAR" required="true" />
+		<column name="type" type="integer" required="true"  />
+	</table>	
+	
+	<table name="autodiscovery_device" description="AutoDiscovery Found Device">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="job_id" type="integer" required="true" />
+		<foreign-key foreignTable="autodiscovery_job" onDelete="cascade">
+			<reference local="job_id" foreign="id" />
+		</foreign-key>
+		<column name="address" type="varchar" size="255" required="true" />
+		<column name="name" type="varchar" size="255" />
+		<column name="hostname" type="varchar" size="255" />
+		<column name="description" type="varchar" size="255" />
+		<column name="osvendor" type="varchar" size="255" />
+		<column name="osfamily" type="varchar" size="255" />
+		<column name="osgen" type="varchar" size="255" />
+		<column name="host_template" type="integer" required="true"  />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		
+		<column name="proposed_parent" type="integer" required="false" />
+		<foreign-key foreignTable="nagios_host" onDelete="setnull">
+			<reference local="proposed_parent" foreign="id" />
+		</foreign-key>
+		
+	</table>
+
+    <table name="autodiscovery_device_service" description="AutoDiscovery Found Service">
+      <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+      <column name="device_id" type="integer" required="true" />
+      <foreign-key foreignTable="autodiscovery_device" onDelete="cascade">
+          <reference local="device_id" foreign="id" />
+      </foreign-key>
+      <column name="protocol" type="varchar" size="255" required="true" />
+      <column name="port" type="integer" required="true" />
+      <column name="name" type="varchar" size="255" required="true" />
+      <column name="product" type="varchar" size="255" required="true" />
+      <column name="version" type="varchar" size="255" required="true" />
+      <column name="extrainfo" type="varchar" size="255" required="true" />
+    </table>
+	
+	<table name="autodiscovery_device_template_match" description="AutoDiscovery Device Matched Template">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="device_id" type="integer" required="true" />
+		<foreign-key foreignTable="autodiscovery_device" onDelete="cascade">
+			<reference local="device_id" foreign="id" />
+		</foreign-key>
+		<column name="host_template" type="integer" required="true"  />
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<column name="percent" type="float" required="true" />
+		<column name="complexity" type="integer" required="true" />
+	</table>
+
+</database>
