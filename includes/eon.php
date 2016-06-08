@@ -30,8 +30,7 @@ function EoN_Actions($type) {
 	global $lilac;
 
 	echo '
-		<hr>
-		<div align="right">';
+		<div align="left">';
 
 	if($type=='Host') {
 		echo 'Object to 
@@ -68,7 +67,7 @@ function EoN_Actions($type) {
                 </select>
                 <input type="submit" name="EoN_Actions" value="Submit" onClick="javascript:return confirmDelete();">';
 
-	echo '</div><hr><br /><br />';
+	echo '</div><br /><br />';
 }
 
 // EoN Actions Process

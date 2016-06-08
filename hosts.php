@@ -2184,7 +2184,7 @@ else {
 }
 print_window_header($title, "100%");
 ?>
-<a class="networkadd sublink" href="add_host.php<?php if(isset($host)) print("?parent_id=" . $host->getId());?>">Add A New Child Host</a><?php
+<a style="float: left;" class="networkadd sublink" href="add_host.php<?php if(isset($host)) print("?parent_id=" . $host->getId());?>">Add A New Child Host</a><?php
 print($navbar);
 ?><br /><br />
 <?php

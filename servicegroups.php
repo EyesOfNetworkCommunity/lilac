@@ -306,8 +306,6 @@ print_header("Service Group Editor");
 	if(!isset($_GET['servicegroup_add'])) {	
 		print_window_header("Service Group Listing", "100%");
 		?>
-		&nbsp;<a class="sublink" href="servicegroups.php?servicegroup_add=1">Add A New Service Group</a><br />
-		<br />
 		<?php
 		if($numOfServiceGroups) {
 			?>

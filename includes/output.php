@@ -241,13 +241,6 @@ function print_window_header($title = null, $type = "top") {
 	<div class="roundedcorner_lilac_box">
 	   <div class="roundedcorner_lilac_top"><div></div></div>
 	      <div class="roundedcorner_lilac_content">
-	      <?php
-	      if(!empty($title)) {
-	      	?>
-	      	<h2><?php echo $title;?></h2>
-	      	<?php
-	      }
-	      ?>
 			<div class="roundedcorner_inner_box">
 			   <div class="roundedcorner_inner_top"><div></div></div>
 			      <div class="roundedcorner_inner_content">
@@ -377,8 +370,12 @@ function print_header($title = null) {
 			<span>Search:</span> <input type="text" name="query" />
 		</form>
 		</div>
-		<a href="about.php"><h1><div class="title"><?php echo LILAC_NAME; ?></div></h1></a>
+		<?php
+		if(empty($title)) { $title=LILAC_NAME; }
+		?>
+		<h1><?php echo $title; ?></h1>
 	</div>
+	<!-- EyesOfNetwork
 	<div id="navigation">
 		<ul>
 			<li><a href="index.php">General</a></li>
@@ -390,6 +387,7 @@ function print_header($title = null) {
 		</ul>
 	</div>
 	<div id="main">
+	-->
 	<?php
 	if(!empty($success) || !empty($error) || !empty($warning)) {
 		?>
