@@ -1,2 +1,2 @@
 # lilac
-EyesOfNetwork nagios configurator 2.4-4
+EyesOfNetwork nagios configurator 2.5-1
