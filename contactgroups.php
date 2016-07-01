@@ -151,15 +151,15 @@ print_header("Contact Group Editor");
 					?>
 					<form name="command_form" method="post" action="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&edit=1">
 						<input type="hidden" name="request" value="modify_contactgroup" />
-						<b>Contact Group Name:</b> <input type="text" name="contactgroup_manage[contactgroup_name]" value="<?php echo $contactGroupInfo->getName();?>"><br />
+						<b>Contact Group Name:</b> <input type="text" name="contactgroup_manage[contactgroup_name]" value="<?php echo $contactGroupInfo->getName();?>">
 						<?php echo $lilac->element_desc("contactgroup_name", "nagios_contactgroups_desc"); ?><br />
 						<br />
 						<b>Description:</b><br />
-						<input type="text" size="80" name="contactgroup_manage[alias]" value="<?php echo $contactGroupInfo->getAlias();?>"><br />
+						<input type="text" size="80" name="contactgroup_manage[alias]" value="<?php echo $contactGroupInfo->getAlias();?>">
 						<?php echo $lilac->element_desc("alias", "nagios_contactgroups_desc"); ?><br />
 						<br />
 						<br />
-						<input type="submit" value="Modify Contact Group" />&nbsp;[ <a href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>">Cancel</a> ]
+						<input class="btn btn-primary" type="submit" value="Modify Contact Group" /> <a class="btn btn-default" href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>">Cancel</a>
 					</form>
 					<?php
 				}
@@ -168,7 +168,7 @@ print_header("Contact Group Editor");
 					<b>Contact Group Name:</b> <?php echo $contactGroupInfo->getName();?><br />
 					<b>Description:</b> <?php echo $contactGroupInfo->getAlias();?><br />
 					<br />
-					[ <a href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>				
@@ -176,7 +176,7 @@ print_header("Contact Group Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&request=delete" onClick="javascript:return confirmDelete();">Delete This Contact Group</a> ]
+			<a class="btn btn-danger" href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&request=delete" onClick="javascript:return confirmDelete();">Delete This Contact Group</a>
 			<?php
 		}
 		else if($_GET['section'] == 'members') {
@@ -210,7 +210,7 @@ print_header("Contact Group Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&section=members&request=delete&contact_id=<?php echo $member_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;<a class="btn btn-danger btn-xs" href="contactgroups.php?contactgroup_id=<?php echo $_GET['contactgroup_id'];?>&section=members&request=delete&contact_id=<?php echo $member_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $member_list[$counter]->getNagiosContact()->getName();?>:</b> <?php echo $member_list[$counter]->getNagiosContact()->getAlias();?></td>
 						</tr>
 						<?php
@@ -234,7 +234,7 @@ print_header("Contact Group Editor");
 					?><strong>No Contacts Available</strong><br /><?php
 				}
 				else {
-					print_select("contactgroup_manage[member_add][contact_id]", $contact_list, "contact_id", "contact_name", "0");?> <input type="submit" value="Add Member"><br /><?php
+					print_select("contactgroup_manage[member_add][contact_id]", $contact_list, "contact_id", "contact_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Member"><br /><?php
 				}
 				?>
 				<?php echo $lilac->element_desc("members", "nagios_contactgroups_desc"); ?><br />
@@ -252,7 +252,7 @@ print_header("Contact Group Editor");
 	if(!isset($_GET['contactgroup_add'])) {	
 		print_window_header("Contact Group Listings", "100%");
 		?>
-		&nbsp;<a class="sublink" href="contactgroups.php?contactgroup_add=1">Add A New Contact Group</a><br />
+		<a class="sublink btn btn-success" href="contactgroups.php?contactgroup_add=1">Add A New Contact Group</a><br />
 		<br />
 		<?php
 		if($numOfContactGroups) {
@@ -304,15 +304,15 @@ print_header("Contact Group Editor");
 		?>
 		<form name="command_form" method="post" action="contactgroups.php">
 			<input type="hidden" name="request" value="add_contactgroup" />
-			<b>Contact Group Name:</b> <input type="text" name="contactgroup_manage[contactgroup_name]" value=""><br />
+			<b>Contact Group Name:</b> <input type="text" name="contactgroup_manage[contactgroup_name]" value="">
 			<?php echo $lilac->element_desc("contactgroup_name", "nagios_contactgroups_desc"); ?><br />
 			<br />
 			<b>Description:</b><br />
-			<input type="text" size="80" name="contactgroup_manage[alias]" value=""><br />
+			<input type="text" size="80" name="contactgroup_manage[alias]" value="">
 			<?php echo $lilac->element_desc("alias", "nagios_contactgroups_desc"); ?><br />
 			<br />
 			<br />
-			<input type="submit" value="Add Contact Group" /> [ <a href="contactgroups.php">Cancel</a> ]
+			<input class="btn btn-primary" type="submit" value="Add Contact Group" /> <a class="btn btn-default" href="contactgroups.php">Cancel</a>
 			<br /><br />
 		</form>
 		<?php

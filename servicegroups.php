@@ -159,13 +159,13 @@ print_header("Service Group Editor");
 						<input type="hidden" name="request" value="modify_servicegroup" />
 						<input type="hidden" name="servicegroup_id" value="<?php echo $_GET['id'];?>">
 
-						<b>Service Group Name:</b> <input type="text" name="servicegroup_name" value="<?php echo $serviceGroup->getName();?>"><br />
+						<b>Service Group Name:</b> <input type="text" name="servicegroup_name" value="<?php echo $serviceGroup->getName();?>">
 						<?php echo $lilac->element_desc("servicegroup_name", "nagios_servicegroups_desc"); ?><br />
 						<br />
 						<b>Description:</b><br />
-						<input type="text" size="80" name="alias" value="<?php echo $serviceGroup->getAlias();?>"><br />
+						<input type="text" size="80" name="alias" value="<?php echo $serviceGroup->getAlias();?>">
 						<?php echo $lilac->element_desc("alias", "nagios_servicegroups_desc"); ?><br />
-						<input type="submit" value="Modify Service Group" />&nbsp;<a href="servicegroups.php?id=<?php echo $_GET['id'];?>">Cancel</a>
+						<input class="btn btn-primary" type="submit" value="Modify Service Group" /> <a class="btn btn-default" href="servicegroups.php?id=<?php echo $_GET['id'];?>">Cancel</a>
 					</form>
 			<?php
 				}
@@ -174,7 +174,7 @@ print_header("Service Group Editor");
 					<b>Service Group Name:</b> <?php echo $serviceGroup->getName();?><br />
 					<b>Description:</b> <?php echo $serviceGroup->getAlias();?><br />
 					<br />
-					[ <a href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -182,7 +182,7 @@ print_header("Service Group Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="servicegroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Service Group</a> ]
+			<a class="btn btn-danger" href="servicegroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Service Group</a>
 			<?php
 		}
 		if($_GET['section'] == 'extended') {
@@ -198,17 +198,17 @@ print_header("Service Group Editor");
 					?>
 					<form name="command_form" method="post" action="servicegroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">
 						<input type="hidden" name="request" value="modify_servicegroup_extended" />
-						<b>Notes:</b> <input type="text" name="notes" value="<?php echo $serviceGroup->getNotes();?>"><br />
+						<b>Notes:</b> <input type="text" name="notes" value="<?php echo $serviceGroup->getNotes();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_servicegroups_desc"); ?><br />
 						<br />
-						<b>Notes URL:</b> <input type="text" name="notes_url" value="<?php echo $serviceGroup->getNotesUrl();?>"><br />
+						<b>Notes URL:</b> <input type="text" name="notes_url" value="<?php echo $serviceGroup->getNotesUrl();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_servicegroups_desc"); ?><br />
 						<br />
-						<b>Action URL:</b> <input type="text" name="action_url" value="<?php echo $serviceGroup->getActionUrl();?>"><br />
+						<b>Action URL:</b> <input type="text" name="action_url" value="<?php echo $serviceGroup->getActionUrl();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_servicegroups_desc"); ?><br />
 						<br />
 						<br />
-						<input type="submit" value="Modify Host Group Extended Information" />&nbsp; [<a href="servicegroups.php">Cancel</a> ]
+						<input class="btn btn-primary" type="submit" value="Modify Host Group Extended Information" /> <a class="btn btn-default" href="servicegroups.php">Cancel</a>
 					</form>
 					<?php
 				}
@@ -230,7 +230,7 @@ print_header("Service Group Editor");
 					}
 					?>
 					<br />
-					[ <a href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -285,7 +285,7 @@ print_header("Service Group Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=members&request=delete&member_id=<?php echo $member->getId();?>" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="servicegroups.php?id=<?php echo $_GET['id'];?>&section=members&request=delete&member_id=<?php echo $member->getId();?>" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $text;?></b></td>
 						</tr>
 						<?php
@@ -357,15 +357,15 @@ print_header("Service Group Editor");
 		?>
 		<form name="servicegroup_form" method="post" action="servicegroups.php">
 			<input type="hidden" name="request" value="add_servicegroup" />
-			<b>Service Group Name:</b> <input type="text" name="servicegroup_name" value=""><br />
+			<b>Service Group Name:</b> <input type="text" name="servicegroup_name" value="">
 			<?php echo $lilac->element_desc("servicegroup_name", "nagios_servicegroups_desc"); ?><br />
 			<br />
 			<b>Description:</b><br />
-			<input type="text" size="80" name="alias" value=""><br />
+			<input type="text" size="80" name="alias" value="">
 			<?php echo $lilac->element_desc("alias", "nagios_servicegroups_desc"); ?><br />
 			<br />
 			<br />
-			<input type="submit" value="Add Service Group" /> [ <a href="servicegroups.php">Cancel</a> ]
+			<input class="btn btn-primary" type="submit" value="Add Service Group" /> <a class="btn btn-default" href="servicegroups.php">Cancel</a>
 			</form>
 			<br /><br />
 		<?php

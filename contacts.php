@@ -317,11 +317,11 @@ print_header("Contact Editor");
 								<?php
 							}
 						?>
-						<b>Contact Name:</b> <input type="text" name="contact_manage[contact_name]" value="<?php echo $tempContactInfo->getName();?>"><br />
+						<b>Contact Name:</b> <input type="text" name="contact_manage[contact_name]" value="<?php echo $tempContactInfo->getName();?>">
 						<?php echo $lilac->element_desc("contact_name", "nagios_contacts_desc"); ?><br />
 						<br />
 						<b>Description:</b><br />
-						<input type="text" size="80" name="contact_manage[alias]" value="<?php echo $tempContactInfo->getAlias();?>"><br />
+						<input type="text" size="80" name="contact_manage[alias]" value="<?php echo $tempContactInfo->getAlias();?>">
 						<?php echo $lilac->element_desc("alias", "nagios_contacts_desc"); ?><br />
 						<br />
 						<input type="checkbox" name="contact_manage[can_submit_commands]" <?php echo  (($tempContactInfo->getCanSubmitCommands() == 1) ? "CHECKED" : '');?>><b>Can Submit Commands</b><br />
@@ -335,10 +335,10 @@ print_header("Contact Editor");
 						<br />
 						<input type="checkbox" name="contact_manage[service_notifications_enabled]" <?php echo  (($tempContactInfo->getServiceNotificationsEnabled() == 1) ? "CHECKED" : '');?>><b>Service Notifications Enabled</b><br />
 						<br />
-						<b>Host Notification Period:</b> <?php print_select("contact_manage[host_notification_period]", $period_list, "timeperiod_id", "timeperiod_name",($tempContactInfo->getHostNotificationPeriod() != null) ? $tempContactInfo->getHostNotificationPeriod() : '');?><br />
+						<b>Host Notification Period:</b> <?php print_select("contact_manage[host_notification_period]", $period_list, "timeperiod_id", "timeperiod_name",($tempContactInfo->getHostNotificationPeriod() != null) ? $tempContactInfo->getHostNotificationPeriod() : '');?>
 						<?php echo $lilac->element_desc("host_notification_period", "nagios_contacts_desc"); ?><br />
 						<br />
-						<b>Service Notification Period:</b> <?php print_select("contact_manage[service_notification_period]", $period_list, "timeperiod_id", "timeperiod_name",($tempContactInfo->getHostNotificationPeriod() != null) ? $tempContactInfo->getServiceNotificationPeriod() : '');?><br />
+						<b>Service Notification Period:</b> <?php print_select("contact_manage[service_notification_period]", $period_list, "timeperiod_id", "timeperiod_name",($tempContactInfo->getHostNotificationPeriod() != null) ? $tempContactInfo->getServiceNotificationPeriod() : '');?>
 						<?php echo $lilac->element_desc("service_notification_period", "nagios_contacts_desc"); ?><br />
 						<br />
 						<b>Host Notification Options:</b>
@@ -371,12 +371,12 @@ print_header("Contact Editor");
 						<br />
 			
 						<b>Email:</b><br />
-						<input type="text" size="80" name="contact_manage[email]" value="<?php echo $tempContactInfo->getEmail();?>"><br />
+						<input type="text" size="80" name="contact_manage[email]" value="<?php echo $tempContactInfo->getEmail();?>">
 						<?php echo $lilac->element_desc("email", "nagios_contacts_desc"); ?><br />
 						<br />
 						<b>Pager:</b><br />
-						<input type="text" size="80" name="contact_manage[pager]" value="<?php echo $tempContactInfo->getPager();?>"><br />
-						<input type="submit" value="Modify Contact" />&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>">Cancel</a> ]
+						<input type="text" size="80" name="contact_manage[pager]" value="<?php echo $tempContactInfo->getPager();?>"><br /><br />
+						<input class="btn btn-primary" type="submit" value="Modify Contact" /> <a class="btn btn-default" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>">Cancel</a>
 						</form>
 					<?php
 				}
@@ -460,7 +460,7 @@ print_header("Contact Editor");
 						?>
 					<br />
 					<br />
-					[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -468,7 +468,7 @@ print_header("Contact Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Contact</a> ]
+			<a class="btn btn-danger" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Contact</a>
 			<?php
 		}
 		else if($_GET['section'] == 'notification') {
@@ -509,7 +509,7 @@ print_header("Contact Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=notification&request=delete&contact_notification_command_id=<?php echo $contactNotificationCommands['host'][$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;<a class="btn btn-danger" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=notification&request=delete&contact_notification_command_id=<?php echo $contactNotificationCommands['host'][$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $contactNotificationCommands['host'][$counter]->getNagiosCommand()->getName();?></b></td>
 						</tr>
 						<?php
@@ -527,7 +527,7 @@ print_header("Contact Editor");
 			 		?><strong>No Commands Available</strong><br /><?php
 				}
 				else {		
-					print_select("contact_manage[notification_add][command_id]", $command_list, "command_id", "command_name", "0");?> <input type="submit" value="Add Command"><br /><?php
+					print_select("contact_manage[notification_add][command_id]", $command_list, "command_id", "command_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Command"><br /><?php
 				}
 				?>
 				<?php echo $lilac->element_desc("host_notification_commands", "nagios_contacts_desc"); ?><br />
@@ -551,7 +551,7 @@ print_header("Contact Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=notification&request=delete&contact_notification_command_id=<?php echo $contactNotificationCommands['service'][$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=notification&request=delete&contact_notification_command_id=<?php echo $contactNotificationCommands['service'][$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $contactNotificationCommands['service'][$counter]->getNagiosCommand()->getName();?></b></td>
 						</tr>
 						<?php
@@ -569,7 +569,7 @@ print_header("Contact Editor");
 			 		?><strong>No Commands Available</strong><br /><?php
 				}
 				else {		
-					print_select("contact_manage[notification_add][command_id]", $command_list, "command_id", "command_name", "0");?> <input type="submit" value="Add Command"><br /><?php
+					print_select("contact_manage[notification_add][command_id]", $command_list, "command_id", "command_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Command"><br /><?php
 				}
 				?>
 				<?php echo $lilac->element_desc("service_notification_commands", "nagios_contacts_desc"); ?><br />
@@ -614,7 +614,7 @@ print_header("Contact Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=groups&request=delete&contactgroup_id=<?php echo $group_list[$counter]->getNagiosContactGroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=groups&request=delete&contactgroup_id=<?php echo $group_list[$counter]->getNagiosContactGroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $group_list[$counter]->getNagiosContactGroup()->getName();?>:</b> <?php echo $group_list[$counter]->getNagiosContactGroup()->getAlias();?></td>
 						</tr>
 						<?php
@@ -631,7 +631,7 @@ print_header("Contact Editor");
 					?><strong>No Contact Groups Available</strong><br /><?php
 				}
 				else {
-					print_select("contact_manage[group_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input type="submit" value="Add Group"><br /><?php
+					print_select("contact_manage[group_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Group"><br /><?php
 				}
 				?>
 				<?php echo $lilac->element_desc("members", "nagios_contactgroups_desc"); ?><br />
@@ -671,7 +671,7 @@ print_header("Contact Editor");
 								<?php
 							}
 							?>
-							<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=addresses&request=delete&contactaddress_id=<?php echo $contactAddresses[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+							<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=addresses&request=delete&contactaddress_id=<?php echo $contactAddresses[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 							<td height="20" class="altRight"><b>$CONTACTADDRESS<?php echo ($counter+1);?>$:</b> <?php echo $contactAddresses[$counter]->getAddress();?></td>
 							</tr>
 							<?php
@@ -686,7 +686,7 @@ print_header("Contact Editor");
 						<form name="add_contact_address" method="post" action="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=addresses">
 						<input type="hidden" name="request" value="contact_address_add" />
 						<input type="hidden" name="contact_manage[contact_id]" value="<?php echo $_GET['contact_id'];?>" />
-						Value for $CONTACTADDRESS<?php echo ($counter+1);?>$: <input type="text" name="contact_manage[address]" /> <input type="submit" value="Add Address" /><br />
+						Value for $CONTACTADDRESS<?php echo ($counter+1);?>$: <input type="text" name="contact_manage[address]" /> <input class="btn btn-primary" type="submit" value="Add Address" />
 						<?php echo $lilac->element_desc("address", "nagios_contacts_desc"); ?><br />
 						</form>
 						<?php
@@ -708,7 +708,7 @@ print_header("Contact Editor");
 	if(!isset($_GET['contact_add'])) {
 		print_window_header("Contacts", "100%");
 		?>
-		&nbsp;<a class="sublink" href="contacts.php?contact_add=1">Add A New Contact</a><br />
+		<a class="sublink btn btn-success" href="contacts.php?contact_add=1">Add A New Contact</a><br />
 		<br />
 		<?php
 		if($numOfContacts) {
@@ -779,17 +779,17 @@ print_header("Contact Editor");
 					<?php
 				}
 			?>
-			<b>Contact Name:</b> <input type="text" name="contact_manage[contact_name]" value=""><br />
+			<b>Contact Name:</b> <input type="text" name="contact_manage[contact_name]" value="">
 			<?php echo $lilac->element_desc("contact_name", "nagios_contacts_desc"); ?><br />
 			<br />
 			<b>Description:</b><br />
-			<input type="text" size="80" name="contact_manage[alias]" value=""><br />
+			<input type="text" size="80" name="contact_manage[alias]" value="">
 			<?php echo $lilac->element_desc("alias", "nagios_contacts_desc"); ?><br />
 			<br />
-			<b>Host Notification Period:</b> <?php print_select("contact_manage[host_notification_period]", $period_list, "timeperiod_id", "timeperiod_name");?><br />
+			<b>Host Notification Period:</b> <?php print_select("contact_manage[host_notification_period]", $period_list, "timeperiod_id", "timeperiod_name");?>
 			<?php echo $lilac->element_desc("host_notification_period", "nagios_contacts_desc"); ?><br />
 			<br />
-			<b>Service Notification Period:</b> <?php print_select("contact_manage[service_notification_period]", $period_list, "timeperiod_id", "timeperiod_name");?><br />
+			<b>Service Notification Period:</b> <?php print_select("contact_manage[service_notification_period]", $period_list, "timeperiod_id", "timeperiod_name");?>
 			<?php echo $lilac->element_desc("service_notification_period", "nagios_contacts_desc"); ?><br />
 			<br />
 			<input type="checkbox" name="contact_manage[can_submit_commands]" value="1"><b>Can Submit Commands</b><br />
@@ -832,19 +832,19 @@ print_header("Contact Editor");
 			</tr>
 			</table>
 			<br />
-			<b>Initial Contact Group:</b> <?php print_select("contact_manage[contact_group]", $contactgroups_list, "contactgroup_id", "contactgroup_name");?><br />
+			<b>Initial Contact Group:</b> <?php print_select("contact_manage[contact_group]", $contactgroups_list, "contactgroup_id", "contactgroup_name");?>
 			<?php echo $lilac->element_desc("members", "nagios_contactgroups_desc"); ?><br />
 			<br />
 			<b>Email:</b><br />
-			<input type="text" size="80" name="contact_manage[email]" value=""><br />
+			<input type="text" size="80" name="contact_manage[email]" value="">
 			<?php echo $lilac->element_desc("email", "nagios_contacts_desc"); ?><br />
 			<br />
 			<b>Pager:</b><br />
-			<input type="text" size="80" name="contact_manage[pager]" value=""><br />
+			<input type="text" size="80" name="contact_manage[pager]" value="">
 			<?php echo $lilac->element_desc("pager", "nagios_contacts_desc"); ?><br />
 			<br />
 			<br />
-			<input type="submit" value="Add Contact" /> &nbsp;[ <a href="contacts.php">Cancel</a> ]
+			<input class="btn btn-primary" type="submit" value="Add Contact" /> <a class="btn btn-default" href="contacts.php">Cancel</a>
 			</form>
 			<br /><br />
 		<?php

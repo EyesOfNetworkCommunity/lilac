@@ -139,7 +139,7 @@ if(isset($_GET['parent_id']) && $_GET['parent_id'] != 0) {
 <tr bgcolor="f0f0f0">
 	<td colspan="2" class="formcell">
 	<b>Host Name:</b><br />
-	<input type="text" size="40" name="host_manage[host_name]" value=""><br />
+	<input type="text" size="40" name="host_manage[host_name]" value="">
 	<?php echo $lilac->element_desc("host_name", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
@@ -147,7 +147,7 @@ if(isset($_GET['parent_id']) && $_GET['parent_id'] != 0) {
 <tr bgcolor="eeeeee">
 	<td colspan="2" class="formcell">
 	<b>Host Description:</b><br />
-	<input type="text" size="40" name="host_manage[alias]" value=""><br />
+	<input type="text" size="40" name="host_manage[alias]" value="">
 	<?php echo $lilac->element_desc("alias", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
@@ -155,7 +155,7 @@ if(isset($_GET['parent_id']) && $_GET['parent_id'] != 0) {
 <tr bgcolor="f0f0f0">
 	<td colspan="2" class="formcell">
 	<b>Address:</b><br />
-	<input type="text" size="40" name="host_manage[address]" value=""><br />
+	<input type="text" size="40" name="host_manage[address]" value="">
 	<?php echo $lilac->element_desc("address", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
@@ -163,7 +163,7 @@ if(isset($_GET['parent_id']) && $_GET['parent_id'] != 0) {
 <tr bgcolor="f0f0f0">
 	<td colspan="2" class="formcell">
 	<b>Display Name (Optional):</b><br />
-	<input type="text" size="40" name="host_manage[display_name]" value=""><br />
+	<input type="text" size="40" name="host_manage[display_name]" value="">
 	<?php echo $lilac->element_desc("display_name", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
@@ -172,7 +172,7 @@ if(isset($_GET['parent_id']) && $_GET['parent_id'] != 0) {
 	<span id="output"></span>	
 </tr>
 <?php double_pane_form_window_finish(); ?>
-<input type="submit" value="Add Host" />&nbsp;[ <a href="hosts.php">Cancel</a> ]
+<input class="btn btn-primary" type="submit" value="Add Host" /> <a class="btn btn-default" href="hosts.php">Cancel</a>
 <br /><br />
 </form>
 <script type="text/javascript">

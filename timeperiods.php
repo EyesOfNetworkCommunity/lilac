@@ -97,22 +97,22 @@ print_header("Time Period Editor");
 				}
 			?>
 			<b>Time Period Name:</b><br />
-			<input type="text" name="timeperiod_manage[timeperiod_name]" value="<?php echo isset($timeperiod) ? $timeperiod->getName() : '';?>"><br />
+			<input type="text" name="timeperiod_manage[timeperiod_name]" value="<?php echo isset($timeperiod) ? $timeperiod->getName() : '';?>">
 			<?php echo $lilac->element_desc("timeperiod_name", "nagios_timeperiods_desc"); ?><br />
 			<br />
 			<b>Description:</b><br />
-			<input type="text" size="80" name="timeperiod_manage[alias]" value="<?php echo isset($timeperiod) ? $timeperiod->getAlias() : '';?>"><br />
+			<input type="text" size="80" name="timeperiod_manage[alias]" value="<?php echo isset($timeperiod) ? $timeperiod->getAlias() : '';?>">
 			<?php echo $lilac->element_desc("alias", "nagios_timeperiods_desc"); ?><br />
 			<br />
 			<?php 
 				if(isset($_GET['timeperiod_id'])) {
 					?>
-					<a href="timeperiods.php?timeperiod_id=<?php echo $_GET['timeperiod_id'];?>&request=delete">Delete</a>&nbsp;<input type="submit" value="Modify Period" />&nbsp;<a href="timeperiods.php">Cancel</a>
+					<a class="btn btn-danger" href="timeperiods.php?timeperiod_id=<?php echo $_GET['timeperiod_id'];?>&request=delete">Delete</a> <input class="btn btn-primary" type="submit" value="Modify Period" />&nbsp;<a href="timeperiods.php">Cancel</a>
 					<?php
 				}
 				else {
 					?>
-					<input type="submit" value="Create Period" />&nbsp;<a href="timeperiods.php">Cancel</a>
+					<input class="btn btn-primary" type="submit" value="Create Period" /> <a class="btn btn-default" href="timeperiods.php">Cancel</a>
 					<?php
 				}
 			?>
@@ -123,7 +123,7 @@ print_header("Time Period Editor");
 	else {
 		print_window_header("Time Period Listings", "100%");
 		?>
-		&nbsp;<a class="sublink" href="timeperiods.php?timeperiod_add=1">Add A New Time Period</a><br />
+		<a class="sublink btn btn-success" href="timeperiods.php?timeperiod_add=1">Add A New Time Period</a><br />
 		<?php
 		if($numOfPeriods) {
 			?>

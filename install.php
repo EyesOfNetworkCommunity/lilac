@@ -973,7 +973,7 @@ else if($stage == 2 && $success) {
 	<br style="clear: both;">
 	<p>
 		<input type="hidden" id="lilacVersion" value="<?php echo LILAC_VERSION;?>" />
-		<input type="submit" value="Submit Information" id="submitReg" />
+		<input class="btn btn-primary" type="submit" value="Submit Information" id="submitReg" />
 	</p>
 	</fieldset>
 	<p>

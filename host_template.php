@@ -870,15 +870,15 @@ print_header("Host Template Editor");
 					<input type="hidden" name="request" value="host_template_modify_general" />
 					<input type="hidden" name="host_template_id" value="<?php echo $hostTemplate->getId();?>">
 					<b>Template Name:</b><br />
-					<input type="text" size="40" name="host_manage[template_name]" value="<?php echo $hostTemplate->getName();?>"><br />
+					<input type="text" size="40" name="host_manage[template_name]" value="<?php echo $hostTemplate->getName();?>">
 					<?php echo $lilac->element_desc("template_name", "nagios_host_template_desc"); ?><br />
 					<br />		
 					<b>Description:</b><br />
-					<input type="text" size="80" name="host_manage[template_description]" value="<?php echo $hostTemplate->getDescription();?>"><br />
+					<input type="text" size="80" name="host_manage[template_description]" value="<?php echo $hostTemplate->getDescription();?>">
 					<?php echo $lilac->element_desc("template_description", "nagios_host_template_desc"); ?><br />
 					<br />
 					<br />
-					<input type="submit" value="Update General" /> [ <a href="host_template.php?id=<?php echo $hostTemplate->getId();?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update General" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $hostTemplate->getId();?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -886,7 +886,7 @@ print_header("Host Template Editor");
 					<b>Template Name:</b> <?php echo $hostTemplate->getName();?><br />
 					<b>Description:</b> <?php echo $hostTemplate->getDescription();?><br />
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -894,7 +894,7 @@ print_header("Host Template Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();">Delete This Host Template</a> ]
+			<a class="btn btn-danger" href="host_template.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();">Delete This Host Template</a>
 			<?php
 		}
 		if($_GET['section'] == 'inheritance') {
@@ -937,9 +937,9 @@ print_header("Host Template Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" class="altLeft"><?php if($numOfTemplates > 1 && $counter > 0) { ?>[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=moveup&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Up</a>]<?php }?></td>
-						<td height="20" width="100" class="altLeft"><?php if($numOfTemplates > 1 && $counter < ($numOfTemplates -1)) { ?>[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=movedown&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Down</a>]<?php }?></td>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=delete&template_id=<?php echo $templateInheritances[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" class="altLeft"><?php if($numOfTemplates > 1 && $counter > 0) { ?><a class="btn btn-primary btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=moveup&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Up</a><?php }?></td>
+						<td height="20" width="100" class="altLeft"><?php if($numOfTemplates > 1 && $counter < ($numOfTemplates -1)) { ?><a class="btn btn-primary btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=movedown&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Down</a><?php }?></td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=delete&template_id=<?php echo $templateInheritances[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $templateInheritances[$counter]->getName();?></b></td>
 						</tr>
 						<?php
@@ -950,7 +950,7 @@ print_header("Host Template Editor");
 				<br />
 				<form name="template_add" method="post" action="host_template.php?id=<?php echo $_GET['id'];?>&section=inheritance">
 				<input type="hidden" name="request" value="add_template_command" />
-				<b>Add Template To Inherit From:</b> <?php print_object_select("hostmanage[template_add][template_id]", $templateList, "getId", "getName", NULL, true, $exclude_list);?> <input type="submit" value="Add Template"><br />
+				<b>Add Template To Inherit From:</b> <?php print_object_select("hostmanage[template_add][template_id]", $templateList, "getId", "getName", NULL, true, $exclude_list);?> <input class="btn btn-primary" type="submit" value="Add Template"><br />
 				<br />
 				</form>
 				</td>
@@ -993,7 +993,7 @@ print_header("Host Template Editor");
 					double_pane_form_window_finish();
 					?>					
 					<br />
-					<input type="submit" value="Update Checks" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Checks" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1016,7 +1016,7 @@ print_header("Host Template Editor");
 					print_enabled_display_field("Failure Prediction", $templateValues, "failure_prediction_enabled", $_GET['id']);
 					?>
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=checks&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=checks&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1052,7 +1052,7 @@ print_header("Host Template Editor");
 					form_text_element_with_enabler(4, 4, "host_manage", "high_flap_threshold", "High Flap Threshold", $lilac->element_desc("high_flap_threshold", "nagios_hosts_desc"), $templateValues, $_GET['id']);
 					double_pane_form_window_finish();
 					?>
-					<input type="submit" value="Update Flapping" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Flapping" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1114,7 +1114,7 @@ print_header("Host Template Editor");
 					print_display_field("High Flap Threshold", $templateValues, "high_flap_threshold", $_GET['id']);
 					?>
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=flapping&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=flapping&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1144,7 +1144,7 @@ print_header("Host Template Editor");
 					form_select_element_with_enabler($enable_list, "values", "text", "host_manage", "retain_nonstatus_information", "Retain Non-Status Information", $lilac->element_desc("retain_nonstatus_information", "nagios_hosts_desc"), $templateValues, $_GET['id']);
 					double_pane_form_window_finish();
 					?>
-					<input type="submit" value="Update Logging" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Logging" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1156,7 +1156,7 @@ print_header("Host Template Editor");
 					print_enabled_display_field("Retain Non-Status Information", $templateValues, "retain_nonstatus_information", $_GET['id']);				
 					?>
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=logging&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=logging&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1201,7 +1201,7 @@ print_header("Host Template Editor");
 					double_pane_form_window_finish();
 					?>
 					<br />
-					<input type="submit" value="Update Notifications" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Notifications" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1300,7 +1300,7 @@ print_header("Host Template Editor");
 					}					
 					?>
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=notifications&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=notifications&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1383,7 +1383,7 @@ print_header("Host Template Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=groups&request=delete&hostgroup_id=<?php echo $group_list[$counter]->getNagiosHostgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=groups&request=delete&hostgroup_id=<?php echo $group_list[$counter]->getNagiosHostgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><a href="hostgroups.php?id=<?php echo $group_list[$counter]->getNagiosHostgroup()->getId();?>"><b><?php echo $group_list[$counter]->getNagiosHostgroup()->getName();?>:</b></a> <?php echo $group_list[$counter]->getNagiosHostgroup()->getAlias();?></td>
 						</tr>
 						<?php
@@ -1395,7 +1395,7 @@ print_header("Host Template Editor");
 				<form name="hostgroup_member_add" method="post" action="host_template.php?id=<?php echo $_GET['id'];?>&section=groups">
 				<input type="hidden" name="request" value="add_member_command" />
 				<input type="hidden" name="host_manage[group_add][host_id]" value="<?php echo $_GET['id'];?>" />
-				<b>Add New Host Group Membership:</b> <?php print_select("host_manage[group_add][hostgroup_id]", $hostgroups_list, "hostgroup_id", "hostgroup_name", "0");?> <input type="submit" value="Add Group"><br />
+				<b>Add New Host Group Membership:</b> <?php print_select("host_manage[group_add][hostgroup_id]", $hostgroups_list, "hostgroup_id", "hostgroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Group">
 				<?php echo $lilac->element_desc("members", "nagios_contactgroups_desc"); ?><br />
 				<br />
 				</form>
@@ -1476,7 +1476,7 @@ print_header("Host Template Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostTemplateServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostTemplateServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><a href="service.php?id=<?php echo $hostTemplateServiceList[$counter]->getId();?>"><?php echo $hostTemplateServiceList[$counter]->getDescription();?></a></b></td>
 						</tr>
 						<?php
@@ -1485,7 +1485,7 @@ print_header("Host Template Editor");
 				</table>
 				<br />
 				<br />
-				[ <a href="add_service.php?host_template_id=<?php echo $_GET['id'];?>">Create A New Service For This Template</a> ]
+				<a class="btn btn-success" href="add_service.php?host_template_id=<?php echo $_GET['id'];?>">Create A New Service For This Template</a>
 				<br />
 				</td>
 			</tr>
@@ -1555,7 +1555,7 @@ print_header("Host Template Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=checkcommand&request=delete&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=checkcommand&request=delete&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<form name="set_check_command_paramter<?php echo ++$parameterCounter;?>" method="post" action="host_template.php?section=checkcommand&id=<?php echo $_GET['id'];?>&request=update&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>">
                     <td height="20" class="altRight"><b>$ARG<?php echo $parameterCounter;?>$:</b><input type="text" <?php
              					echo 'name="param"';
@@ -1576,7 +1576,7 @@ print_header("Host Template Editor");
 			<form name="add_check_command_paramter" method="post" action="host_template.php?section=checkcommand&id=<?php echo $_GET['id'];?>">
 			<input type="hidden" name="request" value="command_parameter_add" />
 			<input type="hidden" name="host_manage[host_template_id]" value="<?php echo $_GET['id'];?>" />
-			Value for $ARG<?php echo ($counter+1);?>$: <input type="text" name="host_manage[parameter]" /> <input type="submit" value="Add Parameter" />
+			Value for $ARG<?php echo ($counter+1);?>$: <input type="text" name="host_manage[parameter]" /> <input class="btn btn-primary" type="submit" value="Add Parameter" />
 			</form>
 			</td>
 			</tr>
@@ -1628,7 +1628,7 @@ print_header("Host Template Editor");
 				double_pane_form_window_finish();
 				?>
 				<br />
-				<input type="submit" value="Update Extended Information" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=extended">Cancel</a> ]
+				<input class="btn btn-primary" type="submit" value="Update Extended Information" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=extended">Cancel</a>
 				</form>
 				<?php
 			} else {
@@ -1644,7 +1644,7 @@ print_header("Host Template Editor");
 				print_display_field("3D Coordinates", $templateValues, "three_d_coords", $_GET['id']);
 				?>
 				<br />
-				[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a> ]
+				<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a>
 				<?php
 			}
 			?>
@@ -1716,7 +1716,7 @@ print_header("Host Template Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b><?php echo $contacts_list[$counter]->getNagiosContact()->getName();?>:</b> <?php echo $contacts_list[$counter]->getNagiosContact()->getAlias();?></td>
 								</tr>
 								<?php
@@ -1734,7 +1734,7 @@ print_header("Host Template Editor");
 				<br />
 				<form name="host_template_contact_add" method="post" action="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts">
 				<input type="hidden" name="request" value="add_contact_command" />
-				<b>Add New Contact:</b> <?php print_select("host_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input type="submit" value="Add Contact"><br />
+				<b>Add New Contact:</b> <?php print_select("host_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact">
 				<?php echo $lilac->element_desc("contact_groups", "nagios_hosts_desc"); ?><br />
 				<br />
 				</form>
@@ -1804,7 +1804,7 @@ print_header("Host Template Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b><?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getName();?>:</b> <?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getAlias();?></td>
 								</tr>
 								<?php
@@ -1823,7 +1823,7 @@ print_header("Host Template Editor");
 				<form name="host_template_contactgroup_add" method="post" action="host_template.php?id=<?php echo $_GET['id'];?>&section=contacts">
 				<input type="hidden" name="request" value="add_contactgroup_command" />
 				<input type="hidden" name="host_manage[contactgroup_add][host_id]" value="<?php echo $_GET['id'];?>" />
-				<b>Add New Contact Group:</b> <?php print_select("host_manage[contactgroup_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input type="submit" value="Add Contact Group"><br />
+				<b>Add New Contact Group:</b> <?php print_select("host_manage[contactgroup_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact Group">
 				<?php echo $lilac->element_desc("contact_groups", "nagios_hosts_desc"); ?><br />
 				<br />
 				</form>
@@ -1900,7 +1900,7 @@ print_header("Host Template Editor");
 										<?php
 									}
 									?>
-									<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+									<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 									<td height="20" class="altRight"><b><a href="dependency.php?id=<?php echo $dependency->getId();?>"><?php echo $dependency->getName();?></a></b></td>
 									</tr>
 									<?php
@@ -1911,7 +1911,7 @@ print_header("Host Template Editor");
 						</table>
 						<br />
 						<br />
-						[ <a href="add_dependency.php?dependency_add=1&host_template_id=<?php echo $_GET['id'];?>">Create A New Host Dependency For This Template</a> ]
+						<a class="btn btn-success" href="add_dependency.php?dependency_add=1&host_template_id=<?php echo $_GET['id'];?>">Create A New Host Dependency For This Template</a>
 				</td>
 			</tr>
 			</table>
@@ -1984,7 +1984,7 @@ print_header("Host Template Editor");
 										<?php
 									}
 									?>
-									<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+									<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 									<td height="20" class="altRight"><b><a href="escalation.php?id=<?php echo $escalation->getId();?>"><?php echo $escalation->getDescription();?></a></b></td>
 									</tr>
 									<?php
@@ -1995,7 +1995,7 @@ print_header("Host Template Editor");
 						</table>
 						<br />
 						<br />
-						[ <a href="add_escalation.php?host_template_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Template</a> ]
+						<a class="btn btn-success" href="add_escalation.php?host_template_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Template</a>
 				</td>
 			</tr>
 			</table>
@@ -2025,7 +2025,7 @@ print_header("Host Template Editor");
 					double_pane_form_window_finish();
 					?>
 					<br />
-					<input type="submit" value="Update Filters" /> [ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=autodiscovery">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Filters" /> <a class="btn btn-default" href="host_template.php?id=<?php echo $_GET['id'];?>&section=autodiscovery">Cancel</a>
 					<?php
 				}
 				else {
@@ -2039,7 +2039,7 @@ print_header("Host Template Editor");
 					print_display_field("Operating system Vendor Filter", $templateValues, "autodiscovery_os_vendor_filter", $_GET['id']);
 					?>
 					<br />
-					[ <a href="host_template.php?id=<?php echo $_GET['id'];?>&section=autodiscovery&edit=1">Edit</a> ]<br />
+					<a class="btn btn-primary" href="host_template.php?id=<?php echo $_GET['id'];?>&section=autodiscovery&edit=1">Edit</a><br />
 					<br />
 					<?php
 					$inherited_list = $hostTemplate->getInheritedNagiosAutodiscoveryServiceFilters();
@@ -2155,7 +2155,7 @@ print_header("Host Template Editor");
 								<?php
 							}
 							?>
-							[ <a href="host_template.php?id=<?php echo $hostTemplate->getId();?>&section=autodiscovery&request=delete&filter=<?php echo $filter->getId();?>"  onClick="javascript:return confirmDelete();">Delete</a> ]
+							<a class="btn btn-danger" href="host_template.php?id=<?php echo $hostTemplate->getId();?>&section=autodiscovery&request=delete&filter=<?php echo $filter->getId();?>"  onClick="javascript:return confirmDelete();">Delete</a>
 							</div>
 							<?php
 						}
@@ -2186,19 +2186,19 @@ print_header("Host Template Editor");
 					 <strong>Protocol: </strong><?php print_select("host_manage[protocol]", $protocol_select, "value", "option");?> <strong>Port: (Required) </strong><input type="text" size="4" maxlength="40" name="host_manage[port]" />
 					</p>
 					<p>
-					<strong>Name: </strong><input type="text" name="host_manage[name]" size="40" maxlength="255" /><br />
+					<strong>Name: </strong><input type="text" name="host_manage[name]" size="40" maxlength="255" />
 					<?php echo $lilac->element_desc("autodiscovery_service_filter_name", "host_template_autodiscovery");?>
 					</p>
 					<p>
-					<strong>Product: </strong><input type="text" name="host_manage[product]" size="40" maxlength="255" /> <strong>Version: </strong><input type="text" name="host_manage[version]" size="4" maxlength="255" /><br />
+					<strong>Product: </strong><input type="text" name="host_manage[product]" size="40" maxlength="255" /> <strong>Version: </strong><input type="text" name="host_manage[version]" size="4" maxlength="255" />
 					<?php echo $lilac->element_desc("autodiscovery_service_filter_product", "host_template_autodiscovery");?>
 					</p>
 					<p>
-					<strong>Extra Information: </strong><input type="text" name="host_manage[extra_information]" size="40" maxlength="255" /><br />
+					<strong>Extra Information: </strong><input type="text" name="host_manage[extra_information]" size="40" maxlength="255" />
 					<?php echo $lilac->element_desc("autodiscovery_service_filter_extra_information", "host_template_autodiscovery");?>
 					</p>
 					<p>
-					<input type="submit" value="Add Service Filter" />
+					<input class="btn btn-primary" type="submit" value="Add Service Filter" />
 					</p>
 					</form>
 					</div>

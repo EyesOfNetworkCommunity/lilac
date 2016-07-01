@@ -168,15 +168,15 @@ print_header("Host Group Editor");
 					?>
 					<form name="command_form" method="post" action="hostgroups.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">
 						<input type="hidden" name="request" value="modify_hostgroup" />
-						<b>Host Group Name:</b> <input type="text" name="hostgroup_name" value="<?php echo $hostgroup->getName();?>"><br />
+						<b>Host Group Name:</b> <input type="text" name="hostgroup_name" value="<?php echo $hostgroup->getName();?>">
 						<?php echo $lilac->element_desc("hostgroup_name", "nagios_hostgroups_desc"); ?><br />
 						<br />
 						<b>Description:</b><br />
-						<input type="text" size="80" name="alias" value="<?php echo $hostgroup->getAlias();?>"><br />
+						<input type="text" size="80" name="alias" value="<?php echo $hostgroup->getAlias();?>">
 						<?php echo $lilac->element_desc("alias", "nagios_hostgroups_desc"); ?><br />
 						<br />
 						<br />
-						<input type="submit" value="Modify Host Group" />&nbsp; [<a href="hostgroups.php">Cancel</a> ]
+						<input class="btn btn-primary" type="submit" value="Modify Host Group" /> <a class="btn btn-default" href="hostgroups.php">Cancel</a>
 					</form>
 					<?php
 				}
@@ -185,7 +185,7 @@ print_header("Host Group Editor");
 					<b>Host Group Name:</b> <?php echo $hostgroup->getName();?><br />
 					<b>Description:</b> <?php echo $hostgroup->getAlias();?><br />
 					<br />
-					[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -193,7 +193,7 @@ print_header("Host Group Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Host Group</a> ]
+			<a class="btn btn-danger" href="hostgroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Host Group</a>
 			<?php
 		}
 		if($_GET['section'] == 'members') {
@@ -250,17 +250,17 @@ print_header("Host Group Editor");
 					?>
 					<form name="command_form" method="post" action="hostgroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">
 						<input type="hidden" name="request" value="modify_hostgroup_extended" />
-						<b>Notes:</b> <input type="text" name="notes" value="<?php echo $hostgroup->getNotes();?>"><br />
+						<b>Notes:</b> <input type="text" name="notes" value="<?php echo $hostgroup->getNotes();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_hostgroups_desc"); ?><br />
 						<br />
-						<b>Notes URL:</b> <input type="text" name="notes_url" value="<?php echo $hostgroup->getNotesUrl();?>"><br />
+						<b>Notes URL:</b> <input type="text" name="notes_url" value="<?php echo $hostgroup->getNotesUrl();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_hostgroups_desc"); ?><br />
 						<br />
-						<b>Action URL:</b> <input type="text" name="action_url" value="<?php echo $hostgroup->getActionUrl();?>"><br />
+						<b>Action URL:</b> <input type="text" name="action_url" value="<?php echo $hostgroup->getActionUrl();?>">
 						<?php echo $lilac->element_desc("notes", "nagios_hostgroups_desc"); ?><br />
 						<br />
 						<br />
-						<input type="submit" value="Modify Host Group Extended Information" />&nbsp; [<a href="hostgroups.php">Cancel</a> ]
+						<input class="btn btn-primary" type="submit" value="Modify Host Group Extended Information" /> <a class="btn btn-default" href="hostgroups.php">Cancel</a>
 					</form>
 					<?php
 				}
@@ -282,7 +282,7 @@ print_header("Host Group Editor");
 					}
 					?>
 					<br />
-					[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -290,7 +290,7 @@ print_header("Host Group Editor");
 			</tr>
 			</table>
 			<br />
-			[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Host Group</a> ]
+			<a class="btn btn-danger" href="hostgroups.php?id=<?php echo $_GET['id'];?>&request=delete" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete This Host Group</a>
 			<?php
 		}
 		else if($_GET['section'] == 'dependencies') {
@@ -322,7 +322,7 @@ print_header("Host Group Editor");
 							<?php
 					}
 					?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><a href="dependency.php?id=<?php echo $dependency->getId();?>"><?php echo $dependency->getName();?></a></b></td>
 						</tr>
 						<?php
@@ -333,7 +333,7 @@ print_header("Host Group Editor");
 				</table>
 				<br />
 				<br />
-				[ <a href="add_dependency.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Dependency For This Hostgroup</a> ]
+				<a class="btn btn-primary" href="add_dependency.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Dependency For This Hostgroup</a>
 				</td>
 				</tr>
 				</table>
@@ -371,7 +371,7 @@ print_header("Host Group Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostgroupServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostgroupServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><a href="service.php?id=<?php echo $hostgroupServiceList[$counter]->getId();?>"><?php echo $hostgroupServiceList[$counter]->getDescription();?></a></b></td>
 						</tr>
 						<?php
@@ -380,7 +380,7 @@ print_header("Host Group Editor");
 				</table>
 				<br />
 				<br />
-				[ <a href="add_service.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Service For This Hostgroup</a> ]
+				<a class="btn btn-primary" href="add_service.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Service For This Hostgroup</a>
 				<br />
 				</td>
 			</tr>
@@ -416,7 +416,7 @@ print_header("Host Group Editor");
 							<?php
 					}
 					?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="hostgroups.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><a href="escalation.php?id=<?php echo $escalation->getId();?>"><?php echo $escalation->getDescription();?></a></b></td>
 						</tr>
 						<?php
@@ -427,7 +427,7 @@ print_header("Host Group Editor");
 				</table>
 				<br />
 				<br />
-				[ <a href="add_escalation.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Hostgroup</a> ]
+				<a class="btn btn-primary" href="add_escalation.php?hostgroup_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Hostgroup</a>
 				</td>
 				</tr>
 				</table>
@@ -439,7 +439,7 @@ print_header("Host Group Editor");
 	if(!isset($_GET['hostgroup_add'])) {
 		print_window_header("Host Group Listing", "100%");
 		?>
-		&nbsp;<a class="sublink" href="hostgroups.php?hostgroup_add=1">Add A New Host Group</a><br />
+		<a class="sublink btn btn-success" href="hostgroups.php?hostgroup_add=1">Add A New Host Group</a><br />
 		<br />
 		<?php
 		
@@ -490,15 +490,15 @@ print_header("Host Group Editor");
 		?>
 		<form name="command_form" method="post" action="hostgroups.php?hostgroup_add=1">
 			<input type="hidden" name="request" value="add_hostgroup" />
-			<b>Host Group Name:</b> <input type="text" name="hostgroup_name" value=""><br />
+			<b>Host Group Name:</b> <input type="text" name="hostgroup_name" value="">
 			<?php echo $lilac->element_desc("hostgroup_name", "nagios_hostgroups_desc"); ?><br />
 			<br />
 			<b>Description:</b><br />
-			<input type="text" size="80" name="alias" value=""><br />
+			<input type="text" size="80" name="alias" value="">
 			<?php echo $lilac->element_desc("alias", "nagios_hostgroups_desc"); ?><br />
 			<br />
 			<br />
-			<input type="submit" value="Add Host Group" /> [ <a href="hostgroups.php">Cancel</a> ]
+			<input class="btn btn-primary" type="submit" value="Add Host Group" /> <a class="btn btn-default" href="hostgroups.php">Cancel</a>
 		</form>
 		<br /><br />
 		<?php

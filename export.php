@@ -279,8 +279,8 @@ if(!isset($exportJob))	{
 				<td><?php echo $job->getDescription();?></td>
 				<td><?php echo $job->getStartTime();?></td>
 				<td><?php echo $job->getStatus();?></td>
-				<td><a href="export.php?id=<?php echo $job->getId();?>">View Job</td>
-				<td><a href="export.php?id=<?php echo $job->getId();?>&action=restart">Restart</a></td>
+				<td><a class="btn btn-info" href="export.php?id=<?php echo $job->getId();?>">View Job</td>
+				<td><a class="btn btn-primary" href="export.php?id=<?php echo $job->getId();?>&action=restart">Restart</a></td>
 			</tr>
 			<?php
 		}
@@ -357,7 +357,7 @@ mysql_close( $link );
 	Choose an Engine to use for your Import Job from Above.
 	</div>
 
-	<input id="export_submit" style="display:none;" type="submit" value="Begin Export" />
+	<input class="btn btn-primary" id="export_submit" style="display:none;" type="submit" value="Begin Export" />
 	<?php
 	print_window_footer();
 }
@@ -429,7 +429,7 @@ else {
 	   <div class="roundedcorner_success_bottom"><div></div></div>
 	</div>
 
-	<a href="export.php?id=<?php echo $exportJob->getId();?>&action=restart">Restart Job</a>  | <a href="export.php?id=<?php echo $exportJob->getId();?>&delete=1" onclick="javascript:return confirmDelete();">Remove Job</a> | <a href="export.php">Return To Exporter</a>
+	<a class="btn btn-primary" href="export.php?id=<?php echo $exportJob->getId();?>&action=restart">Restart Job</a> <a class="btn btn-danger" href="export.php?id=<?php echo $exportJob->getId();?>&delete=1" onclick="javascript:return confirmDelete();">Remove Job</a> <a class="btn btn-default" href="export.php">Return To Exporter</a>
 	<?php
 	print_window_footer();
 	print_window_header("Job Log");

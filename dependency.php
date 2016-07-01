@@ -578,7 +578,7 @@ function enabler_switch(enabler) {
 
 					<br />
 					<br />
-					<input type="submit" value="Update General" /> [ <a href="dependency.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update General" /> <a class="btn btn-default" href="dependency.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -686,7 +686,7 @@ function enabler_switch(enabler) {
 					}	
 					?>
 					<br />
-					[ <a href="dependency.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="dependency.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -726,7 +726,7 @@ function enabler_switch(enabler) {
 							<?php
 					}
 					?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="dependency.php?id=<?php echo $_GET['id'];?>&section=targets&request=delete&target_id=<?php echo $target->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="dependency.php?id=<?php echo $_GET['id'];?>&section=targets&request=delete&target_id=<?php echo $target->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><?php
 					   		switch($target->getType()) {
 								case 'host':
@@ -771,7 +771,7 @@ function enabler_switch(enabler) {
 								<input type="text" id="targetname" size="30" name="name" value='' />
 							</td>
 							<td>
-								<input type="submit" value="Add Target" />
+								<input class="btn btn-primary" type="submit" value="Add Target" />
 							</td>
 						</tr>
 					</table>
@@ -797,7 +797,7 @@ function enabler_switch(enabler) {
 									<option>Enter a valid hostname to the left.</option>
 								</select>
 							</td>
-							<td><input type="submit" id="targetsubmit" value="Add Target" disabled="disabled" /></td>
+							<td><input class="btn btn-primary" type="submit" id="targetsubmit" value="Add Target" disabled="disabled" /></td>
 						</tr>
 
 					</table>

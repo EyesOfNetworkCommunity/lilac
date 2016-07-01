@@ -844,7 +844,7 @@ print_header("Service Editor");
 					<input type="hidden" name="request" value="service_template_modify_general" />
 					<input type="hidden" name="service_template_id" value="<?php echo $_GET['id'];?>">
 					<b>Description:</b><br />
-					<input type="text" size="80" name="service_manage[service_description]" value="<?php echo $service->getDescription();?>"><br />
+					<input type="text" size="80" name="service_manage[service_description]" value="<?php echo $service->getDescription();?>">
 					<?php echo $lilac->element_desc("service_description", "nagios_service_template_desc"); ?><br />
 					<br />
                     <b>Display Name: (Optional)</b><br />
@@ -852,7 +852,7 @@ print_header("Service Editor");
                     <?php echo $lilac->element_desc("display_name", "nagios_service_template_desc"); ?><br />
                     <br />
                     <br />
-					<input type="submit" value="Update General" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update General" /> <a class="btn btn-default" href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -867,7 +867,7 @@ print_header("Service Editor");
                     }
                     ?>
 					<br />
-					[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -915,9 +915,9 @@ print_header("Service Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" class="altLeft"><?php if($numOfTemplates > 1 && $counter > 0) { ?>[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=moveup&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Up</a>]<?php }?></td>
-						<td height="20" width="100" class="altLeft"><?php if($numOfTemplates > 1 && $counter < ($numOfTemplates -1)) { ?>[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=movedown&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Down</a>]<?php }?></td>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=delete&template_id=<?php echo $templateInheritances[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" class="altLeft"><?php if($numOfTemplates > 1 && $counter > 0) { ?><a class="btn btn-primary btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=moveup&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Up</a><?php }?></td>
+						<td height="20" width="100" class="altLeft"><?php if($numOfTemplates > 1 && $counter < ($numOfTemplates -1)) { ?><a class="btn btn-primary btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=movedown&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Down</a><?php }?></td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=delete&template_id=<?php echo $templateInheritances[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $templateInheritances[$counter]->getName();?></b></td>
 						</tr>
 						<?php
@@ -933,7 +933,7 @@ print_header("Service Editor");
 					?><strong>No Service Templates Available</strong><br /><?php
 				}
 				else {
-					print_object_select("servicemanage[template_add][template_id]", $templateList, "getId", "getName", NULL, true, $exclude_list);?> <input type="submit" value="Add Template"><br /><?php
+					print_object_select("servicemanage[template_add][template_id]", $templateList, "getId", "getName", NULL, true, $exclude_list);?> <input class="btn btn-primary" type="submit" value="Add Template"><br /><?php
 				}
 					?>
 				<br />
@@ -983,7 +983,7 @@ print_header("Service Editor");
 					double_pane_form_window_finish();
 					?>					
 					<br />
-					<input type="submit" value="Update Checks" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Checks" /> <a class="btn btn-default" href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1009,7 +1009,7 @@ print_header("Service Editor");
 					print_enabled_display_field("Failure Prediction", $serviceValues, "failure_prediction_enabled", $_GET['id']);
 					?>
 					<br />
-					[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=checks&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=checks&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1045,7 +1045,7 @@ print_header("Service Editor");
 					form_text_element_with_enabler(4, 4, "service_manage", "high_flap_threshold", "High Flap Threshold", $lilac->element_desc("high_flap_threshold", "nagios_services_desc"), $serviceValues, $_GET['id']);
 					double_pane_form_window_finish();
 					?>
-					<input type="submit" value="Update Flapping" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Flapping" /> <a class="btn btn-default" href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1082,7 +1082,7 @@ print_header("Service Editor");
 					print_display_field("High Flap Threshold", $serviceValues, "high_flap_threshold", $_GET['id']);			
 					?>
 					<br />
-					[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=flapping&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=flapping&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1112,7 +1112,7 @@ print_header("Service Editor");
 					form_select_element_with_enabler($enable_list, "values", "text", "service_manage", "retain_nonstatus_information", "Retain Non-Status Information", $lilac->element_desc("retain_nonstatus_information", "nagios_services_desc"), $serviceValues, $_GET['id']);
 					double_pane_form_window_finish();
 					?>
-					<input type="submit" value="Update Logging" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Logging" /> <a class="btn btn-default" href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1124,7 +1124,7 @@ print_header("Service Editor");
 					print_enabled_display_field("Retain Non-Status Information", $serviceValues, "retain_nonstatus_information", $_GET['id']);				
 					?>
 					<br />
-					[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=logging&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=logging&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1169,7 +1169,7 @@ print_header("Service Editor");
 					double_pane_form_window_finish();
 					?>
 					<br />
-					<input type="submit" value="Update Notifications" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update Notifications" /> <a class="btn btn-default" href="service.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -1279,7 +1279,7 @@ print_header("Service Editor");
 					}					
 					?>
 					<br />
-					[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=notifications&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=notifications&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -1368,7 +1368,7 @@ print_header("Service Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=checkcommand&request=delete&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=checkcommand&request=delete&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>" onClick="javascript:return confirmDelete();" onClick="javascript:return confirmDelete();">Delete</a></td>
 				<form name="set_check_command_paramter<?php echo ++$parameterCounter;?>" method="post" action="service.php?section=checkcommand&id=<?php echo $_GET['id'];?>&request=update&checkcommandparameter_id=<?php echo $checkCommandParameters[$counter]->getId();?>">
                     <td height="20" class="altRight"><b>$ARG<?php echo $parameterCounter;?>$:</b><input type="text" <?php
              					echo 'name="param"';
@@ -1389,7 +1389,7 @@ print_header("Service Editor");
 			<br />
 			<form name="add_check_command_paramter" method="post" action="service.php?id=<?php echo $_GET['id'];?>&section=checkcommand">
 			<input type="hidden" name="request" value="command_parameter_add" />
-			Value for $ARG<?php echo ($parameterCounter+1);?>$: <input type="text" name="service_manage[parameter]" /> <input type="submit" value="Add Parameter" />
+			Value for $ARG<?php echo ($parameterCounter+1);?>$: <input type="text" name="service_manage[parameter]" /> <input class="btn btn-primary" type="submit" value="Add Parameter" />
 			</form>
 			</td>
 			</tr>
@@ -1436,7 +1436,7 @@ print_header("Service Editor");
 				double_pane_form_window_finish();
 				?>
 				<br />
-				<input type="submit" value="Update Extended Information" /> [ <a href="service.php?id=<?php echo $_GET['id'];?>&section=extended">Cancel</a> ]
+				<input class="btn btn-primary" type="submit" value="Update Extended Information" /> <a href="service.php?id=<?php echo $_GET['id'];?>&section=extended">Cancel</a>
 				</form>
 				<?php
 			} else {
@@ -1448,7 +1448,7 @@ print_header("Service Editor");
 				print_display_field("Icon Image Alt Text", $serviceValues, "icon_image_alt", $_GET['id']);
 				?>
 				<br />
-				[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a> ]
+				<a class="btn btn-primary" href="service.php?id=<?php echo $_GET['id'];?>&section=extended&edit=1">Edit</a>
 				<?php
 			}
 			?>
@@ -1520,7 +1520,7 @@ print_header("Service Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b><?php echo $contacts_list[$counter]->getNagiosContact()->getName();?>:</b> <?php echo $contacts_list[$counter]->getNagiosContact()->getAlias();?></td>
 								</tr>
 								<?php
@@ -1543,7 +1543,7 @@ print_header("Service Editor");
 			   ?><strong>No Contacts Available</strong><br /><?php
 			   }
 			   else {
-		   		   print_select("service_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input type="submit" value="Add Contact"><br /><?php
+		   		   print_select("service_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact"><br /><?php
 			   }
 				?>
 				<?php echo $lilac->element_desc("contact_groups", "nagios_hosts_desc"); ?><br />
@@ -1617,7 +1617,7 @@ print_header("Service Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b><?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getName();?>:</b> <?php echo $contactgroups_list[$counter]->getNagiosContactgroup()->getAlias();?></td>
 								</tr>
 								<?php
@@ -1640,7 +1640,7 @@ print_header("Service Editor");
 			   ?><strong>No Contact Groups Available</strong><br /><?php
 			   }
 			   else {
-		   		   print_select("contactgroup_id", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input type="submit" value="Add Contact Group"><br /><?php
+		   		   print_select("contactgroup_id", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact Group"><br /><?php
 			   }
 				?>
 				<?php echo $lilac->element_desc("contact_groups", "nagios_services_desc"); ?><br />
@@ -1721,7 +1721,7 @@ print_header("Service Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=servicegroups&request=delete&servicegroup_id=<?php echo $servicegroups_list[$counter]->getNagiosServiceGroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=servicegroups&request=delete&servicegroup_id=<?php echo $servicegroups_list[$counter]->getNagiosServiceGroup()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b><?php echo $servicegroups_list[$counter]->getNagiosServiceGroup()->getName();?>:</b> <?php echo $servicegroups_list[$counter]->getNagiosServiceGroup()->getAlias();?></td>
 								</tr>
 								<?php
@@ -1744,7 +1744,7 @@ print_header("Service Editor");
 					?><strong>No Service Groups Available</strong><br /><?php
 				}
 				else {
-					print_select("servicegroup_id", $servicegroups_list, "servicegroup_id", "servicegroup_name", "0");?> <input type="submit" value="Add Service Group"><br /><?php
+					print_select("servicegroup_id", $servicegroups_list, "servicegroup_id", "servicegroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Service Group"><br /><?php
 				}
 				?>
 				<?php echo $lilac->element_desc("service_groups", "nagios_services_desc"); ?><br />
@@ -1823,7 +1823,7 @@ print_header("Service Editor");
 										<?php
 									}
 									?>
-									<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+									<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=dependencies&request=delete&dependency_id=<?php echo $dependency->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 									<td height="20" class="altRight"><b><a href="dependency.php?id=<?php echo $dependency->getId();?>"><?php echo $dependency->getName();?></a></b></td>
 									</tr>
 									<?php
@@ -1834,7 +1834,7 @@ print_header("Service Editor");
 						</table>
 						<br />
 						<br />
-						[ <a href="add_dependency.php?service_id=<?php echo $_GET['id'];?>">Create A New Service Dependency For This Service</a> ]
+						<a class="btn btn-success" href="add_dependency.php?service_id=<?php echo $_GET['id'];?>">Create A New Service Dependency For This Service</a>
 				</td>
 			</tr>
 			</table>
@@ -1907,7 +1907,7 @@ print_header("Service Editor");
 										<?php
 									}
 									?>
-									<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+									<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=escalations&request=delete&escalation_id=<?php echo $escalation->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 									<td height="20" class="altRight"><b><a href="escalation.php?id=<?php echo $escalation->getId();?>"><?php echo $escalation->getDescription();?></a></b></td>
 									</tr>
 									<?php
@@ -1918,7 +1918,7 @@ print_header("Service Editor");
 						</table>
 						<br />
 						<br />
-						[ <a href="add_escalation.php?service_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Template</a> ]
+						<a class="btn btn-success" href="add_escalation.php?service_id=<?php echo $_GET['id'];?>">Create A New Escalation For This Template</a>
 				</td>
 			</tr>
 			</table>

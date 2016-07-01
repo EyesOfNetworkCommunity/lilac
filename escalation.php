@@ -287,19 +287,19 @@ print_header("Escalation Editor for " . $title);
 					<form name="escalation_manage" method="post" action="escalation.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">
 					<input type="hidden" name="request" value="escalation_modify_general" />
 					
-					<b>Escalation Description:</b> <input type="text" name="escalation_manage[escalation_description]" value="<?php echo $escalation->getDescription();?>" /><br />
+					<b>Escalation Description:</b> <input type="text" name="escalation_manage[escalation_description]" value="<?php echo $escalation->getDescription();?>" />
 					<?php echo $lilac->element_desc("escalation_description", "nagios_escalations_desc"); ?><br />
 					<br />
-					<b>First Notification:</b> <input type="text" name="escalation_manage[first_notification]" value="<?php echo $escalation->getFirstNotification();?>" size="2" maxlength="2" /><br />
+					<b>First Notification:</b> <input type="text" name="escalation_manage[first_notification]" value="<?php echo $escalation->getFirstNotification();?>" size="2" maxlength="2" />
 					<?php echo $lilac->element_desc("first_notification", "nagios_escalations_desc"); ?><br />
 					<br />
-					<b>Last Notification:</b> <input type="text" name="escalation_manage[last_notification]" value="<?php echo $escalation->getLastNotification();?>" size="2" maxlength="2" /><br />
+					<b>Last Notification:</b> <input type="text" name="escalation_manage[last_notification]" value="<?php echo $escalation->getLastNotification();?>" size="2" maxlength="2" />
 					<?php echo $lilac->element_desc("last_notification", "nagios_escalations_desc"); ?><br />
 					<br />
-					<b>Notification Interval:</b> <input type="text" name="escalation_manage[notification_interval]" value="<?php echo $escalation->getNotificationInterval();?>" size="8" maxlength="8" /><br />
+					<b>Notification Interval:</b> <input type="text" name="escalation_manage[notification_interval]" value="<?php echo $escalation->getNotificationInterval();?>" size="8" maxlength="8" />
 					<?php echo $lilac->element_desc("notification_interval", "nagios_escalations_desc"); ?><br />
 					<br />
-					<b>Escalation Period:</b> <?php print_select("escalation_manage[escalation_period]", $period_list, "timeperiod_id", "timeperiod_name",($escalation->getEscalationPeriod() != null) ? $escalation->getEscalationPeriod() : '');?><br />
+					<b>Escalation Period:</b> <?php print_select("escalation_manage[escalation_period]", $period_list, "timeperiod_id", "timeperiod_name",($escalation->getEscalationPeriod() != null) ? $escalation->getEscalationPeriod() : '');?>
 					<?php echo $lilac->element_desc("escalation_period", "nagios_escalations_desc"); ?><br />
 					<br />
 					<?php
@@ -336,7 +336,7 @@ print_header("Escalation Editor for " . $title);
 
 					<br />
 					<br />
-					<input type="submit" value="Update General" /> [ <a href="escalation.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a> ]
+					<input class="btn btn-primary" type="submit" value="Update General" /> <a class="btn btn-default" href="escalation.php?id=<?php echo $_GET['id'];?>&section=general">Cancel</a>
 					<?php
 				}
 				else {
@@ -424,7 +424,7 @@ print_header("Escalation Editor for " . $title);
 					}
 					?>
 					<br />
-					[ <a href="escalation.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a> ]
+					<a class="btn btn-primary" href="escalation.php?id=<?php echo $_GET['id'];?>&section=general&edit=1">Edit</a>
 					<?php
 				}
 				?>
@@ -462,7 +462,7 @@ print_header("Escalation Editor for " . $title);
 							<?php
 					}
 					?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="escalation.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="escalation.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contact_id=<?php echo $contacts_list[$counter]->getNagiosContact()->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $contacts_list[$counter]->getNagiosContact()->getName();?>:</b> <?php echo $contacts_list[$counter]->getNagiosContact()->getAlias();?></td>
 						</tr>
 						<?php
@@ -485,7 +485,7 @@ print_header("Escalation Editor for " . $title);
 			   ?><strong>No Contacts Available</strong><br /><?php
 			   }
 			   else {
-		   		   print_select("escalation_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input type="submit" value="Add Contact"><br /><?php
+		   		   print_select("escalation_manage[contact_add][contact_id]", $contacts_list, "contact_id", "contact_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact"><br /><?php
 			   }
 			?>
 				<?php echo $lilac->element_desc("contact_groups", "nagios_escalations_desc"); ?><br />
@@ -529,7 +529,7 @@ print_header("Escalation Editor for " . $title);
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="escalation.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]['contactgroup_id'];?>">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="escalation.php?id=<?php echo $_GET['id'];?>&section=contacts&request=delete&contactgroup_id=<?php echo $contactgroups_list[$counter]['contactgroup_id'];?>">Delete</a></td>
 						<td height="20" class="altRight"><b><?php echo $lilac->return_contactgroup_name($contactgroups_list[$counter]['contactgroup_id']);?>:</b> <?php echo $lilac->return_contactgroup_alias($contactgroups_list[$counter]['contactgroup_id']);?></td>
 						</tr>
 						<?php
@@ -553,7 +553,7 @@ print_header("Escalation Editor for " . $title);
 			   ?><strong>No Contact Groups Available</strong><br /><?php
 			   }
 			   else {
-		   		   print_select("escalation_manage[contactgroup_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input type="submit" value="Add Contact Group"><br /><?php
+		   		   print_select("escalation_manage[contactgroup_add][contactgroup_id]", $contactgroups_list, "contactgroup_id", "contactgroup_name", "0");?> <input class="btn btn-primary" type="submit" value="Add Contact Group"><br /><?php
 			   }
 				?>
 				<?php echo $lilac->element_desc("contact_groups", "nagios_escalations_desc"); ?><br />

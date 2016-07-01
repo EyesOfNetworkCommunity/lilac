@@ -377,7 +377,7 @@ else {
 			targetcount = targetcount + 1;
 			event.preventDefault();
 			// Add new row to the table before this row, showing the 
-			var content = $("<tr><td>" + $("#activetarget").attr("value") + "<input type='hidden' name='target[" + targetcount + "]' value='" + $("#activetarget").attr("value") + "'/></td><td><a href=''>Delete This Target</a></td></tr>");
+			var content = $("<tr><td>" + $("#activetarget").attr("value") + "<input type='hidden' name='target[" + targetcount + "]' value='" + $("#activetarget").attr("value") + "'/></td><td><a class=\"btn btn-danger btn-xs\" href=''>Delete This Target</a></td></tr>");
 			// Add link to remove
 			$("a", content).click(function(event) {
 				event.preventDefault();
@@ -517,7 +517,7 @@ if(!isset($autodiscoveryJob))	{
 		<table id="targets">
 			<tr id="targetinputrow">
 				<td>
-				<input id="activetarget" type="text"size="40"></td><td><a id="addtargetlink" href="">Add Target</a>
+				<input id="activetarget" type="text"size="40"></td><td><a class="btn btn-primary btn-xs" id="addtargetlink" href="">Add Target</a>
 				</td>
 			</tr>
 		</table>
@@ -525,7 +525,7 @@ if(!isset($autodiscoveryJob))	{
 		</p>
 	</fieldset>
 	</p>
-	<input id="jobSubmitButton" type="submit" disabled="disabled" value="You Must Provide At Least One Target" />
+	<input class="btn btn-primary" id="jobSubmitButton" type="submit" disabled="disabled" value="You Must Provide At Least One Target" />
 	<?php
 	print_window_footer();
 }
@@ -710,7 +710,7 @@ else if(!isset($_GET['deviceId'])) {
 		<a class="checkAllLink" href="#">Check All</a> / <a class="uncheckAllLink" href="#">Un-Check All</a> With Selected: <select>
 		<option value="accept">Import</option>
 		<option value="remove">Remove</option>
-		</select> <input type="submit" value="Process" />		</form>
+		</select> <input p: type="submit" value="Process" />		</form>
 		<?php
 	}
 	?>
@@ -721,7 +721,7 @@ else if(!isset($_GET['deviceId'])) {
 else {
 	print_window_header("Device Details");
 	?>
-	[ <a href="autodiscovery.php?id=<?php echo $device->getAutodiscoveryJob()->getId();?>&review=1">Return To Device List</a> ]
+	<a class="btn btn-default" href="autodiscovery.php?id=<?php echo $device->getAutodiscoveryJob()->getId();?>&review=1">Return To Device List</a>
 	<br />
 	<br />
 	<h3>General Information</h3>
@@ -782,7 +782,7 @@ else {
 	<form action="autodiscovery.php?id=<?php echo $_GET['id'];?>&review=1&deviceId=<?php echo $device->getId();?>" method="post">
 	<input type="hidden" name="request" value="updateGeneral" />
 	<strong>Name: </strong><input type="text" value="<?php echo $device->getName();?>" name="name" size="40" maxlength="255" /> <strong>Description: </strong><input value="<?php echo $device->getDescription();?>" type="text" name="description" size="40" maxlength="255" /> 
-	<input type="submit" value="Update General" />	
+	<input class="btn btn-primary" type="submit" value="Update General" />	
 	
 	</form>
 	<br />
@@ -817,7 +817,7 @@ else {
 			}
 		}
 		print_select("template", $options, "value", "option", $device->getHostTemplate());
-	?> <input type="submit" value="Assign Template" /> [ <a href="autodiscovery.php?id=<?php echo $_GET['id'];?>&review=1&deviceId=<?php echo $device->getId();?>&request=recalc">Recalculate Template Matches</a> ]
+	?> <input class="btn btn-primary" type="submit" value="Assign Template" /> <a class="btn btn-primary" href="autodiscovery.php?id=<?php echo $_GET['id'];?>&review=1&deviceId=<?php echo $device->getId();?>&request=recalc">Recalculate Template Matches</a>
 	</form>
 	<br />
 	<br />

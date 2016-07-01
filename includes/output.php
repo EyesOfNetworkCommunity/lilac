@@ -280,11 +280,13 @@ function print_header($title = null) {
 	<meta http-equiv="X-UA-Compatible" content="IE=10">
 
 		<title><?php echo LILAC_NAME . " "; echo LILAC_VERSION;?><?php if($title) print(" - " . $title);?></title>
-	    	<link rel="stylesheet" type="text/css" href="style/reset.css">	    
-	    	<link rel="stylesheet" type="text/css" href="style/lilac.css">
-	    	<link rel="stylesheet" type="text/css" href="style/flexigrid.css">
-	    	<link rel="stylesheet" type="text/css" href="style/jquery.tooltip.css">
+    	<link rel="stylesheet" type="text/css" href="style/reset.css">	    
+    	<link rel="stylesheet" type="text/css" href="style/lilac.css">
+    	<link rel="stylesheet" type="text/css" href="style/flexigrid.css">
+    	<link rel="stylesheet" type="text/css" href="style/jquery.tooltip.css">
 		<link rel="stylesheet" type="text/css" href="style/jquery.autocomplete.css">
+		<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	 	<link rel="stylesheet" type="text/css" href="/bower_components/font-awesome/css/font-awesome.min.css">
 	 	<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
 	 	<script type="text/javascript" src="js/jquery.tooltip.min.js"></script>
 	 	<script type="text/javascript" src="js/jquery.timers-1.0.0.js"></script>
@@ -367,7 +369,7 @@ function print_header($title = null) {
 	<div id="header">
 		<div id="search">
 		<form action="search.php">
-			<span>Search:</span> <input type="text" name="query" />
+			<span>Search: </span> <input class="form-control input-sm" type="text" name="query" style="display: inline-block" />
 		</form>
 		</div>
 		<?php
@@ -725,7 +727,7 @@ function form_select_element_with_enabler($selectList, $selectValues, $selectLab
 	<div class="formbox">
 		<div class="formelement">
 			<div class="formcontent toggle">
-			<strong><?php echo $label;?>:</strong> <?php print_select($formName . "[" .$fieldName ."]", $selectList, $selectValues, $selectLabels, $value, $enabled);?><br />
+			<strong><?php echo $label;?>:</strong> <?php print_select($formName . "[" .$fieldName ."]", $selectList, $selectValues, $selectLabels, $value, $enabled);?>
 			<?php echo $description;?>
 			</div>
 		</div>
@@ -755,7 +757,7 @@ function form_text_element_with_enabler($size, $maxLength, $formName, $fieldName
 	<div class="formbox">
 		<div class="formelement">
 			<div class="formcontent toggle">
-			<strong><?php echo $label;?>:</strong> <input type="text" size="<?php echo $size;?>" maxlength="<?php echo $maxLength;?>" name="<?php echo $formName . "[" . $fieldName . "]";?>" value="<?php echo $value;?>" <?php if(!$enabled) print("DISABLED");?> /><br />
+			<strong><?php echo $label;?>:</strong> <input type="text" size="<?php echo $size;?>" maxlength="<?php echo $maxLength;?>" name="<?php echo $formName . "[" . $fieldName . "]";?>" value="<?php echo $value;?>" <?php if(!$enabled) print("DISABLED");?> />
 			<?php echo $description;?>
 			</div>
 		</div>

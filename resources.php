@@ -186,7 +186,7 @@ print_header("Environment Resources");
 		</tr>
 		<tr>
 			<td colspan="2">
-			<input type="submit" value="Update Resource Configuration" />
+			<input class="btn btn-primary" type="submit" value="Update Resource Configuration" />
 			</td>
 		</tr>
 		</table>

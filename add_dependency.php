@@ -121,10 +121,10 @@ print_window_header("Add Dependency To " . $title . " " . $textTitle, "100%");
 	<strong>Provide A Name for this Dependency</strong>
 		<form action="add_dependency.php?<?php echo $fieldName;?>=<?php echo $tempSource->getId();?>" method="post">
 		<input type="hidden" name="request" value="add_dependency" />
-		<input id="name" type="text" size="20" name="name" value="" /><br />
-		<input type="submit" value="Create Dependency" /> 
+		<input id="name" type="text" size="20" name="name" value="" /><br /><br />
+		<input class="btn btn-primary" type="submit" value="Create Dependency" /> 
 		<br />
-		<br /><a href="<?php echo $link;?>?id=<?php echo $tempSource->getId();?>">Cancel And Return To <?php echo $title;?> <?php echo $textTitle;?></a>
+		<br /><a class="btn btn-default" href="<?php echo $link;?>?id=<?php echo $tempSource->getId();?>">Cancel And Return To <?php echo $title;?> <?php echo $textTitle;?></a>
 		</form>
 		<?php
 print_window_footer();
