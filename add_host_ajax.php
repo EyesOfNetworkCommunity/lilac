@@ -9,7 +9,7 @@ session_start();
 
 	echo "<table width='100%' align='center' cellspacing='0' cellpadding='2' border='0'><tr class='altTop'><td colspan='4'>Host Templates To Inherit From (Top to Bottom):</td></tr>";
 	if ($_POST['id'] == "null"){
-		echo "</table><br /><br /><b>Add Template To Inherit From:</b>";
+		echo "</table><br /><br /><b>Add Template To Inherit From:</b>&nbsp;";
 		if(!count($templateList)) {
 			echo "<strong>No Templates Available</strong><br /><br />";
 		}

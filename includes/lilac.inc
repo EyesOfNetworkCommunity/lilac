@@ -67,7 +67,7 @@ class Lilac {
 		}
 		else {
 			//return '<i> '.$description->getLabel().'</i>';
-			return '<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="'.$description->getLabel().'" style="cursor: pointer;"></i>';
+			return '<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="'.htmlentities($description->getLabel()).'" style="cursor: pointer;"></i>';
 		}
 	}
 	
