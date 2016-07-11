@@ -946,7 +946,7 @@ print_header("Main Configuration File Editor", "main");
 		?>
 		<div class="formbox">
 			<b>Configuration Directory</b><br />
-			<input type="text" size="80" maxlength="255" name="main_config[config_dir]" value="<?php echo $mainConfig->getConfigDir();?>"><br />
+			<input type="text" size="80" maxlength="255" name="main_config[config_dir]" value="<?php echo $mainConfig->getConfigDir();?>">
 			<?php echo $lilac->element_desc("config_dir", "nagios_main_desc"); ?><br />
 		</div>
 			<?php
@@ -963,7 +963,7 @@ print_header("Main Configuration File Editor", "main");
 			double_pane_form_window_finish();
 			?>
 			<div class="formbox">
-			<input type="submit" value="Update Path Configuration" />
+			<input class="btn btn-primary" type="submit" value="Update Path Configuration" />
 			</div>
 			</form>
 			<?php
@@ -986,7 +986,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Status Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Status Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1003,7 +1003,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Security Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Security Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1023,7 +1023,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Restart Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Restart Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1046,7 +1046,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Logging Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Logging Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1063,7 +1063,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update External Command Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update External Command Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1089,7 +1089,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Retention Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Retention Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1105,7 +1105,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Global Handlers Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Global Handlers Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1135,7 +1135,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Interval Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Interval Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1154,7 +1154,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Interval Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Interval Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1176,7 +1176,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Timeout Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Timeout Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1194,7 +1194,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Obsession Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Obsession Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1212,7 +1212,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Obsession Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Obsession Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1244,7 +1244,7 @@ print_header("Main Configuration File Editor", "main");
 		</div>
 
 		<div class="formbox">
-		<input type="submit" value="Update Debug Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Debug Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1293,7 +1293,7 @@ print_header("Main Configuration File Editor", "main");
 		double_pane_form_window_finish();
 		?>
 		<div class="formbox">
-		<input type="submit" value="Update Other Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Other Configuration" />
 		</div>
 		</form>
 		<?php
@@ -1311,11 +1311,11 @@ print_header("Main Configuration File Editor", "main");
 		<form name="main_broker_config" method="post" action="main.php?section=broker">
 		<input type="hidden" name="request" value="main_modify_broker" />
 		<div class="formbox">
-			<b>Event Broker Options:</b> <?php print_select("main_config[event_broker_options]", $broker_list, "value", "label", $mainConfig->getEventBrokerOptions());?><br />
+			<b>Event Broker Options:</b> <?php print_select("main_config[event_broker_options]", $broker_list, "value", "label", $mainConfig->getEventBrokerOptions());?>
 			<?php echo $lilac->element_desc("event_broker_options", "nagios_main_desc"); ?><br />
 		</div>
 		<div class="formbox">
-		<input type="submit" value="Update Event Broker Configuration" />
+		<input class="btn btn-primary" type="submit" value="Update Event Broker Configuration" />
 		</div>
 		</form>
 		<br />
@@ -1339,7 +1339,7 @@ print_header("Main Configuration File Editor", "main");
 						<?php
 					}
 					?>
-					<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="main.php?section=broker&request=delete&module_id=<?php echo $module->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+					<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger" href="main.php?section=broker&request=delete&module_id=<?php echo $module->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 					<td height="20" class="altRight"><b><?php echo $module->getLine();?></b></td>
 					</tr>
 					<?php
@@ -1353,7 +1353,7 @@ print_header("Main Configuration File Editor", "main");
 		<b>Add Event Broker Module:</b>
 		<form action="<?php echo $_SERVER['PHP_SELF'];?>?&section=broker" method="post">
 		<input type="hidden" name="request" value="module_add" />
-		Module Path And Any Arguments:<input type="text" size="50" maxsize="255" name="module_line" /> <input type="submit" value="Add Module" /><br />
+		Module Path And Any Arguments:<input type="text" size="50" maxsize="255" name="module_line" /> <input class="btn btn-primary" type="submit" value="Add Module" /><br />
 		<i>Example:</i> /usr/lib/module.so arg1 arg2 arg3
 		</div>
 		</form>

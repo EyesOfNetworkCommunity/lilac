@@ -272,7 +272,7 @@ print_window_header("Add Service " . $title, "100%");
 <tr bgcolor="eeeeee">
 	<td colspan="2" class="formcell">
 	<b>Service Description:</b><br />
-	<input type="text" size="40" name="service_description" value=""><br />
+	<input type="text" size="40" name="service_description" value="">
 	<?php echo $lilac->element_desc("service_description", "nagios_services_desc"); ?><br />
 	<br />
 	</td>
@@ -280,7 +280,7 @@ print_window_header("Add Service " . $title, "100%");
 <tr bgcolor="eeeeee">
 	<td colspan="2" class="formcell">
 	<b>Display Name: (Optional)</b><br />
-	<input type="text" size="40" name="display_name" value=""><br />
+	<input type="text" size="40" name="display_name" value="">
 	<?php echo $lilac->element_desc("display_name", "nagios_services_desc"); ?><br />
 	<br />
 	</td>
@@ -332,7 +332,7 @@ print_window_header("Add Service " . $title, "100%");
 	</tr>
 <?php } ?>
 <?php double_pane_form_window_finish(); ?>
-<input type="submit" value="Add Service" />&nbsp;[ <a href="<?php echo $cancelLink;?>">Cancel</a> ]
+<input class="btn btn-primary" type="submit" value="Add Service" /> <a class="btn btn-default" href="<?php echo $cancelLink;?>">Cancel</a>
 <br /><br />
 </form>
 <script type="text/javascript">

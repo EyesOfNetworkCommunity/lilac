@@ -40,7 +40,7 @@ print_header("Template Listings");
 <?php
 	print_window_header("Host Templates", "100%");
 	?>
-	&nbsp;<a class="sublink" href="add_host_template.php">Add A New Host Template</a><br />
+	<a class="sublink btn btn-success" href="add_host_template.php">Add A New Host Template</a><br />
 		<br />
 		<?php
 	if($numOfHostTemplates) {
@@ -85,7 +85,7 @@ print_header("Template Listings");
 	print_window_footer();
 	print_window_header("Service Templates", "100%");
 	?>
-	&nbsp;<a class="sublink" href="add_service_template.php">Add A New Service Template</a><br />
+	<a class="sublink btn btn-success" href="add_service_template.php">Add A New Service Template</a><br />
 		<br />
 		<?php
 	if($numOfServiceTemplates) {

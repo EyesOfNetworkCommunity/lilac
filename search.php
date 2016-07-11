@@ -386,7 +386,7 @@ function validateForm() {
 		<td align="right" colspan="4"><img src="<?php echo $path_config['image_root'];?>dotclear.gif" height="4" width="1" /></td>
 	</tr>
 	<tr>
-		<td align="right"><input type="submit" value="Search" />&nbsp;&nbsp;</td>
+		<td align="right"><input class="btn btn-primary" type="submit" value="Search" />&nbsp;&nbsp;</td>
 	</tr>
 </table>
 </form>

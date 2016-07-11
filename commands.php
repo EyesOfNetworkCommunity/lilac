@@ -127,27 +127,27 @@ print_header("Nagios Command Editor");
 				}
 			?>
 			<b>Command Name:</b><br />
-			<input type="text" size="40" name="command_manage[command_name]" value="<?php echo isset($command) ? $command->getName() : '';?>"><br />
+			<input type="text" size="40" name="command_manage[command_name]" value="<?php echo isset($command) ? $command->getName() : '';?>">
 			<?php echo $lilac->element_desc("command_name", "nagios_commands_desc"); ?><br />
 			<br />
 			<b>Command Line:</b><br />
-			<input type="text" size="100" name="command_manage[command_line]" value="<?php echo isset($command) ? htmlentities($command->getLine()) : '';?>"><br />
+			<input type="text" size="100" name="command_manage[command_line]" value="<?php echo isset($command) ? htmlentities($command->getLine()) : '';?>">
 			<?php echo $lilac->element_desc("command_line", "nagios_commands_desc"); ?><br />
 			<br />
 			<b>Command Description:</b><br />
-			<input type="text" size="100" name="command_manage[command_desc]" value="<?php echo isset($command) ? $command->getDescription(): '';?>"><br />
+			<input type="text" size="100" name="command_manage[command_desc]" value="<?php echo isset($command) ? $command->getDescription(): '';?>">
 			<?php echo $lilac->element_desc("command_desc", "nagios_commands_desc"); ?><br />
 			<br />		
 			<br />
 			<?php 
 				if(isset($command)) {
 					?>
-					<a href="commands.php?command_id=<?php echo $command->getId();?>&request=delete">Delete</a>&nbsp;<input type="submit" value="Modify Command" />&nbsp;<a href="commands.php">Cancel</a>
+					<a class="btn btn-danger" href="commands.php?command_id=<?php echo $command->getId();?>&request=delete">Delete</a> <input class="btn btn-primary" type="submit" value="Modify Command" /> <a class="btn btn-default" href="commands.php">Cancel</a>
 					<?php
 				}
 				else {
 					?>
-					<input type="submit" value="Create Command" />&nbsp;<a href="commands.php">Cancel</a>
+					<input class="btn btn-primary" type="submit" value="Create Command" /> <a class="btn btn-default" href="commands.php">Cancel</a>
 					<?php
 				}
 			?>
@@ -158,7 +158,7 @@ print_header("Nagios Command Editor");
 	else {
 		print_window_header("Nagios Commands", "100%");
 		?>
-		&nbsp;<a class="sublink" href="commands.php?command_add=1">Add A New Command</a><br />
+		<a class="sublink btn btn-success" href="commands.php?command_add=1">Add A New Command</a><br />
 		<?php
 		if($numOfCommands) {
 			?>

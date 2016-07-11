@@ -61,7 +61,7 @@ print_window_header("Add Host Template", "100%");
 <tr bgcolor="f0f0f0">
 	<td colspan="2" class="formcell">
 	<b>Template Name:</b><br />
-	<input type="text" size="40" name="template_name" value=""><br />
+	<input type="text" size="40" name="template_name" value="">
 	<?php echo $lilac->element_desc("template_name", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
@@ -69,13 +69,13 @@ print_window_header("Add Host Template", "100%");
 <tr bgcolor="eeeeee">
 	<td colspan="2" class="formcell">
 	<b>Template Description:</b><br />
-	<input type="text" size="40" name="template_description" value=""><br />
+	<input type="text" size="40" name="template_description" value="">
 	<?php echo $lilac->element_desc("template_description", "nagios_hosts_desc"); ?><br />
 	<br />
 	</td>
 </tr>
 <?php double_pane_form_window_finish(); ?>
-<input type="submit" value="Add Host Template" />&nbsp;[ <a href="templates.php">Cancel</a> ]
+<input class="btn btn-primary" type="submit" value="Add Host Template" /> <a class="btn btn-default" href="templates.php">Cancel</a>
 <br /><br />
 </form>
 <?php

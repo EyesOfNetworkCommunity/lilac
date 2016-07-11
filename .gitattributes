@@ -23,6 +23,8 @@
 *.GIF binary
 *.jpeg binary
 *.JPEG binary
+*.otf binary
+*.OTF binary
 *.png binary
 *.PNG binary
 *.ttf binary

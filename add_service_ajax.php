@@ -22,7 +22,7 @@ session_start();
 				echo "<option value='".$service->getId()."'>".$service->getName()."</option>";
 			}
 			echo "</select>&nbsp;";
-			echo "<input type='button' onClick='javascript:getID()'' value='Add Template'><br /><br />;;;;";
+			echo "<input class='btn btn-primary' type='button' onClick='javascript:getID()'' value='Add Template'><br /><br />;;;;";
 		}
 	}
 	elseif ($_POST['id'] != "undefined") {
@@ -44,7 +44,7 @@ session_start();
 				if ( $service == $serv->getId()){
 					if ($i%2) echo "<tr class='altRow1'>";
 		        	else echo "<tr class='altRow2'>";
-		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(".$serv->getId().",\"delete\",\"null\");'>Delete</a> ]</td>";
+		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'><a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(".$serv->getId().",\"delete\",\"null\");'>Delete</a></td>";
 		        	echo "<td height='20' class='altRight'><b>".$serv->getName()."</b></td></tr>";
 		        	break;
 	        	}
@@ -62,7 +62,7 @@ session_start();
 	        		else echo "<tr class='altRow2'>";
 	        		$_SESSION['services'][count($_SESSION['services'])] = $service->getId() ;
 	        		$_SESSION['command'][count($_SESSION['command'])] = $service->getCheckCommand() ;
-	        		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(".$service->getId().",\"delete\");'>Delete</a> ]</td>";
+	        		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'><a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(".$service->getId().",\"delete\");'>Delete</a></td>";
 	        		echo "<td height='20' class='altRight'><b>".$service->getName()."</b></td></tr>";
 	        		break;
 				}
@@ -102,7 +102,7 @@ session_start();
 				if ( $service == $serv->getId()){
 					if ($i%2) echo "<tr class='altRow1'>";
 		        	else echo "<tr class='altRow2'>";
-		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(".$serv->getId().",\"delete\",\"null\");'>Delete</a> ]</td>";
+		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'> <a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(".$serv->getId().",\"delete\",\"null\");'>Delete</a></td>";
 		        	echo "<td height='20' class='altRight'><b>".$serv->getName()."</b></td></tr>";
 		        	break;
 	        	}
@@ -144,13 +144,13 @@ session_start();
 	foreach($_SESSION['params'] as $i=>$command) {
 		if($i % 2) echo '<tr class="altRow1">';
 		else echo '<tr class="altRow2">';
-		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(\"undefined\",\"null\",\"delete\",\"$command\");'>Delete</a> ]</td>
+		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'><a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(\"undefined\",\"null\",\"delete\",\"$command\");'>Delete</a></td>
         <td height='20' class='altRight'><b>\$ARG".($_SESSION['num_cmd']+$i+1)."\$: $command</b>
         </td></tr>";
         $count++;
 	}
 
 	echo '</table><br /><br /><table><tr><td>
-		Value for $ARG'.($_SESSION['num_cmd']+$count+1).'$: <input type="text" name="host_manage[parameter]" /> <input type="button" value="Add Parameter" onClick="javascript:getValue();"/>
+		Value for $ARG'.($_SESSION['num_cmd']+$count+1).'$: <input type="text" name="host_manage[parameter]" /> <input class="btn btn-primary" type="button" value="Add Parameter" onClick="javascript:getValue();"/>
 		</td></tr></table></br>';
 ?>

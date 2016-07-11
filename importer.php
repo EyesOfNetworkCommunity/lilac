@@ -106,7 +106,7 @@ if(isset($import) && isset($success)) {
 	<b>Import your XML File :</b>
 	<br /><br />
 	<input type="file" name="EoN_Import_XML">
-	<input type="submit" name="EoN_Import_Action" value="Submit" onClick="javascript:return confirmDelete();">
+	<input class="btn btn-primary" type="submit" name="EoN_Import_Action" value="Submit" onClick="javascript:return confirmDelete();">
 </div>
 <hr>
 </form>

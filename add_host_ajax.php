@@ -9,7 +9,7 @@ session_start();
 
 	echo "<table width='100%' align='center' cellspacing='0' cellpadding='2' border='0'><tr class='altTop'><td colspan='4'>Host Templates To Inherit From (Top to Bottom):</td></tr>";
 	if ($_POST['id'] == "null"){
-		echo "</table><br /><br /><b>Add Template To Inherit From:</b>";
+		echo "</table><br /><br /><b>Add Template To Inherit From:</b>&nbsp;";
 		if(!count($templateList)) {
 			echo "<strong>No Templates Available</strong><br /><br />";
 		}
@@ -19,7 +19,7 @@ session_start();
 				echo "<option value='".$template->getId()."'>".$template->getName()."</option>";
 			}
 			echo "</select>&nbsp;";
-			echo "<input type='button' onCLick='javascript:getID()'' value='Add Template'><br /><br />";
+			echo "<input class='btn btn-primary' type='button' onCLick='javascript:getID()'' value='Add Template'><br /><br />";
 		}
 	}
 	else {
@@ -42,7 +42,7 @@ session_start();
 				if ( $template == $temp->getId()){
 					if ($i%2) echo "<tr class='altRow1'>";
 		        	else echo "<tr class='altRow2'>";
-		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(".$temp->getId().",\"delete\");'>Delete</a> ]</td>";
+		        	echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'><a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(".$temp->getId().",\"delete\");'>Delete</a></td>";
 		        	echo "<td height='20' class='altRight'><b>".$temp->getName()."</b></td></tr>";
 		        	$i++;
 		        	break;
@@ -60,7 +60,7 @@ session_start();
 	        		if ($i%2) echo "<tr class='altRow1'>";
 	        		else echo "<tr class='altRow2'>";
 	        		$_SESSION['templates'][count($_SESSION['templates'])] = $template->getId() ;
-	        		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'>&nbsp;[ <a onClick='javascript:appel(".$template->getId().",\"delete\");'>Delete</a> ]</td>";
+	        		echo "<td height='20' width='80' nowrap='nowrap' class='altLeft'><a class=\"btn btn-danger btn-xs\" onClick='javascript:appel(".$template->getId().",\"delete\");'>Delete</a></td>";
 	        		echo "<td height='20' class='altRight'><b>".$template->getName()."</b></td></tr>";
 	        		break;
 				}

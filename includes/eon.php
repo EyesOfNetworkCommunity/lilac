@@ -30,8 +30,7 @@ function EoN_Actions($type) {
 	global $lilac;
 
 	echo '
-		<hr>
-		<div align="right">';
+		<div align="left">';
 
 	if($type=='Host') {
 		echo 'Object to 
@@ -46,7 +45,7 @@ function EoN_Actions($type) {
                         <option value="hosttemplate">Template</option>
                 </select>';
 
-                echo ' <input id="targetname" name="EoN_Association_Value" type="text" /> <input type="submit" name="EoN_Association" value="Do it!"> |
+                echo ' <input id="targetname" name="EoN_Association_Value" type="text" /> <input class="btn btn-primary btn-xs" type="submit" name="EoN_Association" value="Do it!"> |
                 <script type="text/javascript">
                         function RefreshAutoComplete() {
 			  $("#targetname").val("");
@@ -66,9 +65,9 @@ function EoN_Actions($type) {
 			<option value="EoN_Actions_Duplicate_'.$type.'">Duplicate</option>
 			<option value="EoN_Actions_Export_'.$type.'">Export</option>
                 </select>
-                <input type="submit" name="EoN_Actions" value="Submit" onClick="javascript:return confirmDelete();">';
+                <input class="btn btn-primary btn-xs" type="submit" name="EoN_Actions" value="Submit" onClick="javascript:return confirmDelete();">';
 
-	echo '</div><hr><br /><br />';
+	echo '</div><br /><br />';
 }
 
 // EoN Actions Process
