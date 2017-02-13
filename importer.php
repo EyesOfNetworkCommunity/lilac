@@ -98,9 +98,9 @@ if(isset($import) && isset($success)) {
 	<b>Import Options :</b>
 	<br /><br />
 	<ul>
-		<li><input type="checkbox" name="no_contacts" style="vertical-align:middle;">&nbsp;Keep Contacts</li>
-		<li><input type="checkbox" name="no_contactgroups" style="vertical-align:middle;">&nbsp;Keep Contactgroups</li>
-		<li><input type="checkbox" name="no_timeperiods" style="vertical-align:middle;">&nbsp;Keep Timeperiods</li>
+		<li><input type="checkbox" name="no_contacts" style="vertical-align:middle;" checked>&nbsp;Keep Contacts</li>
+		<li><input type="checkbox" name="no_contactgroups" style="vertical-align:middle;" checked>&nbsp;Keep Contactgroups</li>
+		<li><input type="checkbox" name="no_timeperiods" style="vertical-align:middle;" checked>&nbsp;Keep Timeperiods</li>
 	</ul>
 	<br />
 	<b>Import your XML File :</b>
