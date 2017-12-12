@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'import_job' table.
  *
  * Import Job Information
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseImportJob extends BaseObject  implements Persistent {
+abstract class BaseImportJob extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'ImportJobPeer';
 
 	/**
 	 * The Peer class.
@@ -90,11 +96,6 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	protected $collImportLogEntrys;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collImportLogEntrys.
-	 */
-	private $lastImportLogEntryCriteria = null;
-
-	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -107,26 +108,6 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseImportJob object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -405,45 +386,18 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	/**
 	 * Sets the value of [start_time] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     ImportJob The current object (for fluent API support)
 	 */
 	public function setStartTime($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->start_time !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->start_time !== null && $tmpDt = new DateTime($this->start_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->start_time = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->start_time !== null || $dt !== null) {
+			$currentDateAsString = ($this->start_time !== null && $tmpDt = new DateTime($this->start_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->start_time = $newDateAsString;
 				$this->modifiedColumns[] = ImportJobPeer::START_TIME;
 			}
 		} // if either are not null
@@ -454,45 +408,18 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	/**
 	 * Sets the value of [end_time] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     ImportJob The current object (for fluent API support)
 	 */
 	public function setEndTime($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->end_time !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->end_time !== null && $tmpDt = new DateTime($this->end_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->end_time = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->end_time !== null || $dt !== null) {
+			$currentDateAsString = ($this->end_time !== null && $tmpDt = new DateTime($this->end_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->end_time = $newDateAsString;
 				$this->modifiedColumns[] = ImportJobPeer::END_TIME;
 			}
 		} // if either are not null
@@ -543,45 +470,18 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	/**
 	 * Sets the value of [status_change_time] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     ImportJob The current object (for fluent API support)
 	 */
 	public function setStatusChangeTime($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->status_change_time !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->status_change_time !== null && $tmpDt = new DateTime($this->status_change_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->status_change_time = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->status_change_time !== null || $dt !== null) {
+			$currentDateAsString = ($this->status_change_time !== null && $tmpDt = new DateTime($this->status_change_time)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->status_change_time = $newDateAsString;
 				$this->modifiedColumns[] = ImportJobPeer::STATUS_CHANGE_TIME;
 			}
 		} // if either are not null
@@ -639,11 +539,6 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -685,8 +580,7 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 11; // 11 = ImportJobPeer::NUM_COLUMNS - ImportJobPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 11; // 11 = ImportJobPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating ImportJob object", $e);
@@ -749,7 +643,6 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->collImportLogEntrys = null;
-			$this->lastImportLogEntryCriteria = null;
 
 		} // if (deep)
 	}
@@ -772,12 +665,20 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(ImportJobPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			ImportJobPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				ImportJobQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -806,12 +707,29 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(ImportJobPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				ImportJobPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			ImportJobPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -843,16 +761,17 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = ImportJobPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(ImportJobPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.ImportJobPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
-					$affectedRows += ImportJobPeer::doUpdate($this, $con);
+					$affectedRows = ImportJobPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -1023,13 +942,21 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['ImportJob'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['ImportJob'][$this->getPrimaryKey()] = true;
 		$keys = ImportJobPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1044,6 +971,11 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 			$keys[9] => $this->getStats(),
 			$keys[10] => $this->getCmd(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collImportLogEntrys) {
+				$result['ImportLogEntrys'] = $this->collImportLogEntrys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -1179,7 +1111,6 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(ImportJobPeer::DATABASE_NAME);
-
 		$criteria->add(ImportJobPeer::ID, $this->id);
 
 		return $criteria;
@@ -1206,6 +1137,15 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -1213,31 +1153,21 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	 *
 	 * @param      object $copyObj An object of ImportJob (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setName($this->name);
-
-		$copyObj->setDescription($this->description);
-
-		$copyObj->setConfig($this->config);
-
-		$copyObj->setStartTime($this->start_time);
-
-		$copyObj->setEndTime($this->end_time);
-
-		$copyObj->setStatus($this->status);
-
-		$copyObj->setStatusCode($this->status_code);
-
-		$copyObj->setStatusChangeTime($this->status_change_time);
-
-		$copyObj->setStats($this->stats);
-
-		$copyObj->setCmd($this->cmd);
-
+		$copyObj->setName($this->getName());
+		$copyObj->setDescription($this->getDescription());
+		$copyObj->setConfig($this->getConfig());
+		$copyObj->setStartTime($this->getStartTime());
+		$copyObj->setEndTime($this->getEndTime());
+		$copyObj->setStatus($this->getStatus());
+		$copyObj->setStatusCode($this->getStatusCode());
+		$copyObj->setStatusChangeTime($this->getStatusChangeTime());
+		$copyObj->setStats($this->getStats());
+		$copyObj->setCmd($this->getCmd());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1252,11 +1182,10 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1297,8 +1226,24 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 		return self::$peer;
 	}
 
+
 	/**
-	 * Clears out the collImportLogEntrys collection (array).
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name 
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('ImportLogEntry' == $relationName) {
+			return $this->initImportLogEntrys();
+		}
+	}
+
+	/**
+	 * Clears out the collImportLogEntrys collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1312,69 +1257,56 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collImportLogEntrys collection (array).
+	 * Initializes the collImportLogEntrys collection.
 	 *
 	 * By default this just sets the collImportLogEntrys collection to an empty array (like clearcollImportLogEntrys());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initImportLogEntrys()
+	public function initImportLogEntrys($overrideExisting = true)
 	{
-		$this->collImportLogEntrys = array();
+		if (null !== $this->collImportLogEntrys && !$overrideExisting) {
+			return;
+		}
+		$this->collImportLogEntrys = new PropelObjectCollection();
+		$this->collImportLogEntrys->setModel('ImportLogEntry');
 	}
 
 	/**
 	 * Gets an array of ImportLogEntry objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this ImportJob has previously been saved, it will retrieve
-	 * related ImportLogEntrys from storage. If this ImportJob is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this ImportJob is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array ImportLogEntry[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array ImportLogEntry[] List of ImportLogEntry objects
 	 * @throws     PropelException
 	 */
 	public function getImportLogEntrys($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(ImportJobPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collImportLogEntrys === null) {
-			if ($this->isNew()) {
-			   $this->collImportLogEntrys = array();
+		if(null === $this->collImportLogEntrys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collImportLogEntrys) {
+				// return empty collection
+				$this->initImportLogEntrys();
 			} else {
-
-				$criteria->add(ImportLogEntryPeer::JOB, $this->id);
-
-				ImportLogEntryPeer::addSelectColumns($criteria);
-				$this->collImportLogEntrys = ImportLogEntryPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(ImportLogEntryPeer::JOB, $this->id);
-
-				ImportLogEntryPeer::addSelectColumns($criteria);
-				if (!isset($this->lastImportLogEntryCriteria) || !$this->lastImportLogEntryCriteria->equals($criteria)) {
-					$this->collImportLogEntrys = ImportLogEntryPeer::doSelect($criteria, $con);
+				$collImportLogEntrys = ImportLogEntryQuery::create(null, $criteria)
+					->filterByImportJob($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collImportLogEntrys;
 				}
+				$this->collImportLogEntrys = $collImportLogEntrys;
 			}
 		}
-		$this->lastImportLogEntryCriteria = $criteria;
 		return $this->collImportLogEntrys;
 	}
 
@@ -1389,47 +1321,21 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 	 */
 	public function countImportLogEntrys(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(ImportJobPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collImportLogEntrys === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collImportLogEntrys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collImportLogEntrys) {
+				return 0;
 			} else {
-
-				$criteria->add(ImportLogEntryPeer::JOB, $this->id);
-
-				$count = ImportLogEntryPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(ImportLogEntryPeer::JOB, $this->id);
-
-				if (!isset($this->lastImportLogEntryCriteria) || !$this->lastImportLogEntryCriteria->equals($criteria)) {
-					$count = ImportLogEntryPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collImportLogEntrys);
+				$query = ImportLogEntryQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collImportLogEntrys);
+				return $query
+					->filterByImportJob($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collImportLogEntrys);
 		}
-		return $count;
 	}
 
 	/**
@@ -1445,32 +1351,88 @@ abstract class BaseImportJob extends BaseObject  implements Persistent {
 		if ($this->collImportLogEntrys === null) {
 			$this->initImportLogEntrys();
 		}
-		if (!in_array($l, $this->collImportLogEntrys, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collImportLogEntrys, $l);
+		if (!$this->collImportLogEntrys->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collImportLogEntrys[]= $l;
 			$l->setImportJob($this);
 		}
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->name = null;
+		$this->description = null;
+		$this->config = null;
+		$this->start_time = null;
+		$this->end_time = null;
+		$this->status = null;
+		$this->status_code = null;
+		$this->status_change_time = null;
+		$this->stats = null;
+		$this->cmd = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collImportLogEntrys) {
-				foreach ((array) $this->collImportLogEntrys as $o) {
+				foreach ($this->collImportLogEntrys as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collImportLogEntrys instanceof PropelCollection) {
+			$this->collImportLogEntrys->clearIterator();
+		}
 		$this->collImportLogEntrys = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(ImportJobPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseImportJob

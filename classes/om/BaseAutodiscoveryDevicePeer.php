@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'autodiscovery_device' table.
  *
  * AutoDiscovery Found Device
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseAutodiscoveryDevicePeer {
 
@@ -15,14 +16,23 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'autodiscovery_device';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'AutodiscoveryDevice';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'AutodiscoveryDevice';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'AutodiscoveryDeviceTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 11;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 11;
 
 	/** the column name for the ID field */
 	const ID = 'autodiscovery_device.ID';
@@ -57,6 +67,9 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/** the column name for the PROPOSED_PARENT field */
 	const PROPOSED_PARENT = 'autodiscovery_device.PROPOSED_PARENT';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of AutodiscoveryDevice objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -65,11 +78,6 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -77,10 +85,11 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'JobId', 'Address', 'Name', 'Hostname', 'Description', 'Osvendor', 'Osfamily', 'Osgen', 'HostTemplate', 'ProposedParent', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'jobId', 'address', 'name', 'hostname', 'description', 'osvendor', 'osfamily', 'osgen', 'hostTemplate', 'proposedParent', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::JOB_ID, self::ADDRESS, self::NAME, self::HOSTNAME, self::DESCRIPTION, self::OSVENDOR, self::OSFAMILY, self::OSGEN, self::HOST_TEMPLATE, self::PROPOSED_PARENT, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'JOB_ID', 'ADDRESS', 'NAME', 'HOSTNAME', 'DESCRIPTION', 'OSVENDOR', 'OSFAMILY', 'OSGEN', 'HOST_TEMPLATE', 'PROPOSED_PARENT', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'job_id', 'address', 'name', 'hostname', 'description', 'osvendor', 'osfamily', 'osgen', 'host_template', 'proposed_parent', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
@@ -91,25 +100,15 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'JobId' => 1, 'Address' => 2, 'Name' => 3, 'Hostname' => 4, 'Description' => 5, 'Osvendor' => 6, 'Osfamily' => 7, 'Osgen' => 8, 'HostTemplate' => 9, 'ProposedParent' => 10, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'jobId' => 1, 'address' => 2, 'name' => 3, 'hostname' => 4, 'description' => 5, 'osvendor' => 6, 'osfamily' => 7, 'osgen' => 8, 'hostTemplate' => 9, 'proposedParent' => 10, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::JOB_ID => 1, self::ADDRESS => 2, self::NAME => 3, self::HOSTNAME => 4, self::DESCRIPTION => 5, self::OSVENDOR => 6, self::OSFAMILY => 7, self::OSGEN => 8, self::HOST_TEMPLATE => 9, self::PROPOSED_PARENT => 10, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'JOB_ID' => 1, 'ADDRESS' => 2, 'NAME' => 3, 'HOSTNAME' => 4, 'DESCRIPTION' => 5, 'OSVENDOR' => 6, 'OSFAMILY' => 7, 'OSGEN' => 8, 'HOST_TEMPLATE' => 9, 'PROPOSED_PARENT' => 10, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'job_id' => 1, 'address' => 2, 'name' => 3, 'hostname' => 4, 'description' => 5, 'osvendor' => 6, 'osfamily' => 7, 'osgen' => 8, 'host_template' => 9, 'proposed_parent' => 10, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new AutodiscoveryDeviceMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -171,35 +170,38 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::ID);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::JOB_ID);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::ADDRESS);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::NAME);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::HOSTNAME);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::DESCRIPTION);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSVENDOR);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSFAMILY);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSGEN);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::HOST_TEMPLATE);
-
-		$criteria->addSelectColumn(AutodiscoveryDevicePeer::PROPOSED_PARENT);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::ID);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::JOB_ID);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::ADDRESS);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::NAME);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::HOSTNAME);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::DESCRIPTION);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSVENDOR);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSFAMILY);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::OSGEN);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::HOST_TEMPLATE);
+			$criteria->addSelectColumn(AutodiscoveryDevicePeer::PROPOSED_PARENT);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.JOB_ID');
+			$criteria->addSelectColumn($alias . '.ADDRESS');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.HOSTNAME');
+			$criteria->addSelectColumn($alias . '.DESCRIPTION');
+			$criteria->addSelectColumn($alias . '.OSVENDOR');
+			$criteria->addSelectColumn($alias . '.OSFAMILY');
+			$criteria->addSelectColumn($alias . '.OSGEN');
+			$criteria->addSelectColumn($alias . '.HOST_TEMPLATE');
+			$criteria->addSelectColumn($alias . '.PROPOSED_PARENT');
+		}
 	}
 
 	/**
@@ -246,7 +248,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -265,7 +267,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -319,7 +321,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 * @param      AutodiscoveryDevice $value A AutodiscoveryDevice object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(AutodiscoveryDevice $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -387,6 +389,20 @@ abstract class BaseAutodiscoveryDevicePeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to autodiscovery_device
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in AutodiscoveryDeviceServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		AutodiscoveryDeviceServicePeer::clearInstancePool();
+		// Invalidate objects in AutodiscoveryDeviceTemplateMatchPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		AutodiscoveryDeviceTemplateMatchPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -399,12 +415,26 @@ abstract class BaseAutodiscoveryDevicePeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -417,18 +447,16 @@ abstract class BaseAutodiscoveryDevicePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = AutodiscoveryDevicePeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = AutodiscoveryDevicePeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = AutodiscoveryDevicePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -438,11 +466,37 @@ abstract class BaseAutodiscoveryDevicePeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (AutodiscoveryDevice object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = AutodiscoveryDevicePeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = AutodiscoveryDevicePeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			AutodiscoveryDevicePeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related AutodiscoveryJob table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -475,7 +529,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -491,7 +546,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -524,7 +579,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -540,7 +596,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -573,7 +629,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -588,41 +645,41 @@ abstract class BaseAutodiscoveryDevicePeer {
 
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with their AutodiscoveryJob objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAutodiscoveryJob(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAutodiscoveryJob(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
-		AutodiscoveryJobPeer::addSelectColumns($c);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
+		AutodiscoveryJobPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -633,9 +690,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj2 = AutodiscoveryJobPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = AutodiscoveryJobPeer::getOMClass();
+					$cls = AutodiscoveryJobPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					AutodiscoveryJobPeer::addInstanceToPool($obj2, $key2);
@@ -655,41 +711,41 @@ abstract class BaseAutodiscoveryDevicePeer {
 
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with their NagiosHostTemplate objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHostTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHostTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostTemplatePeer::addSelectColumns($c);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -700,9 +756,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj2 = NagiosHostTemplatePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostTemplatePeer::getOMClass();
+					$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -722,41 +777,41 @@ abstract class BaseAutodiscoveryDevicePeer {
 
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with their NagiosHost objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostPeer::addSelectColumns($c);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -767,9 +822,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -790,7 +844,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -823,9 +877,12 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$criteria->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -840,50 +897,52 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol2 = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol2 = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
 
-		AutodiscoveryJobPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (AutodiscoveryJobPeer::NUM_COLUMNS - AutodiscoveryJobPeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryJobPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + AutodiscoveryJobPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-		$c->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$c->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -896,10 +955,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj2 = AutodiscoveryJobPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = AutodiscoveryJobPeer::getOMClass();
+					$cls = AutodiscoveryJobPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					AutodiscoveryJobPeer::addInstanceToPool($obj2, $key2);
@@ -916,10 +973,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj3 = NagiosHostTemplatePeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosHostTemplatePeer::getOMClass();
+					$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -936,10 +991,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 				$obj4 = NagiosHostPeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosHostPeer::addInstanceToPool($obj4, $key4);
@@ -959,7 +1012,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related AutodiscoveryJob table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -992,8 +1045,10 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1009,7 +1064,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1042,8 +1097,10 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1059,7 +1116,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1092,8 +1149,10 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
+
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1109,49 +1168,50 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with all related objects except AutodiscoveryJob.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptAutodiscoveryJob(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptAutodiscoveryJob(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol2 = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol2 = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-				$c->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -1164,10 +1224,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj2 = NagiosHostTemplatePeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosHostTemplatePeer::getOMClass();
+						$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -1185,10 +1243,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj3 = NagiosHostPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostPeer::addInstanceToPool($obj3, $key3);
@@ -1209,49 +1265,50 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with all related objects except NagiosHostTemplate.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHostTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHostTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol2 = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol2 = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
 
-		AutodiscoveryJobPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (AutodiscoveryJobPeer::NUM_COLUMNS - AutodiscoveryJobPeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryJobPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + AutodiscoveryJobPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-				$c->addJoin(array(AutodiscoveryDevicePeer::PROPOSED_PARENT,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::PROPOSED_PARENT, NagiosHostPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -1264,10 +1321,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj2 = AutodiscoveryJobPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = AutodiscoveryJobPeer::getOMClass();
+						$cls = AutodiscoveryJobPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					AutodiscoveryJobPeer::addInstanceToPool($obj2, $key2);
@@ -1285,10 +1340,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj3 = NagiosHostPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostPeer::addInstanceToPool($obj3, $key3);
@@ -1309,49 +1362,50 @@ abstract class BaseAutodiscoveryDevicePeer {
 	/**
 	 * Selects a collection of AutodiscoveryDevice objects pre-filled with all related objects except NagiosHost.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of AutodiscoveryDevice objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		AutodiscoveryDevicePeer::addSelectColumns($c);
-		$startcol2 = (AutodiscoveryDevicePeer::NUM_COLUMNS - AutodiscoveryDevicePeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryDevicePeer::addSelectColumns($criteria);
+		$startcol2 = AutodiscoveryDevicePeer::NUM_HYDRATE_COLUMNS;
 
-		AutodiscoveryJobPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (AutodiscoveryJobPeer::NUM_COLUMNS - AutodiscoveryJobPeer::NUM_LAZY_LOAD_COLUMNS);
+		AutodiscoveryJobPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + AutodiscoveryJobPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(AutodiscoveryDevicePeer::JOB_ID,), array(AutodiscoveryJobPeer::ID,), $join_behavior);
-				$c->addJoin(array(AutodiscoveryDevicePeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(AutodiscoveryDevicePeer::JOB_ID, AutodiscoveryJobPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(AutodiscoveryDevicePeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = AutodiscoveryDevicePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = AutodiscoveryDevicePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = AutodiscoveryDevicePeer::getOMClass();
+				$cls = AutodiscoveryDevicePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				AutodiscoveryDevicePeer::addInstanceToPool($obj1, $key1);
@@ -1364,10 +1418,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj2 = AutodiscoveryJobPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = AutodiscoveryJobPeer::getOMClass();
+						$cls = AutodiscoveryJobPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					AutodiscoveryJobPeer::addInstanceToPool($obj2, $key2);
@@ -1385,10 +1437,8 @@ abstract class BaseAutodiscoveryDevicePeer {
 					$obj3 = NagiosHostTemplatePeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostTemplatePeer::getOMClass();
+						$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -1418,21 +1468,35 @@ abstract class BaseAutodiscoveryDevicePeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return AutodiscoveryDevicePeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseAutodiscoveryDevicePeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseAutodiscoveryDevicePeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new AutodiscoveryDeviceTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a AutodiscoveryDevice or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? AutodiscoveryDevicePeer::CLASS_DEFAULT : AutodiscoveryDevicePeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a AutodiscoveryDevice or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or AutodiscoveryDevice object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1475,7 +1539,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a AutodiscoveryDevice or Criteria object.
+	 * Performs an UPDATE on the database, given a AutodiscoveryDevice or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or AutodiscoveryDevice object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1495,7 +1559,12 @@ abstract class BaseAutodiscoveryDevicePeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(AutodiscoveryDevicePeer::ID);
-			$selectCriteria->add(AutodiscoveryDevicePeer::ID, $criteria->remove(AutodiscoveryDevicePeer::ID), $comparison);
+			$value = $criteria->remove(AutodiscoveryDevicePeer::ID);
+			if ($value) {
+				$selectCriteria->add(AutodiscoveryDevicePeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(AutodiscoveryDevicePeer::TABLE_NAME);
+			}
 
 		} else { // $values is AutodiscoveryDevice object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1509,11 +1578,12 @@ abstract class BaseAutodiscoveryDevicePeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the autodiscovery_device table.
+	 * Deletes all rows from the autodiscovery_device table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(AutodiscoveryDevicePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1524,7 +1594,12 @@ abstract class BaseAutodiscoveryDevicePeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			$affectedRows += AutodiscoveryDevicePeer::doOnDeleteCascade(new Criteria(AutodiscoveryDevicePeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(AutodiscoveryDevicePeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(AutodiscoveryDevicePeer::TABLE_NAME, $con, AutodiscoveryDevicePeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			AutodiscoveryDevicePeer::clearInstancePool();
+			AutodiscoveryDevicePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1534,7 +1609,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a AutodiscoveryDevice or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a AutodiscoveryDevice or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or AutodiscoveryDevice object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1551,30 +1626,14 @@ abstract class BaseAutodiscoveryDevicePeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			AutodiscoveryDevicePeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof AutodiscoveryDevice) {
-			// invalidate the cache for this single object
-			AutodiscoveryDevicePeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof AutodiscoveryDevice) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(AutodiscoveryDevicePeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				AutodiscoveryDevicePeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -1586,25 +1645,26 @@ abstract class BaseAutodiscoveryDevicePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += AutodiscoveryDevicePeer::doOnDeleteCascade($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					AutodiscoveryDevicePeer::clearInstancePool();
-				} else { // it's a PK or object
-					AutodiscoveryDevicePeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += AutodiscoveryDevicePeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				AutodiscoveryDevicePeer::clearInstancePool();
+			} elseif ($values instanceof AutodiscoveryDevice) { // it's a model object
+				AutodiscoveryDevicePeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					AutodiscoveryDevicePeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in AutodiscoveryDeviceServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			AutodiscoveryDeviceServicePeer::clearInstancePool();
-
-			// invalidate objects in AutodiscoveryDeviceTemplateMatchPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			AutodiscoveryDeviceTemplateMatchPeer::clearInstancePool();
-
+			AutodiscoveryDevicePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1637,16 +1697,16 @@ abstract class BaseAutodiscoveryDevicePeer {
 
 
 			// delete related AutodiscoveryDeviceService objects
-			$c = new Criteria(AutodiscoveryDeviceServicePeer::DATABASE_NAME);
+			$criteria = new Criteria(AutodiscoveryDeviceServicePeer::DATABASE_NAME);
 			
-			$c->add(AutodiscoveryDeviceServicePeer::DEVICE_ID, $obj->getId());
-			$affectedRows += AutodiscoveryDeviceServicePeer::doDelete($c, $con);
+			$criteria->add(AutodiscoveryDeviceServicePeer::DEVICE_ID, $obj->getId());
+			$affectedRows += AutodiscoveryDeviceServicePeer::doDelete($criteria, $con);
 
 			// delete related AutodiscoveryDeviceTemplateMatch objects
-			$c = new Criteria(AutodiscoveryDeviceTemplateMatchPeer::DATABASE_NAME);
+			$criteria = new Criteria(AutodiscoveryDeviceTemplateMatchPeer::DATABASE_NAME);
 			
-			$c->add(AutodiscoveryDeviceTemplateMatchPeer::DEVICE_ID, $obj->getId());
-			$affectedRows += AutodiscoveryDeviceTemplateMatchPeer::doDelete($c, $con);
+			$criteria->add(AutodiscoveryDeviceTemplateMatchPeer::DEVICE_ID, $obj->getId());
+			$affectedRows += AutodiscoveryDeviceTemplateMatchPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -1663,7 +1723,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(AutodiscoveryDevice $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -1741,14 +1801,7 @@ abstract class BaseAutodiscoveryDevicePeer {
 
 } // BaseAutodiscoveryDevicePeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the AutodiscoveryDevicePeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the AutodiscoveryDevicePeer class:
-//
-// Propel::getDatabaseMap(AutodiscoveryDevicePeer::DATABASE_NAME)->addTableBuilder(AutodiscoveryDevicePeer::TABLE_NAME, AutodiscoveryDevicePeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseAutodiscoveryDevicePeer::DATABASE_NAME)->addTableBuilder(BaseAutodiscoveryDevicePeer::TABLE_NAME, BaseAutodiscoveryDevicePeer::getMapBuilder());
+BaseAutodiscoveryDevicePeer::buildTableMap();
 

@@ -1,5 +1,25 @@
 <?php
 
+/*
+ Lilac - A Nagios Configuration Tool
+Copyright (C) 2013 Rene Hadler
+Copyright (C) 2007 Taylor Dondich
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 class NagiosContactExporter extends NagiosExporter {
 	
 	public function init() {
@@ -171,6 +191,21 @@ class NagiosContactExporter extends NagiosExporter {
 				$counter = 1;
 				foreach($addresses as $address) {
 					fputs($fp, "\taddress" . $counter++ . "\t" . $address->getAddress() . "\n");
+				}
+			}
+			
+			// Custom Object Variables
+			$cov_list = $contact->getNagiosContactCustomObjectVariables();
+				
+			if(count($cov_list) > 0)
+			{
+				foreach($cov_list as $customObjectVariable)
+				{
+					$name = strtoupper($customObjectVariable->getVarName());
+					if($name[0] != "_")
+						$name = "_" . $name;
+						
+					fputs($fp, sprintf("\t%s\t%s\n", $name, $customObjectVariable->getVarValue()));
 				}
 			}
 

@@ -1,6 +1,7 @@
 <?php
 /*
 Lilac - A Nagios Configuration Tool
+Copyright (C) 2014 Rene Hadler
 Copyright (C) 2007 Taylor Dondich
 
 This program is free software; you can redistribute it and/or
@@ -24,7 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	Starting-point
 */
 
-define("LILAC_VERSION", "2.5");
+define("LILAC_VERSION", "3.0");
+define("LILAC_VERSION_BUILD", "61");
 define("LILAC_NAME", "Eonweb Configurator");
 define("LILAC_FS_ROOT", dirname(__FILE__) . "/../");
 

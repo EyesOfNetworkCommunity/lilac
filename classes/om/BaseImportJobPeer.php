@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'import_job' table.
  *
  * Import Job Information
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseImportJobPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseImportJobPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'import_job';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'ImportJob';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'ImportJob';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'ImportJobTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 11;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 11;
 
 	/** the column name for the ID field */
 	const ID = 'import_job.ID';
@@ -57,6 +67,9 @@ abstract class BaseImportJobPeer {
 	/** the column name for the CMD field */
 	const CMD = 'import_job.CMD';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of ImportJob objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -65,11 +78,6 @@ abstract class BaseImportJobPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -77,10 +85,11 @@ abstract class BaseImportJobPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Description', 'Config', 'StartTime', 'EndTime', 'Status', 'StatusCode', 'StatusChangeTime', 'Stats', 'Cmd', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'description', 'config', 'startTime', 'endTime', 'status', 'statusCode', 'statusChangeTime', 'stats', 'cmd', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::DESCRIPTION, self::CONFIG, self::START_TIME, self::END_TIME, self::STATUS, self::STATUS_CODE, self::STATUS_CHANGE_TIME, self::STATS, self::CMD, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'DESCRIPTION', 'CONFIG', 'START_TIME', 'END_TIME', 'STATUS', 'STATUS_CODE', 'STATUS_CHANGE_TIME', 'STATS', 'CMD', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'description', 'config', 'start_time', 'end_time', 'status', 'status_code', 'status_change_time', 'stats', 'cmd', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
@@ -91,25 +100,15 @@ abstract class BaseImportJobPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Description' => 2, 'Config' => 3, 'StartTime' => 4, 'EndTime' => 5, 'Status' => 6, 'StatusCode' => 7, 'StatusChangeTime' => 8, 'Stats' => 9, 'Cmd' => 10, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'config' => 3, 'startTime' => 4, 'endTime' => 5, 'status' => 6, 'statusCode' => 7, 'statusChangeTime' => 8, 'stats' => 9, 'cmd' => 10, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::DESCRIPTION => 2, self::CONFIG => 3, self::START_TIME => 4, self::END_TIME => 5, self::STATUS => 6, self::STATUS_CODE => 7, self::STATUS_CHANGE_TIME => 8, self::STATS => 9, self::CMD => 10, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'DESCRIPTION' => 2, 'CONFIG' => 3, 'START_TIME' => 4, 'END_TIME' => 5, 'STATUS' => 6, 'STATUS_CODE' => 7, 'STATUS_CHANGE_TIME' => 8, 'STATS' => 9, 'CMD' => 10, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'description' => 2, 'config' => 3, 'start_time' => 4, 'end_time' => 5, 'status' => 6, 'status_code' => 7, 'status_change_time' => 8, 'stats' => 9, 'cmd' => 10, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new ImportJobMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -171,35 +170,38 @@ abstract class BaseImportJobPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(ImportJobPeer::ID);
-
-		$criteria->addSelectColumn(ImportJobPeer::NAME);
-
-		$criteria->addSelectColumn(ImportJobPeer::DESCRIPTION);
-
-		$criteria->addSelectColumn(ImportJobPeer::CONFIG);
-
-		$criteria->addSelectColumn(ImportJobPeer::START_TIME);
-
-		$criteria->addSelectColumn(ImportJobPeer::END_TIME);
-
-		$criteria->addSelectColumn(ImportJobPeer::STATUS);
-
-		$criteria->addSelectColumn(ImportJobPeer::STATUS_CODE);
-
-		$criteria->addSelectColumn(ImportJobPeer::STATUS_CHANGE_TIME);
-
-		$criteria->addSelectColumn(ImportJobPeer::STATS);
-
-		$criteria->addSelectColumn(ImportJobPeer::CMD);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(ImportJobPeer::ID);
+			$criteria->addSelectColumn(ImportJobPeer::NAME);
+			$criteria->addSelectColumn(ImportJobPeer::DESCRIPTION);
+			$criteria->addSelectColumn(ImportJobPeer::CONFIG);
+			$criteria->addSelectColumn(ImportJobPeer::START_TIME);
+			$criteria->addSelectColumn(ImportJobPeer::END_TIME);
+			$criteria->addSelectColumn(ImportJobPeer::STATUS);
+			$criteria->addSelectColumn(ImportJobPeer::STATUS_CODE);
+			$criteria->addSelectColumn(ImportJobPeer::STATUS_CHANGE_TIME);
+			$criteria->addSelectColumn(ImportJobPeer::STATS);
+			$criteria->addSelectColumn(ImportJobPeer::CMD);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.DESCRIPTION');
+			$criteria->addSelectColumn($alias . '.CONFIG');
+			$criteria->addSelectColumn($alias . '.START_TIME');
+			$criteria->addSelectColumn($alias . '.END_TIME');
+			$criteria->addSelectColumn($alias . '.STATUS');
+			$criteria->addSelectColumn($alias . '.STATUS_CODE');
+			$criteria->addSelectColumn($alias . '.STATUS_CHANGE_TIME');
+			$criteria->addSelectColumn($alias . '.STATS');
+			$criteria->addSelectColumn($alias . '.CMD');
+		}
 	}
 
 	/**
@@ -246,7 +248,7 @@ abstract class BaseImportJobPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -265,7 +267,7 @@ abstract class BaseImportJobPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -319,7 +321,7 @@ abstract class BaseImportJobPeer {
 	 * @param      ImportJob $value A ImportJob object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(ImportJob $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -387,6 +389,17 @@ abstract class BaseImportJobPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to import_job
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in ImportLogEntryPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		ImportLogEntryPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -399,12 +412,26 @@ abstract class BaseImportJobPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -417,18 +444,16 @@ abstract class BaseImportJobPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = ImportJobPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = ImportJobPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = ImportJobPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = ImportJobPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -438,6 +463,32 @@ abstract class BaseImportJobPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (ImportJob object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = ImportJobPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = ImportJobPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + ImportJobPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = ImportJobPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			ImportJobPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -451,21 +502,35 @@ abstract class BaseImportJobPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return ImportJobPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseImportJobPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseImportJobPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new ImportJobTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a ImportJob or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? ImportJobPeer::CLASS_DEFAULT : ImportJobPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a ImportJob or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or ImportJob object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -508,7 +573,7 @@ abstract class BaseImportJobPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a ImportJob or Criteria object.
+	 * Performs an UPDATE on the database, given a ImportJob or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or ImportJob object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -528,7 +593,12 @@ abstract class BaseImportJobPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(ImportJobPeer::ID);
-			$selectCriteria->add(ImportJobPeer::ID, $criteria->remove(ImportJobPeer::ID), $comparison);
+			$value = $criteria->remove(ImportJobPeer::ID);
+			if ($value) {
+				$selectCriteria->add(ImportJobPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(ImportJobPeer::TABLE_NAME);
+			}
 
 		} else { // $values is ImportJob object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -542,11 +612,12 @@ abstract class BaseImportJobPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the import_job table.
+	 * Deletes all rows from the import_job table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(ImportJobPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -557,7 +628,12 @@ abstract class BaseImportJobPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			$affectedRows += ImportJobPeer::doOnDeleteCascade(new Criteria(ImportJobPeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(ImportJobPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(ImportJobPeer::TABLE_NAME, $con, ImportJobPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			ImportJobPeer::clearInstancePool();
+			ImportJobPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -567,7 +643,7 @@ abstract class BaseImportJobPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a ImportJob or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a ImportJob or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or ImportJob object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -584,30 +660,14 @@ abstract class BaseImportJobPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			ImportJobPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof ImportJob) {
-			// invalidate the cache for this single object
-			ImportJobPeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof ImportJob) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(ImportJobPeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				ImportJobPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -619,22 +679,26 @@ abstract class BaseImportJobPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += ImportJobPeer::doOnDeleteCascade($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					ImportJobPeer::clearInstancePool();
-				} else { // it's a PK or object
-					ImportJobPeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += ImportJobPeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				ImportJobPeer::clearInstancePool();
+			} elseif ($values instanceof ImportJob) { // it's a model object
+				ImportJobPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					ImportJobPeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in ImportLogEntryPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			ImportLogEntryPeer::clearInstancePool();
-
+			ImportJobPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -667,10 +731,10 @@ abstract class BaseImportJobPeer {
 
 
 			// delete related ImportLogEntry objects
-			$c = new Criteria(ImportLogEntryPeer::DATABASE_NAME);
+			$criteria = new Criteria(ImportLogEntryPeer::DATABASE_NAME);
 			
-			$c->add(ImportLogEntryPeer::JOB, $obj->getId());
-			$affectedRows += ImportLogEntryPeer::doDelete($c, $con);
+			$criteria->add(ImportLogEntryPeer::JOB, $obj->getId());
+			$affectedRows += ImportLogEntryPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -687,7 +751,7 @@ abstract class BaseImportJobPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(ImportJob $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -765,14 +829,7 @@ abstract class BaseImportJobPeer {
 
 } // BaseImportJobPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the ImportJobPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the ImportJobPeer class:
-//
-// Propel::getDatabaseMap(ImportJobPeer::DATABASE_NAME)->addTableBuilder(ImportJobPeer::TABLE_NAME, ImportJobPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseImportJobPeer::DATABASE_NAME)->addTableBuilder(BaseImportJobPeer::TABLE_NAME, BaseImportJobPeer::getMapBuilder());
+BaseImportJobPeer::buildTableMap();
 

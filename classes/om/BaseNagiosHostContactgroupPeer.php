@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_host_contactgroup' table.
  *
  * Contact Group for Host
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosHostContactgroupPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_host_contactgroup';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosHostContactgroup';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosHostContactgroup';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosHostContactgroupTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_host_contactgroup.ID';
@@ -36,6 +46,9 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/** the column name for the CONTACTGROUP field */
 	const CONTACTGROUP = 'nagios_host_contactgroup.CONTACTGROUP';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosHostContactgroup objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -44,11 +57,6 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -56,10 +64,11 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Host', 'HostTemplate', 'Contactgroup', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'host', 'hostTemplate', 'contactgroup', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::HOST, self::HOST_TEMPLATE, self::CONTACTGROUP, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'HOST', 'HOST_TEMPLATE', 'CONTACTGROUP', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'host', 'host_template', 'contactgroup', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
@@ -70,25 +79,15 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Host' => 1, 'HostTemplate' => 2, 'Contactgroup' => 3, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'host' => 1, 'hostTemplate' => 2, 'contactgroup' => 3, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::HOST => 1, self::HOST_TEMPLATE => 2, self::CONTACTGROUP => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'HOST' => 1, 'HOST_TEMPLATE' => 2, 'CONTACTGROUP' => 3, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'host' => 1, 'host_template' => 2, 'contactgroup' => 3, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosHostContactgroupMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -150,21 +149,24 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosHostContactgroupPeer::ID);
-
-		$criteria->addSelectColumn(NagiosHostContactgroupPeer::HOST);
-
-		$criteria->addSelectColumn(NagiosHostContactgroupPeer::HOST_TEMPLATE);
-
-		$criteria->addSelectColumn(NagiosHostContactgroupPeer::CONTACTGROUP);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosHostContactgroupPeer::ID);
+			$criteria->addSelectColumn(NagiosHostContactgroupPeer::HOST);
+			$criteria->addSelectColumn(NagiosHostContactgroupPeer::HOST_TEMPLATE);
+			$criteria->addSelectColumn(NagiosHostContactgroupPeer::CONTACTGROUP);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.HOST');
+			$criteria->addSelectColumn($alias . '.HOST_TEMPLATE');
+			$criteria->addSelectColumn($alias . '.CONTACTGROUP');
+		}
 	}
 
 	/**
@@ -211,7 +213,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -230,7 +232,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -284,7 +286,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 * @param      NagiosHostContactgroup $value A NagiosHostContactgroup object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosHostContactgroup $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -352,6 +354,14 @@ abstract class BaseNagiosHostContactgroupPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_host_contactgroup
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -364,12 +374,26 @@ abstract class BaseNagiosHostContactgroupPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -382,18 +406,16 @@ abstract class BaseNagiosHostContactgroupPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosHostContactgroupPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosHostContactgroupPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosHostContactgroupPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -403,11 +425,37 @@ abstract class BaseNagiosHostContactgroupPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosHostContactgroup object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosHostContactgroupPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosHostContactgroupPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosHostContactgroupPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -440,7 +488,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -456,7 +505,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -489,7 +538,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -505,7 +555,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosContactGroup table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -538,7 +588,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -553,41 +604,41 @@ abstract class BaseNagiosHostContactgroupPeer {
 
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with their NagiosHost objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostPeer::addSelectColumns($c);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -598,9 +649,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -620,41 +670,41 @@ abstract class BaseNagiosHostContactgroupPeer {
 
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with their NagiosHostTemplate objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHostTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHostTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostTemplatePeer::addSelectColumns($c);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -665,9 +715,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj2 = NagiosHostTemplatePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostTemplatePeer::getOMClass();
+					$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -687,41 +736,41 @@ abstract class BaseNagiosHostContactgroupPeer {
 
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with their NagiosContactGroup objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosContactGroup(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosContactGroup(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosContactGroupPeer::addSelectColumns($c);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
+		NagiosContactGroupPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -732,9 +781,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj2 = NagiosContactGroupPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosContactGroupPeer::getOMClass();
+					$cls = NagiosContactGroupPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosContactGroupPeer::addInstanceToPool($obj2, $key2);
@@ -755,7 +803,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -788,9 +836,12 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -805,50 +856,52 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosContactGroupPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosContactGroupPeer::NUM_COLUMNS - NagiosContactGroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactGroupPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosContactGroupPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -861,10 +914,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -881,10 +932,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj3 = NagiosHostTemplatePeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosHostTemplatePeer::getOMClass();
+					$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -901,10 +950,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 				$obj4 = NagiosContactGroupPeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$omClass = NagiosContactGroupPeer::getOMClass();
+					$cls = NagiosContactGroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosContactGroupPeer::addInstanceToPool($obj4, $key4);
@@ -924,7 +971,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -957,8 +1004,10 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -974,7 +1023,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1007,8 +1056,10 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1024,7 +1075,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosContactGroup table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1057,8 +1108,10 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1074,49 +1127,50 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with all related objects except NagiosHost.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosContactGroupPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosContactGroupPeer::NUM_COLUMNS - NagiosContactGroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactGroupPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosContactGroupPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -1129,10 +1183,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj2 = NagiosHostTemplatePeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosHostTemplatePeer::getOMClass();
+						$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -1150,10 +1202,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj3 = NagiosContactGroupPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosContactGroupPeer::getOMClass();
+						$cls = NagiosContactGroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosContactGroupPeer::addInstanceToPool($obj3, $key3);
@@ -1174,49 +1224,50 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with all related objects except NagiosHostTemplate.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHostTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHostTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosContactGroupPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosContactGroupPeer::NUM_COLUMNS - NagiosContactGroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactGroupPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosContactGroupPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostContactgroupPeer::CONTACTGROUP,), array(NagiosContactGroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::CONTACTGROUP, NagiosContactGroupPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -1229,10 +1280,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -1250,10 +1299,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj3 = NagiosContactGroupPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosContactGroupPeer::getOMClass();
+						$cls = NagiosContactGroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosContactGroupPeer::addInstanceToPool($obj3, $key3);
@@ -1274,49 +1321,50 @@ abstract class BaseNagiosHostContactgroupPeer {
 	/**
 	 * Selects a collection of NagiosHostContactgroup objects pre-filled with all related objects except NagiosContactGroup.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHostContactgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosContactGroup(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosContactGroup(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostContactgroupPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostContactgroupPeer::NUM_COLUMNS - NagiosHostContactgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostContactgroupPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostContactgroupPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostTemplatePeer::NUM_COLUMNS - NagiosHostTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostContactgroupPeer::HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostContactgroupPeer::HOST_TEMPLATE,), array(NagiosHostTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST, NagiosHostPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostContactgroupPeer::HOST_TEMPLATE, NagiosHostTemplatePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostContactgroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostContactgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostContactgroupPeer::getOMClass();
+				$cls = NagiosHostContactgroupPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostContactgroupPeer::addInstanceToPool($obj1, $key1);
@@ -1329,10 +1377,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -1350,10 +1396,8 @@ abstract class BaseNagiosHostContactgroupPeer {
 					$obj3 = NagiosHostTemplatePeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostTemplatePeer::getOMClass();
+						$cls = NagiosHostTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -1383,21 +1427,35 @@ abstract class BaseNagiosHostContactgroupPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosHostContactgroupPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosHostContactgroupPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosHostContactgroupPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosHostContactgroupTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosHostContactgroup or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosHostContactgroupPeer::CLASS_DEFAULT : NagiosHostContactgroupPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosHostContactgroup or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosHostContactgroup object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1440,7 +1498,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosHostContactgroup or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosHostContactgroup or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosHostContactgroup object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1460,7 +1518,12 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosHostContactgroupPeer::ID);
-			$selectCriteria->add(NagiosHostContactgroupPeer::ID, $criteria->remove(NagiosHostContactgroupPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosHostContactgroupPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosHostContactgroupPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosHostContactgroupPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosHostContactgroup object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1474,11 +1537,12 @@ abstract class BaseNagiosHostContactgroupPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_host_contactgroup table.
+	 * Deletes all rows from the nagios_host_contactgroup table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosHostContactgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1488,7 +1552,12 @@ abstract class BaseNagiosHostContactgroupPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosHostContactgroupPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosHostContactgroupPeer::TABLE_NAME, $con, NagiosHostContactgroupPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosHostContactgroupPeer::clearInstancePool();
+			NagiosHostContactgroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1498,7 +1567,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosHostContactgroup or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosHostContactgroup or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosHostContactgroup object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1519,24 +1588,18 @@ abstract class BaseNagiosHostContactgroupPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosHostContactgroupPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosHostContactgroup) {
+		} elseif ($values instanceof NagiosHostContactgroup) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosHostContactgroupPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosHostContactgroupPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosHostContactgroupPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -1552,7 +1615,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosHostContactgroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1573,7 +1636,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosHostContactgroup $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -1651,14 +1714,7 @@ abstract class BaseNagiosHostContactgroupPeer {
 
 } // BaseNagiosHostContactgroupPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosHostContactgroupPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosHostContactgroupPeer class:
-//
-// Propel::getDatabaseMap(NagiosHostContactgroupPeer::DATABASE_NAME)->addTableBuilder(NagiosHostContactgroupPeer::TABLE_NAME, NagiosHostContactgroupPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosHostContactgroupPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosHostContactgroupPeer::TABLE_NAME, BaseNagiosHostContactgroupPeer::getMapBuilder());
+BaseNagiosHostContactgroupPeer::buildTableMap();
 

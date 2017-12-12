@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'lilac_configuration' table.
  *
  * Lilac Configuration
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseLilacConfigurationPeer {
 
@@ -15,21 +16,33 @@ abstract class BaseLilacConfigurationPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'lilac_configuration';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'LilacConfiguration';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'LilacConfiguration';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'LilacConfigurationTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 2;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
-	/** the column name for the ID field */
-	const ID = 'lilac_configuration.ID';
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 2;
 
-	/** the column name for the VERSION field */
-	const VERSION = 'lilac_configuration.VERSION';
+	/** the column name for the KEY field */
+	const KEY = 'lilac_configuration.KEY';
 
+	/** the column name for the VALUE field */
+	const VALUE = 'lilac_configuration.VALUE';
+
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of LilacConfiguration objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -38,11 +51,6 @@ abstract class BaseLilacConfigurationPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -50,11 +58,12 @@ abstract class BaseLilacConfigurationPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Version', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'version', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::VERSION, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'version', ),
+	protected static $fieldNames = array (
+		BasePeer::TYPE_PHPNAME => array ('Key', 'Value', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('key', 'value', ),
+		BasePeer::TYPE_COLNAME => array (self::KEY, self::VALUE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('KEY', 'VALUE', ),
+		BasePeer::TYPE_FIELDNAME => array ('key', 'value', ),
 		BasePeer::TYPE_NUM => array (0, 1, )
 	);
 
@@ -64,25 +73,15 @@ abstract class BaseLilacConfigurationPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Version' => 1, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'version' => 1, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VERSION => 1, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'version' => 1, ),
+	protected static $fieldKeys = array (
+		BasePeer::TYPE_PHPNAME => array ('Key' => 0, 'Value' => 1, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('key' => 0, 'value' => 1, ),
+		BasePeer::TYPE_COLNAME => array (self::KEY => 0, self::VALUE => 1, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('KEY' => 0, 'VALUE' => 1, ),
+		BasePeer::TYPE_FIELDNAME => array ('key' => 0, 'value' => 1, ),
 		BasePeer::TYPE_NUM => array (0, 1, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new LilacConfigurationMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -144,17 +143,20 @@ abstract class BaseLilacConfigurationPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(LilacConfigurationPeer::ID);
-
-		$criteria->addSelectColumn(LilacConfigurationPeer::VERSION);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(LilacConfigurationPeer::KEY);
+			$criteria->addSelectColumn(LilacConfigurationPeer::VALUE);
+		} else {
+			$criteria->addSelectColumn($alias . '.KEY');
+			$criteria->addSelectColumn($alias . '.VALUE');
+		}
 	}
 
 	/**
@@ -201,7 +203,7 @@ abstract class BaseLilacConfigurationPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -220,7 +222,7 @@ abstract class BaseLilacConfigurationPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -274,11 +276,11 @@ abstract class BaseLilacConfigurationPeer {
 	 * @param      LilacConfiguration $value A LilacConfiguration object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(LilacConfiguration $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
-				$key = (string) $obj->getId();
+				$key = (string) $obj->getKey();
 			} // if key === null
 			self::$instances[$key] = $obj;
 		}
@@ -298,7 +300,7 @@ abstract class BaseLilacConfigurationPeer {
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
 			if (is_object($value) && $value instanceof LilacConfiguration) {
-				$key = (string) $value->getId();
+				$key = (string) $value->getKey();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
@@ -342,6 +344,14 @@ abstract class BaseLilacConfigurationPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to lilac_configuration
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -354,12 +364,26 @@ abstract class BaseLilacConfigurationPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (string) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -372,18 +396,16 @@ abstract class BaseLilacConfigurationPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = LilacConfigurationPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = LilacConfigurationPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = LilacConfigurationPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = LilacConfigurationPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -393,6 +415,32 @@ abstract class BaseLilacConfigurationPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (LilacConfiguration object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = LilacConfigurationPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = LilacConfigurationPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + LilacConfigurationPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = LilacConfigurationPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			LilacConfigurationPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -406,21 +454,35 @@ abstract class BaseLilacConfigurationPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return LilacConfigurationPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseLilacConfigurationPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseLilacConfigurationPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new LilacConfigurationTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a LilacConfiguration or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? LilacConfigurationPeer::CLASS_DEFAULT : LilacConfigurationPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a LilacConfiguration or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or LilacConfiguration object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -438,10 +500,6 @@ abstract class BaseLilacConfigurationPeer {
 			$criteria = clone $values; // rename for clarity
 		} else {
 			$criteria = $values->buildCriteria(); // build Criteria from LilacConfiguration object
-		}
-
-		if ($criteria->containsKey(LilacConfigurationPeer::ID) && $criteria->keyContainsValue(LilacConfigurationPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.LilacConfigurationPeer::ID.')');
 		}
 
 
@@ -463,7 +521,7 @@ abstract class BaseLilacConfigurationPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a LilacConfiguration or Criteria object.
+	 * Performs an UPDATE on the database, given a LilacConfiguration or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or LilacConfiguration object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -482,8 +540,13 @@ abstract class BaseLilacConfigurationPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(LilacConfigurationPeer::ID);
-			$selectCriteria->add(LilacConfigurationPeer::ID, $criteria->remove(LilacConfigurationPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(LilacConfigurationPeer::KEY);
+			$value = $criteria->remove(LilacConfigurationPeer::KEY);
+			if ($value) {
+				$selectCriteria->add(LilacConfigurationPeer::KEY, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(LilacConfigurationPeer::TABLE_NAME);
+			}
 
 		} else { // $values is LilacConfiguration object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -497,11 +560,12 @@ abstract class BaseLilacConfigurationPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the lilac_configuration table.
+	 * Deletes all rows from the lilac_configuration table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(LilacConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -511,7 +575,12 @@ abstract class BaseLilacConfigurationPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(LilacConfigurationPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(LilacConfigurationPeer::TABLE_NAME, $con, LilacConfigurationPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			LilacConfigurationPeer::clearInstancePool();
+			LilacConfigurationPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -521,7 +590,7 @@ abstract class BaseLilacConfigurationPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a LilacConfiguration or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a LilacConfiguration or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or LilacConfiguration object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -542,24 +611,18 @@ abstract class BaseLilacConfigurationPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			LilacConfigurationPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof LilacConfiguration) {
+		} elseif ($values instanceof LilacConfiguration) { // it's a model object
 			// invalidate the cache for this single object
 			LilacConfigurationPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(LilacConfigurationPeer::ID, (array) $values, Criteria::IN);
-
+			$criteria->add(LilacConfigurationPeer::KEY, (array) $values, Criteria::IN);
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				LilacConfigurationPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -575,7 +638,7 @@ abstract class BaseLilacConfigurationPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			LilacConfigurationPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -596,7 +659,7 @@ abstract class BaseLilacConfigurationPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(LilacConfiguration $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -624,7 +687,7 @@ abstract class BaseLilacConfigurationPeer {
 	/**
 	 * Retrieve a single object by pkey.
 	 *
-	 * @param      int $pk the primary key.
+	 * @param      string $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
 	 * @return     LilacConfiguration
 	 */
@@ -640,7 +703,7 @@ abstract class BaseLilacConfigurationPeer {
 		}
 
 		$criteria = new Criteria(LilacConfigurationPeer::DATABASE_NAME);
-		$criteria->add(LilacConfigurationPeer::ID, $pk);
+		$criteria->add(LilacConfigurationPeer::KEY, $pk);
 
 		$v = LilacConfigurationPeer::doSelect($criteria, $con);
 
@@ -666,7 +729,7 @@ abstract class BaseLilacConfigurationPeer {
 			$objs = array();
 		} else {
 			$criteria = new Criteria(LilacConfigurationPeer::DATABASE_NAME);
-			$criteria->add(LilacConfigurationPeer::ID, $pks, Criteria::IN);
+			$criteria->add(LilacConfigurationPeer::KEY, $pks, Criteria::IN);
 			$objs = LilacConfigurationPeer::doSelect($criteria, $con);
 		}
 		return $objs;
@@ -674,14 +737,7 @@ abstract class BaseLilacConfigurationPeer {
 
 } // BaseLilacConfigurationPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the LilacConfigurationPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the LilacConfigurationPeer class:
-//
-// Propel::getDatabaseMap(LilacConfigurationPeer::DATABASE_NAME)->addTableBuilder(LilacConfigurationPeer::TABLE_NAME, LilacConfigurationPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseLilacConfigurationPeer::DATABASE_NAME)->addTableBuilder(BaseLilacConfigurationPeer::TABLE_NAME, BaseLilacConfigurationPeer::getMapBuilder());
+BaseLilacConfigurationPeer::buildTableMap();
 

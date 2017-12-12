@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosHostTemplateInheritancePeer.php';
 
 
 /**
@@ -12,10 +11,8 @@ require 'om/BaseNagiosHostTemplateInheritancePeer.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosHostTemplateInheritancePeer extends BaseNagiosHostTemplateInheritancePeer {
 
-
-	
 } // NagiosHostTemplateInheritancePeer

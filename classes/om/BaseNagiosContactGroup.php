@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_contact_group' table.
  *
  * Nagios Contact Group
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent {
+abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosContactGroupPeer';
 
 	/**
 	 * The Peer class.
@@ -42,19 +48,9 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	protected $collNagiosContactGroupMembers;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactGroupMembers.
-	 */
-	private $lastNagiosContactGroupMemberCriteria = null;
-
-	/**
 	 * @var        array NagiosServiceContactGroupMember[] Collection to store aggregation of NagiosServiceContactGroupMember objects.
 	 */
 	protected $collNagiosServiceContactGroupMembers;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServiceContactGroupMembers.
-	 */
-	private $lastNagiosServiceContactGroupMemberCriteria = null;
 
 	/**
 	 * @var        array NagiosEscalationContactgroup[] Collection to store aggregation of NagiosEscalationContactgroup objects.
@@ -62,19 +58,9 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	protected $collNagiosEscalationContactgroups;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosEscalationContactgroups.
-	 */
-	private $lastNagiosEscalationContactgroupCriteria = null;
-
-	/**
 	 * @var        array NagiosHostContactgroup[] Collection to store aggregation of NagiosHostContactgroup objects.
 	 */
 	protected $collNagiosHostContactgroups;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostContactgroups.
-	 */
-	private $lastNagiosHostContactgroupCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -89,26 +75,6 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosContactGroup object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -210,11 +176,6 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -248,8 +209,7 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 3; // 3 = NagiosContactGroupPeer::NUM_COLUMNS - NagiosContactGroupPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 3; // 3 = NagiosContactGroupPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosContactGroup object", $e);
@@ -312,16 +272,12 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->collNagiosContactGroupMembers = null;
-			$this->lastNagiosContactGroupMemberCriteria = null;
 
 			$this->collNagiosServiceContactGroupMembers = null;
-			$this->lastNagiosServiceContactGroupMemberCriteria = null;
 
 			$this->collNagiosEscalationContactgroups = null;
-			$this->lastNagiosEscalationContactgroupCriteria = null;
 
 			$this->collNagiosHostContactgroups = null;
-			$this->lastNagiosHostContactgroupCriteria = null;
 
 		} // if (deep)
 	}
@@ -344,12 +300,20 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactGroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosContactGroupPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosContactGroupQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -378,12 +342,29 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactGroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosContactGroupPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosContactGroupPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -415,16 +396,17 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosContactGroupPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosContactGroupPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosContactGroupPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
-					$affectedRows += NagiosContactGroupPeer::doUpdate($this, $con);
+					$affectedRows = NagiosContactGroupPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -619,19 +601,41 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosContactGroup'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosContactGroup'][$this->getPrimaryKey()] = true;
 		$keys = NagiosContactGroupPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getName(),
 			$keys[2] => $this->getAlias(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collNagiosContactGroupMembers) {
+				$result['NagiosContactGroupMembers'] = $this->collNagiosContactGroupMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServiceContactGroupMembers) {
+				$result['NagiosServiceContactGroupMembers'] = $this->collNagiosServiceContactGroupMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosEscalationContactgroups) {
+				$result['NagiosEscalationContactgroups'] = $this->collNagiosEscalationContactgroups->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostContactgroups) {
+				$result['NagiosHostContactgroups'] = $this->collNagiosHostContactgroups->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -727,7 +731,6 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosContactGroupPeer::ID, $this->id);
 
 		return $criteria;
@@ -754,6 +757,15 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -761,15 +773,13 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 *
 	 * @param      object $copyObj An object of NagiosContactGroup (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setName($this->name);
-
-		$copyObj->setAlias($this->alias);
-
+		$copyObj->setName($this->getName());
+		$copyObj->setAlias($this->getAlias());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -802,11 +812,10 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -847,8 +856,33 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		return self::$peer;
 	}
 
+
 	/**
-	 * Clears out the collNagiosContactGroupMembers collection (array).
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name 
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('NagiosContactGroupMember' == $relationName) {
+			return $this->initNagiosContactGroupMembers();
+		}
+		if ('NagiosServiceContactGroupMember' == $relationName) {
+			return $this->initNagiosServiceContactGroupMembers();
+		}
+		if ('NagiosEscalationContactgroup' == $relationName) {
+			return $this->initNagiosEscalationContactgroups();
+		}
+		if ('NagiosHostContactgroup' == $relationName) {
+			return $this->initNagiosHostContactgroups();
+		}
+	}
+
+	/**
+	 * Clears out the collNagiosContactGroupMembers collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -862,69 +896,56 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Initializes the collNagiosContactGroupMembers collection (array).
+	 * Initializes the collNagiosContactGroupMembers collection.
 	 *
 	 * By default this just sets the collNagiosContactGroupMembers collection to an empty array (like clearcollNagiosContactGroupMembers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactGroupMembers()
+	public function initNagiosContactGroupMembers($overrideExisting = true)
 	{
-		$this->collNagiosContactGroupMembers = array();
+		if (null !== $this->collNagiosContactGroupMembers && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactGroupMembers = new PropelObjectCollection();
+		$this->collNagiosContactGroupMembers->setModel('NagiosContactGroupMember');
 	}
 
 	/**
 	 * Gets an array of NagiosContactGroupMember objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContactGroup has previously been saved, it will retrieve
-	 * related NagiosContactGroupMembers from storage. If this NagiosContactGroup is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContactGroup is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContactGroupMember[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContactGroupMember[] List of NagiosContactGroupMember objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactGroupMembers($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactGroupMembers = array();
+		if(null === $this->collNagiosContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactGroupMembers) {
+				// return empty collection
+				$this->initNagiosContactGroupMembers();
 			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-				NagiosContactGroupMemberPeer::addSelectColumns($criteria);
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-				NagiosContactGroupMemberPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-					$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelect($criteria, $con);
+				$collNagiosContactGroupMembers = NagiosContactGroupMemberQuery::create(null, $criteria)
+					->filterByNagiosContactGroup($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactGroupMembers;
 				}
+				$this->collNagiosContactGroupMembers = $collNagiosContactGroupMembers;
 			}
 		}
-		$this->lastNagiosContactGroupMemberCriteria = $criteria;
 		return $this->collNagiosContactGroupMembers;
 	}
 
@@ -939,47 +960,21 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 */
 	public function countNagiosContactGroupMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactGroupMembers) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-				$count = NagiosContactGroupMemberPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-				if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-					$count = NagiosContactGroupMemberPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactGroupMembers);
+				$query = NagiosContactGroupMemberQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactGroupMembers);
+				return $query
+					->filterByNagiosContactGroup($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactGroupMembers);
 		}
-		return $count;
 	}
 
 	/**
@@ -995,8 +990,8 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($this->collNagiosContactGroupMembers === null) {
 			$this->initNagiosContactGroupMembers();
 		}
-		if (!in_array($l, $this->collNagiosContactGroupMembers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactGroupMembers, $l);
+		if (!$this->collNagiosContactGroupMembers->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactGroupMembers[]= $l;
 			$l->setNagiosContactGroup($this);
 		}
 	}
@@ -1012,44 +1007,22 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosContactGroupMember[] List of NagiosContactGroupMember objects
 	 */
 	public function getNagiosContactGroupMembersJoinNagiosContact($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosContactGroupMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosContact', $join_behavior);
 
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosContactGroupMembers = array();
-			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelectJoinNagiosContact($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $this->id);
-
-			if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelectJoinNagiosContact($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosContactGroupMemberCriteria = $criteria;
-
-		return $this->collNagiosContactGroupMembers;
+		return $this->getNagiosContactGroupMembers($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServiceContactGroupMembers collection (array).
+	 * Clears out the collNagiosServiceContactGroupMembers collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1063,69 +1036,56 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Initializes the collNagiosServiceContactGroupMembers collection (array).
+	 * Initializes the collNagiosServiceContactGroupMembers collection.
 	 *
 	 * By default this just sets the collNagiosServiceContactGroupMembers collection to an empty array (like clearcollNagiosServiceContactGroupMembers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServiceContactGroupMembers()
+	public function initNagiosServiceContactGroupMembers($overrideExisting = true)
 	{
-		$this->collNagiosServiceContactGroupMembers = array();
+		if (null !== $this->collNagiosServiceContactGroupMembers && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServiceContactGroupMembers = new PropelObjectCollection();
+		$this->collNagiosServiceContactGroupMembers->setModel('NagiosServiceContactGroupMember');
 	}
 
 	/**
 	 * Gets an array of NagiosServiceContactGroupMember objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContactGroup has previously been saved, it will retrieve
-	 * related NagiosServiceContactGroupMembers from storage. If this NagiosContactGroup is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContactGroup is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosServiceContactGroupMember[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosServiceContactGroupMember[] List of NagiosServiceContactGroupMember objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServiceContactGroupMembers($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServiceContactGroupMembers === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServiceContactGroupMembers = array();
+		if(null === $this->collNagiosServiceContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceContactGroupMembers) {
+				// return empty collection
+				$this->initNagiosServiceContactGroupMembers();
 			} else {
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				NagiosServiceContactGroupMemberPeer::addSelectColumns($criteria);
-				$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				NagiosServiceContactGroupMemberPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceContactGroupMemberCriteria) || !$this->lastNagiosServiceContactGroupMemberCriteria->equals($criteria)) {
-					$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelect($criteria, $con);
+				$collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberQuery::create(null, $criteria)
+					->filterByNagiosContactGroup($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServiceContactGroupMembers;
 				}
+				$this->collNagiosServiceContactGroupMembers = $collNagiosServiceContactGroupMembers;
 			}
 		}
-		$this->lastNagiosServiceContactGroupMemberCriteria = $criteria;
 		return $this->collNagiosServiceContactGroupMembers;
 	}
 
@@ -1140,47 +1100,21 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 */
 	public function countNagiosServiceContactGroupMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServiceContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServiceContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceContactGroupMembers) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				$count = NagiosServiceContactGroupMemberPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				if (!isset($this->lastNagiosServiceContactGroupMemberCriteria) || !$this->lastNagiosServiceContactGroupMemberCriteria->equals($criteria)) {
-					$count = NagiosServiceContactGroupMemberPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServiceContactGroupMembers);
+				$query = NagiosServiceContactGroupMemberQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServiceContactGroupMembers);
+				return $query
+					->filterByNagiosContactGroup($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServiceContactGroupMembers);
 		}
-		return $count;
 	}
 
 	/**
@@ -1196,8 +1130,8 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($this->collNagiosServiceContactGroupMembers === null) {
 			$this->initNagiosServiceContactGroupMembers();
 		}
-		if (!in_array($l, $this->collNagiosServiceContactGroupMembers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServiceContactGroupMembers, $l);
+		if (!$this->collNagiosServiceContactGroupMembers->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServiceContactGroupMembers[]= $l;
 			$l->setNagiosContactGroup($this);
 		}
 	}
@@ -1213,40 +1147,18 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceContactGroupMember[] List of NagiosServiceContactGroupMember objects
 	 */
 	public function getNagiosServiceContactGroupMembersJoinNagiosService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceContactGroupMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosService', $join_behavior);
 
-		if ($this->collNagiosServiceContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceContactGroupMembers = array();
-			} else {
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-			if (!isset($this->lastNagiosServiceContactGroupMemberCriteria) || !$this->lastNagiosServiceContactGroupMemberCriteria->equals($criteria)) {
-				$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceContactGroupMemberCriteria = $criteria;
-
-		return $this->collNagiosServiceContactGroupMembers;
+		return $this->getNagiosServiceContactGroupMembers($query, $con);
 	}
 
 
@@ -1260,44 +1172,22 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceContactGroupMember[] List of NagiosServiceContactGroupMember objects
 	 */
 	public function getNagiosServiceContactGroupMembersJoinNagiosServiceTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceContactGroupMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosServiceTemplate', $join_behavior);
 
-		if ($this->collNagiosServiceContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceContactGroupMembers = array();
-			} else {
-
-				$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-				$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $this->id);
-
-			if (!isset($this->lastNagiosServiceContactGroupMemberCriteria) || !$this->lastNagiosServiceContactGroupMemberCriteria->equals($criteria)) {
-				$this->collNagiosServiceContactGroupMembers = NagiosServiceContactGroupMemberPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceContactGroupMemberCriteria = $criteria;
-
-		return $this->collNagiosServiceContactGroupMembers;
+		return $this->getNagiosServiceContactGroupMembers($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosEscalationContactgroups collection (array).
+	 * Clears out the collNagiosEscalationContactgroups collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1311,69 +1201,56 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Initializes the collNagiosEscalationContactgroups collection (array).
+	 * Initializes the collNagiosEscalationContactgroups collection.
 	 *
 	 * By default this just sets the collNagiosEscalationContactgroups collection to an empty array (like clearcollNagiosEscalationContactgroups());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosEscalationContactgroups()
+	public function initNagiosEscalationContactgroups($overrideExisting = true)
 	{
-		$this->collNagiosEscalationContactgroups = array();
+		if (null !== $this->collNagiosEscalationContactgroups && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosEscalationContactgroups = new PropelObjectCollection();
+		$this->collNagiosEscalationContactgroups->setModel('NagiosEscalationContactgroup');
 	}
 
 	/**
 	 * Gets an array of NagiosEscalationContactgroup objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContactGroup has previously been saved, it will retrieve
-	 * related NagiosEscalationContactgroups from storage. If this NagiosContactGroup is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContactGroup is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosEscalationContactgroup[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosEscalationContactgroup[] List of NagiosEscalationContactgroup objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosEscalationContactgroups($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosEscalationContactgroups = array();
+		if(null === $this->collNagiosEscalationContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContactgroups) {
+				// return empty collection
+				$this->initNagiosEscalationContactgroups();
 			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-				NagiosEscalationContactgroupPeer::addSelectColumns($criteria);
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-				NagiosEscalationContactgroupPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-					$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelect($criteria, $con);
+				$collNagiosEscalationContactgroups = NagiosEscalationContactgroupQuery::create(null, $criteria)
+					->filterByNagiosContactGroup($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosEscalationContactgroups;
 				}
+				$this->collNagiosEscalationContactgroups = $collNagiosEscalationContactgroups;
 			}
 		}
-		$this->lastNagiosEscalationContactgroupCriteria = $criteria;
 		return $this->collNagiosEscalationContactgroups;
 	}
 
@@ -1388,47 +1265,21 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 */
 	public function countNagiosEscalationContactgroups(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosEscalationContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContactgroups) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-				$count = NagiosEscalationContactgroupPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-				if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-					$count = NagiosEscalationContactgroupPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosEscalationContactgroups);
+				$query = NagiosEscalationContactgroupQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosEscalationContactgroups);
+				return $query
+					->filterByNagiosContactGroup($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosEscalationContactgroups);
 		}
-		return $count;
 	}
 
 	/**
@@ -1444,8 +1295,8 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($this->collNagiosEscalationContactgroups === null) {
 			$this->initNagiosEscalationContactgroups();
 		}
-		if (!in_array($l, $this->collNagiosEscalationContactgroups, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosEscalationContactgroups, $l);
+		if (!$this->collNagiosEscalationContactgroups->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosEscalationContactgroups[]= $l;
 			$l->setNagiosContactGroup($this);
 		}
 	}
@@ -1461,44 +1312,22 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalationContactgroup[] List of NagiosEscalationContactgroup objects
 	 */
 	public function getNagiosEscalationContactgroupsJoinNagiosEscalation($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationContactgroupQuery::create(null, $criteria);
+		$query->joinWith('NagiosEscalation', $join_behavior);
 
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalationContactgroups = array();
-			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelectJoinNagiosEscalation($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $this->id);
-
-			if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelectJoinNagiosEscalation($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationContactgroupCriteria = $criteria;
-
-		return $this->collNagiosEscalationContactgroups;
+		return $this->getNagiosEscalationContactgroups($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosHostContactgroups collection (array).
+	 * Clears out the collNagiosHostContactgroups collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1512,69 +1341,56 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Initializes the collNagiosHostContactgroups collection (array).
+	 * Initializes the collNagiosHostContactgroups collection.
 	 *
 	 * By default this just sets the collNagiosHostContactgroups collection to an empty array (like clearcollNagiosHostContactgroups());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostContactgroups()
+	public function initNagiosHostContactgroups($overrideExisting = true)
 	{
-		$this->collNagiosHostContactgroups = array();
+		if (null !== $this->collNagiosHostContactgroups && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostContactgroups = new PropelObjectCollection();
+		$this->collNagiosHostContactgroups->setModel('NagiosHostContactgroup');
 	}
 
 	/**
 	 * Gets an array of NagiosHostContactgroup objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContactGroup has previously been saved, it will retrieve
-	 * related NagiosHostContactgroups from storage. If this NagiosContactGroup is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContactGroup is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHostContactgroup[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHostContactgroup[] List of NagiosHostContactgroup objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostContactgroups($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostContactgroups === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostContactgroups = array();
+		if(null === $this->collNagiosHostContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostContactgroups) {
+				// return empty collection
+				$this->initNagiosHostContactgroups();
 			} else {
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				NagiosHostContactgroupPeer::addSelectColumns($criteria);
-				$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				NagiosHostContactgroupPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostContactgroupCriteria) || !$this->lastNagiosHostContactgroupCriteria->equals($criteria)) {
-					$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelect($criteria, $con);
+				$collNagiosHostContactgroups = NagiosHostContactgroupQuery::create(null, $criteria)
+					->filterByNagiosContactGroup($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostContactgroups;
 				}
+				$this->collNagiosHostContactgroups = $collNagiosHostContactgroups;
 			}
 		}
-		$this->lastNagiosHostContactgroupCriteria = $criteria;
 		return $this->collNagiosHostContactgroups;
 	}
 
@@ -1589,47 +1405,21 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 */
 	public function countNagiosHostContactgroups(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostContactgroups === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostContactgroups) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				$count = NagiosHostContactgroupPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				if (!isset($this->lastNagiosHostContactgroupCriteria) || !$this->lastNagiosHostContactgroupCriteria->equals($criteria)) {
-					$count = NagiosHostContactgroupPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostContactgroups);
+				$query = NagiosHostContactgroupQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostContactgroups);
+				return $query
+					->filterByNagiosContactGroup($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostContactgroups);
 		}
-		return $count;
 	}
 
 	/**
@@ -1645,8 +1435,8 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 		if ($this->collNagiosHostContactgroups === null) {
 			$this->initNagiosHostContactgroups();
 		}
-		if (!in_array($l, $this->collNagiosHostContactgroups, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostContactgroups, $l);
+		if (!$this->collNagiosHostContactgroups->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostContactgroups[]= $l;
 			$l->setNagiosContactGroup($this);
 		}
 	}
@@ -1662,40 +1452,18 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostContactgroup[] List of NagiosHostContactgroup objects
 	 */
 	public function getNagiosHostContactgroupsJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostContactgroupQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosHostContactgroups === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostContactgroups = array();
-			} else {
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-			if (!isset($this->lastNagiosHostContactgroupCriteria) || !$this->lastNagiosHostContactgroupCriteria->equals($criteria)) {
-				$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostContactgroupCriteria = $criteria;
-
-		return $this->collNagiosHostContactgroups;
+		return $this->getNagiosHostContactgroups($query, $con);
 	}
 
 
@@ -1709,80 +1477,115 @@ abstract class BaseNagiosContactGroup extends BaseObject  implements Persistent 
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContactGroup.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostContactgroup[] List of NagiosHostContactgroup objects
 	 */
 	public function getNagiosHostContactgroupsJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactGroupPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostContactgroupQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosHostContactgroups === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostContactgroups = array();
-			} else {
-
-				$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-				$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $this->id);
-
-			if (!isset($this->lastNagiosHostContactgroupCriteria) || !$this->lastNagiosHostContactgroupCriteria->equals($criteria)) {
-				$this->collNagiosHostContactgroups = NagiosHostContactgroupPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostContactgroupCriteria = $criteria;
-
-		return $this->collNagiosHostContactgroups;
+		return $this->getNagiosHostContactgroups($query, $con);
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->name = null;
+		$this->alias = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collNagiosContactGroupMembers) {
-				foreach ((array) $this->collNagiosContactGroupMembers as $o) {
+				foreach ($this->collNagiosContactGroupMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServiceContactGroupMembers) {
-				foreach ((array) $this->collNagiosServiceContactGroupMembers as $o) {
+				foreach ($this->collNagiosServiceContactGroupMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosEscalationContactgroups) {
-				foreach ((array) $this->collNagiosEscalationContactgroups as $o) {
+				foreach ($this->collNagiosEscalationContactgroups as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostContactgroups) {
-				foreach ((array) $this->collNagiosHostContactgroups as $o) {
+				foreach ($this->collNagiosHostContactgroups as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collNagiosContactGroupMembers instanceof PropelCollection) {
+			$this->collNagiosContactGroupMembers->clearIterator();
+		}
 		$this->collNagiosContactGroupMembers = null;
+		if ($this->collNagiosServiceContactGroupMembers instanceof PropelCollection) {
+			$this->collNagiosServiceContactGroupMembers->clearIterator();
+		}
 		$this->collNagiosServiceContactGroupMembers = null;
+		if ($this->collNagiosEscalationContactgroups instanceof PropelCollection) {
+			$this->collNagiosEscalationContactgroups->clearIterator();
+		}
 		$this->collNagiosEscalationContactgroups = null;
+		if ($this->collNagiosHostContactgroups instanceof PropelCollection) {
+			$this->collNagiosHostContactgroups->clearIterator();
+		}
 		$this->collNagiosHostContactgroups = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosContactGroupPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosContactGroup

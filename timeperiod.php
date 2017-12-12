@@ -72,7 +72,7 @@ if(isset($_GET['request'])) {
 if(isset($_POST['request'])) {
 	if($_POST['request'] == 'modify_period') {
 	
-		if($_POST['timeperiod_manage']['timeperiod_name'] != $timeperiod->getName() && $lilac->timeperiod_exists($_POST['timeperiod_manage']['timeperiod_name'])) {
+		if($_POST['timeperiod_manage']['timeperiod_name'] != $timeperiod->getName() && $lilac->period_exists($_POST['timeperiod_manage']['timeperiod_name'])) {
 			$error = "A time period with that name already exists!";
 		}
 		else {

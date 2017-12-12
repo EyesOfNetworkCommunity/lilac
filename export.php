@@ -29,6 +29,14 @@ include_once('exporter/classes.inc.php');
 include_once('ExportJob.php');
 include_once('ExportLogEntry.php');
 
+// Get Next Job Id
+include("/srv/eyesofnetwork/eonweb/include/config.php");
+$link = mysql_connect( $database_host, $database_username, $database_password );
+mysql_select_db( $database_lilac );
+$query = mysql_query( "SHOW TABLE STATUS LIKE 'export_job';" );
+$resultID = mysql_fetch_object( $query );
+mysql_close( $link );
+
 // Better to load our engines!
 $availableEngines = ExportEngine::getAvailableEngines();
 
@@ -36,7 +44,7 @@ if(isset($_GET['action']) && $_GET['action'] == "engineConfig") {
 	// Need to send over engine configuration
 	$engineClass = $_GET['className'];
 	$engine = new $engineClass(null); // Wonky, I know.
-	$engine->renderConfig();
+	$engine->renderConfig($resultID->Auto_increment);
 	die();
 }
 
@@ -324,17 +332,8 @@ if(!isset($exportJob))	{
 	<form name="export_job" method="post" action="export.php">
 	<input type="hidden" name="request" value="export" />
 	<p>
-<?php
-// Get Next Job Id
-include("/srv/eyesofnetwork/eonweb/include/config.php");
-$link = mysql_connect( $databas_host, $database_username, $database_password );
-mysql_select_db( $database_lilac );
-$query = mysql_query( "SHOW TABLE STATUS LIKE 'export_job';" );
-$result = mysql_fetch_object( $query );
-mysql_close( $link );
-?>
         <fieldset>
-                <legend>Job Definition ID : <?php echo $result->Auto_increment; ?> </legend>
+                <legend>Job Definition ID : <?php echo $resultID->Auto_increment; ?> </legend>
 		<label for="job_name">Job Name</label>
 		<input id="job_name" name="job_name" type="text" size="100" maxlength="255" />
 		<label for="job_description">Job Description</label>

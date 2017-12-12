@@ -1,4 +1,8 @@
 <?php
+
+include_once("/srv/eyesofnetwork/eonweb/include/config.php");
+include_once("/srv/eyesofnetwork/eonweb/include/function.php");
+
 abstract class NagiosExporter extends Exporter {
 	
 	private $exportJob;
@@ -34,7 +38,7 @@ class NagiosExportEngine extends ExportEngine {
 	
 	private $restartCmd = null;
 	private $verifyCmd = null;
-	
+	public $MainConfigDir = null;
 	private $exportDir = null;
 
 	public function getDisplayName() {
@@ -45,14 +49,18 @@ class NagiosExportEngine extends ExportEngine {
 		return "Exports configuration to Nagios 3.x configuration files.";
 	}
 
-	public function renderConfig() {
+	public function renderConfig($jobID=1) {
 		?>
 		<p>
 		<fieldset class="checks">
 		
 			<legend>Options</legend>
 			<p>
-			<input type="checkbox" id="backup_existing" name="backup_existing" checked="checked" />
+			<input type="checkbox" id="export_diff" name="export_diff" />
+			<label for="export_diff">Differential export</label>
+			</p>
+			<p>
+			<input type="checkbox" id="backup_existing" name="backup_existing" />
 			<label for="backup_existing">Backup Existing Files</label>
 			</p>
 			<p>
@@ -70,12 +78,12 @@ class NagiosExportEngine extends ExportEngine {
 			<legend>Path Locations</legend>
 			<p>
 			<label for="nagios_path">Nagios Sanity-Check Command (Required if Doing Sanity Check)</label>
-			<input type="text" size="100" maxlength="255" id="nagios_path" name="nagios_path" />
+			<input type="text" size="100" maxlength="255" id="nagios_path" name="nagios_path" value="/srv/eyesofnetwork/nagios/bin/nagios -v /tmp/lilac-export-<?php echo $jobID; ?>/nagios.cfg" />
 			</p>
 			
 			<p>
 			<label for="nagios_path">Restart Nagios Command (Required if Restarting Nagios)</label>
-			<input type="text" size="100" maxlength="255" id="restart_command" name="restart_command" />
+			<input type="text" size="100" maxlength="255" id="restart_command" name="restart_command" value="/usr/bin/sudo /bin/systemctl restart nagios" />
 			</p>
 		</fieldset>
 		</p>
@@ -88,6 +96,12 @@ class NagiosExportEngine extends ExportEngine {
 	}
 
 	public function buildConfig($config) {
+		if(isset($_POST['export_diff'])) {
+			$config->setVar("export_diff", true);
+		}
+		else {
+			$config->setVar("export_diff", false);
+		}
 		if(isset($_POST['backup_existing'])) {
 			$config->setVar("backup_existing", true);
 		}
@@ -123,6 +137,9 @@ class NagiosExportEngine extends ExportEngine {
 		if($config->getVar("overwrite_cgi")) {
 			?><li>Exporting CGI Configuration</li><?php
 		}
+		if($config->getVar("export_diff")) {
+		   ?><li><strong>Do differential export</strong></li><?php
+		}
 		if($config->getVar("backup_existing")) {
 		   ?><li><strong>Backing Up Existing Configuration Files</strong></li><?php
 		}
@@ -140,7 +157,6 @@ class NagiosExportEngine extends ExportEngine {
 		$job = $this->getJob();
 		$job->addNotice("NagiosExportEngine Starting...");
 		$config = $this->getConfig();
-
 
 		// First determine, do we need to make backups?
 		if($config->getVar('backup_existing')) {
@@ -184,6 +200,218 @@ class NagiosExportEngine extends ExportEngine {
 			$this->restartCmd = $config->getVar("restart_command");
 			$this->verifyCmd = $config->getVar("nagios_path");
 		}
+		return true;
+	}
+	
+	public function exportDiff() {
+		
+		global $database_lilac;
+		
+		$ExportDiff=new EoN_Job_Exporter();
+	
+		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
+		$MainConfigDir = $mainConfiguration->getConfigDir();
+		$job = $this->getJob();
+		$job->addNotice("NagiosExportEngine beginning export...");
+		exec("rm -rf ".$this->exportDir."/*");
+		exec("cp ".$MainConfigDir."/* ".$this->exportDir."/");
+		exec("cp -r ".$MainConfigDir."/objects/ ".$this->exportDir."/objects/");
+		$config = $this->getConfig();
+		
+		//Export Main
+		exec("rm -rf ".$this->exportDir."/nagios.cfg");
+		// Main Configuration
+		$fp = @fopen($this->exportDir . "/nagios.cfg", "w");
+		if(!$fp) {
+			$job->addError("Unable to open " . $this->exportDir . "/nagios.cfg for writing.");
+			return false;
+		}
+		$exporter = new NagiosMainExporter($this, $fp);
+		$exporter->setConfigDir($this->exportDir);
+		$exporter->init();
+		
+		if(!$exporter->valid()) {
+			$this->addQueuedExporter($exporter);
+			$job->addNotice("NagiosImportEngine queueing up Main exporter until dependencies are valid.");
+		}
+		else {
+			if(!$exporter->export()) {
+				$job->addError("Main Exporter failed export.  Bailing out of job...");
+				return false;
+			}
+		}
+		
+		//Export the diffences
+		$requêteDiff = sqlrequest($database_lilac, "SELECT * FROM export_job_history");
+		
+		while($row = mysqli_fetch_row($requêteDiff)){
+			if($row[2]=='nagios_cgi_configuration'){
+				exec("rm -rf ".$this->exportDir."/cgi.cfg");
+				// CGI Configuration
+				$fp = @fopen($this->exportDir . "/cgi.cfg", "w");
+				if(!$fp) {
+					$job->addError("Unable to open " . $this->exportDir . "/cgi.cfg for writing.");
+					return false;
+				}
+				$exporter = new NagiosCgiExporter($this, $fp);
+				$exporter->init();
+				
+				if(!$exporter->valid()) {
+					$this->addQueuedExporter($exporter);
+					$job->addNotice("NagiosImportEngine queueing up CGI exporter until dependencies are valid.");
+				}
+				else {
+					if(!$exporter->export()) {
+						$job->addError("CGI Exporter failed export.  Bailing out of job...");
+						return false;
+					}
+				}		
+			}
+			elseif($row[2]=='nagios_resource'){
+				exec("rm -rf ".$this->exportDir."/resource.cfg");
+				// Resource Configuration
+				$fp = @fopen($this->exportDir . "/resource.cfg", "w");
+				if(!$fp) {
+					$job->addError("Unable to open " . $this->exportDir . "/resource.cfg for writing.");
+					return false;
+				}
+				$exporter = new NagiosResourceExporter($this, $fp);
+				$exporter->init();
+				
+				if(!$exporter->valid()) {
+					$this->addQueuedExporter($exporter);
+					$job->addNotice("NagiosImportEngine queueing up Resource exporter until dependencies are valid.");
+				}
+				else {
+					if(!$exporter->export()) {
+						$job->addError("Resource Exporter failed export.  Bailing out of job...");
+						return false;
+					}
+				}
+			}
+			// Delete
+			elseif($row[7]=='delete' || $row[7]=='modify'){
+				$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row[1], $row[2], $row[3], $row[4]);			
+				$fp = @fopen($this->exportDir . "/objects/".$row[2]."s.cfg", "w");
+				fwrite($fp,$final);
+				fclose ($fp);
+				
+				// If host
+				if($row[2]=="host"){
+					$final = $ExportDiff->ModifyCfgFile($this->exportDir, "", "service", $row[1], "host");
+					$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
+					fwrite($fp,$final);
+					fclose ($fp);
+				}
+				
+				$job->addNotice(ucfirst($row[2])." ".$row[1]." has been deleted");
+			}
+			elseif($row[7]=='add' || $row[7]=='modify'){
+				if($row[2]=='servicegroup' || $row[2]=='contactgroup'){
+					//Get Object by Name
+					$majuscule = explode( "g", $row[2]);
+					$objectName = ucfirst($majuscule[0]).ucfirst("g".$majuscule[1]);
+					$job->addNotice("Résultat du type d'objet :".$objectName);
+				}else{
+					$objectName = ucfirst($row[2]);
+				}
+				
+				//Create new object exporter
+				$classname='Nagios'.$objectName.'Exporter';
+				$fp = @fopen($this->exportDir."/objects/".$row[2]."s.cfg", "a");
+				
+				$objectExporter = new $classname($this, $fp);
+				
+				//Get Object by Name
+				$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row[1]));
+				
+				if($object) {
+					if($row[2]=='service'){
+						$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row[3], $row[1]));
+						$objectExporter->export($object, $row[4], $row[3]);
+					}else{
+						$objectExporter->export($object);
+					}
+					
+					$job->addNotice(ucfirst($row[2])." ".$row[1]." has been added");
+				}
+			}
+	
+		}
+		
+		sqlrequest('lilac', "DELETE FROM export_job_history");
+		
+		$job->addNotice("Finished exporting objects.");
+
+		// Finished exporting, let's check if we need to do the preflight
+		if($config->getVar("preflight_check")) {
+			exec($this->verifyCmd . " -v " . $this->exportDir . "/nagios.cfg", $output, $retVal);
+			if(($retVal != 0)) {
+				if($retVal == 127) {
+					$job->addError("The command to verify your configuration: " . $this->verifyCmd . " was not found (127).");
+				}
+				else {
+					$job->addError("Nagios Sanity Check Failed.  Did not write configuration files to production.  Output is as follows:");
+					foreach($output as $outputLine) {
+						$job->addError($outputLine);
+					}
+				}
+				$job->addError("Export failed.");
+				return false;
+			}
+			else {
+				$job->addNotice("Nagios Sanity Check Passed.");
+			}
+		}
+
+		// Now need to re-export main configuration file, so config dir's point 
+		// to right location
+		$fp = @fopen($this->exportDir . "/nagios.cfg", "w");
+		if(!$fp) {
+			$job->addError("Unable to open " . $this->exportDir . "/nagios.cfg for writing.");
+			return false;
+		}
+		$exporter = new NagiosMainExporter($this, $fp);
+		$exporter->init();
+		if(!$exporter->valid()) {
+			$this->addQueuedExporter($exporter);
+			$job->addNotice("NagiosImportEngine queueing up Main exporter until dependencies are valid.");
+		}
+		else {
+			if(!$exporter->export()) {
+				$job->addError("Main Exporter failed export.  Bailing out of job...");
+				return false;
+			}
+		}
+
+		// Move the configuration files to the appropriate place.
+		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
+		if(!$this->dir_copy($this->exportDir, $mainConfiguration->getConfigDir())) {
+			$job->addError("Unable to copy configuration files to : " . $mainConfiguration->getConfigDir());
+			$job->addError("Export failed.");
+			return false;
+		} 
+		
+		// Check if we have to restart
+		if($config->getVar("restart_nagios")) {
+			$output = null;
+			exec($this->restartCmd, $output, $retVal);
+			if($retVal != 0) {
+				if($retVal == 127) {
+					$job->addError("The command to restart Nagios: " . $this->restartCmd . " was not found (127).");
+				}
+				else {
+					$job->addError("Nagios Restart Failed.  You need to manually restart Nagios");
+					foreach($output as $outputLine) {
+						$job->addError($outputLine);
+					}
+				}
+				$job->addError("Restart failed.");
+				return false;
+			}
+			$job->addNotice("Nagios Restarted Successfully.");
+		}
+		
 		return true;
 	}
 	
@@ -318,7 +546,7 @@ class NagiosExportEngine extends ExportEngine {
 		// Contact Group Configuration
 		$fp = @fopen($this->exportDir . "/objects/contactgroups.cfg", "w");
 		if(!$fp) {
-			$job->addError("Unable to open " . $this->exportDir . "/objects/contactgroups.cfg for writing.");
+			$job->addError("Unable to open " . 3 . "/objects/contactgroups.cfg for writing.");
 			return false;
 		}
 		$exporter = new NagiosContactGroupExporter($this, $fp);
@@ -525,6 +753,9 @@ class NagiosExportEngine extends ExportEngine {
 			}
 			$job->addNotice("Nagios Restarted Successfully.");
 		}
+		
+		//reinitialize DB of ExportDiff
+		sqlrequest('lilac', "DELETE FROM export_job_history");
 		
 		return true;
 	}

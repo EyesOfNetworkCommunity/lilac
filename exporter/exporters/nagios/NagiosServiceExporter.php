@@ -1,5 +1,30 @@
 <?php
 
+/*
+ lilac-reloaded - A Nagios Configuration Tool
+Copyright (C) 2013 Rene Hadler
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+/*
+ Filename: NagiosServiceExporter.php
+Description:
+The class definition and methods for the NagiosServiceExporter class
+*/
+
 class NagiosServiceExporter extends NagiosExporter {
 	
 	public function init() {
@@ -24,6 +49,23 @@ class NagiosServiceExporter extends NagiosExporter {
 			
 			case 'hostgroup':
 				fputs($fp, "\thostgroup_name\t" . $targetObj->getName() . "\n");
+
+				$ignoreHosts = array();
+				//error_log("Children for ". $targetObj->getName());
+				foreach($targetObj->getMembers() as $childHost) {
+					//error_log($childHost->getName());
+					foreach($childHost->getNagiosServices() as $childService) {
+						//error_log($childService->getDescription() ." compare to ". $service->getDescription());
+						if($childService->getDescription() == $service->getDescription()) {
+							//error_log("Overriding service ". $service->getDescription() ." in template ". $targetObj->getName() ." for host ". $childHost->getName());
+							array_push($ignoreHosts, "!". $childHost->getName());
+						}
+					}
+				}
+				if(count($ignoreHosts) > 0) {
+					fputs($fp, "\thost_name\t" . implode(",",$ignoreHosts) . "\n");
+				}
+
 				break;
 		}
 		
@@ -99,43 +141,46 @@ class NagiosServiceExporter extends NagiosExporter {
 		}
 		
 		// Notifications
-		if(isset($values['notification_on_warning']['value'])) {
+		//if(isset($values['notification_on_warning']['value'])) {
 			if(!$values['notification_on_warning']['value'] && !$values['notification_on_unknown']['value'] && !$values['notification_on_critical']['value'] && !$values['notification_on_recovery']['value'] && !$values['notification_on_flapping']['value']) {
 				fputs($fp, "\tnotification_options\tn\n");
 			}
 			else {
 				fputs($fp, "\tnotification_options\t");
 				$tempValues = array();
-				if($values['notification_on_warning']['value']) $tempValues[] = "w";
-				if($values['notification_on_unknown']['value']) $tempValues[] = "u";
-				if($values['notification_on_critical']['value']) $tempValues[] = "c";
-				if($values['notification_on_recovery']['value']) $tempValues[] = "r";
-				if($values['notification_on_flapping']['value']) $tempValues[] = "f";
-				if($values['notification_on_scheduled_downtime']['value']) $tempValues[] = "s";
+				if(isset($values['notification_on_warning']['value']) && $values['notification_on_warning']['value']) $tempValues[] = "w";
+				if(isset($values['notification_on_unknown']['value']) && $values['notification_on_unknown']['value']) $tempValues[] = "u";
+				if(isset($values['notification_on_critical']['value']) && $values['notification_on_critical']['value']) $tempValues[] = "c";
+				if(isset($values['notification_on_recovery']['value']) && $values['notification_on_recovery']['value']) $tempValues[] = "r";
+				if(isset($values['notification_on_flapping']['value']) && $values['notification_on_flapping']['value']) $tempValues[] = "f";
+				if(isset($values['notification_on_scheduled_downtime']['value']) && $values['notification_on_scheduled_downtime']['value']) $tempValues[] = "s";
 				fputs($fp, implode(",", $tempValues));
 				fputs($fp, "\n");
 			}
-		}
+		//}
 
 		// Stalking
-		if($values['flap_detection_on_ok']['value'] || $values['flap_detection_on_warning']['value'] || $values['flap_detection_on_unknown']['value'] || $values['flap_detection_on_critical']['value']) {
+		if(isset($values['flap_detection_on_ok']['value']) || isset($values['flap_detection_on_warning']['value']) || isset($values['flap_detection_on_unknown']['value']) || isset($values['flap_detection_on_critical']['value'])) {
 			fputs($fp, "\tflap_detection_options\t");
-			if($values['flap_detection_on_ok']['value']) {
+			if(isset($values['flap_detection_on_ok']['value']) && $values['flap_detection_on_ok']['value']) {
 				fputs($fp, "o");
-				if($values['flap_detection_on_warning']['value'] || $values['flap_detection_on_unknown']['value'] || $values['flap_detection_on_critical']['value'])
+				if((isset($values['flap_detection_on_warning']['value']) && $values['flap_detection_on_warning']['value']) ||
+                   (isset($values['flap_detection_on_unknown']['value']) && $values['flap_detection_on_unknown']['value']) ||
+                   (isset($values['flap_detection_on_critical']['value']) && $values['flap_detection_on_critical']['value']))
 					fputs($fp, ",");
 			}
-			if($values['flap_detection_on_warning']['value']) {
+			if(isset($values['flap_detection_on_warning']['value']) && $values['flap_detection_on_warning']['value']) {
 				fputs($fp, "w");
-				if($values['flap_detection_on_unknown']['value'] || $values['flap_detection_on_critical']['value'])
+				if((isset($values['flap_detection_on_unknown']['value']) && $values['flap_detection_on_unknown']['value']) ||
+                   (isset($values['flap_detection_on_critical']['value']) && $values['flap_detection_on_critical']['value']))
 					fputs($fp, ",");
 			}
-			if($values['flap_detection_on_unknown']['value']) {
+			if(isset($values['flap_detection_on_unknown']['value']) && $values['flap_detection_on_unknown']['value']) {
 				fputs($fp, "u");
-				if($values['flap_detection_on_critical']['value'])
+				if(isset($values['flap_detection_on_critical']['value']) && $values['flap_detection_on_critical']['value'])
 					fputs($fp, ",");
 			}
-			if($values['flap_detection_on_critical']['value']) {
+			if(isset($values['flap_detection_on_critical']['value']) && $values['flap_detection_on_critical']['value']) {
 				fputs($fp, "c");
 			}
 			fputs($fp, "\n");
@@ -144,24 +189,27 @@ class NagiosServiceExporter extends NagiosExporter {
 
 		
 		// Stalking
-		if($values['stalking_on_ok']['value'] || $values['stalking_on_warning']['value'] || $values['stalking_on_unknown']['value'] || $values['stalking_on_critical']['value']) {
+		if(isset($values['stalking_on_ok']['value']) || isset($values['stalking_on_warning']['value']) || isset($values['stalking_on_unknown']['value']) || isset($values['stalking_on_critical']['value'])) {
 			fputs($fp, "\tstalking_options\t");
-			if($values['stalking_on_ok']['value']) {
+			if(isset($values['stalking_on_ok']['value']) && $values['stalking_on_ok']['value']) {
 				fputs($fp, "o");
-				if($values['stalking_on_warning']['value'] || $values['stalking_on_unknown']['value'] || $values['stalking_on_critical']['value'])
+				if((isset($values['stalking_on_warning']['value']) && $values['stalking_on_warning']['value']) ||
+                   (isset($values['stalking_on_unknown']['value']) && $values['stalking_on_unknown']['value']) ||
+                   (isset($values['stalking_on_critical']['value']) && $values['stalking_on_critical']['value']))
 					fputs($fp, ",");
 			}
-			if($values['stalking_on_warning']['value']) {
+			if(isset($values['stalking_on_warning']['value']) && $values['stalking_on_warning']['value']) {
 				fputs($fp, "w");
-				if($values['stalking_on_unknown']['value'] || $values['stalking_on_critical']['value'])
+				if((isset($values['stalking_on_unknown']['value']) && $values['stalking_on_unknown']['value']) ||
+                   (isset($values['stalking_on_critical']['value']) && $values['stalking_on_critical']['value']))
 					fputs($fp, ",");
 			}
-			if($values['stalking_on_unknown']['value']) {
+			if(isset($values['stalking_on_unknown']['value']) && $values['stalking_on_unknown']['value']) {
 				fputs($fp, "u");
-				if($values['stalking_on_critical']['value'])
+				if(isset($values['stalking_on_critical']['value']) && $values['stalking_on_critical']['value'])
 					fputs($fp, ",");
 			}
-			if($values['stalking_on_critical']['value']) {
+			if(isset($values['stalking_on_critical']['value']) && $values['stalking_on_critical']['value']) {
 				fputs($fp, "c");
 			}
 			fputs($fp, "\n");
@@ -183,8 +231,8 @@ class NagiosServiceExporter extends NagiosExporter {
 				$contactList[$contact->getName()] = $contact;
 			}
 		}
+		fputs($fp, "\tcontacts\t");
 		if(count($contactList)) {
-			fputs($fp, "\tcontacts\t");
 			$first = true;
 			foreach($contactList as $contact) {
 				if(!$first) {
@@ -195,8 +243,8 @@ class NagiosServiceExporter extends NagiosExporter {
 				}
 				fputs($fp, $contact->getName());
 			}
-			fputs($fp, "\n");
 		}
+		fputs($fp, "\n");
 
 	
 
@@ -217,7 +265,7 @@ class NagiosServiceExporter extends NagiosExporter {
 				$groupList[$group->getName()] = $group;
 			}
 		}
-		if(count($groupList)) {
+		if(count($groupList) || count($contactList)) {
 			fputs($fp, "\tcontact_groups\t");
 			$first = true;
 			foreach($groupList as $group) {
@@ -262,6 +310,24 @@ class NagiosServiceExporter extends NagiosExporter {
 			fputs($fp, "\n");
 		}
 		
+		// Custom Object Variables
+		$cov_list = $service->getInheritedCustomObjectVariables();
+		$servicecov_list = $service->getNagiosServiceCustomObjectVariables();
+		foreach($servicecov_list as $cov)
+			$cov_list[] = $cov;
+			
+		if(count($cov_list) > 0)
+		{
+			foreach($cov_list as $customObjectVariable)
+			{
+				$name = strtoupper($customObjectVariable->getVarName());
+				if($name[0] != "_")
+					$name = "_" . $name;
+					
+				fputs($fp, sprintf("\t%s\t%s\n", $name, $customObjectVariable->getVarValue()));
+			}
+		}
+		
 		fputs($fp, "}\n");
 		fputs($fp, "\n");
 	}
@@ -276,19 +342,32 @@ class NagiosServiceExporter extends NagiosExporter {
 		$fp = $this->getOutputFile();
 		fputs($fp, "# Written by NagiosServiceExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		$hosts = NagiosHostPeer::doSelect(new Criteria());
-		
+		//$hosts = NagiosHostPeer::doSelect(new Criteria());
+		$hosts = NagiosHostQuery::create()->find();
+		$job->addNotice("Total hosts found: " . count($hosts));
 		foreach($hosts as $host) {
 			// Got hosts
 			// Get our inherited services first
 			$job->addNotice("Processing services for host: " . $host->getName());
 			$inheritedServices = $host->getInheritedServices();
+			$job->addNotice("Total inherited services found for host " . $host->getName() . ": " . count($inheritedServices));
 			foreach($inheritedServices as $service) {
+				// If service belongs to a hostgroup dont add it again to a host
+				$hostgroupID = $service->getHostgroup();
+				if(!empty($hostgroupID))
+					continue;
+				
 				$job->addNotice("Processing service " . $service->getDescription());
 				$this->_exportService($service, "host", $host);
 			}
 			$services = $host->getNagiosServices();
+			$job->addNotice("Total services found for host " . $host->getName() . ": " . count($services));
 			foreach($services as $service) {
+				// If service belongs to a hostgroup dont add it again to a host
+				$hostgroupID = $service->getHostgroup();
+				if(!empty($hostgroupID))
+					continue;
+				
 				$job->addNotice("Processing service " . $service->getDescription());
 				$this->_exportService($service, "host", $host);
 			}
@@ -296,6 +375,7 @@ class NagiosServiceExporter extends NagiosExporter {
 		}
 		
 		$hostgroups = NagiosHostgroupPeer::doSelect(new Criteria());
+		$job->addNotice("Total hostgroups found: " . count($hostgroups));
 		foreach($hostgroups as $hostgroup) {
 			$job->addNotice("Processing services for hostgroup: " . $hostgroup->getName());
 			$services = $hostgroup->getNagiosServices();

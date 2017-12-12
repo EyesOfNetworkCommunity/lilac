@@ -1,5 +1,25 @@
 <?php
 
+/*
+ Lilac - A Nagios Configuration Tool
+Copyright (C) 2013 Rene Hadler
+Copyright (C) 2007 Taylor Dondich
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 class NagiosHostExporter extends NagiosExporter {
 	
 	public function init() {
@@ -52,6 +72,9 @@ class NagiosHostExporter extends NagiosExporter {
 					$key == "description") {
 					continue;
 				}
+                if($key == 'display_name' && empty($value))
+                    continue;
+
 				if($key == 'name') {
 					$key = 'host_name';
 				}
@@ -108,11 +131,11 @@ class NagiosHostExporter extends NagiosExporter {
 				else {
 					fputs($fp, "\tnotification_options\t");
 					$tempValues = array();
-					if($values['notification_on_down']['value']) $tempValues[] = "d";
-					if($values['notification_on_unreachable']['value']) $tempValues[] = "u";
-					if($values['notification_on_recovery']['value']) $tempValues[] = "r";
-					if($values['notification_on_flapping']['value']) $tempValues[] = "f";
-					if($values['notification_on_scheduled_downtime']['value']) $tempValues[] = "s";
+					if(isset($values['notification_on_down']['value']) && $values['notification_on_down']['value']) $tempValues[] = "d";
+					if(isset($values['notification_on_unreachable']['value']) && $values['notification_on_unreachable']['value']) $tempValues[] = "u";
+					if(isset($values['notification_on_recovery']['value']) && $values['notification_on_recovery']['value']) $tempValues[] = "r";
+					if(isset($values['notification_on_flapping']['value']) && $values['notification_on_flapping']['value']) $tempValues[] = "f";
+					if(isset($values['notification_on_scheduled_downtime']['value']) && $values['notification_on_scheduled_downtime']['value']) $tempValues[] = "s";
 					fputs($fp, implode(",", $tempValues));
 					fputs($fp, "\n");
 				}
@@ -120,38 +143,40 @@ class NagiosHostExporter extends NagiosExporter {
 
 			
 			// Stalking
-			if($values['stalking_on_up']['value'] || $values['stalking_on_down']['value'] || $values['stalking_on_unreachable']['value']) {
+			if(isset($values['stalking_on_up']['value']) || isset($values['stalking_on_down']['value']) || isset($values['stalking_on_unreachable']['value'])) {
 				fputs($fp, "\tstalking_options\t");
-					if($values['stalking_on_up']['value']) {
+					if(isset($values['stalking_on_up']['value']) && $values['stalking_on_up']['value']) {
 						fputs($fp, "o");
-						if($values['stalking_on_down']['value'] || $values['stalking_on_unreachable']['value'])
+						if((isset($values['stalking_on_down']['value']) && $values['stalking_on_down']['value']) ||
+                           (isset($values['stalking_on_unreachable']['value']) && $values['stalking_on_unreachable']['value']))
 							fputs($fp, ",");
 					}
-					if($values['stalking_on_down']['value']) {
+					if(isset($values['stalking_on_down']['value']) && $values['stalking_on_down']['value']) {
 						fputs($fp, "d");
-						if($values['stalking_on_unreachable']['value'])
+						if(isset($values['stalking_on_unreachable']['value']) && $values['stalking_on_unreachable']['value'])
 							fputs($fp, ",");
 					}
-					if($values['stalking_on_unreachable']['value']) {
+					if(isset($values['stalking_on_unreachable']['value']) && $values['stalking_on_unreachable']['value']) {
 						fputs($fp, "u");
 					}
 				fputs($fp, "\n");
 			}
 			
 			// Flap Detection
-			if($values['flap_detection_on_up']['value'] || $values['flap_detection_on_down']['value'] || $values['flap_detection_on_unreachable']['value']) {
+			if(isset($values['flap_detection_on_up']['value']) || isset($values['flap_detection_on_down']['value']) || isset($values['flap_detection_on_unreachable']['value'])) {
 				fputs($fp, "\tflap_detection_options\t");
-					if($values['flap_detection_on_up']['value']) {
+					if(isset($values['flap_detection_on_up']['value']) && $values['flap_detection_on_up']['value']) {
 						fputs($fp, "o");
-						if($values['flap_detection_on_down']['value'] || $values['flap_detection_on_unreachable']['value'])
+						if((isset($values['flap_detection_on_down']['value']) && $values['flap_detection_on_down']['value']) ||
+                           (isset($values['flap_detection_on_unreachable']['value']) && $values['flap_detection_on_unreachable']['value']))
 							fputs($fp, ",");
 					}
-					if($values['flap_detection_on_down']['value']) {
+					if(isset($values['flap_detection_on_down']['value']) && $values['flap_detection_on_down']['value']) {
 						fputs($fp, "d");
-						if($values['flap_detection_on_unreachable']['value'])
+						if(isset($values['flap_detection_on_unreachable']['value']) && $values['flap_detection_on_unreachable']['value'])
 							fputs($fp, ",");
 					}
-					if($values['flap_detection_on_unreachable']['value']) {
+					if(isset($values['flap_detection_on_unreachable']['value']) && $values['flap_detection_on_unreachable']['value']) {
 						fputs($fp, "u");
 					}
 				fputs($fp, "\n");
@@ -267,6 +292,24 @@ class NagiosHostExporter extends NagiosExporter {
 					fputs($fp, $group->getName());
 				}
 				fputs($fp, "\n");
+			}
+			
+			// Custom Object Variables
+			$cov_list = $host->getInheritedCustomObjectVariables();
+			$hostcov_list = $host->getNagiosHostCustomObjectVariables();
+			foreach($hostcov_list as $cov)
+				$cov_list[] = $cov;
+			
+			if(count($cov_list) > 0)
+			{
+				foreach($cov_list as $customObjectVariable)
+				{
+					$name = strtoupper($customObjectVariable->getVarName());
+					if($name[0] != "_")
+						$name = "_" . $name;
+					
+					fputs($fp, sprintf("\t%s\t%s\n", $name, $customObjectVariable->getVarValue()));
+				}
 			}
 			
 			fputs($fp, "}\n");

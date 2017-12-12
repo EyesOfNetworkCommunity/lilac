@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'lilac_configuration' table.
  *
  * Lilac Configuration
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseLilacConfiguration extends BaseObject  implements Persistent {
+abstract class BaseLilacConfiguration extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'LilacConfigurationPeer';
 
 	/**
 	 * The Peer class.
@@ -19,16 +25,16 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	protected static $peer;
 
 	/**
-	 * The value for the id field.
-	 * @var        int
-	 */
-	protected $id;
-
-	/**
-	 * The value for the version field.
+	 * The value for the key field.
 	 * @var        string
 	 */
-	protected $version;
+	protected $key;
+
+	/**
+	 * The value for the value field.
+	 * @var        string
+	 */
+	protected $value;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -45,84 +51,64 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	protected $alreadyInValidation = false;
 
 	/**
-	 * Initializes internal state of BaseLilacConfiguration object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
-
-	/**
-	 * Get the [id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * Get the [version] column value.
+	 * Get the [key] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getVersion()
+	public function getKey()
 	{
-		return $this->version;
+		return $this->key;
 	}
 
 	/**
-	 * Set the value of [id] column.
+	 * Get the [value] column value.
 	 * 
-	 * @param      int $v new value
-	 * @return     LilacConfiguration The current object (for fluent API support)
+	 * @return     string
 	 */
-	public function setId($v)
+	public function getValue()
 	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->id !== $v) {
-			$this->id = $v;
-			$this->modifiedColumns[] = LilacConfigurationPeer::ID;
-		}
-
-		return $this;
-	} // setId()
+		return $this->value;
+	}
 
 	/**
-	 * Set the value of [version] column.
+	 * Set the value of [key] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     LilacConfiguration The current object (for fluent API support)
 	 */
-	public function setVersion($v)
+	public function setKey($v)
 	{
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->version !== $v) {
-			$this->version = $v;
-			$this->modifiedColumns[] = LilacConfigurationPeer::VERSION;
+		if ($this->key !== $v) {
+			$this->key = $v;
+			$this->modifiedColumns[] = LilacConfigurationPeer::KEY;
 		}
 
 		return $this;
-	} // setVersion()
+	} // setKey()
+
+	/**
+	 * Set the value of [value] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     LilacConfiguration The current object (for fluent API support)
+	 */
+	public function setValue($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->value !== $v) {
+			$this->value = $v;
+			$this->modifiedColumns[] = LilacConfigurationPeer::VALUE;
+		}
+
+		return $this;
+	} // setValue()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -134,11 +120,6 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -161,8 +142,8 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	{
 		try {
 
-			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->version = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->key = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
+			$this->value = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -171,8 +152,7 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 2; // 2 = LilacConfigurationPeer::NUM_COLUMNS - LilacConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 2; // 2 = LilacConfigurationPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating LilacConfiguration object", $e);
@@ -255,12 +235,20 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 		if ($con === null) {
 			$con = Propel::getConnection(LilacConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			LilacConfigurationPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				LilacConfigurationQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -289,12 +277,29 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 		if ($con === null) {
 			$con = Propel::getConnection(LilacConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				LilacConfigurationPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			LilacConfigurationPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -319,23 +324,16 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = LilacConfigurationPeer::ID;
-			}
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = LilacConfigurationPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
-
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-
+					$criteria = $this->buildCriteria();
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setNew(false);
 				} else {
-					$affectedRows += LilacConfigurationPeer::doUpdate($this, $con);
+					$affectedRows = LilacConfigurationPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -446,10 +444,10 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	{
 		switch($pos) {
 			case 0:
-				return $this->getId();
+				return $this->getKey();
 				break;
 			case 1:
-				return $this->getVersion();
+				return $this->getValue();
 				break;
 			default:
 				return null;
@@ -463,17 +461,24 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
 	{
+		if (isset($alreadyDumpedObjects['LilacConfiguration'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['LilacConfiguration'][$this->getPrimaryKey()] = true;
 		$keys = LilacConfigurationPeer::getFieldNames($keyType);
 		$result = array(
-			$keys[0] => $this->getId(),
-			$keys[1] => $this->getVersion(),
+			$keys[0] => $this->getKey(),
+			$keys[1] => $this->getValue(),
 		);
 		return $result;
 	}
@@ -506,10 +511,10 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	{
 		switch($pos) {
 			case 0:
-				$this->setId($value);
+				$this->setKey($value);
 				break;
 			case 1:
-				$this->setVersion($value);
+				$this->setValue($value);
 				break;
 		} // switch()
 	}
@@ -535,8 +540,8 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	{
 		$keys = LilacConfigurationPeer::getFieldNames($keyType);
 
-		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setVersion($arr[$keys[1]]);
+		if (array_key_exists($keys[0], $arr)) $this->setKey($arr[$keys[0]]);
+		if (array_key_exists($keys[1], $arr)) $this->setValue($arr[$keys[1]]);
 	}
 
 	/**
@@ -548,8 +553,8 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	{
 		$criteria = new Criteria(LilacConfigurationPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(LilacConfigurationPeer::ID)) $criteria->add(LilacConfigurationPeer::ID, $this->id);
-		if ($this->isColumnModified(LilacConfigurationPeer::VERSION)) $criteria->add(LilacConfigurationPeer::VERSION, $this->version);
+		if ($this->isColumnModified(LilacConfigurationPeer::KEY)) $criteria->add(LilacConfigurationPeer::KEY, $this->key);
+		if ($this->isColumnModified(LilacConfigurationPeer::VALUE)) $criteria->add(LilacConfigurationPeer::VALUE, $this->value);
 
 		return $criteria;
 	}
@@ -565,30 +570,38 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(LilacConfigurationPeer::DATABASE_NAME);
-
-		$criteria->add(LilacConfigurationPeer::ID, $this->id);
+		$criteria->add(LilacConfigurationPeer::KEY, $this->key);
 
 		return $criteria;
 	}
 
 	/**
 	 * Returns the primary key for this object (row).
-	 * @return     int
+	 * @return     string
 	 */
 	public function getPrimaryKey()
 	{
-		return $this->getId();
+		return $this->getKey();
 	}
 
 	/**
-	 * Generic method to set the primary key (id column).
+	 * Generic method to set the primary key (key column).
 	 *
-	 * @param      int $key Primary key.
+	 * @param      string $key Primary key.
 	 * @return     void
 	 */
 	public function setPrimaryKey($key)
 	{
-		$this->setId($key);
+		$this->setKey($key);
+	}
+
+	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getKey();
 	}
 
 	/**
@@ -599,18 +612,16 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	 *
 	 * @param      object $copyObj An object of LilacConfiguration (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setVersion($this->version);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setKey($this->getKey());
+		$copyObj->setValue($this->getValue());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+		}
 	}
 
 	/**
@@ -652,19 +663,63 @@ abstract class BaseLilacConfiguration extends BaseObject  implements Persistent 
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->key = null;
+		$this->value = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(LilacConfigurationPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseLilacConfiguration

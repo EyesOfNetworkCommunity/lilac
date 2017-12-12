@@ -59,11 +59,12 @@ class NagiosServiceGroupImporter extends NagiosImporter {
 		$job = $this->getEngine()->getJob();
 		// Check contact existence
 		if(isset($values['members'])) {
-			for($counter = 0; $counter < count($values['members']); $counter += 2) {
+			$members = explode(",",$values['members'][0]['value']);
+			for($counter = 0; $counter < count($members); $counter += 2) {
 				// Get Service
-				$service = NagiosServicePeer::getByHostAndDescription($values['members'][$counter]['value'], $values['members'][$counter+1]['value']);
+				$service = NagiosServicePeer::getByHostAndDescription($members[$counter], $members[$counter + 1]);
 				if(!$service) {
-					$job->addNotice("The member specified by " . $values['members'][$counter]['value'] . ":" . $values['members'][$counter+1]['value'] . " was not found.  Setting this service group as queued.");
+					$job->addNotice("The member specified by " . $members[$counter] . ":" . $members[$counter+1] . " was not found.  Setting this service group as queued.");
 					return false;
 				}
 			}
@@ -93,9 +94,10 @@ class NagiosServiceGroupImporter extends NagiosImporter {
 		$servicegroup = new NagiosServiceGroup();
 
 		if(isset($values['members'])) {
-			for($counter = 0; $counter < count($values['members']); $counter += 2) {
+			$members = explode(",",$values['members'][0]['value']);
+			for($counter = 0; $counter < count($members); $counter +=2) {
 				// Get Service
-				$service = NagiosServicePeer::getByHostAndDescription($values['members'][$counter]['value'], $values['members'][$counter+1]['value']);
+				$service = NagiosServicePeer::getByHostAndDescription($members[$counter], $members[$counter + 1]);
 				$servicegroup->addService($service);	
 				$service->clearAllReferences(true);
 			}
@@ -120,7 +122,7 @@ class NagiosServiceGroupImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $servicegroup, $value);
+					call_user_func(array($servicegroup, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

@@ -12,6 +12,7 @@ class NagiosMainImporter extends NagiosImporter {
 								'precached_object_file' => '',
 								'resource_file' => '',
 								'temp_file' => '',
+								'temp_path' => '',
 								'status_file' => '',
 								'status_update_interval' => '',
 								'nagios_user' => '',
@@ -128,13 +129,17 @@ class NagiosMainImporter extends NagiosImporter {
 								'debug_verbosity' => '',
 								'max_debug_file_size' => '',
 								'admin_pager' => '',
-								'daemon_dumps_core' => '');
+								'daemon_dumps_core' => '',
+                                'log_current_states' => '',
+                                'check_workers' => '',
+                                'query_socket' => '');
 	
 	private $fieldMethods = array('log_file' => 'setLogFile',
 								'daemon_dumps_core' => 'setDaemonDumpsCore',
 								'object_cache_file' => 'setObjectCacheFile',
 								'precached_object_file' => 'setPrecachedObjectFile',
 								'temp_file' => 'setTempFile',
+								'temp_path' => 'setTempPath',
 								'status_file' => 'setStatusFile',
 								'external_command_buffer_slots' => 'setExternalCommandBufferSlots',
 								'status_update_interval' => 'setStatusUpdateInterval',
@@ -252,7 +257,10 @@ class NagiosMainImporter extends NagiosImporter {
 								'debug_level' => 'setDebugLevel',
 								'debug_verbosity' => 'setDebugVerbosity',
 								'max_debug_file_size' => 'setMaxDebugFileSize',
-								'admin_pager' => 'setAdminPager');
+								'admin_pager' => 'setAdminPager',
+                                'log_current_states' => 'setLogCurrentStates',
+                                'check_workers' => 'setCheckWorkers',
+                                'query_socket' => 'setQuerySocket');
 	
 	// We should gather all the cfg_file and cfg_dir directives and add them to our NagiosImportEngine's object files
 	public function init() {
@@ -440,43 +448,23 @@ class NagiosMainImporter extends NagiosImporter {
 		
 		// Setup the configuration directory for the new config file to match the file we imported
 		$mainCfg->setConfigDir(dirname(realpath($fileName)));
-
-                // First let's go and re-merge the coords
-                foreach($values as $key => $entries) {
-                	if($key == "illegal_object_name_chars" || $key == "illegal_macro_output_chars") {
-                        	foreach($entries as $entry) {
-                                	if(empty($newEntry) || $newEntry['value']=="") {
-                                        	$newEntry = $entry;
-                                        }
-                                        else {
-                                                $newEntry['value'] .= "," . $entry['value'];
-                                        }
-                                }
-                                call_user_method($this->fieldMethods[$key], $mainCfg, $newEntry['value']);
-                                unset($newEntry['value']);
-                                continue;
-                	}
-                }
+		
 		foreach($values as $key => $entries) {
 			foreach($entries as $entry) {
 				$value = $entry['value'];
 				$lineNum = $entry['line'];
-
-                		if($key == "illegal_object_name_chars" || $key == "illegal_macro_output_chars") 
-					continue;
-
-				if(key_exists($key, $this->fieldMethods) && $this->fieldMethods[$key] != '') {
-					// Okay, let's check that the method DOES exist
-					if(!method_exists($mainCfg, $this->fieldMethods[$key])) {
-						$job->addError("Method " . $this->fieldMethods[$key] . " does not exist for variable: " . $key . " on line " . $lineNum . " in file " . $fileName);
-						if(!$config->getVar('continue_error')) {
-							return false;
-						}	
+					if(key_exists($key, $this->fieldMethods) && $this->fieldMethods[$key] != '') {
+						// Okay, let's check that the method DOES exist
+						if(!method_exists($mainCfg, $this->fieldMethods[$key])) {
+							$job->addError("Method " . $this->fieldMethods[$key] . " does not exist for variable: " . $key . " on line " . $lineNum . " in file " . $fileName);
+							if(!$config->getVar('continue_error')) {
+								return false;
+							}	
+						}
+						else {
+							call_user_func(array($mainCfg, $this->fieldMethods[$key]), $value);
+						}
 					}
-					else {
-						call_user_method($this->fieldMethods[$key], $mainCfg, $value);
-					}
-				}
 			}
 		}
 		

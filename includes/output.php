@@ -287,9 +287,9 @@ function print_header($title = null) {
 		<link rel="stylesheet" type="text/css" href="style/jquery.autocomplete.css">
 		<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 	 	<link rel="stylesheet" type="text/css" href="/bower_components/font-awesome/css/font-awesome.min.css">
-	 	<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
+	 	<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
 	 	<script type="text/javascript" src="js/jquery.tooltip.min.js"></script>
-	 	<script type="text/javascript" src="js/jquery.timers-1.0.0.js"></script>
+	 	<script type="text/javascript" src="js/jquery.timers.js"></script>
 	 	<script type="text/javascript" src="js/flexigrid.js"></script>
 		<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
 	</head>	    
@@ -377,19 +377,16 @@ function print_header($title = null) {
 		?>
 		<h1><?php echo $title; ?></h1>
 	</div>
-	<!-- EyesOfNetwork
 	<div id="navigation">
-		<ul>
-			<li><a href="index.php">General</a></li>
-			<li><a href="templates.php">Templates</a></li>
-			<li><a href="hosts.php">Network</a></li>
-			<li><a href="importer.php">Imports</a></li>
-			<li><a href="tools.php">Tools</a></li>
-			<li><a href="about.php">About</a></li>
-		</ul>
 	</div>
+	<!-- EyesOfNetwork -->
+	<script>
+	if(self == top)
+	{
+		$("#navigation").html('<ul><li><a href="index.php">General</a></li><li><a href="templates.php">Templates</a></li><li><a href="hosts.php">Network</a></li><li><a href="importer.php">Imports</a></li><li><a href="tools.php">Tools</a></li><li><a href="about.php">About</a></li></ul>');
+	}
+	</script>
 	<div id="main">
-	-->
 	<?php
 	if(!empty($success) || !empty($error) || !empty($warning)) {
 		?>

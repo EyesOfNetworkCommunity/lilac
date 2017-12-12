@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseAutodiscoveryDevice.php';
 
 
 /**
@@ -12,10 +11,10 @@ require 'om/BaseAutodiscoveryDevice.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class AutodiscoveryDevice extends BaseAutodiscoveryDevice {
-
+	
 	/**
 	 * Initializes internal state of AutodiscoveryDevice object.
 	 * @see        parent::__construct()

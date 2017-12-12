@@ -129,7 +129,7 @@ class NagiosResourceImporter extends NagiosImporter {
 							}	
 						}
 						else {
-							call_user_method($this->fieldMethods[$key], $resourcesCfg, $value);
+							call_user_func(array($resourcesCfg, $this->fieldMethods[$key]), $value);
 						}
 					}
 			}

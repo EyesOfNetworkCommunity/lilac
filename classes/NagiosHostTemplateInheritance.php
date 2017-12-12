@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosHostTemplateInheritance.php';
 
 
 /**
@@ -12,10 +11,10 @@ require 'om/BaseNagiosHostTemplateInheritance.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
-
+	
 	/**
 	 * Initializes internal state of NagiosHostTemplateInheritance object.
 	 * @see        parent::__construct()
@@ -58,7 +57,6 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
         $targetTemplate->integrityCheck(); 
-               
     }
 	
 	public function save(PropelPDO $con = null) {

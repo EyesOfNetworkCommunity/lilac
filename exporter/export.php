@@ -10,7 +10,7 @@ if(file_exists('exporter')) {
 	chdir('exporter');
 }
 
-include_once(dirname(__FILE__).'/../includes/config.inc');
+include_once('../includes/config.inc');
 include_once('ExportJob.php');
 include_once('ExportLogEntry.php');
 

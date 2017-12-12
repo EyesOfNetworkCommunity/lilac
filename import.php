@@ -183,7 +183,7 @@ if(isset($importJob)) {
     		colModel: [
     		{display: 'Time', name: 'name', width: 100, sortable: true, align: 'left'},
     		{display: 'Type', name: 'type', width: 100, sortable: true, align: 'left'},
-    		{display: 'Text', name: 'text', width: 1000, sortable: true, align: 'left'}
+    		{display: 'Text', name: 'text', width: 1200, sortable: true, align: 'left'}
     			],
     		resizable: false, //resizable table
     		sortname: "time", 
@@ -193,8 +193,8 @@ if(isset($importJob)) {
     		title: false,
     		showToggleBtn: false, //show or hide column toggle popup
     		useRp: true,
-    		rp: 20,
-    		height: 200
+    		rp: 50,
+    		height: 600
     	});
     	<?php
     	if(!in_array($importJob->getStatusCode(), array(ImportJob::STATUS_FINISHED, ImportJob::STATUS_FAILED))) {
@@ -206,6 +206,7 @@ if(isset($importJob)) {
 				$.getJSON("import.php?id=<?php echo $importJob->getId();?>&request=status&tok=" + Math.random() , function(data) {
 					$("#jobstatus").html(data.status_text);
 					$("#elapsedtime").html(data.elapsed_time);
+					$("#joblog").flexReload();
 					
 					if(data.status_code == <?php echo ImportJob::STATUS_FINISHED;?> || data.status_code == <?php echo ImportJob::STATUS_FAILED;?>) {
 						if(data.status_code == <?php echo ImportJob::STATUS_FINISHED;?>) {
@@ -248,6 +249,8 @@ float: none;
 
 .checks p {
 padding: 2px;
+}
+
 }
 </style>
 <?php
@@ -324,17 +327,8 @@ if(!isset($importJob))	{
 	<form name="import_job" method="post" action="import.php">
 	<input type="hidden" name="request" value="import" />
 	<p>
-<?php
-// Get Next Job Id
-include("/srv/eyesofnetwork/eonweb/include/config.php");
-$link = mysql_connect( $databas_host, $database_username, $database_password );
-mysql_select_db( $database_lilac );
-$query = mysql_query( "SHOW TABLE STATUS LIKE 'import_job';" );
-$result = mysql_fetch_object( $query );
-mysql_close( $link );
-?>
-        <fieldset>
-                <legend>Job Definition ID : <?php echo $result->Auto_increment; ?> </legend>
+	<fieldset>
+		<legend>Job Definition</legend>
 		<label for="job_name">Job Name</label>
 		<input id="job_name" name="job_name" type="text" size="100" maxlength="255" />
 		<label for="job_description">Job Description</label>
@@ -413,7 +407,7 @@ else {
 	      </div>
 	   <div class="roundedcorner_success_bottom"><div></div></div>
 	</div>
-	<a href="import.php?id=<?php echo $importJob->getId();?>&action=restart">Restart Job</a> | <a href="import.php?id=<?php echo $importJob->getId();?>&delete=1" onclick="javascript:return confirmDelete();">Remove Job</a> | <a href="import.php">Return To Import Menu</a>
+	<a href="import.php?id=<?php echo $importJob->getId();?>&action=restart">Restart Job</a> | <a href="import.php?id=<?php echo $importJob->getId();?>&delete=1" onclick="javascript:confirmDelete();">Remove Job</a> | <a href="import.php">Return To Import Menu</a>
 	<?php
 	print_window_footer();
 	print_window_header("Job Log");
