@@ -15,6 +15,30 @@
  */
 class NagiosHostTemplate extends BaseNagiosHostTemplate {
 	
+	public function delete(PropelPDO $con = null) {
+
+		parent::delete($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'hostTemplate','delete');
+		}
+		
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		parent::save($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if(($con == null || $con == "") && $this->isNew()){
+			$JobExport->insertAction($this->getName(),'hostTemplate','add');
+		}elseif($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'hostTemplate','modify');
+		}
+
+	}
+	
 	/**
 	 * Returns hosts which are affected by this template, via voodoo-magic
 	 * (and recursive powah!)

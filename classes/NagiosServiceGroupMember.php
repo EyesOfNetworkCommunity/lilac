@@ -15,4 +15,49 @@
  */
 class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 
+	public function delete(PropelPDO $con = null) {
+
+		parent::delete($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			if($this->getTemplate() != null){
+				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
+				$JobExport->insertAction($object->getName(),'serviceTemplate','modify');
+			}elseif($this->getService() != null){
+				$object = NagiosServicePeer::retrieveByPK($this->getService());
+				if($object->getHost() != null){
+					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}elseif($object->getHostTemplate() != null){
+					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+				}
+			}
+		}
+			
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		parent::save($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			if($this->getTemplate() != null){
+				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
+				$JobExport->insertAction($object->getName(),'serviceTemplate','modify');
+			}elseif($this->getService() != null){
+				if($object->getHost() != null){
+					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}elseif($object->getHostTemplate() != null){
+					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+				}
+			}
+        }
+
+	}
+
 } // NagiosServiceGroupMember

@@ -15,4 +15,28 @@
  */
 class NagiosTimeperiod extends BaseNagiosTimeperiod {
 
+	public function delete(PropelPDO $con = null) {
+
+		parent::delete($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'timeperiod','delete');
+		}
+		
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		parent::save($con);
+
+		$JobExport=new EoN_Job_Exporter();
+		if(($con == null || $con == "") && $this->isNew()){
+			$JobExport->insertAction($this->getName(),'timeperiod','add');
+		}elseif($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'timeperiod','modify');
+		}
+
+	}
+
 } // NagiosTimeperiod

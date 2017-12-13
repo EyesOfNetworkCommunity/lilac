@@ -54,6 +54,12 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 
     public function delete(PropelPDO $con = null) {
         parent::delete($con);
+
+        $JobExport=new EoN_Job_Exporter();
+        if($con == null || $con == ""){
+        	$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
+	}
+
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
         $targetTemplate->integrityCheck(); 
@@ -65,6 +71,10 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 		}
 		else {
 			parent::save($con);	// Okay, we've saved
+			$JobExport=new EoN_Job_Exporter();
+                	if($con == null || $con == ""){
+                        	$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
+                	}
 		}
 	}
 
