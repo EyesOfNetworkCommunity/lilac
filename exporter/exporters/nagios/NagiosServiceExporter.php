@@ -332,7 +332,7 @@ class NagiosServiceExporter extends NagiosExporter {
 		fputs($fp, "\n");
 	}
 	
-	public function export($serv=false, $type=false, $ParentName=false)) {
+	public function export($serv=false, $type=false, $ParentName=false) {
 		global $lilac;
 		// Grab our export job
 		$engine = $this->getEngine();
