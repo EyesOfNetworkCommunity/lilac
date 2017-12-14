@@ -212,7 +212,7 @@ class NagiosExportEngine extends ExportEngine {
 		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
 		$MainConfigDir = $mainConfiguration->getConfigDir();
 		$job = $this->getJob();
-		$job->addNotice("NagiosExportEngine beginning export...");
+		$job->addNotice("NagiosExportEngine beginning diff export...");
 		exec("rm -rf ".$this->exportDir."/*");
 		exec("cp ".$MainConfigDir."/* ".$this->exportDir."/");
 		exec("cp -r ".$MainConfigDir."/objects/ ".$this->exportDir."/objects/");
