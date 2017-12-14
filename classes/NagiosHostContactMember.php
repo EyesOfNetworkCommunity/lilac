@@ -17,23 +17,23 @@ class NagiosHostContactMember extends BaseNagiosHostContactMember {
 
 	public function delete(PropelPDO $con = null) {
 
-		parent::delete($con);
-
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
 		}
 		
+		parent::delete($con);
+
 	}
 
 	public function save(PropelPDO $con = null) {
-
-		parent::save($con);
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
 		}
+
+		parent::save($con);
 
 	}
 

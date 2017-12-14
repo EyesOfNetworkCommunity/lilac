@@ -53,12 +53,13 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 	}
 
     public function delete(PropelPDO $con = null) {
-        parent::delete($con);
 
         $JobExport=new EoN_Job_Exporter();
         if($con == null || $con == ""){
         	$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
 	}
+
+        parent::delete($con);
 
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
@@ -70,11 +71,11 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 			throw new Exception("Adding that inheritance would create a circular chain.");
 		}
 		else {
-			parent::save($con);	// Okay, we've saved
 			$JobExport=new EoN_Job_Exporter();
                 	if($con == null || $con == ""){
                         	$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
                 	}
+			parent::save($con);	// Okay, we've saved
 		}
 	}
 

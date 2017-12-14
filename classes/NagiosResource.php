@@ -17,12 +17,12 @@ class NagiosResource extends BaseNagiosResource {
 	
 	public function save(PropelPDO $con = null) {
 
-		parent::save($con);
-
 		$JobExport=new EoN_Job_Exporter();		
 		if($con == null || $con == ""){
 			$JobExport->insertAction('cgi_config','nagios_resource','modify');
 		}
+
+		parent::save($con);
 
 	}
 

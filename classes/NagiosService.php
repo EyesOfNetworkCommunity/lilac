@@ -17,35 +17,33 @@ class NagiosService extends BaseNagiosService {
 
 	public function delete(PropelPDO $con = null) {
 
-		parent::delete($con);
-
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			if($this->hostgroup == "" || $this->hostgroup == null){
-				$objectHost = NagiosHostPeer::retrieveByPK($this->getHost());
-				$JobExport->insertAction($this->getDescription(),'service','delete', $objectHost->getName(), 'host');
+			if($this->getNagiosHost()) {
+				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+			}elseif($this->getNagiosHostTemplate()) {
+				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
 			}
 		}
 
+		parent::delete($con);
+		
 	}
 
 	public function save(PropelPDO $con = null) {
 
-		parent::save($con);
-	
 		$JobExport=new EoN_Job_Exporter();
-		if(($con == null || $con == "") && $this->isNew()){
-			if($this->hostgroup == "" || $this->hostgroup == null){
-				$objectHost = NagiosHostPeer::retrieveByPK($this->getHost());
-				$JobExport->insertAction($this->getDescription(),'service','add', $objectHost->getName(), 'host');
-			}
-		}elseif($con == null || $con == ""){
-			if($this->hostgroup == "" || $this->hostgroup == null){
-				$objectHost = NagiosHostPeer::retrieveByPK($this->getHost());
-				$JobExport->insertAction($this->getDescription(),'service','modify', $objectHost->getName(), 'host');
+		if($con == null || $con == ""){
+			$action = ($this->isNew()) ? "add" : "modify";
+			if($this->getNagiosHost()) {
+				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHost()->getName(),'host');
+			}elseif($this->getNagiosHostTemplate()) {
+				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHostTemplate()->getName(),'hosttemplate');
 			}
 		}
-
+		
+		parent::save($con);
+		
 	}
 
 	public function getOwnerDescription() {

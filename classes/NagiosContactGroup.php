@@ -17,26 +17,25 @@ class NagiosContactGroup extends BaseNagiosContactGroup {
 	
 	public function delete(PropelPDO $con = null) {
 
-		parent::delete($con);
-
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$JobExport->insertAction($this->getName(),'contactgroup','delete');
 		}
+
+		parent::delete($con);
 		
 	}
 
 	public function save(PropelPDO $con = null) {
 
-		parent::save($con);
-
 		$JobExport=new EoN_Job_Exporter();
-		if(($con == null || $con == "") && $this->isNew()){
-			$JobExport->insertAction($this->getName(),'contactgroup','add');
-		}elseif($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'contactgroup','modify');
+		if($con == null || $con == ""){
+			$action = ($this->isNew()) ? "add" : "modify";
+			$JobExport->insertAction($this->getName(),'contactgroup',$action);
 		}
 
+		parent::save($con);
+		
 	}
 	
 	public function addMemberByName($name) {

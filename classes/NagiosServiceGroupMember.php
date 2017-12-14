@@ -17,8 +17,6 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 
 	public function delete(PropelPDO $con = null) {
 
-		parent::delete($con);
-
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			if($this->getTemplate() != null){
@@ -35,12 +33,12 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 				}
 			}
 		}
+
+		parent::delete($con);
 			
 	}
 
 	public function save(PropelPDO $con = null) {
-
-		parent::save($con);
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
@@ -56,7 +54,9 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
 				}
 			}
-        }
+        	}
+		
+		parent::save($con);
 
 	}
 

@@ -17,12 +17,12 @@ class NagiosCgiConfiguration extends BaseNagiosCgiConfiguration {
 	
 	public function save(PropelPDO $con = null) {
 
-		parent::save($con);
-
 		$JobExport=new EoN_Job_Exporter();		
 		if($con == null || $con == ""){
 			$JobExport->insertAction('cgi_config','nagios_cgi_configuration','modify');
 		}
+
+		parent::save($con);
 
 	}
 

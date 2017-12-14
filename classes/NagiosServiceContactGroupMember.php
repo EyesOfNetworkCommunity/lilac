@@ -17,8 +17,6 @@ class NagiosServiceContactGroupMember extends BaseNagiosServiceContactGroupMembe
 
 	public function delete(PropelPDO $con = null) {
 
-		parent::delete($con);
-
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			if($this->getTemplate() != null){
@@ -35,11 +33,12 @@ class NagiosServiceContactGroupMember extends BaseNagiosServiceContactGroupMembe
 				}
 			}
 		}
+
+		parent::delete($con);
+
 	}
 
 	public function save(PropelPDO $con = null) {
-
-		parent::save($con);
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
@@ -51,7 +50,9 @@ class NagiosServiceContactGroupMember extends BaseNagiosServiceContactGroupMembe
 				$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
 				$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
 			}
-        }
+        	}
+
+		parent::save($con);
 
 	}
 
