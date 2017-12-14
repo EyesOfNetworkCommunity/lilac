@@ -19,7 +19,8 @@ class NagiosHostParent extends BaseNagiosHostParent {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
+			$HostObject = NagiosHostPeer::retrieveByPK($this->getChildHost());
+			$JobExport->insertAction($HostObject->getName(),'host','modify');
 		}
 		
 		parent::delete($con);
@@ -30,7 +31,8 @@ class NagiosHostParent extends BaseNagiosHostParent {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
+			$HostObject = NagiosHostPeer::retrieveByPK($this->getChildHost());
+			$JobExport->insertAction($HostObject->getName(),'host','modify');
 		}
 
 		parent::save($con);

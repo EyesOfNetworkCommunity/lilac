@@ -19,7 +19,7 @@ class NagiosContactGroupMember extends BaseNagiosContactGroupMember {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'contactgroup','modify');
+			$JobExport->insertAction($this->getNagiosContactGroup()->getName(),'contactgroup','modify');
 		}
 		
 		parent::delete($con);
@@ -30,7 +30,7 @@ class NagiosContactGroupMember extends BaseNagiosContactGroupMember {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'contactgroup','modify');
+			$JobExport->insertAction($this->getNagiosContactGroup()->getName(),'contactgroup','modify');
 		}
 
 		parent::save($con);

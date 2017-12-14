@@ -19,7 +19,7 @@ class NagiosHostCheckCommandParameter extends BaseNagiosHostCheckCommandParamete
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
+			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
 		}
 		
 		parent::delete($con);
@@ -30,7 +30,7 @@ class NagiosHostCheckCommandParameter extends BaseNagiosHostCheckCommandParamete
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'host','modify');
+			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
 		}
 
 		parent::save($con);

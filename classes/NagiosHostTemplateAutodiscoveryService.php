@@ -19,7 +19,7 @@ class NagiosHostTemplateAutodiscoveryService extends BaseNagiosHostTemplateAutod
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
+			$JobExport->insertAction($this->getHostTemplate()->getName(),'hosttemplate','add');
 		}
 		
 		parent::delete($con);
@@ -30,7 +30,7 @@ class NagiosHostTemplateAutodiscoveryService extends BaseNagiosHostTemplateAutod
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'hostTemplate','modify');
+			$JobExport->insertAction($this->getHostTemplate()->getName(),'hosttemplate','add');
 		}
 
 		parent::save($con);

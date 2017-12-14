@@ -19,7 +19,8 @@ class NagiosTimeperiodEntry extends BaseNagiosTimeperiodEntry {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'timeperiod','modify');
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 		
 		parent::delete($con);
@@ -30,7 +31,8 @@ class NagiosTimeperiodEntry extends BaseNagiosTimeperiodEntry {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'timeperiod','modify');
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 
 		parent::save($con);
