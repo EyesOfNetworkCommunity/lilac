@@ -332,7 +332,7 @@ class NagiosServiceExporter extends NagiosExporter {
 		fputs($fp, "\n");
 	}
 	
-	public function export() {
+	public function export($serv=false, $type=false, $ParentName=false)) {
 		global $lilac;
 		// Grab our export job
 		$engine = $this->getEngine();
@@ -340,11 +340,15 @@ class NagiosServiceExporter extends NagiosExporter {
 		$job->addNotice("NagiosServiceExporter attempting to export service configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosServiceExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		//$hosts = NagiosHostPeer::doSelect(new Criteria());
-		$hosts = NagiosHostQuery::create()->find();
-		$job->addNotice("Total hosts found: " . count($hosts));
+		if(!$type){
+			fputs($fp, "# Written by NagiosServiceExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$hosts = NagiosHostQuery::create()->find();
+			$job->addNotice("Total hosts found: " . count($hosts));
+		}elseif($type=='host'){
+			$hosts[] = NagiosHostPeer::getByName($ParentName);
+		}
+		
 		foreach($hosts as $host) {
 			// Got hosts
 			// Get our inherited services first
@@ -373,12 +377,25 @@ class NagiosServiceExporter extends NagiosExporter {
 			}
 			$job->addNotice("Completed services export for host: " . $host->getName());
 		}
-		
-		$hostgroups = NagiosHostgroupPeer::doSelect(new Criteria());
-		$job->addNotice("Total hostgroups found: " . count($hostgroups));
+				
+		if(!$serv){
+			$hostgroups = NagiosHostgroupPeer::doSelect(new Criteria());
+			$job->addNotice("Total hostgroups found: " . count($hostgroups));
+		}elseif($type=='hostgroup'){
+			$hostgroups[] = NagiosHostgroupPeer::getByName($ParentName);
+		}else{
+			$hosts[] = array();
+		}
+
 		foreach($hostgroups as $hostgroup) {
 			$job->addNotice("Processing services for hostgroup: " . $hostgroup->getName());
-			$services = $hostgroup->getNagiosServices();
+
+			if(!$type){
+				$services = $hostgroup->getNagiosServices();
+			}else{
+				$services[] = $serv;
+			}
+
 			foreach($services as $service) {
 				$job->addNotice("Processing service " . $service->getDescription());
 				$this->_exportService($service, "hostgroup", $hostgroup);

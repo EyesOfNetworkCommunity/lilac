@@ -10,17 +10,21 @@ class NagiosHostGroupExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function export() {
+	public function export($objectDiff=false) {
 		// Grab our export job
 		$engine = $this->getEngine();
 		$job = $engine->getJob();
 		$job->addNotice("NagiosHostGroupExporter attempting to export host group configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosHostGroupExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		$hostgroups = NagiosHostgroupPeer::doSelect(new Criteria());
-
+		if(!$objectDiff){
+			fputs($fp, "# Written by NagiosHostGroupExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$hostgroups = NagiosHostgroupPeer::doSelect(new Criteria());
+		} else {
+			$hostgroups[] = $objectDiff;
+		}
+		
 		foreach($hostgroups as $hostgroup) {
 			fputs($fp, "define hostgroup {\n");
 			$finalArray = array();

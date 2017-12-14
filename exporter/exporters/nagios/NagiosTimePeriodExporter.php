@@ -10,17 +10,21 @@ class NagiosTimePeriodExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function export() {
+	public function export($objectDiff=false) {
 		// Grab our export job
 		$engine = $this->getEngine();
 		$job = $engine->getJob();
 		$job->addNotice("NagiosTimePeriodExporter attempting to export time period configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosTimePeriodExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
-		
-		$timeperiods = NagiosTimeperiodPeer::doSelect(new Criteria());
 
+		if(!$objectDiff){
+			fputs($fp, "# Written by NagiosTimePeriodExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$timeperiods = NagiosTimeperiodPeer::doSelect(new Criteria());
+		}else{
+			$timeperiods[] = $objectDiff;
+		}
+		
 		foreach($timeperiods as $timeperiod) {
 			fputs($fp, "define timeperiod {\n");
 			$finalArray = array();

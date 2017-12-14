@@ -30,7 +30,7 @@ class NagiosHostExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function export() {
+	public function export($objectDiff=false) {
 		global $lilac;
 		// Grab our export job
 		$engine = $this->getEngine();
@@ -38,9 +38,13 @@ class NagiosHostExporter extends NagiosExporter {
 		$job->addNotice("NagiosHostExporter attempting to export host configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosHostExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		$hosts = NagiosHostPeer::doSelect(new Criteria());
+		if(!$objectDiff){
+			fputs($fp, "# Written by NagiosHostExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$hosts = NagiosHostPeer::doSelect(new Criteria());
+		} else {
+			$hosts[] = $objectDiff;
+		}
 		
 		foreach($hosts as $host) {
 			
