@@ -420,7 +420,7 @@ else {
 		?><strong>Exporting CGI Configuration</strong><br /><?php
 	}
 	?>
-	<div id="completemsg" class="roundedcorner_success_box" <?php if($exportJob->getStatusCode() != ExportJob::STATUS_FINISHED ) { ?>style="display: none; margin-left:0px;"<?php } ?>>
+	<div id="completemsg" class="roundedcorner_success_box" <?php if($exportJob->getStatusCode() != ExportJob::STATUS_FINISHED ) { ?>style="display: none; margin-left:0px;"<?php } else { ?>style="margin-left:0px;"<?php } ?>>
 	   <div class="roundedcorner_success_top"><div></div></div>
 	      <div class="roundedcorner_success_content">
 	      Export Job Complete.  Content Exported Successfully.

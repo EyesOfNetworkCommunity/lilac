@@ -176,7 +176,7 @@ function EoN_Duplicate($object,$id) {
 	$class="Nagios".$object."Peer";
 	$old=new $class;
 	$old=$old->retrieveByPK($id);
-	$new=$old->copy(true);
+	$new=$old->copy(false);
 	if($object=="Service") {
 		$name=$old->getDescription();
 		$new->setDescription($name."-".rand(1000,9999));

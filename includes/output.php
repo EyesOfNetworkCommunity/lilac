@@ -383,7 +383,7 @@ function print_header($title = null) {
 	<script>
 	if(self == top)
 	{
-		$("#navigation").html('<ul><li><a href="index.php">General</a></li><li><a href="templates.php">Templates</a></li><li><a href="hosts.php">Network</a></li><li><a href="importer.php">Imports</a></li><li><a href="tools.php">Tools</a></li><li><a href="about.php">About</a></li></ul>');
+		$("#navigation").html('<ul><li><a href="index.php">General</a></li><li><a href="templates.php">Templates</a></li><li><a href="hosts.php">Network</a></li><li><a href="importer.php">Imports</a></li><li><a href="tools.php">Tools</a></li><li><a href="about.php">About</a></li></ul><br>');
 	}
 	</script>
 	<div id="main">
