@@ -41,6 +41,8 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 	public function duplicate() {
 	
 		$copyObj = parent::copy();
+		$copyObj->setNew(false);
+		$deepCopy=true;
 		foreach ($this->getNagiosTimeperiodEntrys() as $relObj) {
 			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 				$copyObj->addNagiosTimeperiodEntry($relObj->copy($deepCopy));
@@ -56,6 +58,8 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 				$copyObj->addNagiosTimeperiodExcludeRelatedByExcludedTimeperiod($relObj->copy($deepCopy));
 			}
 		}
+		$copyObj->setNew(true);
+		$copyObj->setId(NULL);
 		return $copyObj;
 	
 	}

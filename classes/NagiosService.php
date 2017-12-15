@@ -527,7 +527,75 @@ class NagiosService extends BaseNagiosService {
 	}
 
 	public function duplicate() {
-		return parent::copy();
+		
+		$copyObj = parent::copy();
+		$copyObj->setNew(false);
+		$deepCopy=true;
+	
+		foreach ($this->getNagiosServiceCheckCommandParameters() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosServiceCheckCommandParameter($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosServiceGroupMembers() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosServiceGroupMember($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosServiceContactMembers() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosServiceContactMember($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosServiceContactGroupMembers() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosServiceContactGroupMember($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosDependencys() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosDependency($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosDependencyTargets() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosDependencyTarget($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosEscalations() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosEscalation($relObj->copy($deepCopy));
+			}
+		}
+
+	   $numInheritance="0";
+		foreach ($this->getNagiosServiceTemplateInheritances() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$newInheritance = new NagiosServiceTemplateInheritance();
+				$newInheritance->setNagiosService($copyObj);
+				$newInheritance->setNagiosServiceTemplateRelatedByTargetTemplate($relObj);
+				$newInheritance->setOrder($numInheritance);
+				//$copyObj->addNagiosServiceTemplateInheritance($relObj->copy($deepCopy));
+			}
+			$numInheritance++;
+		}
+
+		foreach ($this->getNagiosServiceCustomObjectVars() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosServiceCustomObjectVar($relObj->copy($deepCopy));
+			}
+		}
+	
+		$copyObj->setNew(true);
+		$copyObj->setId(NULL);
+		return $copyObj;
+	
 	}
 	
 } // NagiosService

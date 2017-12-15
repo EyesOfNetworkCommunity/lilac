@@ -666,7 +666,99 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 	}
 
 	public function duplicate() {
-		return parent::copy();
+		
+		$copyObj = parent::copy();
+		$copyObj->setNew(false);
+		$deepCopy=true;
+		
+		foreach ($this->getNagiosHostTemplateAutodiscoveryServices() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostTemplateAutodiscoveryService($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosServices() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosService($relObj->duplicate());
+			}
+		}
+
+		foreach ($this->getNagiosHostContactMembers() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostContactMember($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosDependencys() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosDependency($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosEscalations() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosEscalation($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostContactgroups() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostContactgroup($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostgroupMemberships() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostgroupMembership($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostCheckCommandParameters() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostCheckCommandParameter($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostParents() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostParent($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostTemplateInheritancesRelatedBySourceTemplate() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostTemplateInheritanceRelatedBySourceTemplate($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				//$copyObj->addNagiosHostTemplateInheritanceRelatedByTargetTemplate($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getAutodiscoveryDevices() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addAutodiscoveryDevice($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getAutodiscoveryDeviceTemplateMatchs() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addAutodiscoveryDeviceTemplateMatch($relObj->copy($deepCopy));
+			}
+		}
+
+		foreach ($this->getNagiosHostCustomObjectVars() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$copyObj->addNagiosHostCustomObjectVar($relObj->copy($deepCopy));
+			}
+		}
+		
+		$copyObj->setNew(true);
+		$copyObj->setId(NULL);
+		return $copyObj;
+
 	}
 
 } // NagiosHostTemplate
