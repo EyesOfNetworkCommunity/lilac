@@ -254,7 +254,7 @@ print_header("Time Period Editor");
 		<?php echo $lilac->element_desc("timeperiod_weekday_exception", "nagios_timeperiods_desc"); ?><br />
 		<br />
 		<b>Value: </b><input type="text" name="value" value="<?php echo $value;?>" size="50" maxlength="255" />
-		<?php echo $lilac->element_desc("timeperiod_value", "nagios_timeperiods_desc"); ?><br />
+		<?php echo $lilac->element_desc("timeperiod_value", "nagios_timeperiods_desc"); ?><br /><br />
 		<input class="btn btn-primary" type="submit" value="Add Entry" />
 		</div>
 		<?php

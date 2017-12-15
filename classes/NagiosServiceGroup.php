@@ -82,4 +82,8 @@ class NagiosServiceGroup extends BaseNagiosServiceGroup {
 		return true;
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosServiceGroup

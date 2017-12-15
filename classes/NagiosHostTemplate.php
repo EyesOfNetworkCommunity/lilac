@@ -635,35 +635,38 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		return parent::getNagiosHostCustomObjectVars($criteria);
 	}
 
-        function getDependentHosts() {
-                $hosts = array();
-                $criteria = new Criteria();
-                $criteria->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, NULL, Criteria::ISNOTNULL);
-                $criteria->add(NagiosHostTemplateInheritancePeer::TARGET_TEMPLATE, $this->getId());
-                $links = NagiosHostTemplateInheritancePeer::doSelect($criteria);
-                foreach($links as $link) {
-                        $host = $link->getNagiosHost();
-                        $hosts[] = $host;
-                }
-                return $hosts;
-        }
+	function getDependentHosts() {
+			$hosts = array();
+			$criteria = new Criteria();
+			$criteria->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, NULL, Criteria::ISNOTNULL);
+			$criteria->add(NagiosHostTemplateInheritancePeer::TARGET_TEMPLATE, $this->getId());
+			$links = NagiosHostTemplateInheritancePeer::doSelect($criteria);
+			foreach($links as $link) {
+					$host = $link->getNagiosHost();
+					$hosts[] = $host;
+			}
+			return $hosts;
+	}
 
-        function getDependentHostTemplates() {
-                $hosttemplates = array();
-                $criteria = new Criteria();
-                $criteria->add(NagiosHostTemplateInheritancePeer::SOURCE_TEMPLATE, NULL, Criteria::ISNOTNULL);
-                $criteria->add(NagiosHostTemplateInheritancePeer::TARGET_TEMPLATE, $this->getId());
-                $links = NagiosHostTemplateInheritancePeer::doSelect($criteria);
-                foreach($links as $link) {
-                        $hosttemplate = $link->getNagiosHostTemplateRelatedBySourceTemplate();
-                        $hosttemplates[] = $hosttemplate;
-                }
-                return $hosttemplates;
-        }
+	function getDependentHostTemplates() {
+			$hosttemplates = array();
+			$criteria = new Criteria();
+			$criteria->add(NagiosHostTemplateInheritancePeer::SOURCE_TEMPLATE, NULL, Criteria::ISNOTNULL);
+			$criteria->add(NagiosHostTemplateInheritancePeer::TARGET_TEMPLATE, $this->getId());
+			$links = NagiosHostTemplateInheritancePeer::doSelect($criteria);
+			foreach($links as $link) {
+					$hosttemplate = $link->getNagiosHostTemplateRelatedBySourceTemplate();
+					$hosttemplates[] = $hosttemplate;
+			}
+			return $hosttemplates;
+	}
 
-        function getDependentCount() {
-                return count($this->getDependentHosts()) + count($this->getDependentHostTemplates());
-        }
+	function getDependentCount() {
+			return count($this->getDependentHosts()) + count($this->getDependentHostTemplates());
+	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
 
 } // NagiosHostTemplate

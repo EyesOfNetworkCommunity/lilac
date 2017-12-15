@@ -526,4 +526,8 @@ class NagiosService extends BaseNagiosService {
 		return parent::getNagiosServiceCustomObjectVars($criteria);
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosService

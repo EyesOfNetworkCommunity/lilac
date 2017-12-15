@@ -595,4 +595,8 @@ class NagiosHost extends BaseNagiosHost {
 		return parent::getNagiosHostCustomObjectVars($criteria);
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosHost

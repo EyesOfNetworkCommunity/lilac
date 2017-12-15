@@ -461,4 +461,8 @@ class NagiosServiceTemplate extends BaseNagiosServiceTemplate {
 		return count($this->getDependentServices()) + count($this->getDependentServiceTemplates());
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosServiceTemplate

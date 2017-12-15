@@ -44,4 +44,8 @@ class NagiosCommand extends BaseNagiosCommand {
 		if(isset($source['command_line'])) $this->setLine($source['command_line']);
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosCommand

@@ -123,4 +123,8 @@ class NagiosContact extends BaseNagiosContact {
 		return $cov_list;
 	}
 
+	public function duplicate() {
+		return parent::copy(true);
+	}
+	
 } // NagiosContact

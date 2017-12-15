@@ -125,4 +125,8 @@ class NagiosHostgroup extends BaseNagiosHostgroup {
 		return true;
 	}
 
+	public function duplicate() {
+		return parent::copy();
+	}
+	
 } // NagiosHostgroup

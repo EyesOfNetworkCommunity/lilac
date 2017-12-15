@@ -24,5 +24,5 @@ class NagiosCommandPeer extends BaseNagiosCommandPeer {
 			return false;
 		return $command;
     }
-
+	
 } // NagiosCommandPeer
