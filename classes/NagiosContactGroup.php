@@ -53,7 +53,7 @@ class NagiosContactGroup extends BaseNagiosContactGroup {
 	}
 
 	public function duplicate() {
-		return parent::copy(true);
+		return parent::copy();
 	}
 	
 } // NagiosContactGroup

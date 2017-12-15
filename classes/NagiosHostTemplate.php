@@ -731,12 +731,6 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 			}
 		}
 
-		foreach ($this->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $relObj) {
-			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-				//$copyObj->addNagiosHostTemplateInheritanceRelatedByTargetTemplate($relObj->copy($deepCopy));
-			}
-		}
-
 		foreach ($this->getAutodiscoveryDevices() as $relObj) {
 			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 				$copyObj->addAutodiscoveryDevice($relObj->copy($deepCopy));

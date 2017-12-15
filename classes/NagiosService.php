@@ -574,7 +574,7 @@ class NagiosService extends BaseNagiosService {
 			}
 		}
 
-	   $numInheritance="0";
+		$numInheritance="0";
 		foreach ($this->getNagiosServiceTemplateInheritances() as $relObj) {
 			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 				$newInheritance = new NagiosServiceTemplateInheritance();

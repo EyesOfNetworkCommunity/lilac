@@ -509,12 +509,6 @@ class NagiosServiceTemplate extends BaseNagiosServiceTemplate {
 			}
 		}
 
-		foreach ($this->getNagiosServiceTemplateInheritancesRelatedByTargetTemplate() as $relObj) {
-			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-				//$copyObj->addNagiosServiceTemplateInheritanceRelatedByTargetTemplate($relObj->copy($deepCopy));
-			}
-		}
-
 		foreach ($this->getNagiosServiceCustomObjectVars() as $relObj) {
 			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 				$copyObj->addNagiosServiceCustomObjectVar($relObj->copy($deepCopy));
