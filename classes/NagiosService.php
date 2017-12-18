@@ -26,7 +26,7 @@ class NagiosService extends BaseNagiosService {
 			}
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -42,7 +42,7 @@ class NagiosService extends BaseNagiosService {
 			}
 		}
 		
-		parent::save($con);
+		return parent::save($con);
 		
 	}
 

@@ -22,7 +22,7 @@ class NagiosServiceGroup extends BaseNagiosServiceGroup {
 			$JobExport->insertAction($this->getName(),'servicegroup','delete');
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -34,7 +34,7 @@ class NagiosServiceGroup extends BaseNagiosServiceGroup {
 			$JobExport->insertAction($this->getName(),'servicegroup',$action);
 		}
 	
-		parent::save($con);
+		return parent::save($con);
 
 	}
 	

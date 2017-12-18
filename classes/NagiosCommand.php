@@ -19,22 +19,25 @@ class NagiosCommand extends BaseNagiosCommand {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'command','delete');
+			$JobExport->insertAction($this->getId(),$this->getName(),'command','delete');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
 	public function save(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
-		if($con == null || $con == ""){
-			$action = ($this->isNew()) ? "add" : "modify";
-			$JobExport->insertAction($this->getName(),'command',$action);
+		$action = ($this->isNew()) ? "add" : "modify";
+	
+		$save = parent::save($con);
+	
+		if($con == null || $con == ""){	
+			$JobExport->insertAction($this->getId(),$this->getName(),'command',$action);
 		}
 
-		parent::save($con);
+		return $save;
 		
 	}
 

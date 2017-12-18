@@ -23,7 +23,7 @@ class NagiosTimeperiodExclude extends BaseNagiosTimeperiodExclude {
                         $JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -35,7 +35,7 @@ class NagiosTimeperiodExclude extends BaseNagiosTimeperiodExclude {
                         $JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

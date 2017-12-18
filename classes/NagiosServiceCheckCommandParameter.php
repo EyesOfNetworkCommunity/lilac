@@ -34,7 +34,7 @@ class NagiosServiceCheckCommandParameter extends BaseNagiosServiceCheckCommandPa
 			}
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -52,7 +52,7 @@ class NagiosServiceCheckCommandParameter extends BaseNagiosServiceCheckCommandPa
 			}
         	}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

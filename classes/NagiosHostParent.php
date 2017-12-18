@@ -20,10 +20,12 @@ class NagiosHostParent extends BaseNagiosHostParent {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$HostObject = NagiosHostPeer::retrieveByPK($this->getChildHost());
-			$JobExport->insertAction($HostObject->getName(),'host','modify');
+			if($HostObject) {
+				$JobExport->insertAction($HostObject->getName(),'host','modify');
+			}
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -32,10 +34,12 @@ class NagiosHostParent extends BaseNagiosHostParent {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$HostObject = NagiosHostPeer::retrieveByPK($this->getChildHost());
-			$JobExport->insertAction($HostObject->getName(),'host','modify');
+			if($HostObject) {
+				$JobExport->insertAction($HostObject->getName(),'host','modify');
+			}
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

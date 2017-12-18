@@ -19,10 +19,10 @@ class NagiosHost extends BaseNagiosHost {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'host','delete');
+			$JobExport->insertAction($this->getId(),$this->getName(),'host','delete');
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -31,10 +31,10 @@ class NagiosHost extends BaseNagiosHost {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$action = ($this->isNew()) ? "add" : "modify";
-			$JobExport->insertAction($this->getName(),'host',$action);
+			$JobExport->insertAction($this->getId(),$this->getName(),'host',$action);
 		}
 
-		parent::save($con);
+		return parent::save($con);
 		
 	}
 

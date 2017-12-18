@@ -22,7 +22,7 @@ class NagiosHostContactMember extends BaseNagiosHostContactMember {
 			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -33,7 +33,7 @@ class NagiosHostContactMember extends BaseNagiosHostContactMember {
 			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

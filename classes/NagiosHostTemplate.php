@@ -22,7 +22,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 			$JobExport->insertAction($this->getName(),'hostTemplate','delete');
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -34,7 +34,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 			$JobExport->insertAction($this->getName(),'hostTemplate',$action);
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 	

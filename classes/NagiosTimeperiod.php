@@ -22,7 +22,7 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 			$JobExport->insertAction($this->getName(),'timeperiod','delete');
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 
@@ -34,7 +34,7 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 			$JobExport->insertAction($this->getName(),'timeperiod',$action);
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

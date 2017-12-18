@@ -34,7 +34,7 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 			}
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 			
 	}
 
@@ -56,7 +56,7 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 			}
         	}
 		
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

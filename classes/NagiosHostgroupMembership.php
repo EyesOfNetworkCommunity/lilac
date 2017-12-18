@@ -28,7 +28,7 @@ class NagiosHostgroupMembership extends BaseNagiosHostgroupMembership {
 			}
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -45,7 +45,7 @@ class NagiosHostgroupMembership extends BaseNagiosHostgroupMembership {
 			}
 		}
 		
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

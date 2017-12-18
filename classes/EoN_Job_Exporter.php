@@ -25,7 +25,7 @@ include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
 class EoN_Job_Exporter {
 
-	function insertAction($name, $type, $action, $parent_name=NULL, $parent_type=NULL) {
+	function insertAction($uid, $name, $type, $action, $parent_id=NULL, $parent_type=NULL) {
 
 		global $database_lilac;
 	
@@ -42,9 +42,13 @@ class EoN_Job_Exporter {
 		}
 
 		if($insert) {
+			sqlrequest($database_lilac,"UPDATE export_job_history 
+				SET name = '".$name."' where type = '".$type."' and uid='".$uid."'"
+			);
+			
 			sqlrequest($database_lilac,"INSERT INTO export_job_history 
-				(name,type,parent_name,parent_type,date,user,action) 
-				VALUES ('".$name."', '".$type."', '".$parent_name."', '".$parent_type."', '".$date."', '".$_COOKIE['user_name']."', '".$action."')"
+				(uid,name,type,parent_id,parent_type,date,user,action) 
+				VALUES ('".$uid."','".$name."', '".$type."', '".$parent_id."', '".$parent_type."', '".$date."', '".$_COOKIE['user_name']."', '".$action."')"
 			);
 		}
 

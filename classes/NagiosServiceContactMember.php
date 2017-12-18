@@ -34,7 +34,7 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 			}
 		}
 
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -55,9 +55,9 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
 				}
 			}
-        	}
+        }
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

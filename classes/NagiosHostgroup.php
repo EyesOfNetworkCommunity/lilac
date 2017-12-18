@@ -22,7 +22,7 @@ class NagiosHostgroup extends BaseNagiosHostgroup {
 			$JobExport->insertAction($this->getName(),'hostgroup','delete');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -34,7 +34,7 @@ class NagiosHostgroup extends BaseNagiosHostgroup {
 			$JobExport->insertAction($this->getName(),'hostgroup',$action);
 		}
 	
-		parent::save($con);
+		return parent::save($con);
 
 	}
 	

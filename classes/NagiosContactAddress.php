@@ -19,10 +19,10 @@ class NagiosContactAddress extends BaseNagiosContactAddress {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+			$JobExport->insertAction($this->getNagiosContact()->getId(),$this->getNagiosContact()->getName(),'contact','modify');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -30,10 +30,10 @@ class NagiosContactAddress extends BaseNagiosContactAddress {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+			$JobExport->insertAction($this->getNagiosContact()->getId(),$this->getNagiosContact()->getName(),'contact','modify');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 	

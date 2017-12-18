@@ -242,10 +242,10 @@ class NagiosExportEngine extends ExportEngine {
 		}
 		
 		//Export the diffences
-		$requêteDiff = sqlrequest($database_lilac, "SELECT * FROM export_job_history");
+		$requêteDiff = sqlrequest($database_lilac, "SELECT * FROM export_job_history ORDER BY id");
 		
-		while($row = mysqli_fetch_row($requêteDiff)){
-			if($row[2]=='nagios_cgi_configuration'){
+		while($row = mysqli_fetch_assoc($requêteDiff)){
+			if($row["type"]=='nagios_cgi_configuration'){
 				exec("rm -rf ".$this->exportDir."/cgi.cfg");
 				// CGI Configuration
 				$fp = @fopen($this->exportDir . "/cgi.cfg", "w");
@@ -267,7 +267,7 @@ class NagiosExportEngine extends ExportEngine {
 					}
 				}		
 			}
-			elseif($row[2]=='nagios_resource'){
+			elseif($row["type"]=='nagios_resource'){
 				exec("rm -rf ".$this->exportDir."/resource.cfg");
 				// Resource Configuration
 				$fp = @fopen($this->exportDir . "/resource.cfg", "w");
@@ -289,57 +289,64 @@ class NagiosExportEngine extends ExportEngine {
 					}
 				}
 			}
-			// Delete
-			elseif($row[7]=='delete' || $row[7]=='modify'){
-				$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row[1], $row[2], $row[3], $row[4]);			
-				$fp = @fopen($this->exportDir . "/objects/".$row[2]."s.cfg", "w");
-				fwrite($fp,$final);
-				fclose ($fp);
-				
-				// If host
-				if($row[2]=="host"){
-					$final = $ExportDiff->ModifyCfgFile($this->exportDir, "", "service", $row[1], "host");
-					$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
+			// Objects
+			else {
+				// Delete / Modify
+				if($row["action"]=='delete' || $row["action"]=='modify'){
+					if($row["parent_type"]=="host") {
+						$row["parent_name"] = NagiosHostPeer::retrieveByPK($_GET['id'])->getName();
+					} elseif($row["parent_type"]=="hostTemplate") {
+						$row["parent_name"] = NagiosHostTemplatePeer::retrieveByPK($_GET['id'])->getName();
+					}
+					$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
+					$fp = @fopen($this->exportDir . "/objects/".$row["type"]."s.cfg", "w");
 					fwrite($fp,$final);
 					fclose ($fp);
-				}
-				
-				$job->addNotice(ucfirst($row[2])." ".$row[1]." has been deleted");
-			}
-			elseif($row[7]=='add' || $row[7]=='modify'){
-				if($row[2]=='servicegroup' || $row[2]=='contactgroup'){
-					//Get Object by Name
-					$majuscule = explode( "g", $row[2]);
-					$objectName = ucfirst($majuscule[0]).ucfirst("g".$majuscule[1]);
-					$job->addNotice("Résultat du type d'objet :".$objectName);
-				}else{
-					$objectName = ucfirst($row[2]);
-				}
-				
-				//Create new object exporter
-				$classname='Nagios'.$objectName.'Exporter';
-				$fp = @fopen($this->exportDir."/objects/".$row[2]."s.cfg", "a");
-				
-				$objectExporter = new $classname($this, $fp);
-				
-				//Get Object by Name
-				$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row[1]));
-				
-				if($object) {
-					if($row[2]=='service'){
-						$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row[3], $row[1]));
-						$objectExporter->export($object, $row[4], $row[3]);
-					}else{
-						$objectExporter->export($object);
+					
+					// If host
+					if($row["type"]=="host"){
+						$final = $ExportDiff->ModifyCfgFile($this->exportDir, "", "service", $row["name"], "host");
+						$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
+						fwrite($fp,$final);
+						fclose ($fp);
 					}
 					
-					$job->addNotice(ucfirst($row[2])." ".$row[1]." has been added");
+					$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
+				}
+				
+				// Add / Modify
+				if($row["action"]=='add' || $row["action"]=='modify'){
+					if($row["type"]=='servicegroup' || $row["type"]=='contactgroup'){
+						//Get Object by Name
+						$majuscule = explode( "g", $row["type"]);
+						$objectName = ucfirst($majuscule[0]).ucfirst("g".$majuscule[1]);
+						$job->addNotice("Résultat du type d'objet :".$objectName);
+					}else{
+						$objectName = ucfirst($row["type"]);
+					}
+					
+					//Create new object exporter
+					$classname='Nagios'.$objectName.'Exporter';
+					$fp = @fopen($this->exportDir."/objects/".$row["type"]."s.cfg", "a");
+					
+					$objectExporter = new $classname($this, $fp);
+					
+					//Get Object by Name
+					$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row["name"]));
+					
+					if($object) {
+						if($row["type"]=='service'){
+							$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row["parent_id"], $row["name"]));
+							$objectExporter->export($object, $row["parent_type"], $row["parent_id"]);
+						}else{
+							$objectExporter->export($object);
+						}
+						
+						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added");
+					}
 				}
 			}
-	
 		}
-		
-		sqlrequest('lilac', "DELETE FROM export_job_history");
 		
 		$job->addNotice("Finished exporting objects.");
 
@@ -410,6 +417,9 @@ class NagiosExportEngine extends ExportEngine {
 				return false;
 			}
 			$job->addNotice("Nagios Restarted Successfully.");
+			
+			//reinitialize DB of ExportDiff
+			sqlrequest('lilac', "DELETE FROM export_job_history");
 		}
 		
 		return true;
@@ -752,11 +762,11 @@ class NagiosExportEngine extends ExportEngine {
 				return false;
 			}
 			$job->addNotice("Nagios Restarted Successfully.");
+			
+			//reinitialize DB of ExportDiff
+			sqlrequest('lilac', "DELETE FROM export_job_history");
 		}
-		
-		//reinitialize DB of ExportDiff
-		sqlrequest('lilac', "DELETE FROM export_job_history");
-		
+				
 		return true;
 	}
 	

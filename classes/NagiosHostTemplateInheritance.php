@@ -59,7 +59,7 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
         	$JobExport->insertAction($this->getSourceTemplate()->getName(),'hostTemplate','modify');
 	}*/
 
-        parent::delete($con);
+        return parent::delete($con);
 
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
@@ -75,7 +75,7 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
                 	if($con == null || $con == ""){
         			$JobExport->insertAction($this->getSourceTemplate()->getName(),'hostTemplate','modify');
                 	}*/
-			parent::save($con);	// Okay, we've saved
+			return parent::save($con);	// Okay, we've saved
 		}
 	}
 

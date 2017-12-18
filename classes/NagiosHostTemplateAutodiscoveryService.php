@@ -22,7 +22,7 @@ class NagiosHostTemplateAutodiscoveryService extends BaseNagiosHostTemplateAutod
 			$JobExport->insertAction($this->getHostTemplate()->getName(),'hosttemplate','add');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -33,7 +33,7 @@ class NagiosHostTemplateAutodiscoveryService extends BaseNagiosHostTemplateAutod
 			$JobExport->insertAction($this->getHostTemplate()->getName(),'hosttemplate','add');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 
