@@ -14,6 +14,24 @@
  * @package    propel.generator.
  */
 class NagiosService extends BaseNagiosService {
+	
+	public function setDescription($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			if($this->getNagiosHost() != null) {
+				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+			}elseif($this->getNagiosHostTemplate()  != null) {
+				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
+			}
+		}
+		
+		$setName = parent::setDescription($v);
+		
+		return $setName;
+	}
 
 	public function delete(PropelPDO $con = null) {
 

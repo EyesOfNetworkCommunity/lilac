@@ -15,6 +15,20 @@
  */
 class NagiosServiceGroup extends BaseNagiosServiceGroup {
 	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->insertAction($this->getName(),'servicegroup','delete');
+		}
+		
+		$setName = parent::setName($v);
+		
+		return $setName;
+	}
+	
 	public function delete(PropelPDO $con = null) {
 		
 		$JobExport=new EoN_Job_Exporter();
