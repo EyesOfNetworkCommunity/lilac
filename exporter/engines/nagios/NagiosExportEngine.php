@@ -304,7 +304,7 @@ class NagiosExportEngine extends ExportEngine {
 					fclose ($fp);
 					
 					// If host
-					if($row["type"]=="host"){
+					if($row["type"]=="host" && $row["action"] == "delete"){
 						$final = $ExportDiff->ModifyCfgFile($this->exportDir, "", "service", $row["name"], "host");
 						$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
 						fwrite($fp,$final);
