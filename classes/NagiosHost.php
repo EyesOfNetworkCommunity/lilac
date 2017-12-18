@@ -14,12 +14,24 @@
  * @package    propel.generator.
  */
 class NagiosHost extends BaseNagiosHost {
+	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->insertAction($this->getName(),'host','delete');
+		}
+		
+		return parent::setName($v);
+	}
 
 	public function delete(PropelPDO $con = null) {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getId(),$this->getName(),'host','delete');
+			$JobExport->insertAction($this->getName(),'host','delete');
 		}
 
 		return parent::delete($con);
@@ -31,7 +43,7 @@ class NagiosHost extends BaseNagiosHost {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$action = ($this->isNew()) ? "add" : "modify";
-			$JobExport->insertAction($this->getId(),$this->getName(),'host',$action);
+			$JobExport->insertAction($this->getName(),'host',$action);
 		}
 
 		return parent::save($con);
