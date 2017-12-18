@@ -22,9 +22,9 @@ class NagiosService extends BaseNagiosService {
 		
 		if($action == "modify"){
 			if($this->getNagiosHost() != null) {
-				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getId(),'host');
 			}elseif($this->getNagiosHostTemplate()  != null) {
-				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
+				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getId(),'hosttemplate');
 			}
 		}
 		
@@ -38,9 +38,9 @@ class NagiosService extends BaseNagiosService {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			if($this->getNagiosHost()) {
-				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getId(),'host');
 			}elseif($this->getNagiosHostTemplate()) {
-				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
+				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getId(),'hosttemplate');
 			}
 		}
 
@@ -54,9 +54,9 @@ class NagiosService extends BaseNagiosService {
 		if($con == null || $con == ""){
 			$action = ($this->isNew()) ? "add" : "modify";
 			if($this->getNagiosHost()) {
-				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHost()->getName(),'host');
+				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHost()->getId(),'host');
 			}elseif($this->getNagiosHostTemplate()) {
-				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHostTemplate()->getName(),'hosttemplate');
+				$JobExport->insertAction($this->getDescription(),'service',$action,$this->getNagiosHostTemplate()->getId(),'hosttemplate');
 			}
 		}
 		

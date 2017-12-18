@@ -26,10 +26,10 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 				$object = NagiosServicePeer::retrieveByPK($this->getService());
 				if($object->getHost() != null){
 					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getId(), 'host');
 				}elseif($object->getHostTemplate() != null){
 					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getId(), 'hostTemplate');
 				}
 			}
 		}
@@ -48,10 +48,10 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 			}elseif($this->getService() != null){
 				if($object->getHost() != null){
 					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getId(), 'host');
 				}elseif($object->getHostTemplate() != null){
 					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getId(), 'hostTemplate');
 				}
 			}
         	}
