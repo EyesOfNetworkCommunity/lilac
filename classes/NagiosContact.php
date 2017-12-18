@@ -15,6 +15,20 @@
  */
 class NagiosContact extends BaseNagiosContact {
 	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->insertAction($this->getName(),'contact','delete');
+		}
+		
+		$setName = parent::setName($v);
+		
+		return $setName;
+	}
+	
 	public function delete(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
@@ -29,12 +43,13 @@ class NagiosContact extends BaseNagiosContact {
 	public function save(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
+		
 		if($con == null || $con == ""){
 			$action = ($this->isNew()) ? "add" : "modify";
 			$JobExport->insertAction($this->getName(),'contact',$action);
 		}
 
-		parent::save($con);
+		return parent::save($con);
 		
 	}
 	

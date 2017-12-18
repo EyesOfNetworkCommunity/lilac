@@ -22,7 +22,7 @@ class NagiosContactGroupMember extends BaseNagiosContactGroupMember {
 			$JobExport->insertAction($this->getNagiosContactGroup()->getName(),'contactgroup','modify');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -33,7 +33,7 @@ class NagiosContactGroupMember extends BaseNagiosContactGroupMember {
 			$JobExport->insertAction($this->getNagiosContactGroup()->getName(),'contactgroup','modify');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 	

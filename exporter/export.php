@@ -96,6 +96,9 @@ else {
 	$exportJob->setStatus("Complete");
 	$exportJob->addNotice("Completed Export.");
 	$exportJob->save();
+	
+	//reinitialize DB of ExportDiff
+	sqlrequest('lilac', "DELETE FROM export_job_history");
 }
 
 ?>

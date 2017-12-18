@@ -418,8 +418,6 @@ class NagiosExportEngine extends ExportEngine {
 			}
 			$job->addNotice("Nagios Restarted Successfully.");
 			
-			//reinitialize DB of ExportDiff
-			sqlrequest('lilac', "DELETE FROM export_job_history");
 		}
 		
 		return true;
@@ -763,8 +761,6 @@ class NagiosExportEngine extends ExportEngine {
 			}
 			$job->addNotice("Nagios Restarted Successfully.");
 			
-			//reinitialize DB of ExportDiff
-			sqlrequest('lilac', "DELETE FROM export_job_history");
 		}
 				
 		return true;

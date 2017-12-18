@@ -22,7 +22,7 @@ class NagiosContactNotificationCommand extends BaseNagiosContactNotificationComm
 			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 
 	}
 
@@ -33,7 +33,7 @@ class NagiosContactNotificationCommand extends BaseNagiosContactNotificationComm
 			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
 		}
 
-		parent::save($con);
+		return parent::save($con);
 
 	}
 

@@ -15,11 +15,25 @@
  */
 class NagiosCommand extends BaseNagiosCommand {
 	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->insertAction($this->getName(),'command','delete');
+		}
+		
+		$setName = parent::setName($v);
+		
+		return $setName;
+	}
+	
 	public function delete(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getId(),$this->getName(),'command','delete');
+			$JobExport->insertAction($this->getName(),'command','delete');
 		}
 		
 		return parent::delete($con);
@@ -29,15 +43,13 @@ class NagiosCommand extends BaseNagiosCommand {
 	public function save(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
-		$action = ($this->isNew()) ? "add" : "modify";
-	
-		$save = parent::save($con);
 	
 		if($con == null || $con == ""){	
-			$JobExport->insertAction($this->getId(),$this->getName(),'command',$action);
+			$action = ($this->isNew()) ? "add" : "modify";
+			$JobExport->insertAction($this->getName(),'command',$action);
 		}
 
-		return $save;
+		return parent::save($con);
 		
 	}
 

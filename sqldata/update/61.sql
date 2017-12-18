@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS `export_job_history`;
 CREATE TABLE `export_job_history` (
         `id` INT(11) NOT NULL AUTO_INCREMENT,
-        `uid` INT(11) NOT NULL,
         `name` VARCHAR(50) NOT NULL,
         `type` VARCHAR(50) NOT NULL,
         `parent_id` VARCHAR(50) DEFAULT NULL,
