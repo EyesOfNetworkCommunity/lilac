@@ -14,6 +14,20 @@
  * @package    propel.generator.
  */
 class NagiosTimeperiod extends BaseNagiosTimeperiod {
+	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->insertAction($this->getName(),'timeperiod','delete');
+		}
+		
+		$setName = parent::setName($v);
+		
+		return $setName;
+	}
 
 	public function delete(PropelPDO $con = null) {
 
