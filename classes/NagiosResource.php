@@ -19,7 +19,7 @@ class NagiosResource extends BaseNagiosResource {
 
 		$JobExport=new EoN_Job_Exporter();		
 		if($con == null || $con == ""){
-			$JobExport->insertAction(0,'resource','nagios_resource','modify');
+			$JobExport->insertAction('resource','nagios_resource','modify');
 		}
 
 		return parent::save($con);

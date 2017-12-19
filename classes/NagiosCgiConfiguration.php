@@ -19,7 +19,7 @@ class NagiosCgiConfiguration extends BaseNagiosCgiConfiguration {
 
 		$JobExport=new EoN_Job_Exporter();		
 		if($con == null || $con == ""){
-			$JobExport->insertAction(0,'cgi_config','nagios_cgi_configuration','modify');
+			$JobExport->insertAction('cgi_config','nagios_cgi_configuration','modify');
 		}
 
 		parent::save($con);
