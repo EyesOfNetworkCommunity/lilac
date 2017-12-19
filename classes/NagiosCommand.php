@@ -21,7 +21,7 @@ class NagiosCommand extends BaseNagiosCommand {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'command','delete');
+			$JobExport->insertAction($this->getName(),'command','rename');
 		}
 		
 		$setName = parent::setName($v);

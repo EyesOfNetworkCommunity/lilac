@@ -54,10 +54,16 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 
     public function delete(PropelPDO $con = null) {
 
-        /*$JobExport=new EoN_Job_Exporter();
+        $JobExport=new EoN_Job_Exporter();
         if($con == null || $con == ""){
-        	$JobExport->insertAction($this->getSourceTemplate()->getName(),'hostTemplate','modify');
-	}*/
+			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
+			if($tmpTemplate->getNagiosServices() !== null) {
+				foreach($tmpTemplate->getNagiosServices() as $tmpService) {
+					$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+					$JobExport->insertAction($tmpService->getDescription(),"service","delete",$tmpHost->getName(),"host");	
+				}
+			}
+		}
 
         return parent::delete($con);
 
@@ -71,10 +77,16 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 			throw new Exception("Adding that inheritance would create a circular chain.");
 		}
 		else {
-			/*$JobExport=new EoN_Job_Exporter();
-                	if($con == null || $con == ""){
-        			$JobExport->insertAction($this->getSourceTemplate()->getName(),'hostTemplate','modify');
-                	}*/
+			$JobExport=new EoN_Job_Exporter();
+			if($con == null || $con == ""){
+				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
+				if($tmpTemplate->getNagiosServices() !== null) {
+					foreach($tmpTemplate->getNagiosServices() as $tmpService) {
+						$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+						$JobExport->insertAction($tmpService->getDescription(),"service","add",$tmpHost->getName(),"host");	
+					}
+				}
+			}
 			return parent::save($con);	// Okay, we've saved
 		}
 	}

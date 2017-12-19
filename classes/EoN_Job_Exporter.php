@@ -25,7 +25,44 @@ include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
 class EoN_Job_Exporter {
 
-	function insertAction($name, $type, $action, $parent_id=NULL, $parent_type=NULL) {
+	function renameAction($newname,$oldname,$type,$action="add") {
+		
+		global $database_lilac;
+		
+		$date=date("Y-m-d H:i:s");
+		
+		sqlrequest($database_lilac,"DELETE FROM export_job_history 
+			WHERE parent_name='".$oldname."'
+			AND parent_type='".$type."'"
+		);
+		$this->insertAction($oldname,$type,'delete');
+				
+		switch($type) {
+			case "host":		
+				// Get Services List
+				$tmpHost = NagiosHostPeer::getByName($oldname);
+				if($tmpHost->getInheritedServices() !== null) {
+					foreach($tmpHost->getInheritedServices() as $tmpService) {
+						if($action=="add") {
+							$this->insertAction($tmpService->getDescription(),"service","delete",$oldname,$type);
+						}
+						$this->insertAction($tmpService->getDescription(),"service",$action,$newname,$type);
+					}
+				}
+				if($tmpHost->getNagiosServices() !== null) {
+					foreach($tmpHost->getNagiosServices() as $tmpService) {
+						if($action=="add") {
+							$this->insertAction($tmpService->getDescription(),"service","delete",$oldname,$type);
+						}
+						$this->insertAction($tmpService->getDescription(),"service",$action,$newname,$type);
+					}
+				}
+				break;
+		}
+		
+	}
+
+	function insertAction($name, $type, $action, $parent_name=NULL, $parent_type=NULL) {
 
 		global $database_lilac;
 	
@@ -42,10 +79,16 @@ class EoN_Job_Exporter {
 		}
 
 		if($insert) {
+			sqlrequest($database_lilac,"DELETE FROM export_job_history 
+				WHERE name='".$name."'
+				AND type='".$type."'
+				AND parent_name='".$parent_name."'
+				AND parent_type='".$parent_type."'"
+			);	
 			sqlrequest($database_lilac,"INSERT INTO export_job_history 
-				(name,type,parent_id,parent_type,date,user,action) 
-				VALUES ('".$name."', '".$type."', '".$parent_id."', '".$parent_type."', '".$date."', '".$_COOKIE['user_name']."', '".$action."')"
-			);
+				(name,type,parent_name,parent_type,date,user,action) 
+				VALUES ('".$name."', '".$type."', '".$parent_name."', '".$parent_type."', '".$date."', '".$_COOKIE['user_name']."', '".$action."')"
+			);			
 		}
 
 	}

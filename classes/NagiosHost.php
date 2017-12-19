@@ -21,7 +21,7 @@ class NagiosHost extends BaseNagiosHost {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'host','delete');
+			$JobExport->renameAction($v,$this->getName(),'host');
 		}
 		
 		return parent::setName($v);
@@ -31,7 +31,7 @@ class NagiosHost extends BaseNagiosHost {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'host','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'host','delete');
 		}
 
 		return parent::delete($con);
@@ -45,9 +45,9 @@ class NagiosHost extends BaseNagiosHost {
 			$action = ($this->isNew()) ? "add" : "modify";
 			$JobExport->insertAction($this->getName(),'host',$action);
 		}
-
-		return parent::save($con);
 		
+		return parent::save($con);
+	
 	}
 
 	public function getValues($inherited = false) {

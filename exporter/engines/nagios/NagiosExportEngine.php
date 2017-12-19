@@ -291,28 +291,12 @@ class NagiosExportEngine extends ExportEngine {
 			}
 			// Objects
 			else {
-				// Delete / Modify
-				if($row["action"]=='delete' || $row["action"]=='modify'){
-					if($row["parent_type"]=="host") {
-						$row["parent_name"] = NagiosHostPeer::retrieveByPK($_GET['id'])->getName();
-					} elseif($row["parent_type"]=="hostTemplate") {
-						$row["parent_name"] = NagiosHostTemplatePeer::retrieveByPK($_GET['id'])->getName();
-					}
-					$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
-					$fp = @fopen($this->exportDir . "/objects/".$row["type"]."s.cfg", "w");
-					fwrite($fp,$final);
-					fclose ($fp);
-					
-					// If host
-					if($row["type"]=="host" && $row["action"] == "delete"){
-						$final = $ExportDiff->ModifyCfgFile($this->exportDir, "", "service", $row["name"], "host");
-						$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
-						fwrite($fp,$final);
-						fclose ($fp);
-					}
-					
-					$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
-				}
+				// Delete if exists
+				$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
+				$fp = @fopen($this->exportDir . "/objects/".$row["type"]."s.cfg", "w");
+				fwrite($fp,$final);
+				fclose ($fp);
+				$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
 				
 				// Add / Modify
 				if($row["action"]=='add' || $row["action"]=='modify'){
@@ -336,8 +320,8 @@ class NagiosExportEngine extends ExportEngine {
 					
 					if($object) {
 						if($row["type"]=='service'){
-							$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row["parent_id"], $row["name"]));
-							$objectExporter->export($object, $row["parent_type"], $row["parent_id"]);
+							$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row["parent_name"], $row["name"]));
+							$objectExporter->export($object, $row["parent_type"], $row["parent_name"]);
 						}else{
 							$objectExporter->export($object);
 						}
