@@ -35,7 +35,7 @@ class NagiosServiceExporter extends NagiosExporter {
 		return true;
 	}
 	
-	private function _exportService($service, $type, $targetObj) {
+	public function _exportService($service, $type, $targetObj) {
 		global $lilac;
 		$fp = $this->getOutputFile();
 		

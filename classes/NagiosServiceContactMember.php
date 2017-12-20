@@ -21,7 +21,7 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 		if($con == null || $con == ""){
 			if($this->getTemplate() != null){
 				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
-				$JobExport->insertAction($object->getName(),'serviceTemplate','modify');
+				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
 			}elseif($this->getService() != null){
 				$object = NagiosServicePeer::retrieveByPK($this->getService());
 				if($object->getHost() != null){
@@ -29,7 +29,7 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
 				}elseif($object->getHostTemplate() != null){
 					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
 				}
 			}
 		}
@@ -44,7 +44,7 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 		if($con == null || $con == ""){
 			if($this->getTemplate() != null){
 				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
-				$JobExport->insertAction($object->getName(),'serviceTemplate','modify');
+				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
 			}elseif($this->getService() != null){
 				$object = NagiosServicePeer::retrieveByPK($this->getService());
 				if($object->getHost() != null){
@@ -52,7 +52,7 @@ class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
 				}elseif($object->getHostTemplate() != null){
 					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
-					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hostTemplate');
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
 				}
 			}
         }

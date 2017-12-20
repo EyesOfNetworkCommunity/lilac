@@ -55,7 +55,7 @@ class EoN_Job_Exporter {
 				foreach ($tmpHostTemplates as $relObj) {
 					if ($relObj !== $tmpCommand) {
 						$tmpHostTemplate = NagiosHostTemplatePeer::retrieveByPK($relObj->getId());
-						$this->insertAction($tmpHostTemplate->getName(),"hostTemplate","modify");
+						$this->insertAction($tmpHostTemplate->getName(),"hosttemplate","modify");
 					}
 				}
 				
@@ -73,7 +73,7 @@ class EoN_Job_Exporter {
 				foreach ($tmpServiceTemplates as $relObj) {
 					if ($relObj !== $tmpCommand) {  // ensure that we don't try to copy a reference to ourselves
 						$tmpServiceTemplate = NagiosServiceTemplatePeer::retrieveByPK($relObj->getId());
-						$this->insertAction($tmpServiceTemplate->getName(),"serviceTemplate","modify");
+						$this->insertAction($tmpServiceTemplate->getName(),"servicetemplate","modify");
 					}
 				}
 				

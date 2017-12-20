@@ -19,7 +19,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'hostTemplate','delete');
+			$JobExport->insertAction($this->getName(),'hosttemplate','delete');
 		}
 
 		return parent::delete($con);
@@ -31,7 +31,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			$action = ($this->isNew()) ? "add" : "modify";
-			$JobExport->insertAction($this->getName(),'hostTemplate',$action);
+			$JobExport->insertAction($this->getName(),'hosttemplate',$action);
 		}
 
 		return parent::save($con);

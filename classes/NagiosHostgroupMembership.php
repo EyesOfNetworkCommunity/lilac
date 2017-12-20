@@ -24,7 +24,7 @@ class NagiosHostgroupMembership extends BaseNagiosHostgroupMembership {
 				$JobExport->insertAction($objectHost->getName(),'host','modify');
 			}elseif($this->getHostTemplate() != null){
 				$objectHost = NagiosHostTemplatePeer::retrieveByPK($this->getHostTemplate());
-				$JobExport->insertAction($objectHost->getName(),'hostTemplate','modify');
+				$JobExport->insertAction($objectHost->getName(),'hosttemplate','modify');
 			}
 		}
 		
@@ -41,7 +41,7 @@ class NagiosHostgroupMembership extends BaseNagiosHostgroupMembership {
 				$JobExport->insertAction($objectHost->getName(),'host','modify');
 			}elseif($this->getHostTemplate() != null){
 				$objectHost = NagiosHostTemplatePeer::retrieveByPK($this->getHostTemplate());
-				$JobExport->insertAction($objectHost->getName(),'hostTemplate','modify');
+				$JobExport->insertAction($objectHost->getName(),'hosttemplate','modify');
 			}
 		}
 		
