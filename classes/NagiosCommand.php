@@ -21,7 +21,7 @@ class NagiosCommand extends BaseNagiosCommand {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'command','rename');
+			$JobExport->renameAction($v,$this->getName(),'command');
 		}
 		
 		$setName = parent::setName($v);
@@ -33,7 +33,7 @@ class NagiosCommand extends BaseNagiosCommand {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'command','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'host','delete');
 		}
 		
 		return parent::delete($con);

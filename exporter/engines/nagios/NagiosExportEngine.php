@@ -315,19 +315,27 @@ class NagiosExportEngine extends ExportEngine {
 					
 					$objectExporter = new $classname($this, $fp);
 					
-					//Get Object by Name
-					$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row["name"]));
-					
-					if($object) {
-						if($row["type"]=='service'){
-							$object = call_user_func_array('Nagios'.$objectName.'Peer::getByHostAndDescription', array($row["parent_name"], $row["name"]));
-							$objectExporter->export($object, $row["parent_type"], $row["parent_name"]);
-						}else{
-							$objectExporter->export($object);
+					// Get Service and Host
+					if($row["type"]=='service') {
+						$object = NagiosServicePeer::getByHostAndDescription($row["parent_name"],$row["name"]);
+						
+						if($row["parent_type"]=="host") {
+							$object_parent = NagiosHostPeer::getByName($row["parent_name"]);
 						}
 						
-						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added");
+						if($object && $object_parent) {
+							$objectExporter->_exportService($object, $row["parent_type"], $object_parent);
+							$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added on ".$row["parent_type"]." ".$row["parent_name"]);
+						}
+					// Other objects
+					} else {
+						$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row["name"]));
+						if($object) {
+							$objectExporter->export($object);
+							$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added");
+						}
 					}
+
 				}
 			}
 		}
