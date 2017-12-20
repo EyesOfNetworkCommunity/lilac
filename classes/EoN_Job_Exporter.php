@@ -25,6 +25,42 @@ include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
 class EoN_Job_Exporter {
 
+	function renameObject($object,$dep_type,$dep_array) {
+		foreach ($dep_array as $relObj) {
+			if ($relObj !== $object) {  // ensure that we don't try to copy a reference to ourselves
+				switch($dep_type) {
+					case "contact":
+						$tmpObj = NagiosContactPeer::retrieveByPK($relObj->getContactId());
+						break;
+					case "host":
+						$tmpObj = NagiosHostPeer::retrieveByPK($relObj->getId());
+						break;
+					case "hosttemplate":
+						$tmpObj = NagiosHostTemplatePeer::retrieveByPK($relObj->getId());
+						break;
+					case "servicetemplate":
+						$tmpObj = NagiosServiceTemplatePeer::retrieveByPK($relObj->getId());
+						break;
+					case "service":
+						$tmpService = NagiosServicePeer::retrieveByPK($relObj->getId());
+						if($tmpService->getHost() !== null) {
+							$parent=NagiosHostPeer::retrieveByPK($tmpService->getHost());
+							$parent_type="host";
+						} elseif($tmpService->getHostTemplate() !== null) {
+							$parent=NagiosHostTemplatePeer::retrieveByPK($tmpService->getHostTemplate());
+							$parent_type="hosttemplate";
+						}
+						break;
+				}
+				if($dep_type=="service") {
+					$this->insertAction($tmpService->getDescription(),$dep_type,"modify",$parent->getName(),$parent_type);
+				} else {
+					$this->insertAction($tmpObj->getName(),$dep_type,"modify");
+				}
+			}
+		}
+	}
+
 	function renameAction($newname,$oldname,$type,$action="add") {
 		
 		global $database_lilac;
@@ -43,55 +79,24 @@ class EoN_Job_Exporter {
 				$tmpCommand = NagiosCommandPeer::getByName($oldname);
 				
 				// Contacts
-				foreach ($tmpCommand->getNagiosContactNotificationCommands() as $relObj) {
-					if ($relObj !== $tmpCommand) {  // ensure that we don't try to copy a reference to ourselves
-						$tmpContact = NagiosContactPeer::retrieveByPK($relObj->getContactId());
-						$this->insertAction($tmpContact->getName(),"contact","modify");
-					}
-				}
-				
+				$this->renameObject($tmpCommand,"contact",$tmpCommand->getNagiosContactNotificationCommands());
+					
 				// HostTemplates
 				$tmpHostTemplates = (object) array_merge((array) $tmpCommand->getNagiosHostTemplatesRelatedByCheckCommand(),(array) $tmpCommand->getNagiosHostTemplatesRelatedByEventHandler());	
-				foreach ($tmpHostTemplates as $relObj) {
-					if ($relObj !== $tmpCommand) {
-						$tmpHostTemplate = NagiosHostTemplatePeer::retrieveByPK($relObj->getId());
-						$this->insertAction($tmpHostTemplate->getName(),"hosttemplate","modify");
-					}
-				}
+				$this->renameObject($tmpCommand,"hosttemplate",$tmpHostTemplates);
 				
 				// Hosts
 				$tmpHosts = (object) array_merge((array) $tmpCommand->getNagiosHostsRelatedByCheckCommand(),(array) $tmpCommand->getNagiosHostsRelatedByEventHandler());
-				foreach ($tmpHosts as $relObj) {
-					if ($relObj !== $tmpCommand) {
-						$tmpHost = NagiosHostPeer::retrieveByPK($relObj->getId());
-						$this->insertAction($tmpHost->getName(),"host","modify");
-					}
-				}
+				$this->renameObject($tmpCommand,"host",$tmpHosts);
 
 				// ServiceTemplates
 				$tmpServiceTemplates = (object) array_merge((array) $tmpCommand->getNagiosServiceTemplatesRelatedByCheckCommand(),(array) $tmpCommand->getNagiosServiceTemplatesRelatedByEventHandler());
-				foreach ($tmpServiceTemplates as $relObj) {
-					if ($relObj !== $tmpCommand) {  // ensure that we don't try to copy a reference to ourselves
-						$tmpServiceTemplate = NagiosServiceTemplatePeer::retrieveByPK($relObj->getId());
-						$this->insertAction($tmpServiceTemplate->getName(),"servicetemplate","modify");
-					}
-				}
+				$this->renameObject($tmpCommand,"servicetemplate",$tmpServiceTemplates);
 				
 				// Services
 				$tmpServices = (object) array_merge((array) $tmpCommand->getNagiosServicesRelatedByCheckCommand(),(array) $tmpCommand->getNagiosServicesRelatedByEventHandler());
-				foreach ($tmpServices as $relObj) {
-					if ($relObj !== $tmpCommand) {  // ensure that we don't try to copy a reference to ourselves
-						$tmpService = NagiosServicePeer::retrieveByPK($relObj->getId());
-						if($tmpService->getHost() !== null) {
-							$parent=NagiosHostPeer::retrieveByPK($tmpService->getHost());
-							$parent_type="host";
-						} elseif($tmpService->getHostTemplate() !== null) {
-							$parent=NagiosHostTemplatePeer::retrieveByPK($tmpService->getHostTemplate());
-							$parent_type="hostTemplate";
-						}
-						$this->insertAction($tmpService->getDescription(),"service","modify",$parent->getName(),$parent_type);
-					}
-				}
+				$this->renameObject($tmpCommand,"service",$tmpServices);
+				
 				break;
 				
 			case "host":		
