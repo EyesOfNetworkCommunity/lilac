@@ -27,13 +27,33 @@ class EoN_Job_Exporter {
 
 	function renameObject($object,$dep_type,$dep_array) {
 		foreach ($dep_array as $relObj) {
+			$deptype = $dep_type;
 			if ($relObj !== $object) {  // ensure that we don't try to copy a reference to ourselves
 				switch($dep_type) {
 					case "contact":
+						$tmpObj = NagiosContactPeer::retrieveByPK($relObj->getId());
+						break;
+					case "contactmember":
 						$tmpObj = NagiosContactPeer::retrieveByPK($relObj->getContactId());
+						$deptype = "contact";
+						break;
+					case "contactgroup":
+						$tmpObj = NagiosContactGroupPeer::retrieveByPK($relObj->getContactgroup());
+						break;
+					case "timeperiod":
+						$tmpObj = NagiosTimeperiodPeer::retrieveByPK($relObj->getId());
 						break;
 					case "host":
 						$tmpObj = NagiosHostPeer::retrieveByPK($relObj->getId());
+						break;
+					case "hostmember":
+						if($relObj->getNagiosHost() !== null) {
+							$tmpObj = $relObj->getNagiosHost();
+							$deptype = "host";
+						} elseif($relObj->getNagiosHostTemplate() !== null) {
+							$tmpObj = $relObj->getNagiosHostTemplate();
+							$deptype = "hosttemplate";
+						}
 						break;
 					case "hosttemplate":
 						$tmpObj = NagiosHostTemplatePeer::retrieveByPK($relObj->getId());
@@ -51,11 +71,28 @@ class EoN_Job_Exporter {
 							$parent_type="hosttemplate";
 						}
 						break;
+					case "servicemember":
+						if($relObj->getNagiosService() !== null) {
+							$tmpService = $relObj->getNagiosService();
+							$deptype = "service";
+							if($tmpService->getHost() !== null) {
+								$parent=NagiosHostPeer::retrieveByPK($tmpService->getHost());
+								$parent_type="host";
+							} elseif($tmpService->getHostTemplate() !== null) {
+								$parent=NagiosHostTemplatePeer::retrieveByPK($tmpService->getHostTemplate());
+								$parent_type="hosttemplate";
+							}
+						}
+						else {
+							$tmpObj = $relObj->getNagiosServiceTemplate();
+							$deptype = "servicetemplate";
+						}
+						break;
 				}
-				if($dep_type=="service") {
-					$this->insertAction($tmpService->getDescription(),$dep_type,"modify",$parent->getName(),$parent_type);
+				if($deptype=="service") {
+					$this->insertAction($tmpService->getDescription(),$deptype,"modify",$parent->getName(),$parent_type);
 				} else {
-					$this->insertAction($tmpObj->getName(),$dep_type,"modify");
+					$this->insertAction($tmpObj->getName(),$deptype,"modify");
 				}
 			}
 		}
@@ -74,12 +111,14 @@ class EoN_Job_Exporter {
 		$this->insertAction($oldname,$type,'delete');
 				
 		switch($type) {
+			
 			case "command":
 				
-				$tmpCommand = NagiosCommandPeer::getByName($oldname);
+				$tmpCommand = new NagiosCommandPeer();
+				$tmpCommand = $tmpCommand->getByName($oldname);
 				
 				// Contacts
-				$this->renameObject($tmpCommand,"contact",$tmpCommand->getNagiosContactNotificationCommands());
+				$this->renameObject($tmpCommand,"contactmember",$tmpCommand->getNagiosContactNotificationCommands());
 					
 				// HostTemplates
 				$tmpHostTemplates = (object) array_merge((array) $tmpCommand->getNagiosHostTemplatesRelatedByCheckCommand(),(array) $tmpCommand->getNagiosHostTemplatesRelatedByEventHandler());	
@@ -98,7 +137,86 @@ class EoN_Job_Exporter {
 				$this->renameObject($tmpCommand,"service",$tmpServices);
 				
 				break;
+			
+			case "contact":
+			
+				$tmpContact = new NagiosContactPeer();
+				$tmpContact = $tmpContact->getByName($oldname);
+			
+				// ContactGroups
+				$this->renameObject($tmpContact,"contactgroup",$tmpContact->getNagiosContactGroupMembers());
 				
+				// Hosts
+				$this->renameObject($tmpContact,"hostmember",$tmpContact->getNagiosHostContactMembers());
+								
+				// Services
+				$this->renameObject($tmpContact,"servicemember",$tmpContact->getNagiosServiceContactMembers());
+			
+				break;
+			
+			case "contactgroup":
+			
+				$tmpContactGroup = new NagiosContactGroupPeer();
+				$tmpContactGroup = $tmpContactGroup->getByName($oldname);
+			
+				// Hosts
+				$this->renameObject($tmpContactGroup,"hostmember",$tmpContactGroup->getNagiosHostContactgroups());
+								
+				// Services
+				$this->renameObject($tmpContactGroup,"servicemember",$tmpContactGroup->getNagiosServiceContactGroupMembers());
+			
+				break;
+			
+			case "timeperiod":
+			
+				$tmpTimeperiod = new NagiosTimeperiodPeer();
+				$tmpTimeperiod = $tmpTimeperiod->getByName($oldname);
+			
+				// Timeperiods
+				$this->renameObject($tmpTimeperiod,"timeperiod",$tmpTimeperiod->getNagiosTimeperiodExcludesRelatedByExcludedTimeperiod());
+			
+				// Contacts
+				$this->renameObject($tmpTimeperiod,"contact",$tmpTimeperiod->getNagiosContactsRelatedByHostNotificationPeriod());
+				$this->renameObject($tmpTimeperiod,"contact",$tmpTimeperiod->getNagiosContactsRelatedByServiceNotificationPeriod());
+				
+				// Hosts
+				$this->renameObject($tmpTimeperiod,"host",$tmpTimeperiod->getNagiosHostsRelatedByCheckPeriod());
+				$this->renameObject($tmpTimeperiod,"host",$tmpTimeperiod->getNagiosHostsRelatedByNotificationPeriod());	
+							
+				// HostTemplates
+				$this->renameObject($tmpTimeperiod,"hosttemplate",$tmpTimeperiod->getNagiosHostTemplatesRelatedByCheckPeriod());
+				$this->renameObject($tmpTimeperiod,"hosttemplate",$tmpTimeperiod->getNagiosHostTemplatesRelatedByNotificationPeriod());
+										
+				// Services
+				$this->renameObject($tmpTimeperiod,"service",$tmpTimeperiod->getNagiosServicesRelatedByCheckPeriod());
+				$this->renameObject($tmpTimeperiod,"service",$tmpTimeperiod->getNagiosServicesRelatedByNotificationPeriod());	
+				
+				// ServiceTemplates
+				$this->renameObject($tmpTimeperiod,"servicetemplate",$tmpTimeperiod->getNagiosServiceTemplatesRelatedByCheckPeriod());
+				$this->renameObject($tmpTimeperiod,"servicetemplate",$tmpTimeperiod->getNagiosServiceTemplatesRelatedByNotificationPeriod());
+				
+				break;
+			
+			case "hostgroup":
+			
+				$tmpHostGroup = new NagiosHostgroupPeer();
+				$tmpHostGroup = $tmpHostGroup->getByName($oldname);
+			
+				// Hosts
+				$this->renameObject($tmpHostGroup,"hostmember",$tmpHostGroup->getNagiosHostgroupMemberships());
+											
+				break;
+			
+			case "servicegroup":
+			
+				$tmpServiceGroup = new NagiosServiceGroupPeer();
+				$tmpServiceGroup = $tmpServiceGroup->getByName($oldname);
+			
+				// Hosts
+				$this->renameObject($tmpServiceGroup,"servicemember",$tmpServiceGroup->getNagiosServiceGroupMembers());
+											
+				break;
+			
 			case "host":		
 				// Get Services List
 				$tmpHost = NagiosHostPeer::getByName($oldname);
@@ -118,24 +236,6 @@ class EoN_Job_Exporter {
 						$this->insertAction($tmpService->getDescription(),"service",$action,$newname,$type);
 					}
 				}
-				break;
-			case "contact":
-			
-				break;
-			case "service":
-			
-				break;
-			case "hostgroup":
-			
-				break;
-			case "servicegroup":
-			
-				break;
-			case "contactgroup":
-			
-				break;
-			case "timeperiod":
-			
 				break;
 		}
 		

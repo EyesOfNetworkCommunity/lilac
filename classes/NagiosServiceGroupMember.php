@@ -46,6 +46,7 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
 				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
 			}elseif($this->getService() != null){
+				$object = NagiosServicePeer::retrieveByPK($this->getService());
 				if($object->getHost() != null){
 					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
@@ -54,7 +55,7 @@ class NagiosServiceGroupMember extends BaseNagiosServiceGroupMember {
 					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
 				}
 			}
-        	}
+        }
 		
 		return parent::save($con);
 

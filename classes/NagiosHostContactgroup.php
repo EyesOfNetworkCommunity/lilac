@@ -19,7 +19,11 @@ class NagiosHostContactgroup extends BaseNagiosHostContactgroup {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			if($this->getNagiosHost() != null) {
+				$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			} else {
+				$JobExport->insertAction($this->getNagiosHostTemplate()->getName(),'hosttemplate','modify');
+			}
 		}
 		
 		return parent::delete($con);
@@ -30,7 +34,11 @@ class NagiosHostContactgroup extends BaseNagiosHostContactgroup {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			if($this->getNagiosHost() != null) {
+				$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			} else {
+				$JobExport->insertAction($this->getNagiosHostTemplate()->getName(),'hosttemplate','modify');
+			}
 		}
 
 		return parent::save($con);
