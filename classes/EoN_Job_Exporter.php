@@ -41,7 +41,7 @@ class EoN_Job_Exporter {
 						$tmpObj = NagiosContactGroupPeer::retrieveByPK($relObj->getContactgroup());
 						break;
 					case "timeperiod":
-						$tmpObj = NagiosTimeperiodPeer::retrieveByPK($relObj->getId());
+						$tmpObj = NagiosTimeperiodPeer::retrieveByPK($relObj->getTimeperiodId());
 						break;
 					case "host":
 						$tmpObj = NagiosHostPeer::retrieveByPK($relObj->getId());
