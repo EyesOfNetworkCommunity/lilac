@@ -21,7 +21,7 @@ class NagiosContact extends BaseNagiosContact {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'contact','delete');
+			$JobExport->renameAction($v,$this->getName(),'contact');
 		}
 		
 		$setName = parent::setName($v);
@@ -33,10 +33,10 @@ class NagiosContact extends BaseNagiosContact {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'contact','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'contact','delete');
 		}
 		
-		parent::delete($con);
+		return parent::delete($con);
 		
 	}
 

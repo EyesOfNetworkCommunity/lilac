@@ -15,11 +15,23 @@
  */
 class NagiosHostgroup extends BaseNagiosHostgroup {
 	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify"){
+			$JobExport->renameAction($v,$this->getName(),'hostgroup');
+		}
+		
+		return parent::setName($v);
+	}
+	
 	public function delete(PropelPDO $con = null) {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'hostgroup','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'hostgroup','delete');
 		}
 		
 		return parent::delete($con);

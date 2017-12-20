@@ -21,7 +21,7 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'timeperiod','delete');
+			$JobExport->renameAction($v,$this->getName(),'timeperiod');
 		}
 		
 		$setName = parent::setName($v);
@@ -33,7 +33,7 @@ class NagiosTimeperiod extends BaseNagiosTimeperiod {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'timeperiod','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'timeperiod','delete');
 		}
 
 		return parent::delete($con);

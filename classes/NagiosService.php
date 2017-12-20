@@ -22,9 +22,9 @@ class NagiosService extends BaseNagiosService {
 		
 		if($action == "modify"){
 			if($this->getNagiosHost() != null) {
-				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+				$JobExport->renameAction($v,$this->getDescription(),'service');
 			}elseif($this->getNagiosHostTemplate()  != null) {
-				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
+				$JobExport->renameAction($v,$this->getDescription(),'service');
 			}
 		}
 		
@@ -38,9 +38,9 @@ class NagiosService extends BaseNagiosService {
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
 			if($this->getNagiosHost()) {
-				$JobExport->insertAction($this->getDescription(),'service','delete',$this->getNagiosHost()->getName(),'host');
+				$JobExport->renameAction($this->getDescription(),$this->getDescription(),'service','delete');
 			}elseif($this->getNagiosHostTemplate()) {
-				$JobExport->insertAction($this->getDescription(),'service','delete', $this->getNagiosHostTemplate()->getName(),'hosttemplate');
+				$JobExport->renameAction($this->getDescription(),$this->getDescription(),'service','delete');
 			}
 		}
 

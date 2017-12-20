@@ -21,7 +21,7 @@ class NagiosServiceGroup extends BaseNagiosServiceGroup {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify"){
-			$JobExport->insertAction($this->getName(),'servicegroup','delete');
+			$JobExport->renameAction($v,$this->getName(),'servicegroup');
 		}
 		
 		$setName = parent::setName($v);
@@ -33,7 +33,7 @@ class NagiosServiceGroup extends BaseNagiosServiceGroup {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getName(),'servicegroup','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'servicegroup','delete');
 		}
 
 		return parent::delete($con);

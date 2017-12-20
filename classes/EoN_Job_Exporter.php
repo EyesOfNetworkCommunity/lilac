@@ -119,6 +119,24 @@ class EoN_Job_Exporter {
 					}
 				}
 				break;
+			case "contact":
+			
+				break;
+			case "service":
+			
+				break;
+			case "hostgroup":
+			
+				break;
+			case "servicegroup":
+			
+				break;
+			case "contactgroup":
+			
+				break;
+			case "timeperiod":
+			
+				break;
 		}
 		
 	}
