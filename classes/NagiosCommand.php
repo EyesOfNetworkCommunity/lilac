@@ -33,7 +33,7 @@ class NagiosCommand extends BaseNagiosCommand {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->renameAction($this->getName(),$this->getName(),'host','delete');
+			$JobExport->renameAction($this->getName(),$this->getName(),'command','delete');
 		}
 		
 		return parent::delete($con);
