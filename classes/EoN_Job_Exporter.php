@@ -104,10 +104,6 @@ class EoN_Job_Exporter {
 		
 		$date=date("Y-m-d H:i:s");
 		
-		sqlrequest($database_lilac,"DELETE FROM export_job_history 
-			WHERE parent_name='".$oldname."'
-			AND parent_type='".$type."'"
-		);
 		$this->insertAction($oldname,$type,'delete');
 				
 		switch($type) {
@@ -218,6 +214,11 @@ class EoN_Job_Exporter {
 				break;
 			
 			case "host":		
+				sqlrequest($database_lilac,"DELETE FROM export_job_history 
+					WHERE parent_name='".$oldname."'
+					AND parent_type='".$type."'"
+				);
+			
 				// Get Services List
 				$tmpHost = NagiosHostPeer::getByName($oldname);
 				if($tmpHost->getInheritedServices() !== null) {

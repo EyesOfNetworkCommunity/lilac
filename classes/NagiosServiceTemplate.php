@@ -15,6 +15,29 @@
  */
 class NagiosServiceTemplate extends BaseNagiosServiceTemplate {
 	
+	public function delete(PropelPDO $con = null) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'servicetemplate','delete');
+		}
+
+		return parent::delete($con);
+		
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$action = ($this->isNew()) ? "add" : "modify";
+			$JobExport->insertAction($this->getName(),'servicetemplate',$action);
+		}
+
+		return parent::save($con);
+
+	}
+	
 	public function getValues($inherited = false) {
 		$values = array();
 		
