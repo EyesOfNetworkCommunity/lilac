@@ -19,8 +19,17 @@ class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInherita
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			//$JobExport->insertAction($this->getName(),'service','modify');
-			//$JobExport->insertAction($this->getName(),'servicetemplate','modify');
+			if($this->getSourceService() == null) {
+				$tmpTemplate = NagiosServiceTemplatePeer::retrieveByPK($this->getSourceTemplate());
+				$JobExport->insertAction($tmpTemplate->getName(),"servicetemplate","modify");
+			} else {
+				$tmpService = NagiosServicePeer::retrieveByPK($this->getSourceService());
+				if($tmpService->getNagiosHost() != null) {
+					$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHost()->getName(),'host');
+				}elseif($tmpService->getNagiosHostTemplate()  != null) {
+					$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHostTemplate()->getName(),'hosttemplate');
+				}
+			}
 		}
 
 		return parent::delete($con);
@@ -72,8 +81,17 @@ class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInherita
 		else {
 			$JobExport=new EoN_Job_Exporter();
 			if($con == null || $con == ""){
-				//$JobExport->insertAction($this->getName(),'service','modify');
-				//$JobExport->insertAction($this->getName(),'servicetemplate','modify');
+				if($this->getSourceService() == null) {
+					$tmpTemplate = NagiosServiceTemplatePeer::retrieveByPK($this->getSourceTemplate());
+					$JobExport->insertAction($tmpTemplate->getName(),"servicetemplate","modify");
+				} else {
+					$tmpService = NagiosServicePeer::retrieveByPK($this->getSourceService());
+					if($tmpService->getNagiosHost() != null) {
+						$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHost()->getName(),'host');
+					}elseif($tmpService->getNagiosHostTemplate()  != null) {
+						$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHostTemplate()->getName(),'hosttemplate');
+					}
+				}
 			}
 			parent::save($con);	// Okay, we've saved
 		}

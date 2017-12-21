@@ -56,11 +56,16 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 
         $JobExport=new EoN_Job_Exporter();
         if($con == null || $con == ""){
-			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
-			if($tmpTemplate->getNagiosServices() !== null) {
-				foreach($tmpTemplate->getNagiosServices() as $tmpService) {
-					$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
-					$JobExport->insertAction($tmpService->getDescription(),"service","delete",$tmpHost->getName(),"host");	
+			if($this->getSourceHost() == null) {
+				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getSourceTemplate());
+				$JobExport->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+			} else {
+				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());			
+				if($tmpTemplate->getNagiosServices() !== null) {
+					foreach($tmpTemplate->getNagiosServices() as $tmpService) {
+						$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+						$JobExport->insertAction($tmpService->getDescription(),"service","delete",$tmpHost->getName(),"host");	
+					}
 				}
 			}
 		}
@@ -79,11 +84,16 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 		else {
 			$JobExport=new EoN_Job_Exporter();
 			if($con == null || $con == ""){
-				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
-				if($tmpTemplate->getNagiosServices() !== null) {
-					foreach($tmpTemplate->getNagiosServices() as $tmpService) {
-						$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
-						$JobExport->insertAction($tmpService->getDescription(),"service","add",$tmpHost->getName(),"host");	
+				if($this->getSourceHost() == null) {
+					$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getSourceTemplate());
+					$JobExport->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+				} else {
+					$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());			
+					if($tmpTemplate->getNagiosServices() !== null) {
+						foreach($tmpTemplate->getNagiosServices() as $tmpService) {
+							$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+							$JobExport->insertAction($tmpService->getDescription(),"service","add",$tmpHost->getName(),"host");	
+						}
 					}
 				}
 			}
