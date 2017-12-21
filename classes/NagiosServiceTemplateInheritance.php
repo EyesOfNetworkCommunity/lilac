@@ -15,6 +15,18 @@
  */
 class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInheritance {
 
+	public function delete(PropelPDO $con = null) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			//$JobExport->insertAction($this->getName(),'service','modify');
+			//$JobExport->insertAction($this->getName(),'servicetemplate','modify');
+		}
+
+		return parent::delete($con);
+		
+	}
+
 	/**
 	 * Initializes internal state of NagiosServiceTemplateInheritance object.
 	 * @see        parent::__construct()
@@ -58,6 +70,11 @@ class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInherita
 			throw new Exception("Adding that inheritance would create a circular chain.");
 		}
 		else {
+			$JobExport=new EoN_Job_Exporter();
+			if($con == null || $con == ""){
+				//$JobExport->insertAction($this->getName(),'service','modify');
+				//$JobExport->insertAction($this->getName(),'servicetemplate','modify');
+			}
 			parent::save($con);	// Okay, we've saved
 		}
 	}

@@ -214,8 +214,7 @@ class NagiosExportEngine extends ExportEngine {
 		$job = $this->getJob();
 		$job->addNotice("NagiosExportEngine beginning diff export...");
 		exec("rm -rf ".$this->exportDir."/*");
-		exec("cp ".$MainConfigDir."/* ".$this->exportDir."/");
-		exec("cp -r ".$MainConfigDir."/objects/ ".$this->exportDir."/objects/");
+		exec("cp -arf ".$MainConfigDir."/* ".$this->exportDir."/");
 		$config = $this->getConfig();
 		
 		//Export Main
@@ -241,7 +240,7 @@ class NagiosExportEngine extends ExportEngine {
 			}
 		}
 		
-		//Export the diffences
+		// Export the diffences
 		$requêteDiff = sqlrequest($database_lilac, "SELECT * FROM export_job_history ORDER BY id");
 		
 		while($row = mysqli_fetch_assoc($requêteDiff)){
@@ -291,26 +290,23 @@ class NagiosExportEngine extends ExportEngine {
 			}
 			// Objects
 			else {
-				// Manage Host Templates
+				// Service in Host Template
 				if($row["parent_type"]=="hosttemplate"){
 					$tmpHostTemplate = NagiosHostTemplatePeer::getByName($row["parent_name"]);
 					foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance){
 						if($tmpHostInheritance->getNagiosHost()!=null){
 							// Delete if exists
 							$final = $ExportDiff->ModifyCfgFile($this->exportDir, $row["name"], $row["type"], $tmpHostInheritance->getNagiosHost()->getName(), 'host');			
-							$fp = @fopen($this->exportDir . "/objects/".$row["type"]."s.cfg", "w");
+							$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
 							fwrite($fp,$final);
 							fclose ($fp);
-							$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
+							$job->addNotice("Service ".$row["name"]." has been deleted on host ".$tmpHostInheritance->getNagiosHost()->getName());
 							
+							// Create object
 							if($row["action"]=='add' || $row["action"]=='modify'){
-								$objectName = ucfirst($row["type"]);
-						
-								//Create new object exporter
-								$classname='Nagios'.$objectName.'Exporter';
-								$fp = @fopen($this->exportDir."/objects/".$row["type"]."s.cfg", "a");
+								$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
 								
-								$objectExporter = new $classname($this, $fp);
+								$objectExporter = new NagiosServiceExporter($this, $fp);
 								
 								$object = NagiosServicePeer::getByHostTemplateAndDescription($row["parent_name"],$row["name"]);
 								
@@ -318,12 +314,14 @@ class NagiosExportEngine extends ExportEngine {
 								
 								if($object && $object_parent) {
 									$objectExporter->_exportService($object, 'host', $object_parent);
-									$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added on host ".$tmpHostInheritance->getNagiosHost()->getName());
+									$job->addNotice("Service ".$row["name"]." has been added on host ".$tmpHostInheritance->getNagiosHost()->getName());
 								}
 							}
 						}
 					}
-				}elseif($row["type"]=="hosttemplate"){
+				}
+				// Host Template
+				elseif($row["type"]=="hosttemplate"){
 					$tmpHostTemplate = NagiosHostTemplatePeer::getByName($row["name"]);
 					foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance){
 						if($tmpHostInheritance->getNagiosHost()!=null){
@@ -334,8 +332,8 @@ class NagiosExportEngine extends ExportEngine {
 							fclose ($fp);
 							$job->addNotice("Host ".$tmpHostInheritance->getNagiosHost()->getName()." has been deleted");
 							
+							// Create object
 							if($row["action"]=='add' || $row["action"]=='modify'){
-								//Create new object exporter
 								$fp = @fopen($this->exportDir."/objects/hosts.cfg", "a");
 								
 								$objectExporter = new NagiosHostExporter($this, $fp);
@@ -348,21 +346,25 @@ class NagiosExportEngine extends ExportEngine {
 							}
 						}
 					}
-				}elseif($row["type"]=="servicetemplate"){
+				}
+				// Service Template
+				elseif($row["type"]=="servicetemplate"){
 					$tmpServiceTemplate = NagiosServiceTemplatePeer::getByName($row["name"]);
 					foreach($tmpServiceTemplate->getNagiosServiceTemplateInheritancesRelatedByTargetTemplate() as $tmpServiceInheritance){
 						if($tmpServiceInheritance->getNagiosService() != null){
-							// Delete if exists
 							$service = $tmpServiceInheritance->getNagiosService();
+							
+							// Service in Host
 							if($service->getNagiosHost() != null) {
+								// Delete if exists
 								$final = $ExportDiff->ModifyCfgFile($this->exportDir, $service->getDescription(), 'service', $service->getNagiosHost(), "host");			
 								$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
 								fwrite($fp,$final);
 								fclose ($fp);
-								$job->addNotice("Service ".$service->getDescription()." has been deleted");
-								
+								$job->addNotice("Service ".$service->getDescription()." has been deleted on host ".$service->getNagiosHost()->getName());
+							
+								// Create object
 								if($row["action"]=='add' || $row["action"]=='modify'){
-									//Create new object exporter
 									$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
 									
 									$objectExporter = new NagiosServiceExporter($this, $fp);
@@ -375,31 +377,32 @@ class NagiosExportEngine extends ExportEngine {
 										$job->addNotice("Service ".$service->getDescription()." has been added on host ".$service->getNagiosHost()->getName());
 									}
 								}
-							}elseif($service->getNagiosHostTemplate()  != null){
+							}
+							// Service in Host Template
+							elseif($service->getNagiosHostTemplate()  != null){
 								$tmpHostTemplate = NagiosHostTemplatePeer::getByName($service->getNagiosHostTemplate()->getName());
 								foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance) {
-									$final = $ExportDiff->ModifyCfgFile($this->exportDir, $service->getDescription(), 'service', $tmpHostInheritance->getNagiosHost()->getName(), "host");			
-									$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
-									fwrite($fp,$final);
-									fclose ($fp);
-									$job->addNotice("Service ".$service->getDescription()." has been deleted");
-									
-									if($row["action"]=='add' || $row["action"]=='modify'){
-										//Create new object exporter
-										$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
+									if($tmpHostInheritance->getNagiosHost() != null) {
+										// Delete if exists
+										$final = $ExportDiff->ModifyCfgFile($this->exportDir, $service->getDescription(), 'service', $tmpHostInheritance->getNagiosHost()->getName(), "host");			
+										$fp = @fopen($this->exportDir . "/objects/services.cfg", "w");
+										fwrite($fp,$final);
+										fclose ($fp);
+										$job->addNotice("Service ".$service->getDescription()." has been deleted");
 										
-										$objectExporter = new NagiosServiceExporter($this, $fp);
-										
-										$object = NagiosServicePeer::getByHostTemplateAndDescription($tmpHostTemplate->getName(),$service->getDescription());
-										$object_parent = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());
-										
-										$job->addNotice("Cet objet : ".$object->getDescription());
-										$job->addNotice(" ou celui la : ".$object_parent->getName());
-										
-										if($object && $object_parent) {
-											$job->addNotice("Ca passe presque");
-											$objectExporter->_exportService($object, 'host', $object_parent);
-											$job->addNotice("Service ".$service->getDescription()." has been added on host ".$tmpHostInheritance->getNagiosHost()->getName());
+										// Create object
+										if($row["action"]=='add' || $row["action"]=='modify'){
+											$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
+											
+											$objectExporter = new NagiosServiceExporter($this, $fp);
+											
+											$object = NagiosServicePeer::getByHostTemplateAndDescription($tmpHostTemplate->getName(),$service->getDescription());
+											$object_parent = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());
+											
+											if($object && $object_parent) {
+												$objectExporter->_exportService($object, 'host', $object_parent);
+												$job->addNotice("Service ".$service->getDescription()." has been added on host ".$tmpHostInheritance->getNagiosHost()->getName());
+											}
 										}
 									}
 								}

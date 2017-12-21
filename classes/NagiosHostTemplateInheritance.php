@@ -65,7 +65,7 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 			}
 		}
 
-        return parent::delete($con);
+        parent::delete($con);
 
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
