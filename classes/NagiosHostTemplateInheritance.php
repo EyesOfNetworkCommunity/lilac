@@ -55,18 +55,26 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
     public function delete(PropelPDO $con = null) {
 
         $JobExport=new EoN_Job_Exporter();
-        if($con == null || $con == ""){
+		if($con == null || $con == ""){
 			if($this->getSourceHost() == null) {
 				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getSourceTemplate());
 				$JobExport->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+				$tmpHost = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
+				if($tmpHost->getNagiosServices() !== null) {
+					foreach($tmpHost->getNagiosServices() as $tmpService) {
+						$JobExport->insertAction($tmpService->getDescription(),"service","delete",$tmpTemplate->getName(),"hosttemplate");	
+					}
+				}
 			} else {
-				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());			
+				$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+				$JobExport->insertAction($tmpHost->getName(),"host","modify");
+				$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
 				if($tmpTemplate->getNagiosServices() !== null) {
 					foreach($tmpTemplate->getNagiosServices() as $tmpService) {
 						$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
 						$JobExport->insertAction($tmpService->getDescription(),"service","delete",$tmpHost->getName(),"host");	
 					}
-				}
+				}				
 			}
 		}
 
@@ -87,14 +95,22 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 				if($this->getSourceHost() == null) {
 					$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getSourceTemplate());
 					$JobExport->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+					$tmpHost = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
+					if($tmpHost->getNagiosServices() !== null) {
+						foreach($tmpHost->getNagiosServices() as $tmpService) {
+							$JobExport->insertAction($tmpService->getDescription(),"service","add",$tmpTemplate->getName(),"hosttemplate");	
+						}
+					}
 				} else {
-					$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());			
+					$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
+					$JobExport->insertAction($tmpHost->getName(),"host","modify");
+					$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($this->getTargetTemplate());
 					if($tmpTemplate->getNagiosServices() !== null) {
 						foreach($tmpTemplate->getNagiosServices() as $tmpService) {
 							$tmpHost = NagiosHostPeer::retrieveByPK($this->getSourceHost());
 							$JobExport->insertAction($tmpService->getDescription(),"service","add",$tmpHost->getName(),"host");	
 						}
-					}
+					}				
 				}
 			}
 			return parent::save($con);	// Okay, we've saved
