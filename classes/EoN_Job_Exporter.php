@@ -297,18 +297,18 @@ class EoN_Job_Exporter {
 
 	}
 	
-	function ModifyCfgFile($job,$MainConfigDir, $name, $type, $parent_name=false, $parent_type=false){
+	function ModifyCfgFile($job, $MainConfigDir, $name, $type, $parent_name=false, $parent_type=false){
 		
 		$file = $MainConfigDir."/objects/".$type."s.cfg";
 		$lecture=file_get_contents($file);
 		$writer=$lecture;		
 		
 		if($type == 'service'){
-			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\\n\\tservice_description\\t".$name."#", $writer, $matches, PREG_OFFSET_CAPTURE);
+			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\\n\\tservice_description\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}elseif($type == 'service' && $name=""){
-			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."#", $writer, $matches, PREG_OFFSET_CAPTURE);
+			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}else{
-			preg_match_all("#define ".$type." {\\n\\t".$type."_name\\t".$name."#", $writer, $matches, PREG_OFFSET_CAPTURE);
+			preg_match_all("#define ".$type." {\\n\\t".$type."_name\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}
 
 		preg_match_all("#\\n}#", $writer, $match, PREG_OFFSET_CAPTURE);

@@ -298,7 +298,7 @@ class NagiosExportEngine extends ExportEngine {
 					if($row["type"] == "host") {
 						
 						// Delete Host
-						$ExportDiff->ModifyCfgFile($job,$this->exportDir, $row["name"], "host");
+						$ExportDiff->ModifyCfgFile($job,$this->exportDir,$row["name"],'host');
 						
 						// Create Host
 						$fp = @fopen($this->exportDir."/objects/hosts.cfg", "a");
@@ -466,8 +466,12 @@ class NagiosExportEngine extends ExportEngine {
 				}
 				else{
 					// Delete if exists
-					$ExportDiff->ModifyCfgFile($job,$this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
-					
+					if(isset($row["parent_name"]) && isset($row["parent_type"])) {
+						$ExportDiff->ModifyCfgFile($job, $this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
+					} else {
+						$ExportDiff->ModifyCfgFile($job, $this->exportDir, $row["name"], $row["type"]);	
+					}
+					 
 					// Add / Modify
 					if($row["action"]=='add' || $row["action"]=='modify'){
 						if($row["type"]=='servicegroup' || $row["type"]=='contactgroup'){
@@ -509,8 +513,7 @@ class NagiosExportEngine extends ExportEngine {
 							}
 						}
 
-					}
-					
+					}	
 				}
 			}
 		}
