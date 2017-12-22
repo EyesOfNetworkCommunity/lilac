@@ -46,7 +46,15 @@ class NagiosHost extends BaseNagiosHost {
 			$JobExport->insertAction($this->getName(),'host',$action);
 		}
 		
-		return parent::save($con);
+		$save = parent::save($con);
+	
+		foreach ($this->getNagiosHostTemplateInheritances() as $relObj) {
+			if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+				$JobExport->insertAction($this->getName(),'host','modify',$relObj->getName(),'hosttemplate');
+			}
+		}
+		
+		return $save;
 	
 	}
 
