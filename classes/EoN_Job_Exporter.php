@@ -67,6 +67,9 @@ class EoN_Job_Exporter {
 							$deptype = "host";
 						} elseif($relObj->getNagiosHostTemplate() !== null) {
 							$tmpObj = $relObj->getNagiosHostTemplate();
+							foreach($tmpObj->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
+								$this->getInheritances($template_in,"modify");
+							}
 							$deptype = "hosttemplate";
 						}
 						break;
@@ -86,6 +89,9 @@ class EoN_Job_Exporter {
 							$parent_type="host";
 						} elseif($tmpService->getHostTemplate() !== null) {
 							$parent=NagiosHostTemplatePeer::retrieveByPK($tmpService->getHostTemplate());
+							foreach($tmpObj->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
+								$this->getInheritances($template_in,"modify");
+							}
 							$parent_type="hosttemplate";
 						}
 						break;
@@ -159,7 +165,7 @@ class EoN_Job_Exporter {
 			
 				// ContactGroups
 				$this->renameObject($tmpContact,"contactgroup",$tmpContact->getNagiosContactGroupMembers());
-				
+								
 				// Hosts
 				$this->renameObject($tmpContact,"hostmember",$tmpContact->getNagiosHostContactMembers());
 								

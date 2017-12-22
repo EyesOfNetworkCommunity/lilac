@@ -463,7 +463,8 @@ class NagiosExportEngine extends ExportEngine {
 							}
 						}
 					}
-				}else{
+				}
+				else{
 					// Delete if exists
 					$ExportDiff->ModifyCfgFile($job,$this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
 					
@@ -496,8 +497,9 @@ class NagiosExportEngine extends ExportEngine {
 								$objectExporter->_exportService($object, $row["parent_type"], $object_parent);
 								$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added on ".$row["parent_type"]." ".$row["parent_name"]);
 							}
-						// Other objects
-						} else {
+						}
+						// Other objects						
+						else {
 							$class = 'Nagios'.$objectName.'Peer';
 							$object_class = new $class();
 							$object = $object_class->getByName($row["name"]);
