@@ -105,7 +105,7 @@ class EoN_Job_Exporter {
 		$date=date("Y-m-d H:i:s");
 		
 		$this->insertAction($oldname,$type,'delete');
-				
+		
 		switch($type) {
 			
 			case "command":
@@ -213,12 +213,12 @@ class EoN_Job_Exporter {
 											
 				break;
 			
-			case "host":		
+			case "host":
 				sqlrequest($database_lilac,"DELETE FROM export_job_history 
 					WHERE parent_name='".$oldname."'
 					AND parent_type='".$type."'"
 				);
-			
+				
 				// Get Services List
 				$tmpHost = NagiosHostPeer::getByName($oldname);
 				if($tmpHost->getInheritedServices() !== null) {
@@ -272,10 +272,11 @@ class EoN_Job_Exporter {
 		}
 
 	}
-
-	function ModifyCfgFile($MainConfigDir, $name, $type, $parent_name, $parent_type){
+	
+	function ModifyCfgFile($job,$MainConfigDir, $name, $type, $parent_name=false, $parent_type=false){
 		
-		$lecture= file_get_contents($MainConfigDir."/objects/".$type."s.cfg");
+		$file = $MainConfigDir."/objects/".$type."s.cfg";
+		$lecture=file_get_contents($file);
 		$writer=$lecture;		
 		
 		if($type == 'service'){
@@ -297,7 +298,19 @@ class EoN_Job_Exporter {
 			$fin = $match[0][$z][1]+3;
 			$writer = substr_replace($writer,"",$debut,$fin-$debut);
 		}	
-		return $writer;
+		
+		// Write file
+		$fp = @fopen($file, "w");
+		fwrite($fp,$writer);
+		fclose ($fp);
+		
+		// Notice
+		if($type == 'service') {
+			$job->addNotice(ucfirst($type)." ".$name." has been deleted on ".$parent_type." ".$parent_name);
+		} else {
+			$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+		}
+
 	}
 	
 }
