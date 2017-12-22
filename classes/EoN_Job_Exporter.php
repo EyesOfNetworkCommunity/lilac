@@ -25,6 +25,21 @@ include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
 class EoN_Job_Exporter {
 
+	public function getInheritances($templateInheritance,$continue=true) {
+		if($templateInheritance->getSourceHost() == null) {
+			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getSourceTemplate());
+			$this->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+			$template_ins = $tmpTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate();
+			foreach($template_ins as $template_in) {
+				$this->getInheritances($template_in,false);
+			}
+		} elseif($continue) {
+			$tmpHost = NagiosHostPeer::retrieveByPK($templateInheritance->getSourceHost());
+			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getTargetTemplate());
+			$this->insertAction($tmpHost->getName(),"host","modify",$tmpTemplate->getName(),"hosttemplate");			
+		}
+	}
+
 	function renameObject($object,$dep_type,$dep_array) {
 		foreach ($dep_array as $relObj) {
 			$deptype = $dep_type;
@@ -57,6 +72,9 @@ class EoN_Job_Exporter {
 						break;
 					case "hosttemplate":
 						$tmpObj = NagiosHostTemplatePeer::retrieveByPK($relObj->getId());
+						foreach($tmpObj->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
+							$this->getInheritances($template_in,"modify");
+						}
 						break;
 					case "servicetemplate":
 						$tmpObj = NagiosServiceTemplatePeer::retrieveByPK($relObj->getId());
@@ -298,6 +316,9 @@ class EoN_Job_Exporter {
 			$fin = $match[0][$z][1]+3;
 			$writer = substr_replace($writer,"",$debut,$fin-$debut);
 		}	
+		
+		// Suppress line returns
+		$writer=str_replace("\n\n\n","\n", $writer);
 		
 		// Write file
 		$fp = @fopen($file, "w");

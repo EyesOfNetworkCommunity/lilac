@@ -51,28 +51,13 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 		}
 		return false;
 	}
-
-	private function getInheritances($JobExport,$templateInheritance,$continue=true) {
-		if($templateInheritance->getSourceHost() == null) {
-			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getSourceTemplate());
-			$JobExport->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
-			$template_ins = $tmpTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate();
-			foreach($template_ins as $template_in) {
-				$this->getInheritances($JobExport,$template_in,false);
-			}
-		} elseif($continue) {
-			$tmpHost = NagiosHostPeer::retrieveByPK($templateInheritance->getSourceHost());
-			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getTargetTemplate());
-			$JobExport->insertAction($tmpHost->getName(),"host","modify",$tmpTemplate->getName(),"hosttemplate");			
-		}
-	}
 	
     public function delete(PropelPDO $con = null) {
 
 		$templateInheritance = $this;
         $JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$this->getInheritances($JobExport,$templateInheritance,"delete");
+			$JobExport->getInheritances($templateInheritance,"delete");
 		}
 
         parent::delete($con);
@@ -90,7 +75,7 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 			$templateInheritance = $this;
 			$JobExport=new EoN_Job_Exporter();
 			if($con == null || $con == ""){
-				$this->getInheritances($JobExport,$templateInheritance,"add");
+				$JobExport->getInheritances($templateInheritance,"add");
 			}
 			return parent::save($con);	// Okay, we've saved
 		}

@@ -19,8 +19,8 @@ class NagiosTimeperiodExclude extends BaseNagiosTimeperiodExclude {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-                        $NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
-                        $JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 
 		return parent::delete($con);
@@ -31,8 +31,8 @@ class NagiosTimeperiodExclude extends BaseNagiosTimeperiodExclude {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-                        $NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
-                        $JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
 		}
 
 		return parent::save($con);

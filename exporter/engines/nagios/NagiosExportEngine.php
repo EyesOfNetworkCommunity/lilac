@@ -398,7 +398,7 @@ class NagiosExportEngine extends ExportEngine {
 							$tmpHost = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());
 							if($tmpHost->getInheritedServices() !== null) {
 								foreach($tmpHost->getInheritedServices() as $tmpService) {
-									$ExportDiff->ModifyCfgFile($this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
+									$ExportDiff->ModifyCfgFile($job,$this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
 								}
 							}
 							if($tmpHost->getNagiosServices() !== null) {
@@ -419,7 +419,7 @@ class NagiosExportEngine extends ExportEngine {
 							// Service in Host
 							if($service->getNagiosHost() != null) {
 								// Delete if exists
-								$ExportDiff->ModifyCfgFile($job,$this->exportDir, $service->getDescription(), 'service', $service->getNagiosHost(), "host");
+								$ExportDiff->ModifyCfgFile($job,$this->exportDir, $service->getDescription(), 'service', $service->getNagiosHost()->getName(), "host");
 							
 								// Create object
 								if($row["action"]=='add' || $row["action"]=='modify'){
@@ -437,7 +437,7 @@ class NagiosExportEngine extends ExportEngine {
 								}
 							}
 							// Service in Host Template
-							elseif($service->getNagiosHostTemplate()  != null){
+							elseif($service->getNagiosHostTemplate() != null){
 								$tmpHostTemplate = NagiosHostTemplatePeer::getByName($service->getNagiosHostTemplate()->getName());
 								foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance) {
 									if($tmpHostInheritance->getNagiosHost() != null) {
@@ -498,7 +498,9 @@ class NagiosExportEngine extends ExportEngine {
 							}
 						// Other objects
 						} else {
-							$object = call_user_func_array('Nagios'.$objectName.'Peer::getByName', array($row["name"]));
+							$class = 'Nagios'.$objectName.'Peer';
+							$object_class = new $class();
+							$object = $object_class->getByName($row["name"]);
 							if($object) {
 								$objectExporter->export($object);
 								$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added");

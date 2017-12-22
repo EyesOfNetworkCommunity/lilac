@@ -47,10 +47,15 @@ class NagiosServiceCheckCommandParameter extends BaseNagiosServiceCheckCommandPa
 				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
 			}elseif($this->getService() != null){
 				$object = NagiosServicePeer::retrieveByPK($this->getService());
-				$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
-				$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				if($object->getHost() != null){
+					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}elseif($object->getHostTemplate() != null){
+					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
+				}
 			}
-        	}
+		}
 
 		return parent::save($con);
 

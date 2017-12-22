@@ -20,7 +20,7 @@ class NagiosContactGroup extends BaseNagiosContactGroup {
 		$JobExport=new EoN_Job_Exporter();
 		$action = ($this->isNew()) ? "add" : "modify";
 		
-		if($action == "modify"){
+		if($action == "modify" && $v!=$this->getName()){
 			$JobExport->renameAction($v,$this->getName(),'contactgroup');
 		}
 		

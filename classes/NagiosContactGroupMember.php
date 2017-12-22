@@ -37,4 +37,12 @@ class NagiosContactGroupMember extends BaseNagiosContactGroupMember {
 
 	}
 	
+	public function copy($deepCopy = false) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$JobExport->insertAction($this->getNagiosContactGroup()->getName(),'contactgroup','modify');
+		return parent::copy($deepCopy);
+		
+	}
+	
 } // NagiosContactGroupMember
