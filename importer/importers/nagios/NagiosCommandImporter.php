@@ -116,7 +116,7 @@ class NagiosCommandImporter extends NagiosImporter {
 							}	
 						}
 						else {
-							call_user_method($this->fieldMethods[$key], $command, $value);
+							call_user_func(array($command, $this->fieldMethods[$key]), $value);
 						}
 					}
 			}

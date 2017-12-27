@@ -23,6 +23,7 @@
 include_once(LILAC_FS_ROOT . 'includes/eon.inc');
 include_once(LILAC_FS_ROOT . 'classes/EoN_Exporter.php');
 include_once(LILAC_FS_ROOT . 'classes/EoN_Importer.php');
+include_once(LILAC_FS_ROOT . 'classes/EoN_Job_Exporter.php');
 
 // EoN Actions Selection
 function EoN_Actions($type) {
@@ -154,12 +155,12 @@ function EoN_Actions_Process($object) {
 
 // EoN Generic Delete
 function EoN_Delete($object,$id) {
-
+	
 	global $error;
 	global $success;
 
 	$class="Nagios".$object."Peer";
-	$class=&new $class();
+	$class=new $class();
 	$a = $class->retrieveByPK($id);
 	$a->delete();
 	unset($a);
@@ -173,9 +174,9 @@ function EoN_Duplicate($object,$id) {
 	global $success;
 
 	$class="Nagios".$object."Peer";
-	$old=&new $class;
+	$old=new $class;
 	$old=$old->retrieveByPK($id);
-	$new=$old->copy(true);
+	$new=$old->duplicate();
 	if($object=="Service") {
 		$name=$old->getDescription();
 		$new->setDescription($name."-".rand(1000,9999));

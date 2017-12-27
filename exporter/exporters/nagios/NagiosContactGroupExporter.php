@@ -10,16 +10,20 @@ class NagiosContactGroupExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function export() {
+	public function export($objectDiff=false) {
 		// Grab our export job
 		$engine = $this->getEngine();
 		$job = $engine->getJob();
 		$job->addNotice("NagiosContactGroupExporter attempting to export contact configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosContactGroupExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		$contactgroups = NagiosContactGroupPeer::doSelect(new Criteria());
+		if(!$objectDiff){
+			fputs($fp, "# Written by NagiosContactGroupExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$contactgroups = NagiosContactGroupPeer::doSelect(new Criteria());
+		} else {
+			$contactgroups[] = $objectDiff;
+		}
 		
 		foreach($contactgroups as $contactgroup) {
 			fputs($fp, "define contactgroup {\n");

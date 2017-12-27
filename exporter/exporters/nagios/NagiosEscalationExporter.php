@@ -95,6 +95,11 @@ class NagiosEscalationExporter extends NagiosExporter {
 		
 		if($escalation->getEscalationOptionsUp() != null || $escalation->getEscalationOptionsDown() != null || $escalation->getEscalationOptionsUnreachable() != null || $escalation->getEscalationOptionsOk() != null || $escalation->getEscalationOptionsWarning() != null || $escalation->getEscalationOptionsUnknown() != null || $escalation->getEscalationOptionsCritical() != null) {
 			fputs($fp, "\tescalation_options\t");
+			
+			/*
+			 * Host / Hostgroup States
+			 */
+			
 			if($escalation->getEscalationOptionsUp()) {
 				fputs($fp, "r");
 				if($escalation->getEscalationOptionsDown() || $escalation->getEscalationOptionsUnreachable() || $escalation->getEscalationOptionsOk() || $escalation->getEscalationOptionsWarning() || $escalation->getEscalationOptionsUnknown() || $escalation->getEscalationOptionsCritical() )
@@ -110,8 +115,13 @@ class NagiosEscalationExporter extends NagiosExporter {
 				if($escalation->getEscalationOptionsOk() || $escalation->getEscalationOptionsWarning() || $escalation->getEscalationOptionsUnknown() || $escalation->getEscalationOptionsCritical() )
 					fputs($fp, ",");
 			}
+			
+			/*
+			 * Service States
+			 */
+			
 			if($escalation->getEscalationOptionsOk()) {
-				fputs($fp, "o");
+				fputs($fp, "r");
 					if($escalation->getEscalationOptionsWarning() || $escalation->getEscalationOptionsUnknown() || $escalation->getEscalationOptionsCritical() )
 						fputs($fp, ",");
 			}
@@ -178,7 +188,6 @@ class NagiosEscalationExporter extends NagiosExporter {
 				}
 				
 				$c = new Criteria();
-				$c->add(NagiosEscalationPeer::HOST, $host->getId());
 				$c->add(NagiosEscalationPeer::SERVICE, $service->getId());
 				$serviceEscalations = NagiosEscalationPeer::doSelect($c);
 				foreach($serviceEscalations as $escalation) {

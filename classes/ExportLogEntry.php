@@ -1,6 +1,5 @@
 <?php
 
-require_once 'om/BaseExportLogEntry.php';
 
 
 /**
@@ -12,15 +11,15 @@ require_once 'om/BaseExportLogEntry.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class ExportLogEntry extends BaseExportLogEntry {
-
+	
 	const TYPE_NOTICE = 1;
 	const TYPE_WARNING = 2;
 	const TYPE_ERROR = 3;
 
-	public function isValidType($type) {
+	public static function isValidType($type) {
 		return true;
 		if($type != ImportLogEntry::TYPE_NOTICE &&
 			$type != ImportLogEntry::TYPE_WARNING &&
@@ -41,5 +40,5 @@ class ExportLogEntry extends BaseExportLogEntry {
 			return "ERROR";
 		}
 	}	
-	
+
 } // ExportLogEntry

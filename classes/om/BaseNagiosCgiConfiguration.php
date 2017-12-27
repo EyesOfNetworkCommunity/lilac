@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_cgi_configuration' table.
  *
  * CGI Configuration
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persistent {
+abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosCgiConfigurationPeer';
 
 	/**
 	 * The Peer class.
@@ -193,6 +199,42 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	protected $splunk_url;
 
 	/**
+	 * The value for the authorized_for_read_only field.
+	 * @var        string
+	 */
+	protected $authorized_for_read_only;
+
+	/**
+	 * The value for the color_transparency_index_r field.
+	 * @var        int
+	 */
+	protected $color_transparency_index_r;
+
+	/**
+	 * The value for the color_transparency_index_g field.
+	 * @var        int
+	 */
+	protected $color_transparency_index_g;
+
+	/**
+	 * The value for the color_transparency_index_b field.
+	 * @var        int
+	 */
+	protected $color_transparency_index_b;
+
+	/**
+	 * The value for the result_limit field.
+	 * @var        int
+	 */
+	protected $result_limit;
+
+	/**
+	 * The value for the nagios_check_command field.
+	 * @var        string
+	 */
+	protected $nagios_check_command;
+
+	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -205,26 +247,6 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosCgiConfiguration object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -517,6 +539,66 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	}
 
 	/**
+	 * Get the [authorized_for_read_only] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getAuthorizedForReadOnly()
+	{
+		return $this->authorized_for_read_only;
+	}
+
+	/**
+	 * Get the [color_transparency_index_r] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getColorTransparencyIndexR()
+	{
+		return $this->color_transparency_index_r;
+	}
+
+	/**
+	 * Get the [color_transparency_index_g] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getColorTransparencyIndexG()
+	{
+		return $this->color_transparency_index_g;
+	}
+
+	/**
+	 * Get the [color_transparency_index_b] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getColorTransparencyIndexB()
+	{
+		return $this->color_transparency_index_b;
+	}
+
+	/**
+	 * Get the [result_limit] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getResultLimit()
+	{
+		return $this->result_limit;
+	}
+
+	/**
+	 * Get the [nagios_check_command] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getNagiosCheckCommand()
+	{
+		return $this->nagios_check_command;
+	}
+
+	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
@@ -577,15 +659,23 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	} // setUrlHtmlPath()
 
 	/**
-	 * Set the value of [use_authentication] column.
+	 * Sets the value of the [use_authentication] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
 	 */
 	public function setUseAuthentication($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_authentication !== $v) {
@@ -757,15 +847,23 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	} // setAuthorizedForAllServiceCommands()
 
 	/**
-	 * Set the value of [lock_author_names] column.
+	 * Sets the value of the [lock_author_names] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
 	 */
 	public function setLockAuthorNames($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->lock_author_names !== $v) {
@@ -997,15 +1095,23 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	} // setPingSyntax()
 
 	/**
-	 * Set the value of [escape_html_tags] column.
+	 * Sets the value of the [escape_html_tags] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
 	 */
 	public function setEscapeHtmlTags($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escape_html_tags !== $v) {
@@ -1057,15 +1163,23 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	} // setActionUrlTarget()
 
 	/**
-	 * Set the value of [enable_splunk_integration] column.
+	 * Sets the value of the [enable_splunk_integration] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableSplunkIntegration($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_splunk_integration !== $v) {
@@ -1097,6 +1211,126 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	} // setSplunkUrl()
 
 	/**
+	 * Set the value of [authorized_for_read_only] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setAuthorizedForReadOnly($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->authorized_for_read_only !== $v) {
+			$this->authorized_for_read_only = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::AUTHORIZED_FOR_READ_ONLY;
+		}
+
+		return $this;
+	} // setAuthorizedForReadOnly()
+
+	/**
+	 * Set the value of [color_transparency_index_r] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setColorTransparencyIndexR($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->color_transparency_index_r !== $v) {
+			$this->color_transparency_index_r = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_R;
+		}
+
+		return $this;
+	} // setColorTransparencyIndexR()
+
+	/**
+	 * Set the value of [color_transparency_index_g] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setColorTransparencyIndexG($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->color_transparency_index_g !== $v) {
+			$this->color_transparency_index_g = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_G;
+		}
+
+		return $this;
+	} // setColorTransparencyIndexG()
+
+	/**
+	 * Set the value of [color_transparency_index_b] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setColorTransparencyIndexB($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->color_transparency_index_b !== $v) {
+			$this->color_transparency_index_b = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_B;
+		}
+
+		return $this;
+	} // setColorTransparencyIndexB()
+
+	/**
+	 * Set the value of [result_limit] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setResultLimit($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->result_limit !== $v) {
+			$this->result_limit = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::RESULT_LIMIT;
+		}
+
+		return $this;
+	} // setResultLimit()
+
+	/**
+	 * Set the value of [nagios_check_command] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     NagiosCgiConfiguration The current object (for fluent API support)
+	 */
+	public function setNagiosCheckCommand($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->nagios_check_command !== $v) {
+			$this->nagios_check_command = $v;
+			$this->modifiedColumns[] = NagiosCgiConfigurationPeer::NAGIOS_CHECK_COMMAND;
+		}
+
+		return $this;
+	} // setNagiosCheckCommand()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1106,11 +1340,6 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -1162,6 +1391,12 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 			$this->action_url_target = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
 			$this->enable_splunk_integration = ($row[$startcol + 27] !== null) ? (boolean) $row[$startcol + 27] : null;
 			$this->splunk_url = ($row[$startcol + 28] !== null) ? (string) $row[$startcol + 28] : null;
+			$this->authorized_for_read_only = ($row[$startcol + 29] !== null) ? (string) $row[$startcol + 29] : null;
+			$this->color_transparency_index_r = ($row[$startcol + 30] !== null) ? (int) $row[$startcol + 30] : null;
+			$this->color_transparency_index_g = ($row[$startcol + 31] !== null) ? (int) $row[$startcol + 31] : null;
+			$this->color_transparency_index_b = ($row[$startcol + 32] !== null) ? (int) $row[$startcol + 32] : null;
+			$this->result_limit = ($row[$startcol + 33] !== null) ? (int) $row[$startcol + 33] : null;
+			$this->nagios_check_command = ($row[$startcol + 34] !== null) ? (string) $row[$startcol + 34] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1170,8 +1405,7 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 29; // 29 = NagiosCgiConfigurationPeer::NUM_COLUMNS - NagiosCgiConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 35; // 35 = NagiosCgiConfigurationPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosCgiConfiguration object", $e);
@@ -1254,12 +1488,20 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosCgiConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosCgiConfigurationPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosCgiConfigurationQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -1288,12 +1530,29 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosCgiConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosCgiConfigurationPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosCgiConfigurationPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -1325,16 +1584,17 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosCgiConfigurationPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosCgiConfigurationPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosCgiConfigurationPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
-					$affectedRows += NagiosCgiConfigurationPeer::doUpdate($this, $con);
+					$affectedRows = NagiosCgiConfigurationPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -1531,6 +1791,24 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 			case 28:
 				return $this->getSplunkUrl();
 				break;
+			case 29:
+				return $this->getAuthorizedForReadOnly();
+				break;
+			case 30:
+				return $this->getColorTransparencyIndexR();
+				break;
+			case 31:
+				return $this->getColorTransparencyIndexG();
+				break;
+			case 32:
+				return $this->getColorTransparencyIndexB();
+				break;
+			case 33:
+				return $this->getResultLimit();
+				break;
+			case 34:
+				return $this->getNagiosCheckCommand();
+				break;
 			default:
 				return null;
 				break;
@@ -1543,13 +1821,20 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
 	{
+		if (isset($alreadyDumpedObjects['NagiosCgiConfiguration'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosCgiConfiguration'][$this->getPrimaryKey()] = true;
 		$keys = NagiosCgiConfigurationPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1581,6 +1866,12 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 			$keys[26] => $this->getActionUrlTarget(),
 			$keys[27] => $this->getEnableSplunkIntegration(),
 			$keys[28] => $this->getSplunkUrl(),
+			$keys[29] => $this->getAuthorizedForReadOnly(),
+			$keys[30] => $this->getColorTransparencyIndexR(),
+			$keys[31] => $this->getColorTransparencyIndexG(),
+			$keys[32] => $this->getColorTransparencyIndexB(),
+			$keys[33] => $this->getResultLimit(),
+			$keys[34] => $this->getNagiosCheckCommand(),
 		);
 		return $result;
 	}
@@ -1699,6 +1990,24 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 			case 28:
 				$this->setSplunkUrl($value);
 				break;
+			case 29:
+				$this->setAuthorizedForReadOnly($value);
+				break;
+			case 30:
+				$this->setColorTransparencyIndexR($value);
+				break;
+			case 31:
+				$this->setColorTransparencyIndexG($value);
+				break;
+			case 32:
+				$this->setColorTransparencyIndexB($value);
+				break;
+			case 33:
+				$this->setResultLimit($value);
+				break;
+			case 34:
+				$this->setNagiosCheckCommand($value);
+				break;
 		} // switch()
 	}
 
@@ -1752,6 +2061,12 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 		if (array_key_exists($keys[26], $arr)) $this->setActionUrlTarget($arr[$keys[26]]);
 		if (array_key_exists($keys[27], $arr)) $this->setEnableSplunkIntegration($arr[$keys[27]]);
 		if (array_key_exists($keys[28], $arr)) $this->setSplunkUrl($arr[$keys[28]]);
+		if (array_key_exists($keys[29], $arr)) $this->setAuthorizedForReadOnly($arr[$keys[29]]);
+		if (array_key_exists($keys[30], $arr)) $this->setColorTransparencyIndexR($arr[$keys[30]]);
+		if (array_key_exists($keys[31], $arr)) $this->setColorTransparencyIndexG($arr[$keys[31]]);
+		if (array_key_exists($keys[32], $arr)) $this->setColorTransparencyIndexB($arr[$keys[32]]);
+		if (array_key_exists($keys[33], $arr)) $this->setResultLimit($arr[$keys[33]]);
+		if (array_key_exists($keys[34], $arr)) $this->setNagiosCheckCommand($arr[$keys[34]]);
 	}
 
 	/**
@@ -1792,6 +2107,12 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 		if ($this->isColumnModified(NagiosCgiConfigurationPeer::ACTION_URL_TARGET)) $criteria->add(NagiosCgiConfigurationPeer::ACTION_URL_TARGET, $this->action_url_target);
 		if ($this->isColumnModified(NagiosCgiConfigurationPeer::ENABLE_SPLUNK_INTEGRATION)) $criteria->add(NagiosCgiConfigurationPeer::ENABLE_SPLUNK_INTEGRATION, $this->enable_splunk_integration);
 		if ($this->isColumnModified(NagiosCgiConfigurationPeer::SPLUNK_URL)) $criteria->add(NagiosCgiConfigurationPeer::SPLUNK_URL, $this->splunk_url);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_READ_ONLY)) $criteria->add(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_READ_ONLY, $this->authorized_for_read_only);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_R)) $criteria->add(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_R, $this->color_transparency_index_r);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_G)) $criteria->add(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_G, $this->color_transparency_index_g);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_B)) $criteria->add(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_B, $this->color_transparency_index_b);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::RESULT_LIMIT)) $criteria->add(NagiosCgiConfigurationPeer::RESULT_LIMIT, $this->result_limit);
+		if ($this->isColumnModified(NagiosCgiConfigurationPeer::NAGIOS_CHECK_COMMAND)) $criteria->add(NagiosCgiConfigurationPeer::NAGIOS_CHECK_COMMAND, $this->nagios_check_command);
 
 		return $criteria;
 	}
@@ -1807,7 +2128,6 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosCgiConfigurationPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosCgiConfigurationPeer::ID, $this->id);
 
 		return $criteria;
@@ -1834,6 +2154,15 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -1841,72 +2170,49 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	 *
 	 * @param      object $copyObj An object of NagiosCgiConfiguration (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setPhysicalHtmlPath($this->physical_html_path);
-
-		$copyObj->setUrlHtmlPath($this->url_html_path);
-
-		$copyObj->setUseAuthentication($this->use_authentication);
-
-		$copyObj->setDefaultUserName($this->default_user_name);
-
-		$copyObj->setAuthorizedForSystemInformation($this->authorized_for_system_information);
-
-		$copyObj->setAuthorizedForSystemCommands($this->authorized_for_system_commands);
-
-		$copyObj->setAuthorizedForConfigurationInformation($this->authorized_for_configuration_information);
-
-		$copyObj->setAuthorizedForAllHosts($this->authorized_for_all_hosts);
-
-		$copyObj->setAuthorizedForAllHostCommands($this->authorized_for_all_host_commands);
-
-		$copyObj->setAuthorizedForAllServices($this->authorized_for_all_services);
-
-		$copyObj->setAuthorizedForAllServiceCommands($this->authorized_for_all_service_commands);
-
-		$copyObj->setLockAuthorNames($this->lock_author_names);
-
-		$copyObj->setStatusmapBackgroundImage($this->statusmap_background_image);
-
-		$copyObj->setDefaultStatusmapLayout($this->default_statusmap_layout);
-
-		$copyObj->setStatuswrlInclude($this->statuswrl_include);
-
-		$copyObj->setDefaultStatuswrlLayout($this->default_statuswrl_layout);
-
-		$copyObj->setRefreshRate($this->refresh_rate);
-
-		$copyObj->setHostUnreachableSound($this->host_unreachable_sound);
-
-		$copyObj->setHostDownSound($this->host_down_sound);
-
-		$copyObj->setServiceCriticalSound($this->service_critical_sound);
-
-		$copyObj->setServiceWarningSound($this->service_warning_sound);
-
-		$copyObj->setServiceUnknownSound($this->service_unknown_sound);
-
-		$copyObj->setPingSyntax($this->ping_syntax);
-
-		$copyObj->setEscapeHtmlTags($this->escape_html_tags);
-
-		$copyObj->setNotesUrlTarget($this->notes_url_target);
-
-		$copyObj->setActionUrlTarget($this->action_url_target);
-
-		$copyObj->setEnableSplunkIntegration($this->enable_splunk_integration);
-
-		$copyObj->setSplunkUrl($this->splunk_url);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setPhysicalHtmlPath($this->getPhysicalHtmlPath());
+		$copyObj->setUrlHtmlPath($this->getUrlHtmlPath());
+		$copyObj->setUseAuthentication($this->getUseAuthentication());
+		$copyObj->setDefaultUserName($this->getDefaultUserName());
+		$copyObj->setAuthorizedForSystemInformation($this->getAuthorizedForSystemInformation());
+		$copyObj->setAuthorizedForSystemCommands($this->getAuthorizedForSystemCommands());
+		$copyObj->setAuthorizedForConfigurationInformation($this->getAuthorizedForConfigurationInformation());
+		$copyObj->setAuthorizedForAllHosts($this->getAuthorizedForAllHosts());
+		$copyObj->setAuthorizedForAllHostCommands($this->getAuthorizedForAllHostCommands());
+		$copyObj->setAuthorizedForAllServices($this->getAuthorizedForAllServices());
+		$copyObj->setAuthorizedForAllServiceCommands($this->getAuthorizedForAllServiceCommands());
+		$copyObj->setLockAuthorNames($this->getLockAuthorNames());
+		$copyObj->setStatusmapBackgroundImage($this->getStatusmapBackgroundImage());
+		$copyObj->setDefaultStatusmapLayout($this->getDefaultStatusmapLayout());
+		$copyObj->setStatuswrlInclude($this->getStatuswrlInclude());
+		$copyObj->setDefaultStatuswrlLayout($this->getDefaultStatuswrlLayout());
+		$copyObj->setRefreshRate($this->getRefreshRate());
+		$copyObj->setHostUnreachableSound($this->getHostUnreachableSound());
+		$copyObj->setHostDownSound($this->getHostDownSound());
+		$copyObj->setServiceCriticalSound($this->getServiceCriticalSound());
+		$copyObj->setServiceWarningSound($this->getServiceWarningSound());
+		$copyObj->setServiceUnknownSound($this->getServiceUnknownSound());
+		$copyObj->setPingSyntax($this->getPingSyntax());
+		$copyObj->setEscapeHtmlTags($this->getEscapeHtmlTags());
+		$copyObj->setNotesUrlTarget($this->getNotesUrlTarget());
+		$copyObj->setActionUrlTarget($this->getActionUrlTarget());
+		$copyObj->setEnableSplunkIntegration($this->getEnableSplunkIntegration());
+		$copyObj->setSplunkUrl($this->getSplunkUrl());
+		$copyObj->setAuthorizedForReadOnly($this->getAuthorizedForReadOnly());
+		$copyObj->setColorTransparencyIndexR($this->getColorTransparencyIndexR());
+		$copyObj->setColorTransparencyIndexG($this->getColorTransparencyIndexG());
+		$copyObj->setColorTransparencyIndexB($this->getColorTransparencyIndexB());
+		$copyObj->setResultLimit($this->getResultLimit());
+		$copyObj->setNagiosCheckCommand($this->getNagiosCheckCommand());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1948,19 +2254,96 @@ abstract class BaseNagiosCgiConfiguration extends BaseObject  implements Persist
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->physical_html_path = null;
+		$this->url_html_path = null;
+		$this->use_authentication = null;
+		$this->default_user_name = null;
+		$this->authorized_for_system_information = null;
+		$this->authorized_for_system_commands = null;
+		$this->authorized_for_configuration_information = null;
+		$this->authorized_for_all_hosts = null;
+		$this->authorized_for_all_host_commands = null;
+		$this->authorized_for_all_services = null;
+		$this->authorized_for_all_service_commands = null;
+		$this->lock_author_names = null;
+		$this->statusmap_background_image = null;
+		$this->default_statusmap_layout = null;
+		$this->statuswrl_include = null;
+		$this->default_statuswrl_layout = null;
+		$this->refresh_rate = null;
+		$this->host_unreachable_sound = null;
+		$this->host_down_sound = null;
+		$this->service_critical_sound = null;
+		$this->service_warning_sound = null;
+		$this->service_unknown_sound = null;
+		$this->ping_syntax = null;
+		$this->escape_html_tags = null;
+		$this->notes_url_target = null;
+		$this->action_url_target = null;
+		$this->enable_splunk_integration = null;
+		$this->splunk_url = null;
+		$this->authorized_for_read_only = null;
+		$this->color_transparency_index_r = null;
+		$this->color_transparency_index_g = null;
+		$this->color_transparency_index_b = null;
+		$this->result_limit = null;
+		$this->nagios_check_command = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosCgiConfigurationPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosCgiConfiguration

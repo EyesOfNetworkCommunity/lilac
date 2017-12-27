@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosTimeperiodEntry.php';
 
 
 /**
@@ -12,19 +11,32 @@ require 'om/BaseNagiosTimeperiodEntry.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosTimeperiodEntry extends BaseNagiosTimeperiodEntry {
 
-	/**
-	 * Initializes internal state of NagiosTimeperiodEntry object.
-	 * @see        parent::__construct()
-	 */
-	public function __construct()
-	{
-		// Make sure that parent constructor is always invoked, since that
-		// is where any default values for this object are set.
-		parent::__construct();
+	public function delete(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
+		}
+		
+		return parent::delete($con);
+
 	}
 
+	public function save(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$NagiosTimeperiod = NagiosTimeperiodPeer::retrieveByPK($this->getTimeperiodId());
+			$JobExport->insertAction($NagiosTimeperiod->getName(),'timeperiod','modify');
+		}
+
+		return parent::save($con);
+
+	}
+	
 } // NagiosTimeperiodEntry

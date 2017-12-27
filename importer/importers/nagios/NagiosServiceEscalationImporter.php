@@ -1,5 +1,6 @@
 <?php
 require_once('NagiosEscalation.php');
+require_once('NagiosEscalationContactgroup.php');
 
 class NagiosServiceEscalationImporter extends NagiosImporter {
 
@@ -225,7 +226,7 @@ class NagiosServiceEscalationImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $escalation, $value);
+					call_user_func(array($escalation, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

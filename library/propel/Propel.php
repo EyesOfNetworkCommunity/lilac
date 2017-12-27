@@ -1,27 +1,12 @@
 <?php
-/*
- *  $Id: Propel.php 1105 2009-02-23 11:32:52Z v-dogg $
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information please see
- * <http://propel.phpdb.org>.
- */
 
-require 'propel/PropelException.php';
-require 'propel/adapter/DBAdapter.php';
-require 'propel/util/PropelPDO.php';
+/**
+ * This file is part of the Propel package.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @license    MIT License
+ */
 
 /**
  * Propel's main resource pool and initialization & configuration class.
@@ -37,11 +22,16 @@ require 'propel/util/PropelPDO.php';
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
  * @author     Henning P. Schmiedehausen <hps@intermeta.de> (Torque)
  * @author     Kurt Schrader <kschrader@karmalab.org> (Torque)
- * @version    $Revision: 1105 $
- * @package    propel
+ * @version    $Revision: 2319 $
+ * @package    propel.runtime
  */
 class Propel
 {
+	/**
+	 * The Propel version.
+	 */
+	const VERSION = '1.6.1';
+	
 	/**
 	 * A constant for <code>default</code>.
 	 */
@@ -86,11 +76,6 @@ class Propel
 	 * A constant defining 'Debug-level messages' logging level
 	 */
 	const LOG_DEBUG = 7;
-
-	/**
-	 * The Propel version.
-	 */
-	const VERSION = '1.3.0-dev';
 
 	/**
 	 * The class name for a PDO object.
@@ -168,61 +153,104 @@ class Propel
 	private static $forceMasterConnection = false;
 
 	/**
+	 * @var        string Base directory to use for autoloading. Initialized in self::initBaseDir()
+	 */
+  protected static $baseDir;
+  
+	/**
 	 * @var        array A map of class names and their file paths for autoloading
 	 */
-	private static $autoloadMap = array(
-		'PropelException' => 'propel/PropelException.php',
+	protected static $autoloadMap = array(
 
-		'DBAdapter' => 'propel/adapter/DBAdapter.php',
-		'DBMSSQL' => 'propel/adapter/DBMSSQL.php',
-		'DBMySQL' => 'propel/adapter/DBMySQL.php',
-		'DBMySQLi' => 'propel/adapter/DBMySQLi.php',
-		'DBNone' => 'propel/adapter/DBNone.php',
-		'DBOracle' => 'propel/adapter/DBOracle.php',
-		'DBPostgres' => 'propel/adapter/DBPostgres.php',
-		'DBSQLite' => 'propel/adapter/DBSQLite.php',
-		'DBSybase' => 'propel/adapter/DBSybase.php',
+		'DBAdapter'           => 'adapter/DBAdapter.php',
+		'DBMSSQL'             => 'adapter/DBMSSQL.php',
+		'MssqlPropelPDO'      => 'adapter/MSSQL/MssqlPropelPDO.php',
+		'MssqlDebugPDO'       => 'adapter/MSSQL/MssqlDebugPDO.php',
+		'MssqlDateTime'       => 'adapter/MSSQL/MssqlDateTime.class.php',
+		'DBMySQL'             => 'adapter/DBMySQL.php',
+		'DBMySQLi'            => 'adapter/DBMySQLi.php',
+		'DBNone'              => 'adapter/DBNone.php',
+		'DBOracle'            => 'adapter/DBOracle.php',
+		'DBPostgres'          => 'adapter/DBPostgres.php',
+		'DBSQLite'            => 'adapter/DBSQLite.php',
+		'DBSybase'            => 'adapter/DBSybase.php',
+		'DBSQLSRV'            => 'adapter/DBSQLSRV.php',
 
-		'BasicLogger' => 'propel/logger/BasicLogger.php',
-		'MojaviLogAdapter' => 'propel/logger/MojaviLogAdapter.php',
+		'PropelArrayCollection' => 'collection/PropelArrayCollection.php',
+		'PropelCollection'    => 'collection/PropelCollection.php',
+		'PropelObjectCollection' => 'collection/PropelObjectCollection.php',
+		'PropelOnDemandCollection' => 'collection/PropelOnDemandCollection.php',
+		'PropelOnDemandIterator' => 'collection/PropelOnDemandIterator.php',
 
-		'ColumnMap' => 'propel/map/ColumnMap.php',
-		'DatabaseMap' => 'propel/map/DatabaseMap.php',
-		'MapBuilder' => 'propel/map/MapBuilder.php',
-		'TableMap' => 'propel/map/TableMap.php',
-		'ValidatorMap' => 'propel/map/ValidatorMap.php',
+		'PropelConfiguration' => 'config/PropelConfiguration.php',
+		'PropelConfigurationIterator' => 'config/PropelConfigurationIterator.php',
 
-		'BaseObject' => 'propel/om/BaseObject.php',
-		'NodeObject' => 'propel/om/NodeObject.php',
-		'Persistent' => 'propel/om/Persistent.php',
-		'PreOrderNodeIterator' => 'propel/om/PreOrderNodeIterator.php',
-		'NestedSetPreOrderNodeIterator' => 'propel/om/NestedSetPreOrderNodeIterator.php',
-		'NestedSetRecursiveIterator' => 'propel/om/NestedSetRecursiveIterator.php',
+		'PropelPDO'           => 'connection/PropelPDO.php',
+		'DebugPDO'            => 'connection/DebugPDO.php',
+		'DebugPDOStatement'   => 'connection/DebugPDOStatement.php',
 
-		'BasePeer' => 'propel/util/BasePeer.php',
-		'NodePeer' => 'propel/util/NodePeer.php',
-		'Criteria' => 'propel/util/Criteria.php',
-		'PeerInfo' => 'propel/util/PeerInfo.php',
-		'PropelColumnTypes' => 'propel/util/PropelColumnTypes.php',
-		'PropelConfiguration' => 'propel/util/PropelConfiguration.php',
-		'PropelConfigurationIterator' => 'propel/util/PropelConfigurationIterator.php',
-		'PropelPDO' => 'propel/util/PropelPDO.php',
-		'PropelPager' => 'propel/util/PropelPager.php',
-		'PropelDateTime' => 'propel/util/PropelDateTime.php',
-		'DebugPDO' => 'propel/util/DebugPDO.php',
-		'DebugPDOStatement' => 'propel/util/DebugPDOStatement.php',
+		'PropelException'     => 'exception/PropelException.php',
+		
+		'ModelWith'           => 'formatter/ModelWith.php',
+		'PropelArrayFormatter' => 'formatter/PropelArrayFormatter.php',
+		'PropelFormatter'     => 'formatter/PropelFormatter.php',
+		'PropelObjectFormatter' => 'formatter/PropelObjectFormatter.php',
+		'PropelOnDemandFormatter' => 'formatter/PropelOnDemandFormatter.php',
+		'PropelStatementFormatter' => 'formatter/PropelStatementFormatter.php',
+		'PropelSimpleArrayFormatter' => 'formatter/PropelSimpleArrayFormatter.php',
+		
+		'BasicLogger'         => 'logger/BasicLogger.php',
+		'MojaviLogAdapter'    => 'logger/MojaviLogAdapter.php',
 
-		'BasicValidator' => 'propel/validator/BasicValidator.php',
-		'MatchValidator' => 'propel/validator/MatchValidator.php',
-		'MaxLengthValidator' => 'propel/validator/MaxLengthValidator.php',
-		'MaxValueValidator' => 'propel/validator/MaxValueValidator.php',
-		'MinLengthValidator' => 'propel/validator/MinLengthValidator.php',
-		'MinValueValidator' => 'propel/validator/MinValueValidator.php',
-		'NotMatchValidator' => 'propel/validator/NotMatchValidator.php',
-		'RequiredValidator' => 'propel/validator/RequiredValidator.php',
-		'UniqueValidator' => 'propel/validator/UniqueValidator.php',
-		'ValidValuesValidator' => 'propel/validator/ValidValuesValidator.php',
-		'ValidationFailed' => 'propel/validator/ValidationFailed.php',
+		'ColumnMap'           => 'map/ColumnMap.php',
+		'DatabaseMap'         => 'map/DatabaseMap.php',
+		'TableMap'            => 'map/TableMap.php',
+		'RelationMap'         => 'map/RelationMap.php',
+		'ValidatorMap'        => 'map/ValidatorMap.php',
+
+		'BaseObject'          => 'om/BaseObject.php',
+		'NodeObject'          => 'om/NodeObject.php',
+		'Persistent'          => 'om/Persistent.php',
+		'PreOrderNodeIterator' => 'om/PreOrderNodeIterator.php',
+		'NestedSetPreOrderNodeIterator' => 'om/NestedSetPreOrderNodeIterator.php',
+		'NestedSetRecursiveIterator' => 'om/NestedSetRecursiveIterator.php',
+
+		'PropelCSVParser'     => 'parser/PropelCSVParser.php',
+		'PropelJSONParser'    => 'parser/PropelJSONParser.php',
+		'PropelParser'        => 'parser/PropelParser.php',
+		'PropelXMLParser'     => 'parser/PropelXMLParser.php',
+		'PropelYAMLParser'    => 'parser/PropelYAMLParser.php',
+		
+		'Criteria'            => 'query/Criteria.php',
+		'Criterion'           => 'query/Criterion.php',
+		'CriterionIterator'   => 'query/CriterionIterator.php',
+		'Join'                => 'query/Join.php',
+		'ModelCriteria'       => 'query/ModelCriteria.php',
+		'ModelCriterion'      => 'query/ModelCriterion.php',
+		'ModelJoin'           => 'query/ModelJoin.php',
+		'PropelQuery'         => 'query/PropelQuery.php',
+
+		'BasePeer'            => 'util/BasePeer.php',
+		'NodePeer'            => 'util/NodePeer.php',
+		'PeerInfo'            => 'util/PeerInfo.php',
+		'PropelAutoloader'    => 'util/PropelAutoloader.php',
+		'PropelColumnTypes'   => 'util/PropelColumnTypes.php',
+		'PropelConditionalProxy' => 'util/PropelConditionalProxy.php',
+		'PropelModelPager'    => 'util/PropelModelPager.php',
+		'PropelPager'         => 'util/PropelPager.php',
+		'PropelDateTime'      => 'util/PropelDateTime.php',
+
+		'BasicValidator'      => 'validator/BasicValidator.php',
+		'MatchValidator'      => 'validator/MatchValidator.php',
+		'MaxLengthValidator'  => 'validator/MaxLengthValidator.php',
+		'MaxValueValidator'   => 'validator/MaxValueValidator.php',
+		'MinLengthValidator'  => 'validator/MinLengthValidator.php',
+		'MinValueValidator'   => 'validator/MinValueValidator.php',
+		'NotMatchValidator'   => 'validator/NotMatchValidator.php',
+		'RequiredValidator'   => 'validator/RequiredValidator.php',
+		'UniqueValidator'     => 'validator/UniqueValidator.php',
+		'ValidValuesValidator' => 'validator/ValidValuesValidator.php',
+		'ValidationFailed'    => 'validator/ValidationFailed.php',
 	);
 
 	/**
@@ -234,29 +262,24 @@ class Propel
 	public static function initialize()
 	{
 		if (self::$configuration === null) {
-			throw new PropelException("Propel cannot be initialized without "
-			. "a valid configuration. Please check the log files "
-			. "for further details.");
+			throw new PropelException("Propel cannot be initialized without a valid configuration. Please check the log files for further details.");
 		}
 
 		self::configureLogging();
 
-
 		// reset the connection map (this should enable runtime changes of connection params)
 		self::$connectionMap = array();
-
-		foreach (self::$configuration['datasources'] as $key => $datasource) {
-			if ($key != 'default' && isset($datasource['classes'])) {
-				// merge the classes to the autoload map
-				self::$autoloadMap = array_merge($datasource['classes'], self::$autoloadMap);
-			}
-		}
-
+		
+		if (isset(self::$configuration['classmap']) && is_array(self::$configuration['classmap'])) {
+		  PropelAutoloader::getInstance()->addClassPaths(self::$configuration['classmap']);
+		  PropelAutoloader::getInstance()->register();
+	  }
+		
 		self::$isInit = true;
 	}
 
 	/**
-	 * Configure Propel using an INI or PHP (array) config file.
+	 * Configure Propel a PHP (array) config file.
 	 *
 	 * @param      string Path (absolute or relative to include_path) to config file.
 	 *
@@ -292,7 +315,7 @@ class Propel
 	}
 
 	/**
-	 * Initialization of Propel with an INI or PHP (array) configuration file.
+	 * Initialization of Propel a PHP (array) configuration file.
 	 *
 	 * @param      string $c The Propel configuration file path.
 	 *
@@ -323,28 +346,9 @@ class Propel
 	public static function setConfiguration($c)
 	{
 		if (is_array($c)) {
-
-			/* For some reason the array generated from runtime-conf.xml has separate
-			 * 'log' section and 'propel' sections. To maintain backward compatibility
-			 * we need to remove 'propel' section BUT of course first save the 'log' section.
-			 *
-			 * So here goes...
-			 */
-
-			$log = array();
-			if (isset($c['propel']) && isset($c['log'])) { //looks like the original array from myproject-conf.php
-				$log = $c['log'];
-			}
-
-			// Support having the configuration stored within a 'propel' sub-section or at the top-level
 			if (isset($c['propel']) && is_array($c['propel'])) {
-				$c = $c['propel'];
-			}
-
-			if ($log) {
-				$c['log'] = $log;
-			}
-
+			  $c = $c['propel'];
+		  }
 			$c = new PropelConfiguration($c);
 		}
 		self::$configuration = $c;
@@ -456,7 +460,7 @@ class Propel
 		if ($name === null) {
 			$name = self::getDefaultDB();
 			if ($name === null) {
-				throw new PropelException("DatabaseMap name was null!");
+				throw new PropelException("DatabaseMap name is null!");
 			}
 		}
 
@@ -539,56 +543,86 @@ class Propel
 
 		// IF a WRITE-mode connection was requested
 		// or Propel is configured to always use the master connection
-		// or the slave for this connection has already been set to FALSE (indicating no slave)
 		// THEN return the master connection.
-		if ($mode != Propel::CONNECTION_READ || self::$forceMasterConnection || (isset(self::$connectionMap[$name]['slave']) && self::$connectionMap[$name]['slave'] === false)) {
-			if (!isset(self::$connectionMap[$name]['master'])) {
-				// load connection parameter for master connection
-				$conparams = isset(self::$configuration['datasources'][$name]['connection']) ? self::$configuration['datasources'][$name]['connection'] : null;
-				if (empty($conparams)) {
-					throw new PropelException('No connection information in your runtime configuration file for datasource ['.$name.']');
+		if ($mode != Propel::CONNECTION_READ || self::$forceMasterConnection) {
+			return self::getMasterConnection($name);
+		} else {
+			return self::getSlaveConnection($name);
+		}
+
+	} 
+	
+	/**
+	 * Gets an already-opened write PDO connection or opens a new one for passed-in db name.
+	 *
+	 * @param      string $name The datasource name that is used to look up the DSN 
+	 *                          from the runtime configuation file. Empty name not allowed.
+	 *
+	 * @return     PDO A database connection
+	 *
+	 * @throws     PropelException - if connection cannot be configured or initialized.
+	 */
+	public static function getMasterConnection($name)
+	{
+		if (!isset(self::$connectionMap[$name]['master'])) {
+			// load connection parameter for master connection
+			$conparams = isset(self::$configuration['datasources'][$name]['connection']) ? self::$configuration['datasources'][$name]['connection'] : null;
+			if (empty($conparams)) {
+				throw new PropelException('No connection information in your runtime configuration file for datasource ['.$name.']');
+			}
+			// initialize master connection
+			$con = Propel::initConnection($conparams, $name);
+			self::$connectionMap[$name]['master'] = $con;
+		}
+
+		return self::$connectionMap[$name]['master'];
+	}
+	
+	/**
+	 * Gets an already-opened read PDO connection or opens a new one for passed-in db name.
+	 *
+	 * @param      string $name The datasource name that is used to look up the DSN 
+	 *                          from the runtime configuation file. Empty name not allowed.
+	 *
+	 * @return     PDO A database connection
+	 *
+	 * @throws     PropelException - if connection cannot be configured or initialized.
+	 */
+	public static function getSlaveConnection($name)
+	{
+		if (!isset(self::$connectionMap[$name]['slave'])) {
+
+			$slaveconfigs = isset(self::$configuration['datasources'][$name]['slaves']) ? self::$configuration['datasources'][$name]['slaves'] : null;
+
+			if (empty($slaveconfigs)) {
+				// no slaves configured for this datasource
+				// fallback to the master connection
+				self::$connectionMap[$name]['slave'] = self::getMasterConnection($name);
+			} else {
+				// Initialize a new slave
+				if (isset($slaveconfigs['connection']['dsn'])) {
+					// only one slave connection configured
+					$conparams = $slaveconfigs['connection'];
+				} else {
+					// more than one sleve connection configured
+					// pickup a random one
+					$randkey = array_rand($slaveconfigs['connection']);
+					$conparams = $slaveconfigs['connection'][$randkey];
+					if (empty($conparams)) {
+						throw new PropelException('No connection information in your runtime configuration file for SLAVE ['.$randkey.'] to datasource ['.$name.']');
+					}
 				}
-				// initialize master connection
+
+				// initialize slave connection
 				$con = Propel::initConnection($conparams, $name);
-				self::$connectionMap[$name]['master'] = $con;
+				self::$connectionMap[$name]['slave'] = $con;
 			}
 
-			return self::$connectionMap[$name]['master'];
+		} // if datasource slave not set
 
-		} else {
-
-			if (!isset(self::$connectionMap[$name]['slave'])) {
-
-				// we've already ensured that the configuration exists, in previous if-statement
-				$slaveconfigs = isset(self::$configuration['datasources'][$name]['slaves']) ? self::$configuration['datasources'][$name]['slaves'] : null;
-
-				if (empty($slaveconfigs)) { // no slaves configured for this datasource
-					self::$connectionMap[$name]['slave'] = false;
-					return self::getConnection($name, Propel::CONNECTION_WRITE); // Recurse to get the WRITE connection
-				} else { // Initialize a new slave
-					if (isset($slaveconfigs['connection']['dsn'])) { // only one slave connection configured
-						$conparams = $slaveconfigs['connection'];
-					} else {
-						$randkey = array_rand($slaveconfigs['connection']);
-						$conparams = $slaveconfigs['connection'][$randkey];
-						if (empty($conparams)) {
-							throw new PropelException('No connection information in your runtime configuration file for SLAVE ['.$randkey.'] to datasource ['.$name.']');
-						}
-					}
-
-					// initialize master connection
-					$con = Propel::initConnection($conparams, $name);
-					self::$connectionMap[$name]['slave'] = $con;
-				}
-
-			} // if datasource slave not set
-
-			return self::$connectionMap[$name]['slave'];
-
-		} // if mode == CONNECTION_WRITE
-
-	} // getConnection()
-
+		return self::$connectionMap[$name]['slave'];
+	}
+	
 	/**
 	 * Opens a new PDO connection for passed-in db name.
 	 *
@@ -635,6 +669,9 @@ class Propel
 		try {
 			$con = new $classname($dsn, $user, $password, $driver_options);
 			$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			if (Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->getParameter('debugpdo.logging.enabled', false)) {
+				$con->useLogging(true);
+			}
 		} catch (PDOException $e) {
 			throw new PropelException("Unable to open PDO connection", $e);
 		}
@@ -745,7 +782,7 @@ class Propel
 	{
 		if (self::$defaultDBName === null) {
 			// Determine default database name.
-			self::$defaultDBName = isset(self::$configuration['datasources']['default']) ? self::$configuration['datasources']['default'] : self::DEFAULT_NAME;
+			self::$defaultDBName = isset(self::$configuration['datasources']['default']) && is_scalar(self::$configuration['datasources']['default']) ? self::$configuration['datasources']['default'] : self::DEFAULT_NAME;
 		}
 		return self::$defaultDBName;
 	}
@@ -774,14 +811,24 @@ class Propel
 	public static function autoload($className)
 	{
 		if (isset(self::$autoloadMap[$className])) {
-			require(self::$autoloadMap[$className]);
+			require self::$baseDir . self::$autoloadMap[$className];
 			return true;
 		}
 		return false;
 	}
+	
+	/**
+	 * Initialize the base directory for the autoloader.
+	 * Avoids a call to dirname(__FILE__) each time self::autoload() is called.
+	 * FIXME put in the constructor if the Propel class ever becomes a singleton
+	 */
+	public static function initBaseDir()
+	{
+		self::$baseDir = dirname(__FILE__) . '/';
+	}
 
 	/**
-	 * Include once a file specified in DOT notation and reutrn unqualified clasname.
+	 * Include once a file specified in DOT notation and return unqualified classname.
 	 *
 	 * Typically, Propel uses autoload is used to load classes and expects that all classes
 	 * referenced within Propel are included in Propel's autoload map.  This method is only
@@ -833,18 +880,32 @@ class Propel
 
 	/**
 	 * Disable instance pooling.
+	 * 
+	 * @return boolean true if the method changed the instance pooling state,
+	 *                 false if it was already disabled
 	 */
 	public static function disableInstancePooling()
 	{
+		if (!self::$instancePoolingEnabled) {
+			return false;
+		}
 		self::$instancePoolingEnabled = false;
+		return true;
 	}
 
 	/**
 	 * Enable instance pooling (enabled by default).
+	 * 
+	 * @return boolean true if the method changed the instance pooling state,
+	 *                 false if it was already enabled
 	 */
 	public static function enableInstancePooling()
 	{
+		if (self::$instancePoolingEnabled) {
+			return false;
+		}
 		self::$instancePoolingEnabled = true;
+		return true;
 	}
 
 	/**
@@ -858,4 +919,6 @@ class Propel
 	}
 }
 
+// Since the Propel class is not a true singleton, this code cannot go into the __construct()
+Propel::initBaseDir();
 spl_autoload_register(array('Propel', 'autoload'));

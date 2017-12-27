@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_main_configuration' table.
  *
  * Nagios Main Configuration
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persistent {
+abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosMainConfigurationPeer';
 
 	/**
 	 * The Peer class.
@@ -775,6 +781,48 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	protected $max_debug_file_size;
 
 	/**
+	 * The value for the temp_path field.
+	 * @var        string
+	 */
+	protected $temp_path;
+
+	/**
+	 * The value for the check_for_updates field.
+	 * @var        boolean
+	 */
+	protected $check_for_updates;
+
+	/**
+	 * The value for the check_for_orphaned_hosts field.
+	 * @var        boolean
+	 */
+	protected $check_for_orphaned_hosts;
+
+	/**
+	 * The value for the bare_update_check field.
+	 * @var        boolean
+	 */
+	protected $bare_update_check;
+
+	/**
+	 * The value for the log_current_states field.
+	 * @var        boolean
+	 */
+	protected $log_current_states;
+
+	/**
+	 * The value for the check_workers field.
+	 * @var        int
+	 */
+	protected $check_workers;
+
+	/**
+	 * The value for the query_socket field.
+	 * @var        string
+	 */
+	protected $query_socket;
+
+	/**
 	 * @var        NagiosCommand
 	 */
 	protected $aNagiosCommandRelatedByOcspCommand;
@@ -827,26 +875,6 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosMainConfiguration object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -2109,6 +2137,76 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	}
 
 	/**
+	 * Get the [temp_path] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getTempPath()
+	{
+		return $this->temp_path;
+	}
+
+	/**
+	 * Get the [check_for_updates] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getCheckForUpdates()
+	{
+		return $this->check_for_updates;
+	}
+
+	/**
+	 * Get the [check_for_orphaned_hosts] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getCheckForOrphanedHosts()
+	{
+		return $this->check_for_orphaned_hosts;
+	}
+
+	/**
+	 * Get the [bare_update_check] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getBareUpdateCheck()
+	{
+		return $this->bare_update_check;
+	}
+
+	/**
+	 * Get the [log_current_states] column value.
+	 * 
+	 * @return     boolean
+	 */
+	public function getLogCurrentStates()
+	{
+		return $this->log_current_states;
+	}
+
+	/**
+	 * Get the [check_workers] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getCheckWorkers()
+	{
+		return $this->check_workers;
+	}
+
+	/**
+	 * Get the [query_socket] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getQuerySocket()
+	{
+		return $this->query_socket;
+	}
+
+	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
@@ -2269,15 +2367,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setNagiosGroup()
 
 	/**
-	 * Set the value of [enable_notifications] column.
+	 * Sets the value of the [enable_notifications] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableNotifications($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_notifications !== $v) {
@@ -2289,15 +2395,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setEnableNotifications()
 
 	/**
-	 * Set the value of [execute_service_checks] column.
+	 * Sets the value of the [execute_service_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setExecuteServiceChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->execute_service_checks !== $v) {
@@ -2309,15 +2423,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setExecuteServiceChecks()
 
 	/**
-	 * Set the value of [accept_passive_service_checks] column.
+	 * Sets the value of the [accept_passive_service_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setAcceptPassiveServiceChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->accept_passive_service_checks !== $v) {
@@ -2329,15 +2451,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setAcceptPassiveServiceChecks()
 
 	/**
-	 * Set the value of [enable_event_handlers] column.
+	 * Sets the value of the [enable_event_handlers] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableEventHandlers($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_event_handlers !== $v) {
@@ -2389,15 +2519,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogArchivePath()
 
 	/**
-	 * Set the value of [check_external_commands] column.
+	 * Sets the value of the [check_external_commands] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setCheckExternalCommands($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->check_external_commands !== $v) {
@@ -2469,15 +2607,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLockFile()
 
 	/**
-	 * Set the value of [retain_state_information] column.
+	 * Sets the value of the [retain_state_information] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setRetainStateInformation($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->retain_state_information !== $v) {
@@ -2529,15 +2675,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setRetentionUpdateInterval()
 
 	/**
-	 * Set the value of [use_retained_program_state] column.
+	 * Sets the value of the [use_retained_program_state] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseRetainedProgramState($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_retained_program_state !== $v) {
@@ -2549,15 +2703,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseRetainedProgramState()
 
 	/**
-	 * Set the value of [use_syslog] column.
+	 * Sets the value of the [use_syslog] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseSyslog($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_syslog !== $v) {
@@ -2569,15 +2731,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseSyslog()
 
 	/**
-	 * Set the value of [log_notifications] column.
+	 * Sets the value of the [log_notifications] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogNotifications($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_notifications !== $v) {
@@ -2589,15 +2759,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogNotifications()
 
 	/**
-	 * Set the value of [log_service_retries] column.
+	 * Sets the value of the [log_service_retries] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogServiceRetries($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_service_retries !== $v) {
@@ -2609,15 +2787,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogServiceRetries()
 
 	/**
-	 * Set the value of [log_host_retries] column.
+	 * Sets the value of the [log_host_retries] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogHostRetries($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_host_retries !== $v) {
@@ -2629,15 +2815,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogHostRetries()
 
 	/**
-	 * Set the value of [log_event_handlers] column.
+	 * Sets the value of the [log_event_handlers] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogEventHandlers($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_event_handlers !== $v) {
@@ -2649,15 +2843,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogEventHandlers()
 
 	/**
-	 * Set the value of [log_initial_states] column.
+	 * Sets the value of the [log_initial_states] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogInitialStates($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_initial_states !== $v) {
@@ -2669,15 +2871,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogInitialStates()
 
 	/**
-	 * Set the value of [log_external_commands] column.
+	 * Sets the value of the [log_external_commands] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogExternalCommands($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_external_commands !== $v) {
@@ -2689,15 +2899,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setLogExternalCommands()
 
 	/**
-	 * Set the value of [log_passive_checks] column.
+	 * Sets the value of the [log_passive_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setLogPassiveChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->log_passive_checks !== $v) {
@@ -2877,15 +3095,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setIntervalLength()
 
 	/**
-	 * Set the value of [use_aggressive_host_checking] column.
+	 * Sets the value of the [use_aggressive_host_checking] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseAggressiveHostChecking($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_aggressive_host_checking !== $v) {
@@ -2897,15 +3123,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseAggressiveHostChecking()
 
 	/**
-	 * Set the value of [enable_flap_detection] column.
+	 * Sets the value of the [enable_flap_detection] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableFlapDetection($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_flap_detection !== $v) {
@@ -2997,15 +3231,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setHighHostFlapThreshold()
 
 	/**
-	 * Set the value of [soft_state_dependencies] column.
+	 * Sets the value of the [soft_state_dependencies] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setSoftStateDependencies($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->soft_state_dependencies !== $v) {
@@ -3157,15 +3399,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setPerfdataTimeout()
 
 	/**
-	 * Set the value of [obsess_over_services] column.
+	 * Sets the value of the [obsess_over_services] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setObsessOverServices($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->obsess_over_services !== $v) {
@@ -3201,15 +3451,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setOcspCommand()
 
 	/**
-	 * Set the value of [process_performance_data] column.
+	 * Sets the value of the [process_performance_data] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setProcessPerformanceData($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->process_performance_data !== $v) {
@@ -3221,15 +3479,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setProcessPerformanceData()
 
 	/**
-	 * Set the value of [check_for_orphaned_services] column.
+	 * Sets the value of the [check_for_orphaned_services] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setCheckForOrphanedServices($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->check_for_orphaned_services !== $v) {
@@ -3241,15 +3507,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setCheckForOrphanedServices()
 
 	/**
-	 * Set the value of [check_service_freshness] column.
+	 * Sets the value of the [check_service_freshness] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setCheckServiceFreshness($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->check_service_freshness !== $v) {
@@ -3381,15 +3655,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setAdminPager()
 
 	/**
-	 * Set the value of [execute_host_checks] column.
+	 * Sets the value of the [execute_host_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setExecuteHostChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->execute_host_checks !== $v) {
@@ -3421,15 +3703,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setServiceInterCheckDelayMethod()
 
 	/**
-	 * Set the value of [use_retained_scheduling_info] column.
+	 * Sets the value of the [use_retained_scheduling_info] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseRetainedSchedulingInfo($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_retained_scheduling_info !== $v) {
@@ -3441,15 +3731,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseRetainedSchedulingInfo()
 
 	/**
-	 * Set the value of [accept_passive_host_checks] column.
+	 * Sets the value of the [accept_passive_host_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setAcceptPassiveHostChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->accept_passive_host_checks !== $v) {
@@ -3521,15 +3819,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setMaxHostCheckSpread()
 
 	/**
-	 * Set the value of [auto_reschedule_checks] column.
+	 * Sets the value of the [auto_reschedule_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setAutoRescheduleChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->auto_reschedule_checks !== $v) {
@@ -3601,15 +3907,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setOchpTimeout()
 
 	/**
-	 * Set the value of [obsess_over_hosts] column.
+	 * Sets the value of the [obsess_over_hosts] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setObsessOverHosts($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->obsess_over_hosts !== $v) {
@@ -3645,15 +3959,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setOchpCommand()
 
 	/**
-	 * Set the value of [check_host_freshness] column.
+	 * Sets the value of the [check_host_freshness] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setCheckHostFreshness($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->check_host_freshness !== $v) {
@@ -3705,15 +4027,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setServiceFreshnessCheckInterval()
 
 	/**
-	 * Set the value of [use_regexp_matching] column.
+	 * Sets the value of the [use_regexp_matching] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseRegexpMatching($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_regexp_matching !== $v) {
@@ -3725,15 +4055,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseRegexpMatching()
 
 	/**
-	 * Set the value of [use_true_regexp_matching] column.
+	 * Sets the value of the [use_true_regexp_matching] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseTrueRegexpMatching($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_true_regexp_matching !== $v) {
@@ -3765,15 +4103,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setEventBrokerOptions()
 
 	/**
-	 * Set the value of [daemon_dumps_core] column.
+	 * Sets the value of the [daemon_dumps_core] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setDaemonDumpsCore($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->daemon_dumps_core !== $v) {
@@ -4281,15 +4627,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setMaxCheckResultFileAge()
 
 	/**
-	 * Set the value of [translate_passive_host_checks] column.
+	 * Sets the value of the [translate_passive_host_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setTranslatePassiveHostChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->translate_passive_host_checks !== $v) {
@@ -4301,15 +4655,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setTranslatePassiveHostChecks()
 
 	/**
-	 * Set the value of [passive_host_checks_are_soft] column.
+	 * Sets the value of the [passive_host_checks_are_soft] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setPassiveHostChecksAreSoft($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->passive_host_checks_are_soft !== $v) {
@@ -4321,15 +4683,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setPassiveHostChecksAreSoft()
 
 	/**
-	 * Set the value of [enable_predictive_host_dependency_checks] column.
+	 * Sets the value of the [enable_predictive_host_dependency_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnablePredictiveHostDependencyChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_predictive_host_dependency_checks !== $v) {
@@ -4341,15 +4711,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setEnablePredictiveHostDependencyChecks()
 
 	/**
-	 * Set the value of [enable_predictive_service_dependency_checks] column.
+	 * Sets the value of the [enable_predictive_service_dependency_checks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnablePredictiveServiceDependencyChecks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_predictive_service_dependency_checks !== $v) {
@@ -4401,15 +4779,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setCachedServiceCheckHorizon()
 
 	/**
-	 * Set the value of [use_large_installation_tweaks] column.
+	 * Sets the value of the [use_large_installation_tweaks] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseLargeInstallationTweaks($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_large_installation_tweaks !== $v) {
@@ -4421,15 +4807,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setUseLargeInstallationTweaks()
 
 	/**
-	 * Set the value of [free_child_process_memory] column.
+	 * Sets the value of the [free_child_process_memory] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setFreeChildProcessMemory($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->free_child_process_memory !== $v) {
@@ -4441,15 +4835,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setFreeChildProcessMemory()
 
 	/**
-	 * Set the value of [child_processes_fork_twice] column.
+	 * Sets the value of the [child_processes_fork_twice] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setChildProcessesForkTwice($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->child_processes_fork_twice !== $v) {
@@ -4461,15 +4863,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setChildProcessesForkTwice()
 
 	/**
-	 * Set the value of [enable_environment_macros] column.
+	 * Sets the value of the [enable_environment_macros] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableEnvironmentMacros($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_environment_macros !== $v) {
@@ -4501,15 +4911,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setAdditionalFreshnessLatency()
 
 	/**
-	 * Set the value of [enable_embedded_perl] column.
+	 * Sets the value of the [enable_embedded_perl] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setEnableEmbeddedPerl($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->enable_embedded_perl !== $v) {
@@ -4521,15 +4939,23 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setEnableEmbeddedPerl()
 
 	/**
-	 * Set the value of [use_embedded_perl_implicitly] column.
+	 * Sets the value of the [use_embedded_perl_implicitly] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosMainConfiguration The current object (for fluent API support)
 	 */
 	public function setUseEmbeddedPerlImplicitly($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->use_embedded_perl_implicitly !== $v) {
@@ -4661,6 +5087,178 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	} // setMaxDebugFileSize()
 
 	/**
+	 * Set the value of [temp_path] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setTempPath($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->temp_path !== $v) {
+			$this->temp_path = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::TEMP_PATH;
+		}
+
+		return $this;
+	} // setTempPath()
+
+	/**
+	 * Sets the value of the [check_for_updates] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setCheckForUpdates($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->check_for_updates !== $v) {
+			$this->check_for_updates = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::CHECK_FOR_UPDATES;
+		}
+
+		return $this;
+	} // setCheckForUpdates()
+
+	/**
+	 * Sets the value of the [check_for_orphaned_hosts] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setCheckForOrphanedHosts($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->check_for_orphaned_hosts !== $v) {
+			$this->check_for_orphaned_hosts = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::CHECK_FOR_ORPHANED_HOSTS;
+		}
+
+		return $this;
+	} // setCheckForOrphanedHosts()
+
+	/**
+	 * Sets the value of the [bare_update_check] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setBareUpdateCheck($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->bare_update_check !== $v) {
+			$this->bare_update_check = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::BARE_UPDATE_CHECK;
+		}
+
+		return $this;
+	} // setBareUpdateCheck()
+
+	/**
+	 * Sets the value of the [log_current_states] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+	 * 
+	 * @param      boolean|integer|string $v The new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setLogCurrentStates($v)
+	{
+		if ($v !== null) {
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
+		}
+
+		if ($this->log_current_states !== $v) {
+			$this->log_current_states = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::LOG_CURRENT_STATES;
+		}
+
+		return $this;
+	} // setLogCurrentStates()
+
+	/**
+	 * Set the value of [check_workers] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setCheckWorkers($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->check_workers !== $v) {
+			$this->check_workers = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::CHECK_WORKERS;
+		}
+
+		return $this;
+	} // setCheckWorkers()
+
+	/**
+	 * Set the value of [query_socket] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     NagiosMainConfiguration The current object (for fluent API support)
+	 */
+	public function setQuerySocket($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->query_socket !== $v) {
+			$this->query_socket = $v;
+			$this->modifiedColumns[] = NagiosMainConfigurationPeer::QUERY_SOCKET;
+		}
+
+		return $this;
+	} // setQuerySocket()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -4670,11 +5268,6 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -4823,6 +5416,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 			$this->debug_level = ($row[$startcol + 123] !== null) ? (int) $row[$startcol + 123] : null;
 			$this->debug_verbosity = ($row[$startcol + 124] !== null) ? (int) $row[$startcol + 124] : null;
 			$this->max_debug_file_size = ($row[$startcol + 125] !== null) ? (int) $row[$startcol + 125] : null;
+			$this->temp_path = ($row[$startcol + 126] !== null) ? (string) $row[$startcol + 126] : null;
+			$this->check_for_updates = ($row[$startcol + 127] !== null) ? (boolean) $row[$startcol + 127] : null;
+			$this->check_for_orphaned_hosts = ($row[$startcol + 128] !== null) ? (boolean) $row[$startcol + 128] : null;
+			$this->bare_update_check = ($row[$startcol + 129] !== null) ? (boolean) $row[$startcol + 129] : null;
+			$this->log_current_states = ($row[$startcol + 130] !== null) ? (boolean) $row[$startcol + 130] : null;
+			$this->check_workers = ($row[$startcol + 131] !== null) ? (int) $row[$startcol + 131] : null;
+			$this->query_socket = ($row[$startcol + 132] !== null) ? (string) $row[$startcol + 132] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -4831,8 +5431,7 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 126; // 126 = NagiosMainConfigurationPeer::NUM_COLUMNS - NagiosMainConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 133; // 133 = NagiosMainConfigurationPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosMainConfiguration object", $e);
@@ -4947,12 +5546,20 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosMainConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosMainConfigurationPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosMainConfigurationQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -4981,12 +5588,29 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosMainConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosMainConfigurationPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosMainConfigurationPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -5079,13 +5703,14 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosMainConfigurationPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosMainConfigurationPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosMainConfigurationPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows += 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
 					$affectedRows += NagiosMainConfigurationPeer::doUpdate($this, $con);
@@ -5630,6 +6255,27 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 			case 125:
 				return $this->getMaxDebugFileSize();
 				break;
+			case 126:
+				return $this->getTempPath();
+				break;
+			case 127:
+				return $this->getCheckForUpdates();
+				break;
+			case 128:
+				return $this->getCheckForOrphanedHosts();
+				break;
+			case 129:
+				return $this->getBareUpdateCheck();
+				break;
+			case 130:
+				return $this->getLogCurrentStates();
+				break;
+			case 131:
+				return $this->getCheckWorkers();
+				break;
+			case 132:
+				return $this->getQuerySocket();
+				break;
 			default:
 				return null;
 				break;
@@ -5642,13 +6288,21 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosMainConfiguration'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosMainConfiguration'][$this->getPrimaryKey()] = true;
 		$keys = NagiosMainConfigurationPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -5777,7 +6431,40 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 			$keys[123] => $this->getDebugLevel(),
 			$keys[124] => $this->getDebugVerbosity(),
 			$keys[125] => $this->getMaxDebugFileSize(),
+			$keys[126] => $this->getTempPath(),
+			$keys[127] => $this->getCheckForUpdates(),
+			$keys[128] => $this->getCheckForOrphanedHosts(),
+			$keys[129] => $this->getBareUpdateCheck(),
+			$keys[130] => $this->getLogCurrentStates(),
+			$keys[131] => $this->getCheckWorkers(),
+			$keys[132] => $this->getQuerySocket(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->aNagiosCommandRelatedByOcspCommand) {
+				$result['NagiosCommandRelatedByOcspCommand'] = $this->aNagiosCommandRelatedByOcspCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByOchpCommand) {
+				$result['NagiosCommandRelatedByOchpCommand'] = $this->aNagiosCommandRelatedByOchpCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByHostPerfdataCommand) {
+				$result['NagiosCommandRelatedByHostPerfdataCommand'] = $this->aNagiosCommandRelatedByHostPerfdataCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByServicePerfdataCommand) {
+				$result['NagiosCommandRelatedByServicePerfdataCommand'] = $this->aNagiosCommandRelatedByServicePerfdataCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand) {
+				$result['NagiosCommandRelatedByHostPerfdataFileProcessingCommand'] = $this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand) {
+				$result['NagiosCommandRelatedByServicePerfdataFileProcessingCommand'] = $this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByGlobalServiceEventHandler) {
+				$result['NagiosCommandRelatedByGlobalServiceEventHandler'] = $this->aNagiosCommandRelatedByGlobalServiceEventHandler->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosCommandRelatedByGlobalHostEventHandler) {
+				$result['NagiosCommandRelatedByGlobalHostEventHandler'] = $this->aNagiosCommandRelatedByGlobalHostEventHandler->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+		}
 		return $result;
 	}
 
@@ -6186,6 +6873,27 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 			case 125:
 				$this->setMaxDebugFileSize($value);
 				break;
+			case 126:
+				$this->setTempPath($value);
+				break;
+			case 127:
+				$this->setCheckForUpdates($value);
+				break;
+			case 128:
+				$this->setCheckForOrphanedHosts($value);
+				break;
+			case 129:
+				$this->setBareUpdateCheck($value);
+				break;
+			case 130:
+				$this->setLogCurrentStates($value);
+				break;
+			case 131:
+				$this->setCheckWorkers($value);
+				break;
+			case 132:
+				$this->setQuerySocket($value);
+				break;
 		} // switch()
 	}
 
@@ -6336,6 +7044,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 		if (array_key_exists($keys[123], $arr)) $this->setDebugLevel($arr[$keys[123]]);
 		if (array_key_exists($keys[124], $arr)) $this->setDebugVerbosity($arr[$keys[124]]);
 		if (array_key_exists($keys[125], $arr)) $this->setMaxDebugFileSize($arr[$keys[125]]);
+		if (array_key_exists($keys[126], $arr)) $this->setTempPath($arr[$keys[126]]);
+		if (array_key_exists($keys[127], $arr)) $this->setCheckForUpdates($arr[$keys[127]]);
+		if (array_key_exists($keys[128], $arr)) $this->setCheckForOrphanedHosts($arr[$keys[128]]);
+		if (array_key_exists($keys[129], $arr)) $this->setBareUpdateCheck($arr[$keys[129]]);
+		if (array_key_exists($keys[130], $arr)) $this->setLogCurrentStates($arr[$keys[130]]);
+		if (array_key_exists($keys[131], $arr)) $this->setCheckWorkers($arr[$keys[131]]);
+		if (array_key_exists($keys[132], $arr)) $this->setQuerySocket($arr[$keys[132]]);
 	}
 
 	/**
@@ -6473,6 +7188,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 		if ($this->isColumnModified(NagiosMainConfigurationPeer::DEBUG_LEVEL)) $criteria->add(NagiosMainConfigurationPeer::DEBUG_LEVEL, $this->debug_level);
 		if ($this->isColumnModified(NagiosMainConfigurationPeer::DEBUG_VERBOSITY)) $criteria->add(NagiosMainConfigurationPeer::DEBUG_VERBOSITY, $this->debug_verbosity);
 		if ($this->isColumnModified(NagiosMainConfigurationPeer::MAX_DEBUG_FILE_SIZE)) $criteria->add(NagiosMainConfigurationPeer::MAX_DEBUG_FILE_SIZE, $this->max_debug_file_size);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::TEMP_PATH)) $criteria->add(NagiosMainConfigurationPeer::TEMP_PATH, $this->temp_path);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::CHECK_FOR_UPDATES)) $criteria->add(NagiosMainConfigurationPeer::CHECK_FOR_UPDATES, $this->check_for_updates);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::CHECK_FOR_ORPHANED_HOSTS)) $criteria->add(NagiosMainConfigurationPeer::CHECK_FOR_ORPHANED_HOSTS, $this->check_for_orphaned_hosts);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::BARE_UPDATE_CHECK)) $criteria->add(NagiosMainConfigurationPeer::BARE_UPDATE_CHECK, $this->bare_update_check);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::LOG_CURRENT_STATES)) $criteria->add(NagiosMainConfigurationPeer::LOG_CURRENT_STATES, $this->log_current_states);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::CHECK_WORKERS)) $criteria->add(NagiosMainConfigurationPeer::CHECK_WORKERS, $this->check_workers);
+		if ($this->isColumnModified(NagiosMainConfigurationPeer::QUERY_SOCKET)) $criteria->add(NagiosMainConfigurationPeer::QUERY_SOCKET, $this->query_socket);
 
 		return $criteria;
 	}
@@ -6488,7 +7210,6 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosMainConfigurationPeer::ID, $this->id);
 
 		return $criteria;
@@ -6515,6 +7236,15 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -6522,266 +7252,147 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	 *
 	 * @param      object $copyObj An object of NagiosMainConfiguration (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setConfigDir($this->config_dir);
-
-		$copyObj->setLogFile($this->log_file);
-
-		$copyObj->setTempFile($this->temp_file);
-
-		$copyObj->setStatusFile($this->status_file);
-
-		$copyObj->setStatusUpdateInterval($this->status_update_interval);
-
-		$copyObj->setNagiosUser($this->nagios_user);
-
-		$copyObj->setNagiosGroup($this->nagios_group);
-
-		$copyObj->setEnableNotifications($this->enable_notifications);
-
-		$copyObj->setExecuteServiceChecks($this->execute_service_checks);
-
-		$copyObj->setAcceptPassiveServiceChecks($this->accept_passive_service_checks);
-
-		$copyObj->setEnableEventHandlers($this->enable_event_handlers);
-
-		$copyObj->setLogRotationMethod($this->log_rotation_method);
-
-		$copyObj->setLogArchivePath($this->log_archive_path);
-
-		$copyObj->setCheckExternalCommands($this->check_external_commands);
-
-		$copyObj->setCommandCheckInterval($this->command_check_interval);
-
-		$copyObj->setCommandFile($this->command_file);
-
-		$copyObj->setLockFile($this->lock_file);
-
-		$copyObj->setRetainStateInformation($this->retain_state_information);
-
-		$copyObj->setStateRetentionFile($this->state_retention_file);
-
-		$copyObj->setRetentionUpdateInterval($this->retention_update_interval);
-
-		$copyObj->setUseRetainedProgramState($this->use_retained_program_state);
-
-		$copyObj->setUseSyslog($this->use_syslog);
-
-		$copyObj->setLogNotifications($this->log_notifications);
-
-		$copyObj->setLogServiceRetries($this->log_service_retries);
-
-		$copyObj->setLogHostRetries($this->log_host_retries);
-
-		$copyObj->setLogEventHandlers($this->log_event_handlers);
-
-		$copyObj->setLogInitialStates($this->log_initial_states);
-
-		$copyObj->setLogExternalCommands($this->log_external_commands);
-
-		$copyObj->setLogPassiveChecks($this->log_passive_checks);
-
-		$copyObj->setGlobalHostEventHandler($this->global_host_event_handler);
-
-		$copyObj->setGlobalServiceEventHandler($this->global_service_event_handler);
-
-		$copyObj->setExternalCommandBufferSlots($this->external_command_buffer_slots);
-
-		$copyObj->setSleepTime($this->sleep_time);
-
-		$copyObj->setServiceInterleaveFactor($this->service_interleave_factor);
-
-		$copyObj->setMaxConcurrentChecks($this->max_concurrent_checks);
-
-		$copyObj->setServiceReaperFrequency($this->service_reaper_frequency);
-
-		$copyObj->setIntervalLength($this->interval_length);
-
-		$copyObj->setUseAggressiveHostChecking($this->use_aggressive_host_checking);
-
-		$copyObj->setEnableFlapDetection($this->enable_flap_detection);
-
-		$copyObj->setLowServiceFlapThreshold($this->low_service_flap_threshold);
-
-		$copyObj->setHighServiceFlapThreshold($this->high_service_flap_threshold);
-
-		$copyObj->setLowHostFlapThreshold($this->low_host_flap_threshold);
-
-		$copyObj->setHighHostFlapThreshold($this->high_host_flap_threshold);
-
-		$copyObj->setSoftStateDependencies($this->soft_state_dependencies);
-
-		$copyObj->setServiceCheckTimeout($this->service_check_timeout);
-
-		$copyObj->setHostCheckTimeout($this->host_check_timeout);
-
-		$copyObj->setEventHandlerTimeout($this->event_handler_timeout);
-
-		$copyObj->setNotificationTimeout($this->notification_timeout);
-
-		$copyObj->setOcspTimeout($this->ocsp_timeout);
-
-		$copyObj->setOhcpTimeout($this->ohcp_timeout);
-
-		$copyObj->setPerfdataTimeout($this->perfdata_timeout);
-
-		$copyObj->setObsessOverServices($this->obsess_over_services);
-
-		$copyObj->setOcspCommand($this->ocsp_command);
-
-		$copyObj->setProcessPerformanceData($this->process_performance_data);
-
-		$copyObj->setCheckForOrphanedServices($this->check_for_orphaned_services);
-
-		$copyObj->setCheckServiceFreshness($this->check_service_freshness);
-
-		$copyObj->setFreshnessCheckInterval($this->freshness_check_interval);
-
-		$copyObj->setDateFormat($this->date_format);
-
-		$copyObj->setIllegalObjectNameChars($this->illegal_object_name_chars);
-
-		$copyObj->setIllegalMacroOutputChars($this->illegal_macro_output_chars);
-
-		$copyObj->setAdminEmail($this->admin_email);
-
-		$copyObj->setAdminPager($this->admin_pager);
-
-		$copyObj->setExecuteHostChecks($this->execute_host_checks);
-
-		$copyObj->setServiceInterCheckDelayMethod($this->service_inter_check_delay_method);
-
-		$copyObj->setUseRetainedSchedulingInfo($this->use_retained_scheduling_info);
-
-		$copyObj->setAcceptPassiveHostChecks($this->accept_passive_host_checks);
-
-		$copyObj->setMaxServiceCheckSpread($this->max_service_check_spread);
-
-		$copyObj->setHostInterCheckDelayMethod($this->host_inter_check_delay_method);
-
-		$copyObj->setMaxHostCheckSpread($this->max_host_check_spread);
-
-		$copyObj->setAutoRescheduleChecks($this->auto_reschedule_checks);
-
-		$copyObj->setAutoReschedulingInterval($this->auto_rescheduling_interval);
-
-		$copyObj->setAutoReschedulingWindow($this->auto_rescheduling_window);
-
-		$copyObj->setOchpTimeout($this->ochp_timeout);
-
-		$copyObj->setObsessOverHosts($this->obsess_over_hosts);
-
-		$copyObj->setOchpCommand($this->ochp_command);
-
-		$copyObj->setCheckHostFreshness($this->check_host_freshness);
-
-		$copyObj->setHostFreshnessCheckInterval($this->host_freshness_check_interval);
-
-		$copyObj->setServiceFreshnessCheckInterval($this->service_freshness_check_interval);
-
-		$copyObj->setUseRegexpMatching($this->use_regexp_matching);
-
-		$copyObj->setUseTrueRegexpMatching($this->use_true_regexp_matching);
-
-		$copyObj->setEventBrokerOptions($this->event_broker_options);
-
-		$copyObj->setDaemonDumpsCore($this->daemon_dumps_core);
-
-		$copyObj->setHostPerfdataCommand($this->host_perfdata_command);
-
-		$copyObj->setServicePerfdataCommand($this->service_perfdata_command);
-
-		$copyObj->setHostPerfdataFile($this->host_perfdata_file);
-
-		$copyObj->setHostPerfdataFileTemplate($this->host_perfdata_file_template);
-
-		$copyObj->setServicePerfdataFile($this->service_perfdata_file);
-
-		$copyObj->setServicePerfdataFileTemplate($this->service_perfdata_file_template);
-
-		$copyObj->setHostPerfdataFileMode($this->host_perfdata_file_mode);
-
-		$copyObj->setServicePerfdataFileMode($this->service_perfdata_file_mode);
-
-		$copyObj->setHostPerfdataFileProcessingCommand($this->host_perfdata_file_processing_command);
-
-		$copyObj->setServicePerfdataFileProcessingCommand($this->service_perfdata_file_processing_command);
-
-		$copyObj->setHostPerfdataFileProcessingInterval($this->host_perfdata_file_processing_interval);
-
-		$copyObj->setServicePerfdataFileProcessingInterval($this->service_perfdata_file_processing_interval);
-
-		$copyObj->setObjectCacheFile($this->object_cache_file);
-
-		$copyObj->setPrecachedObjectFile($this->precached_object_file);
-
-		$copyObj->setRetainedHostAttributeMask($this->retained_host_attribute_mask);
-
-		$copyObj->setRetainedServiceAttributeMask($this->retained_service_attribute_mask);
-
-		$copyObj->setRetainedProcessHostAttributeMask($this->retained_process_host_attribute_mask);
-
-		$copyObj->setRetainedProcessServiceAttributeMask($this->retained_process_service_attribute_mask);
-
-		$copyObj->setRetainedContactHostAttributeMask($this->retained_contact_host_attribute_mask);
-
-		$copyObj->setRetainedContactServiceAttributeMask($this->retained_contact_service_attribute_mask);
-
-		$copyObj->setCheckResultReaperFrequency($this->check_result_reaper_frequency);
-
-		$copyObj->setMaxCheckResultReaperTime($this->max_check_result_reaper_time);
-
-		$copyObj->setCheckResultPath($this->check_result_path);
-
-		$copyObj->setMaxCheckResultFileAge($this->max_check_result_file_age);
-
-		$copyObj->setTranslatePassiveHostChecks($this->translate_passive_host_checks);
-
-		$copyObj->setPassiveHostChecksAreSoft($this->passive_host_checks_are_soft);
-
-		$copyObj->setEnablePredictiveHostDependencyChecks($this->enable_predictive_host_dependency_checks);
-
-		$copyObj->setEnablePredictiveServiceDependencyChecks($this->enable_predictive_service_dependency_checks);
-
-		$copyObj->setCachedHostCheckHorizon($this->cached_host_check_horizon);
-
-		$copyObj->setCachedServiceCheckHorizon($this->cached_service_check_horizon);
-
-		$copyObj->setUseLargeInstallationTweaks($this->use_large_installation_tweaks);
-
-		$copyObj->setFreeChildProcessMemory($this->free_child_process_memory);
-
-		$copyObj->setChildProcessesForkTwice($this->child_processes_fork_twice);
-
-		$copyObj->setEnableEnvironmentMacros($this->enable_environment_macros);
-
-		$copyObj->setAdditionalFreshnessLatency($this->additional_freshness_latency);
-
-		$copyObj->setEnableEmbeddedPerl($this->enable_embedded_perl);
-
-		$copyObj->setUseEmbeddedPerlImplicitly($this->use_embedded_perl_implicitly);
-
-		$copyObj->setP1File($this->p1_file);
-
-		$copyObj->setUseTimezone($this->use_timezone);
-
-		$copyObj->setDebugFile($this->debug_file);
-
-		$copyObj->setDebugLevel($this->debug_level);
-
-		$copyObj->setDebugVerbosity($this->debug_verbosity);
-
-		$copyObj->setMaxDebugFileSize($this->max_debug_file_size);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setConfigDir($this->getConfigDir());
+		$copyObj->setLogFile($this->getLogFile());
+		$copyObj->setTempFile($this->getTempFile());
+		$copyObj->setStatusFile($this->getStatusFile());
+		$copyObj->setStatusUpdateInterval($this->getStatusUpdateInterval());
+		$copyObj->setNagiosUser($this->getNagiosUser());
+		$copyObj->setNagiosGroup($this->getNagiosGroup());
+		$copyObj->setEnableNotifications($this->getEnableNotifications());
+		$copyObj->setExecuteServiceChecks($this->getExecuteServiceChecks());
+		$copyObj->setAcceptPassiveServiceChecks($this->getAcceptPassiveServiceChecks());
+		$copyObj->setEnableEventHandlers($this->getEnableEventHandlers());
+		$copyObj->setLogRotationMethod($this->getLogRotationMethod());
+		$copyObj->setLogArchivePath($this->getLogArchivePath());
+		$copyObj->setCheckExternalCommands($this->getCheckExternalCommands());
+		$copyObj->setCommandCheckInterval($this->getCommandCheckInterval());
+		$copyObj->setCommandFile($this->getCommandFile());
+		$copyObj->setLockFile($this->getLockFile());
+		$copyObj->setRetainStateInformation($this->getRetainStateInformation());
+		$copyObj->setStateRetentionFile($this->getStateRetentionFile());
+		$copyObj->setRetentionUpdateInterval($this->getRetentionUpdateInterval());
+		$copyObj->setUseRetainedProgramState($this->getUseRetainedProgramState());
+		$copyObj->setUseSyslog($this->getUseSyslog());
+		$copyObj->setLogNotifications($this->getLogNotifications());
+		$copyObj->setLogServiceRetries($this->getLogServiceRetries());
+		$copyObj->setLogHostRetries($this->getLogHostRetries());
+		$copyObj->setLogEventHandlers($this->getLogEventHandlers());
+		$copyObj->setLogInitialStates($this->getLogInitialStates());
+		$copyObj->setLogExternalCommands($this->getLogExternalCommands());
+		$copyObj->setLogPassiveChecks($this->getLogPassiveChecks());
+		$copyObj->setGlobalHostEventHandler($this->getGlobalHostEventHandler());
+		$copyObj->setGlobalServiceEventHandler($this->getGlobalServiceEventHandler());
+		$copyObj->setExternalCommandBufferSlots($this->getExternalCommandBufferSlots());
+		$copyObj->setSleepTime($this->getSleepTime());
+		$copyObj->setServiceInterleaveFactor($this->getServiceInterleaveFactor());
+		$copyObj->setMaxConcurrentChecks($this->getMaxConcurrentChecks());
+		$copyObj->setServiceReaperFrequency($this->getServiceReaperFrequency());
+		$copyObj->setIntervalLength($this->getIntervalLength());
+		$copyObj->setUseAggressiveHostChecking($this->getUseAggressiveHostChecking());
+		$copyObj->setEnableFlapDetection($this->getEnableFlapDetection());
+		$copyObj->setLowServiceFlapThreshold($this->getLowServiceFlapThreshold());
+		$copyObj->setHighServiceFlapThreshold($this->getHighServiceFlapThreshold());
+		$copyObj->setLowHostFlapThreshold($this->getLowHostFlapThreshold());
+		$copyObj->setHighHostFlapThreshold($this->getHighHostFlapThreshold());
+		$copyObj->setSoftStateDependencies($this->getSoftStateDependencies());
+		$copyObj->setServiceCheckTimeout($this->getServiceCheckTimeout());
+		$copyObj->setHostCheckTimeout($this->getHostCheckTimeout());
+		$copyObj->setEventHandlerTimeout($this->getEventHandlerTimeout());
+		$copyObj->setNotificationTimeout($this->getNotificationTimeout());
+		$copyObj->setOcspTimeout($this->getOcspTimeout());
+		$copyObj->setOhcpTimeout($this->getOhcpTimeout());
+		$copyObj->setPerfdataTimeout($this->getPerfdataTimeout());
+		$copyObj->setObsessOverServices($this->getObsessOverServices());
+		$copyObj->setOcspCommand($this->getOcspCommand());
+		$copyObj->setProcessPerformanceData($this->getProcessPerformanceData());
+		$copyObj->setCheckForOrphanedServices($this->getCheckForOrphanedServices());
+		$copyObj->setCheckServiceFreshness($this->getCheckServiceFreshness());
+		$copyObj->setFreshnessCheckInterval($this->getFreshnessCheckInterval());
+		$copyObj->setDateFormat($this->getDateFormat());
+		$copyObj->setIllegalObjectNameChars($this->getIllegalObjectNameChars());
+		$copyObj->setIllegalMacroOutputChars($this->getIllegalMacroOutputChars());
+		$copyObj->setAdminEmail($this->getAdminEmail());
+		$copyObj->setAdminPager($this->getAdminPager());
+		$copyObj->setExecuteHostChecks($this->getExecuteHostChecks());
+		$copyObj->setServiceInterCheckDelayMethod($this->getServiceInterCheckDelayMethod());
+		$copyObj->setUseRetainedSchedulingInfo($this->getUseRetainedSchedulingInfo());
+		$copyObj->setAcceptPassiveHostChecks($this->getAcceptPassiveHostChecks());
+		$copyObj->setMaxServiceCheckSpread($this->getMaxServiceCheckSpread());
+		$copyObj->setHostInterCheckDelayMethod($this->getHostInterCheckDelayMethod());
+		$copyObj->setMaxHostCheckSpread($this->getMaxHostCheckSpread());
+		$copyObj->setAutoRescheduleChecks($this->getAutoRescheduleChecks());
+		$copyObj->setAutoReschedulingInterval($this->getAutoReschedulingInterval());
+		$copyObj->setAutoReschedulingWindow($this->getAutoReschedulingWindow());
+		$copyObj->setOchpTimeout($this->getOchpTimeout());
+		$copyObj->setObsessOverHosts($this->getObsessOverHosts());
+		$copyObj->setOchpCommand($this->getOchpCommand());
+		$copyObj->setCheckHostFreshness($this->getCheckHostFreshness());
+		$copyObj->setHostFreshnessCheckInterval($this->getHostFreshnessCheckInterval());
+		$copyObj->setServiceFreshnessCheckInterval($this->getServiceFreshnessCheckInterval());
+		$copyObj->setUseRegexpMatching($this->getUseRegexpMatching());
+		$copyObj->setUseTrueRegexpMatching($this->getUseTrueRegexpMatching());
+		$copyObj->setEventBrokerOptions($this->getEventBrokerOptions());
+		$copyObj->setDaemonDumpsCore($this->getDaemonDumpsCore());
+		$copyObj->setHostPerfdataCommand($this->getHostPerfdataCommand());
+		$copyObj->setServicePerfdataCommand($this->getServicePerfdataCommand());
+		$copyObj->setHostPerfdataFile($this->getHostPerfdataFile());
+		$copyObj->setHostPerfdataFileTemplate($this->getHostPerfdataFileTemplate());
+		$copyObj->setServicePerfdataFile($this->getServicePerfdataFile());
+		$copyObj->setServicePerfdataFileTemplate($this->getServicePerfdataFileTemplate());
+		$copyObj->setHostPerfdataFileMode($this->getHostPerfdataFileMode());
+		$copyObj->setServicePerfdataFileMode($this->getServicePerfdataFileMode());
+		$copyObj->setHostPerfdataFileProcessingCommand($this->getHostPerfdataFileProcessingCommand());
+		$copyObj->setServicePerfdataFileProcessingCommand($this->getServicePerfdataFileProcessingCommand());
+		$copyObj->setHostPerfdataFileProcessingInterval($this->getHostPerfdataFileProcessingInterval());
+		$copyObj->setServicePerfdataFileProcessingInterval($this->getServicePerfdataFileProcessingInterval());
+		$copyObj->setObjectCacheFile($this->getObjectCacheFile());
+		$copyObj->setPrecachedObjectFile($this->getPrecachedObjectFile());
+		$copyObj->setRetainedHostAttributeMask($this->getRetainedHostAttributeMask());
+		$copyObj->setRetainedServiceAttributeMask($this->getRetainedServiceAttributeMask());
+		$copyObj->setRetainedProcessHostAttributeMask($this->getRetainedProcessHostAttributeMask());
+		$copyObj->setRetainedProcessServiceAttributeMask($this->getRetainedProcessServiceAttributeMask());
+		$copyObj->setRetainedContactHostAttributeMask($this->getRetainedContactHostAttributeMask());
+		$copyObj->setRetainedContactServiceAttributeMask($this->getRetainedContactServiceAttributeMask());
+		$copyObj->setCheckResultReaperFrequency($this->getCheckResultReaperFrequency());
+		$copyObj->setMaxCheckResultReaperTime($this->getMaxCheckResultReaperTime());
+		$copyObj->setCheckResultPath($this->getCheckResultPath());
+		$copyObj->setMaxCheckResultFileAge($this->getMaxCheckResultFileAge());
+		$copyObj->setTranslatePassiveHostChecks($this->getTranslatePassiveHostChecks());
+		$copyObj->setPassiveHostChecksAreSoft($this->getPassiveHostChecksAreSoft());
+		$copyObj->setEnablePredictiveHostDependencyChecks($this->getEnablePredictiveHostDependencyChecks());
+		$copyObj->setEnablePredictiveServiceDependencyChecks($this->getEnablePredictiveServiceDependencyChecks());
+		$copyObj->setCachedHostCheckHorizon($this->getCachedHostCheckHorizon());
+		$copyObj->setCachedServiceCheckHorizon($this->getCachedServiceCheckHorizon());
+		$copyObj->setUseLargeInstallationTweaks($this->getUseLargeInstallationTweaks());
+		$copyObj->setFreeChildProcessMemory($this->getFreeChildProcessMemory());
+		$copyObj->setChildProcessesForkTwice($this->getChildProcessesForkTwice());
+		$copyObj->setEnableEnvironmentMacros($this->getEnableEnvironmentMacros());
+		$copyObj->setAdditionalFreshnessLatency($this->getAdditionalFreshnessLatency());
+		$copyObj->setEnableEmbeddedPerl($this->getEnableEmbeddedPerl());
+		$copyObj->setUseEmbeddedPerlImplicitly($this->getUseEmbeddedPerlImplicitly());
+		$copyObj->setP1File($this->getP1File());
+		$copyObj->setUseTimezone($this->getUseTimezone());
+		$copyObj->setDebugFile($this->getDebugFile());
+		$copyObj->setDebugLevel($this->getDebugLevel());
+		$copyObj->setDebugVerbosity($this->getDebugVerbosity());
+		$copyObj->setMaxDebugFileSize($this->getMaxDebugFileSize());
+		$copyObj->setTempPath($this->getTempPath());
+		$copyObj->setCheckForUpdates($this->getCheckForUpdates());
+		$copyObj->setCheckForOrphanedHosts($this->getCheckForOrphanedHosts());
+		$copyObj->setBareUpdateCheck($this->getBareUpdateCheck());
+		$copyObj->setLogCurrentStates($this->getLogCurrentStates());
+		$copyObj->setCheckWorkers($this->getCheckWorkers());
+		$copyObj->setQuerySocket($this->getQuerySocket());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -6859,15 +7470,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByOcspCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByOcspCommand === null && ($this->ocsp_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->ocsp_command);
-			$this->aNagiosCommandRelatedByOcspCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByOcspCommand = NagiosCommandQuery::create()->findPk($this->ocsp_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByOcspCommand->addNagiosMainConfigurationsRelatedByOcspCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByOcspCommand->addNagiosMainConfigurationsRelatedByOcspCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByOcspCommand;
@@ -6910,15 +7519,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByOchpCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByOchpCommand === null && ($this->ochp_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->ochp_command);
-			$this->aNagiosCommandRelatedByOchpCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByOchpCommand = NagiosCommandQuery::create()->findPk($this->ochp_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByOchpCommand->addNagiosMainConfigurationsRelatedByOchpCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByOchpCommand->addNagiosMainConfigurationsRelatedByOchpCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByOchpCommand;
@@ -6961,15 +7568,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByHostPerfdataCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByHostPerfdataCommand === null && ($this->host_perfdata_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->host_perfdata_command);
-			$this->aNagiosCommandRelatedByHostPerfdataCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByHostPerfdataCommand = NagiosCommandQuery::create()->findPk($this->host_perfdata_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByHostPerfdataCommand->addNagiosMainConfigurationsRelatedByHostPerfdataCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByHostPerfdataCommand->addNagiosMainConfigurationsRelatedByHostPerfdataCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByHostPerfdataCommand;
@@ -7012,15 +7617,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByServicePerfdataCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByServicePerfdataCommand === null && ($this->service_perfdata_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->service_perfdata_command);
-			$this->aNagiosCommandRelatedByServicePerfdataCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByServicePerfdataCommand = NagiosCommandQuery::create()->findPk($this->service_perfdata_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByServicePerfdataCommand->addNagiosMainConfigurationsRelatedByServicePerfdataCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByServicePerfdataCommand->addNagiosMainConfigurationsRelatedByServicePerfdataCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByServicePerfdataCommand;
@@ -7063,15 +7666,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByHostPerfdataFileProcessingCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand === null && ($this->host_perfdata_file_processing_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->host_perfdata_file_processing_command);
-			$this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand = NagiosCommandQuery::create()->findPk($this->host_perfdata_file_processing_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand->addNagiosMainConfigurationsRelatedByHostPerfdataFileProcessingCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand->addNagiosMainConfigurationsRelatedByHostPerfdataFileProcessingCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand;
@@ -7114,15 +7715,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByServicePerfdataFileProcessingCommand(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand === null && ($this->service_perfdata_file_processing_command !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->service_perfdata_file_processing_command);
-			$this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand = NagiosCommandQuery::create()->findPk($this->service_perfdata_file_processing_command, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand->addNagiosMainConfigurationsRelatedByServicePerfdataFileProcessingCommand($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand->addNagiosMainConfigurationsRelatedByServicePerfdataFileProcessingCommand($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand;
@@ -7165,15 +7764,13 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByGlobalServiceEventHandler(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByGlobalServiceEventHandler === null && ($this->global_service_event_handler !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->global_service_event_handler);
-			$this->aNagiosCommandRelatedByGlobalServiceEventHandler = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByGlobalServiceEventHandler = NagiosCommandQuery::create()->findPk($this->global_service_event_handler, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByGlobalServiceEventHandler->addNagiosMainConfigurationsRelatedByGlobalServiceEventHandler($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByGlobalServiceEventHandler->addNagiosMainConfigurationsRelatedByGlobalServiceEventHandler($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByGlobalServiceEventHandler;
@@ -7216,42 +7813,215 @@ abstract class BaseNagiosMainConfiguration extends BaseObject  implements Persis
 	public function getNagiosCommandRelatedByGlobalHostEventHandler(PropelPDO $con = null)
 	{
 		if ($this->aNagiosCommandRelatedByGlobalHostEventHandler === null && ($this->global_host_event_handler !== null)) {
-			$c = new Criteria(NagiosCommandPeer::DATABASE_NAME);
-			$c->add(NagiosCommandPeer::ID, $this->global_host_event_handler);
-			$this->aNagiosCommandRelatedByGlobalHostEventHandler = NagiosCommandPeer::doSelectOne($c, $con);
+			$this->aNagiosCommandRelatedByGlobalHostEventHandler = NagiosCommandQuery::create()->findPk($this->global_host_event_handler, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosCommandRelatedByGlobalHostEventHandler->addNagiosMainConfigurationsRelatedByGlobalHostEventHandler($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosCommandRelatedByGlobalHostEventHandler->addNagiosMainConfigurationsRelatedByGlobalHostEventHandler($this);
 			 */
 		}
 		return $this->aNagiosCommandRelatedByGlobalHostEventHandler;
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->config_dir = null;
+		$this->log_file = null;
+		$this->temp_file = null;
+		$this->status_file = null;
+		$this->status_update_interval = null;
+		$this->nagios_user = null;
+		$this->nagios_group = null;
+		$this->enable_notifications = null;
+		$this->execute_service_checks = null;
+		$this->accept_passive_service_checks = null;
+		$this->enable_event_handlers = null;
+		$this->log_rotation_method = null;
+		$this->log_archive_path = null;
+		$this->check_external_commands = null;
+		$this->command_check_interval = null;
+		$this->command_file = null;
+		$this->lock_file = null;
+		$this->retain_state_information = null;
+		$this->state_retention_file = null;
+		$this->retention_update_interval = null;
+		$this->use_retained_program_state = null;
+		$this->use_syslog = null;
+		$this->log_notifications = null;
+		$this->log_service_retries = null;
+		$this->log_host_retries = null;
+		$this->log_event_handlers = null;
+		$this->log_initial_states = null;
+		$this->log_external_commands = null;
+		$this->log_passive_checks = null;
+		$this->global_host_event_handler = null;
+		$this->global_service_event_handler = null;
+		$this->external_command_buffer_slots = null;
+		$this->sleep_time = null;
+		$this->service_interleave_factor = null;
+		$this->max_concurrent_checks = null;
+		$this->service_reaper_frequency = null;
+		$this->interval_length = null;
+		$this->use_aggressive_host_checking = null;
+		$this->enable_flap_detection = null;
+		$this->low_service_flap_threshold = null;
+		$this->high_service_flap_threshold = null;
+		$this->low_host_flap_threshold = null;
+		$this->high_host_flap_threshold = null;
+		$this->soft_state_dependencies = null;
+		$this->service_check_timeout = null;
+		$this->host_check_timeout = null;
+		$this->event_handler_timeout = null;
+		$this->notification_timeout = null;
+		$this->ocsp_timeout = null;
+		$this->ohcp_timeout = null;
+		$this->perfdata_timeout = null;
+		$this->obsess_over_services = null;
+		$this->ocsp_command = null;
+		$this->process_performance_data = null;
+		$this->check_for_orphaned_services = null;
+		$this->check_service_freshness = null;
+		$this->freshness_check_interval = null;
+		$this->date_format = null;
+		$this->illegal_object_name_chars = null;
+		$this->illegal_macro_output_chars = null;
+		$this->admin_email = null;
+		$this->admin_pager = null;
+		$this->execute_host_checks = null;
+		$this->service_inter_check_delay_method = null;
+		$this->use_retained_scheduling_info = null;
+		$this->accept_passive_host_checks = null;
+		$this->max_service_check_spread = null;
+		$this->host_inter_check_delay_method = null;
+		$this->max_host_check_spread = null;
+		$this->auto_reschedule_checks = null;
+		$this->auto_rescheduling_interval = null;
+		$this->auto_rescheduling_window = null;
+		$this->ochp_timeout = null;
+		$this->obsess_over_hosts = null;
+		$this->ochp_command = null;
+		$this->check_host_freshness = null;
+		$this->host_freshness_check_interval = null;
+		$this->service_freshness_check_interval = null;
+		$this->use_regexp_matching = null;
+		$this->use_true_regexp_matching = null;
+		$this->event_broker_options = null;
+		$this->daemon_dumps_core = null;
+		$this->host_perfdata_command = null;
+		$this->service_perfdata_command = null;
+		$this->host_perfdata_file = null;
+		$this->host_perfdata_file_template = null;
+		$this->service_perfdata_file = null;
+		$this->service_perfdata_file_template = null;
+		$this->host_perfdata_file_mode = null;
+		$this->service_perfdata_file_mode = null;
+		$this->host_perfdata_file_processing_command = null;
+		$this->service_perfdata_file_processing_command = null;
+		$this->host_perfdata_file_processing_interval = null;
+		$this->service_perfdata_file_processing_interval = null;
+		$this->object_cache_file = null;
+		$this->precached_object_file = null;
+		$this->retained_host_attribute_mask = null;
+		$this->retained_service_attribute_mask = null;
+		$this->retained_process_host_attribute_mask = null;
+		$this->retained_process_service_attribute_mask = null;
+		$this->retained_contact_host_attribute_mask = null;
+		$this->retained_contact_service_attribute_mask = null;
+		$this->check_result_reaper_frequency = null;
+		$this->max_check_result_reaper_time = null;
+		$this->check_result_path = null;
+		$this->max_check_result_file_age = null;
+		$this->translate_passive_host_checks = null;
+		$this->passive_host_checks_are_soft = null;
+		$this->enable_predictive_host_dependency_checks = null;
+		$this->enable_predictive_service_dependency_checks = null;
+		$this->cached_host_check_horizon = null;
+		$this->cached_service_check_horizon = null;
+		$this->use_large_installation_tweaks = null;
+		$this->free_child_process_memory = null;
+		$this->child_processes_fork_twice = null;
+		$this->enable_environment_macros = null;
+		$this->additional_freshness_latency = null;
+		$this->enable_embedded_perl = null;
+		$this->use_embedded_perl_implicitly = null;
+		$this->p1_file = null;
+		$this->use_timezone = null;
+		$this->debug_file = null;
+		$this->debug_level = null;
+		$this->debug_verbosity = null;
+		$this->max_debug_file_size = null;
+		$this->temp_path = null;
+		$this->check_for_updates = null;
+		$this->check_for_orphaned_hosts = null;
+		$this->bare_update_check = null;
+		$this->log_current_states = null;
+		$this->check_workers = null;
+		$this->query_socket = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
-			$this->aNagiosCommandRelatedByOcspCommand = null;
-			$this->aNagiosCommandRelatedByOchpCommand = null;
-			$this->aNagiosCommandRelatedByHostPerfdataCommand = null;
-			$this->aNagiosCommandRelatedByServicePerfdataCommand = null;
-			$this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand = null;
-			$this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand = null;
-			$this->aNagiosCommandRelatedByGlobalServiceEventHandler = null;
-			$this->aNagiosCommandRelatedByGlobalHostEventHandler = null;
+		$this->aNagiosCommandRelatedByOcspCommand = null;
+		$this->aNagiosCommandRelatedByOchpCommand = null;
+		$this->aNagiosCommandRelatedByHostPerfdataCommand = null;
+		$this->aNagiosCommandRelatedByServicePerfdataCommand = null;
+		$this->aNagiosCommandRelatedByHostPerfdataFileProcessingCommand = null;
+		$this->aNagiosCommandRelatedByServicePerfdataFileProcessingCommand = null;
+		$this->aNagiosCommandRelatedByGlobalServiceEventHandler = null;
+		$this->aNagiosCommandRelatedByGlobalHostEventHandler = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosMainConfigurationPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosMainConfiguration

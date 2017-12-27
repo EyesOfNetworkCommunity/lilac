@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_dependency_target' table.
  *
  * Targets for a Dependency
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosDependencyTargetPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_dependency_target';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosDependencyTarget';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosDependencyTarget';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosDependencyTargetTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 5;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_dependency_target.ID';
@@ -39,6 +49,9 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/** the column name for the TARGET_HOSTGROUP field */
 	const TARGET_HOSTGROUP = 'nagios_dependency_target.TARGET_HOSTGROUP';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosDependencyTarget objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -47,11 +60,6 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -59,10 +67,11 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Dependency', 'TargetHost', 'TargetService', 'TargetHostgroup', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'dependency', 'targetHost', 'targetService', 'targetHostgroup', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::DEPENDENCY, self::TARGET_HOST, self::TARGET_SERVICE, self::TARGET_HOSTGROUP, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DEPENDENCY', 'TARGET_HOST', 'TARGET_SERVICE', 'TARGET_HOSTGROUP', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'dependency', 'target_host', 'target_service', 'target_hostgroup', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
@@ -73,25 +82,15 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Dependency' => 1, 'TargetHost' => 2, 'TargetService' => 3, 'TargetHostgroup' => 4, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'dependency' => 1, 'targetHost' => 2, 'targetService' => 3, 'targetHostgroup' => 4, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DEPENDENCY => 1, self::TARGET_HOST => 2, self::TARGET_SERVICE => 3, self::TARGET_HOSTGROUP => 4, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DEPENDENCY' => 1, 'TARGET_HOST' => 2, 'TARGET_SERVICE' => 3, 'TARGET_HOSTGROUP' => 4, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'dependency' => 1, 'target_host' => 2, 'target_service' => 3, 'target_hostgroup' => 4, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosDependencyTargetMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -153,23 +152,26 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosDependencyTargetPeer::ID);
-
-		$criteria->addSelectColumn(NagiosDependencyTargetPeer::DEPENDENCY);
-
-		$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_HOST);
-
-		$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_SERVICE);
-
-		$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_HOSTGROUP);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosDependencyTargetPeer::ID);
+			$criteria->addSelectColumn(NagiosDependencyTargetPeer::DEPENDENCY);
+			$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_HOST);
+			$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_SERVICE);
+			$criteria->addSelectColumn(NagiosDependencyTargetPeer::TARGET_HOSTGROUP);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.DEPENDENCY');
+			$criteria->addSelectColumn($alias . '.TARGET_HOST');
+			$criteria->addSelectColumn($alias . '.TARGET_SERVICE');
+			$criteria->addSelectColumn($alias . '.TARGET_HOSTGROUP');
+		}
 	}
 
 	/**
@@ -216,7 +218,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -235,7 +237,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -289,7 +291,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 * @param      NagiosDependencyTarget $value A NagiosDependencyTarget object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosDependencyTarget $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -357,6 +359,14 @@ abstract class BaseNagiosDependencyTargetPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_dependency_target
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -369,12 +379,26 @@ abstract class BaseNagiosDependencyTargetPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -387,18 +411,16 @@ abstract class BaseNagiosDependencyTargetPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosDependencyTargetPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosDependencyTargetPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosDependencyTargetPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -408,11 +430,37 @@ abstract class BaseNagiosDependencyTargetPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosDependencyTarget object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosDependencyTargetPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosDependencyTargetPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosDependencyTargetPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosDependency table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -445,7 +493,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -461,7 +510,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -494,7 +543,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -510,7 +560,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosService table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -543,7 +593,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -559,7 +610,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostgroup table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -592,7 +643,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -607,41 +659,41 @@ abstract class BaseNagiosDependencyTargetPeer {
 
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with their NagiosDependency objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosDependency(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosDependency(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosDependencyPeer::addSelectColumns($c);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
+		NagiosDependencyPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -652,9 +704,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj2 = NagiosDependencyPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosDependencyPeer::getOMClass();
+					$cls = NagiosDependencyPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosDependencyPeer::addInstanceToPool($obj2, $key2);
@@ -674,41 +725,41 @@ abstract class BaseNagiosDependencyTargetPeer {
 
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with their NagiosHost objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostPeer::addSelectColumns($c);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -719,9 +770,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -741,41 +791,41 @@ abstract class BaseNagiosDependencyTargetPeer {
 
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with their NagiosService objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosService(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosServicePeer::addSelectColumns($c);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
+		NagiosServicePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -786,9 +836,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj2 = NagiosServicePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosServicePeer::getOMClass();
+					$cls = NagiosServicePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosServicePeer::addInstanceToPool($obj2, $key2);
@@ -808,41 +857,41 @@ abstract class BaseNagiosDependencyTargetPeer {
 
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with their NagiosHostgroup objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosHostgroup(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosHostgroup(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosHostgroupPeer::addSelectColumns($c);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
+		NagiosHostgroupPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -853,9 +902,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj2 = NagiosHostgroupPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosHostgroupPeer::getOMClass();
+					$cls = NagiosHostgroupPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosHostgroupPeer::addInstanceToPool($obj2, $key2);
@@ -876,7 +924,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -909,10 +957,14 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -927,54 +979,57 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol2 = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosDependencyPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosDependencyPeer::NUM_COLUMNS - NagiosDependencyPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosDependencyPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostgroupPeer::addSelectColumns($c);
-		$startcol6 = $startcol5 + (NagiosHostgroupPeer::NUM_COLUMNS - NagiosHostgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostgroupPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + NagiosHostgroupPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -987,10 +1042,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj2 = NagiosDependencyPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosDependencyPeer::getOMClass();
+					$cls = NagiosDependencyPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosDependencyPeer::addInstanceToPool($obj2, $key2);
@@ -1007,10 +1060,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj3 = NagiosHostPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosHostPeer::getOMClass();
+					$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostPeer::addInstanceToPool($obj3, $key3);
@@ -1027,10 +1078,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj4 = NagiosServicePeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$omClass = NagiosServicePeer::getOMClass();
+					$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosServicePeer::addInstanceToPool($obj4, $key4);
@@ -1047,10 +1096,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 				$obj5 = NagiosHostgroupPeer::getInstanceFromPool($key5);
 				if (!$obj5) {
 
-					$omClass = NagiosHostgroupPeer::getOMClass();
+					$cls = NagiosHostgroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj5 = new $cls();
 					$obj5->hydrate($row, $startcol5);
 					NagiosHostgroupPeer::addInstanceToPool($obj5, $key5);
@@ -1070,7 +1117,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosDependency table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1103,9 +1150,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1121,7 +1171,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHost table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1154,9 +1204,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1172,7 +1225,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosService table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1205,9 +1258,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1223,7 +1279,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosHostgroup table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1256,9 +1312,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1274,53 +1333,55 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with all related objects except NagiosDependency.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosDependency(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosDependency(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol2 = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostgroupPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosHostgroupPeer::NUM_COLUMNS - NagiosHostgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostgroupPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosHostgroupPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -1333,10 +1394,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj2 = NagiosHostPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosHostPeer::addInstanceToPool($obj2, $key2);
@@ -1354,10 +1413,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj3 = NagiosServicePeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosServicePeer::getOMClass();
+						$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosServicePeer::addInstanceToPool($obj3, $key3);
@@ -1375,10 +1432,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj4 = NagiosHostgroupPeer::getInstanceFromPool($key4);
 					if (!$obj4) {
 	
-						$omClass = NagiosHostgroupPeer::getOMClass();
+						$cls = NagiosHostgroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosHostgroupPeer::addInstanceToPool($obj4, $key4);
@@ -1399,53 +1454,55 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with all related objects except NagiosHost.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHost(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHost(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol2 = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosDependencyPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosDependencyPeer::NUM_COLUMNS - NagiosDependencyPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosDependencyPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostgroupPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosHostgroupPeer::NUM_COLUMNS - NagiosHostgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostgroupPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosHostgroupPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -1458,10 +1515,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj2 = NagiosDependencyPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosDependencyPeer::getOMClass();
+						$cls = NagiosDependencyPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosDependencyPeer::addInstanceToPool($obj2, $key2);
@@ -1479,10 +1534,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj3 = NagiosServicePeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosServicePeer::getOMClass();
+						$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosServicePeer::addInstanceToPool($obj3, $key3);
@@ -1500,10 +1553,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj4 = NagiosHostgroupPeer::getInstanceFromPool($key4);
 					if (!$obj4) {
 	
-						$omClass = NagiosHostgroupPeer::getOMClass();
+						$cls = NagiosHostgroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosHostgroupPeer::addInstanceToPool($obj4, $key4);
@@ -1524,53 +1575,55 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with all related objects except NagiosService.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosService(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol2 = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosDependencyPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosDependencyPeer::NUM_COLUMNS - NagiosDependencyPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosDependencyPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostgroupPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosHostgroupPeer::NUM_COLUMNS - NagiosHostgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostgroupPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosHostgroupPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOSTGROUP,), array(NagiosHostgroupPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOSTGROUP, NagiosHostgroupPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -1583,10 +1636,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj2 = NagiosDependencyPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosDependencyPeer::getOMClass();
+						$cls = NagiosDependencyPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosDependencyPeer::addInstanceToPool($obj2, $key2);
@@ -1604,10 +1655,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj3 = NagiosHostPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostPeer::addInstanceToPool($obj3, $key3);
@@ -1625,10 +1674,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj4 = NagiosHostgroupPeer::getInstanceFromPool($key4);
 					if (!$obj4) {
 	
-						$omClass = NagiosHostgroupPeer::getOMClass();
+						$cls = NagiosHostgroupPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosHostgroupPeer::addInstanceToPool($obj4, $key4);
@@ -1649,53 +1696,55 @@ abstract class BaseNagiosDependencyTargetPeer {
 	/**
 	 * Selects a collection of NagiosDependencyTarget objects pre-filled with all related objects except NagiosHostgroup.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosDependencyTarget objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosHostgroup(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosHostgroup(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosDependencyTargetPeer::addSelectColumns($c);
-		$startcol2 = (NagiosDependencyTargetPeer::NUM_COLUMNS - NagiosDependencyTargetPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyTargetPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosDependencyTargetPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosDependencyPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosDependencyPeer::NUM_COLUMNS - NagiosDependencyPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosDependencyPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosDependencyPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosDependencyTargetPeer::DEPENDENCY,), array(NagiosDependencyPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_HOST,), array(NagiosHostPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosDependencyTargetPeer::TARGET_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosDependencyTargetPeer::DEPENDENCY, NagiosDependencyPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_HOST, NagiosHostPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosDependencyTargetPeer::TARGET_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosDependencyTargetPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosDependencyTargetPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosDependencyTargetPeer::getOMClass();
+				$cls = NagiosDependencyTargetPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosDependencyTargetPeer::addInstanceToPool($obj1, $key1);
@@ -1708,10 +1757,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj2 = NagiosDependencyPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosDependencyPeer::getOMClass();
+						$cls = NagiosDependencyPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosDependencyPeer::addInstanceToPool($obj2, $key2);
@@ -1729,10 +1776,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj3 = NagiosHostPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosHostPeer::getOMClass();
+						$cls = NagiosHostPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosHostPeer::addInstanceToPool($obj3, $key3);
@@ -1750,10 +1795,8 @@ abstract class BaseNagiosDependencyTargetPeer {
 					$obj4 = NagiosServicePeer::getInstanceFromPool($key4);
 					if (!$obj4) {
 	
-						$omClass = NagiosServicePeer::getOMClass();
+						$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosServicePeer::addInstanceToPool($obj4, $key4);
@@ -1783,21 +1826,35 @@ abstract class BaseNagiosDependencyTargetPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosDependencyTargetPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosDependencyTargetPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosDependencyTargetPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosDependencyTargetTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosDependencyTarget or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosDependencyTargetPeer::CLASS_DEFAULT : NagiosDependencyTargetPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosDependencyTarget or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosDependencyTarget object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1840,7 +1897,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosDependencyTarget or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosDependencyTarget or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosDependencyTarget object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1860,7 +1917,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosDependencyTargetPeer::ID);
-			$selectCriteria->add(NagiosDependencyTargetPeer::ID, $criteria->remove(NagiosDependencyTargetPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosDependencyTargetPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosDependencyTargetPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosDependencyTargetPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosDependencyTarget object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1874,11 +1936,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_dependency_target table.
+	 * Deletes all rows from the nagios_dependency_target table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosDependencyTargetPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1888,7 +1951,12 @@ abstract class BaseNagiosDependencyTargetPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosDependencyTargetPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosDependencyTargetPeer::TABLE_NAME, $con, NagiosDependencyTargetPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosDependencyTargetPeer::clearInstancePool();
+			NagiosDependencyTargetPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1898,7 +1966,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosDependencyTarget or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosDependencyTarget or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosDependencyTarget object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1919,24 +1987,18 @@ abstract class BaseNagiosDependencyTargetPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosDependencyTargetPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosDependencyTarget) {
+		} elseif ($values instanceof NagiosDependencyTarget) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosDependencyTargetPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosDependencyTargetPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosDependencyTargetPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -1952,7 +2014,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosDependencyTargetPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1973,7 +2035,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosDependencyTarget $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -2051,14 +2113,7 @@ abstract class BaseNagiosDependencyTargetPeer {
 
 } // BaseNagiosDependencyTargetPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosDependencyTargetPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosDependencyTargetPeer class:
-//
-// Propel::getDatabaseMap(NagiosDependencyTargetPeer::DATABASE_NAME)->addTableBuilder(NagiosDependencyTargetPeer::TABLE_NAME, NagiosDependencyTargetPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosDependencyTargetPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosDependencyTargetPeer::TABLE_NAME, BaseNagiosDependencyTargetPeer::getMapBuilder());
+BaseNagiosDependencyTargetPeer::buildTableMap();
 

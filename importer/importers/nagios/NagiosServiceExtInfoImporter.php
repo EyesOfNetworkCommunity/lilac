@@ -184,7 +184,7 @@ class NagiosServiceExtInfoImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $service, $value);
+					call_user_func(array($service, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_timeperiod' table.
  *
  * Nagios Timeperiods
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosTimeperiodPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosTimeperiodPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_timeperiod';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosTimeperiod';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosTimeperiod';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosTimeperiodTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 3;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 3;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_timeperiod.ID';
@@ -33,6 +43,9 @@ abstract class BaseNagiosTimeperiodPeer {
 	/** the column name for the ALIAS field */
 	const ALIAS = 'nagios_timeperiod.ALIAS';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosTimeperiod objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -41,11 +54,6 @@ abstract class BaseNagiosTimeperiodPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -53,10 +61,11 @@ abstract class BaseNagiosTimeperiodPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Alias', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'alias', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::ALIAS, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ALIAS', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'alias', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
@@ -67,25 +76,15 @@ abstract class BaseNagiosTimeperiodPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Alias' => 2, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::ALIAS => 2, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ALIAS' => 2, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosTimeperiodMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -147,19 +146,22 @@ abstract class BaseNagiosTimeperiodPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosTimeperiodPeer::ID);
-
-		$criteria->addSelectColumn(NagiosTimeperiodPeer::NAME);
-
-		$criteria->addSelectColumn(NagiosTimeperiodPeer::ALIAS);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosTimeperiodPeer::ID);
+			$criteria->addSelectColumn(NagiosTimeperiodPeer::NAME);
+			$criteria->addSelectColumn(NagiosTimeperiodPeer::ALIAS);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.ALIAS');
+		}
 	}
 
 	/**
@@ -206,7 +208,7 @@ abstract class BaseNagiosTimeperiodPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -225,7 +227,7 @@ abstract class BaseNagiosTimeperiodPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -279,7 +281,7 @@ abstract class BaseNagiosTimeperiodPeer {
 	 * @param      NagiosTimeperiod $value A NagiosTimeperiod object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosTimeperiod $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -347,6 +349,59 @@ abstract class BaseNagiosTimeperiodPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_timeperiod
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in NagiosTimeperiodEntryPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosTimeperiodEntryPeer::clearInstancePool();
+		// Invalidate objects in NagiosTimeperiodExcludePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosTimeperiodExcludePeer::clearInstancePool();
+		// Invalidate objects in NagiosTimeperiodExcludePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosTimeperiodExcludePeer::clearInstancePool();
+		// Invalidate objects in NagiosContactPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosContactPeer::clearInstancePool();
+		// Invalidate objects in NagiosContactPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosContactPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostPeer::clearInstancePool();
+		// Invalidate objects in NagiosServiceTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServiceTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosServiceTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServiceTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServicePeer::clearInstancePool();
+		// Invalidate objects in NagiosServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServicePeer::clearInstancePool();
+		// Invalidate objects in NagiosDependencyPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosDependencyPeer::clearInstancePool();
+		// Invalidate objects in NagiosEscalationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosEscalationPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -359,12 +414,26 @@ abstract class BaseNagiosTimeperiodPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -377,18 +446,16 @@ abstract class BaseNagiosTimeperiodPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosTimeperiodPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosTimeperiodPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosTimeperiodPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosTimeperiodPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -398,6 +465,32 @@ abstract class BaseNagiosTimeperiodPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosTimeperiod object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosTimeperiodPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosTimeperiodPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosTimeperiodPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosTimeperiodPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -411,21 +504,35 @@ abstract class BaseNagiosTimeperiodPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosTimeperiodPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosTimeperiodPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosTimeperiodPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosTimeperiodTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosTimeperiod or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosTimeperiodPeer::CLASS_DEFAULT : NagiosTimeperiodPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosTimeperiod or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiod object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -468,7 +575,7 @@ abstract class BaseNagiosTimeperiodPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosTimeperiod or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosTimeperiod or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiod object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -488,7 +595,12 @@ abstract class BaseNagiosTimeperiodPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosTimeperiodPeer::ID);
-			$selectCriteria->add(NagiosTimeperiodPeer::ID, $criteria->remove(NagiosTimeperiodPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosTimeperiodPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosTimeperiodPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosTimeperiodPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosTimeperiod object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -502,11 +614,12 @@ abstract class BaseNagiosTimeperiodPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_timeperiod table.
+	 * Deletes all rows from the nagios_timeperiod table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosTimeperiodPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -518,7 +631,12 @@ abstract class BaseNagiosTimeperiodPeer {
 			$con->beginTransaction();
 			$affectedRows += NagiosTimeperiodPeer::doOnDeleteCascade(new Criteria(NagiosTimeperiodPeer::DATABASE_NAME), $con);
 			NagiosTimeperiodPeer::doOnDeleteSetNull(new Criteria(NagiosTimeperiodPeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(NagiosTimeperiodPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosTimeperiodPeer::TABLE_NAME, $con, NagiosTimeperiodPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosTimeperiodPeer::clearInstancePool();
+			NagiosTimeperiodPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -528,7 +646,7 @@ abstract class BaseNagiosTimeperiodPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosTimeperiod or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosTimeperiod or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiod object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -545,30 +663,14 @@ abstract class BaseNagiosTimeperiodPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			NagiosTimeperiodPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosTimeperiod) {
-			// invalidate the cache for this single object
-			NagiosTimeperiodPeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof NagiosTimeperiod) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosTimeperiodPeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				NagiosTimeperiodPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -580,65 +682,30 @@ abstract class BaseNagiosTimeperiodPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += NagiosTimeperiodPeer::doOnDeleteCascade($criteria, $con);
-			NagiosTimeperiodPeer::doOnDeleteSetNull($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					NagiosTimeperiodPeer::clearInstancePool();
-				} else { // it's a PK or object
-					NagiosTimeperiodPeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += NagiosTimeperiodPeer::doOnDeleteCascade($c, $con);
+			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			NagiosTimeperiodPeer::doOnDeleteSetNull($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				NagiosTimeperiodPeer::clearInstancePool();
+			} elseif ($values instanceof NagiosTimeperiod) { // it's a model object
+				NagiosTimeperiodPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					NagiosTimeperiodPeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in NagiosTimeperiodEntryPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosTimeperiodEntryPeer::clearInstancePool();
-
-			// invalidate objects in NagiosTimeperiodExcludePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosTimeperiodExcludePeer::clearInstancePool();
-
-			// invalidate objects in NagiosTimeperiodExcludePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosTimeperiodExcludePeer::clearInstancePool();
-
-			// invalidate objects in NagiosContactPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosContactPeer::clearInstancePool();
-
-			// invalidate objects in NagiosContactPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosContactPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostPeer::clearInstancePool();
-
-			// invalidate objects in NagiosServiceTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServiceTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServiceTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServiceTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServicePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServicePeer::clearInstancePool();
-
-			// invalidate objects in NagiosDependencyPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosDependencyPeer::clearInstancePool();
-
-			// invalidate objects in NagiosEscalationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosEscalationPeer::clearInstancePool();
-
+			NagiosTimeperiodPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -671,10 +738,10 @@ abstract class BaseNagiosTimeperiodPeer {
 
 
 			// delete related NagiosDependency objects
-			$c = new Criteria(NagiosDependencyPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosDependencyPeer::DATABASE_NAME);
 			
-			$c->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $obj->getId());
-			$affectedRows += NagiosDependencyPeer::doDelete($c, $con);
+			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $obj->getId());
+			$affectedRows += NagiosDependencyPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -705,7 +772,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, $obj->getId());
 			$updateValues->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosTimeperiodExclude rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -713,7 +780,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, $obj->getId());
 			$updateValues->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosTimeperiodExclude rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -721,7 +788,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, $obj->getId());
 			$updateValues->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosContact rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -729,7 +796,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosContact rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -737,7 +804,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHostTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -745,7 +812,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $obj->getId());
 			$updateValues->add(NagiosHostTemplatePeer::CHECK_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHostTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -753,7 +820,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHost rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -761,7 +828,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosHostPeer::CHECK_PERIOD, $obj->getId());
 			$updateValues->add(NagiosHostPeer::CHECK_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHost rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -769,7 +836,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosHostPeer::NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosServiceTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -777,7 +844,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $obj->getId());
 			$updateValues->add(NagiosServiceTemplatePeer::CHECK_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosServiceTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -785,7 +852,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosService rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -793,7 +860,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosServicePeer::CHECK_PERIOD, $obj->getId());
 			$updateValues->add(NagiosServicePeer::CHECK_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosService rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -801,7 +868,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosServicePeer::NOTIFICATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosEscalation rows to NULL
 			$selectCriteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
@@ -809,7 +876,7 @@ abstract class BaseNagiosTimeperiodPeer {
 			$selectCriteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $obj->getId());
 			$updateValues->add(NagiosEscalationPeer::ESCALATION_PERIOD, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 		}
 	}
@@ -826,7 +893,7 @@ abstract class BaseNagiosTimeperiodPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosTimeperiod $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -904,14 +971,7 @@ abstract class BaseNagiosTimeperiodPeer {
 
 } // BaseNagiosTimeperiodPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosTimeperiodPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosTimeperiodPeer class:
-//
-// Propel::getDatabaseMap(NagiosTimeperiodPeer::DATABASE_NAME)->addTableBuilder(NagiosTimeperiodPeer::TABLE_NAME, NagiosTimeperiodPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosTimeperiodPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosTimeperiodPeer::TABLE_NAME, BaseNagiosTimeperiodPeer::getMapBuilder());
+BaseNagiosTimeperiodPeer::buildTableMap();
 

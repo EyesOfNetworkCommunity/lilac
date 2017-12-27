@@ -48,7 +48,7 @@ if(isset($_POST['request'])) {
 		else {
 			
 			// Check for pre-existing command with same name
-			if($lilac->timeperiod_exists($_POST['timeperiod_manage']['timeperiod_name'])) {
+			if($lilac->period_exists($_POST['timeperiod_manage']['timeperiod_name'])) {
 				$error = "A time period with that name already exists!";
 			}
 			else {

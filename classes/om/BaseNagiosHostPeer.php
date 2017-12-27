@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_host' table.
  *
  * Nagios Host
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosHostPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosHostPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_host';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosHost';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosHost';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosHostTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 50;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 50;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_host.ID';
@@ -174,6 +184,9 @@ abstract class BaseNagiosHostPeer {
 	/** the column name for the THREE_D_COORDS field */
 	const THREE_D_COORDS = 'nagios_host.THREE_D_COORDS';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosHost objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -182,11 +195,6 @@ abstract class BaseNagiosHostPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -194,10 +202,11 @@ abstract class BaseNagiosHostPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Alias', 'DisplayName', 'InitialState', 'Address', 'CheckCommand', 'RetryInterval', 'FirstNotificationDelay', 'MaximumCheckAttempts', 'CheckInterval', 'PassiveChecksEnabled', 'CheckPeriod', 'ObsessOverHost', 'CheckFreshness', 'FreshnessThreshold', 'ActiveChecksEnabled', 'ChecksEnabled', 'EventHandler', 'EventHandlerEnabled', 'LowFlapThreshold', 'HighFlapThreshold', 'FlapDetectionEnabled', 'ProcessPerfData', 'RetainStatusInformation', 'RetainNonstatusInformation', 'NotificationInterval', 'NotificationPeriod', 'NotificationsEnabled', 'NotificationOnDown', 'NotificationOnUnreachable', 'NotificationOnRecovery', 'NotificationOnFlapping', 'NotificationOnScheduledDowntime', 'StalkingOnUp', 'StalkingOnDown', 'StalkingOnUnreachable', 'FailurePredictionEnabled', 'FlapDetectionOnUp', 'FlapDetectionOnDown', 'FlapDetectionOnUnreachable', 'Notes', 'NotesUrl', 'ActionUrl', 'IconImage', 'IconImageAlt', 'VrmlImage', 'StatusmapImage', 'TwoDCoords', 'ThreeDCoords', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'alias', 'displayName', 'initialState', 'address', 'checkCommand', 'retryInterval', 'firstNotificationDelay', 'maximumCheckAttempts', 'checkInterval', 'passiveChecksEnabled', 'checkPeriod', 'obsessOverHost', 'checkFreshness', 'freshnessThreshold', 'activeChecksEnabled', 'checksEnabled', 'eventHandler', 'eventHandlerEnabled', 'lowFlapThreshold', 'highFlapThreshold', 'flapDetectionEnabled', 'processPerfData', 'retainStatusInformation', 'retainNonstatusInformation', 'notificationInterval', 'notificationPeriod', 'notificationsEnabled', 'notificationOnDown', 'notificationOnUnreachable', 'notificationOnRecovery', 'notificationOnFlapping', 'notificationOnScheduledDowntime', 'stalkingOnUp', 'stalkingOnDown', 'stalkingOnUnreachable', 'failurePredictionEnabled', 'flapDetectionOnUp', 'flapDetectionOnDown', 'flapDetectionOnUnreachable', 'notes', 'notesUrl', 'actionUrl', 'iconImage', 'iconImageAlt', 'vrmlImage', 'statusmapImage', 'twoDCoords', 'threeDCoords', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::ALIAS, self::DISPLAY_NAME, self::INITIAL_STATE, self::ADDRESS, self::CHECK_COMMAND, self::RETRY_INTERVAL, self::FIRST_NOTIFICATION_DELAY, self::MAXIMUM_CHECK_ATTEMPTS, self::CHECK_INTERVAL, self::PASSIVE_CHECKS_ENABLED, self::CHECK_PERIOD, self::OBSESS_OVER_HOST, self::CHECK_FRESHNESS, self::FRESHNESS_THRESHOLD, self::ACTIVE_CHECKS_ENABLED, self::CHECKS_ENABLED, self::EVENT_HANDLER, self::EVENT_HANDLER_ENABLED, self::LOW_FLAP_THRESHOLD, self::HIGH_FLAP_THRESHOLD, self::FLAP_DETECTION_ENABLED, self::PROCESS_PERF_DATA, self::RETAIN_STATUS_INFORMATION, self::RETAIN_NONSTATUS_INFORMATION, self::NOTIFICATION_INTERVAL, self::NOTIFICATION_PERIOD, self::NOTIFICATIONS_ENABLED, self::NOTIFICATION_ON_DOWN, self::NOTIFICATION_ON_UNREACHABLE, self::NOTIFICATION_ON_RECOVERY, self::NOTIFICATION_ON_FLAPPING, self::NOTIFICATION_ON_SCHEDULED_DOWNTIME, self::STALKING_ON_UP, self::STALKING_ON_DOWN, self::STALKING_ON_UNREACHABLE, self::FAILURE_PREDICTION_ENABLED, self::FLAP_DETECTION_ON_UP, self::FLAP_DETECTION_ON_DOWN, self::FLAP_DETECTION_ON_UNREACHABLE, self::NOTES, self::NOTES_URL, self::ACTION_URL, self::ICON_IMAGE, self::ICON_IMAGE_ALT, self::VRML_IMAGE, self::STATUSMAP_IMAGE, self::TWO_D_COORDS, self::THREE_D_COORDS, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ALIAS', 'DISPLAY_NAME', 'INITIAL_STATE', 'ADDRESS', 'CHECK_COMMAND', 'RETRY_INTERVAL', 'FIRST_NOTIFICATION_DELAY', 'MAXIMUM_CHECK_ATTEMPTS', 'CHECK_INTERVAL', 'PASSIVE_CHECKS_ENABLED', 'CHECK_PERIOD', 'OBSESS_OVER_HOST', 'CHECK_FRESHNESS', 'FRESHNESS_THRESHOLD', 'ACTIVE_CHECKS_ENABLED', 'CHECKS_ENABLED', 'EVENT_HANDLER', 'EVENT_HANDLER_ENABLED', 'LOW_FLAP_THRESHOLD', 'HIGH_FLAP_THRESHOLD', 'FLAP_DETECTION_ENABLED', 'PROCESS_PERF_DATA', 'RETAIN_STATUS_INFORMATION', 'RETAIN_NONSTATUS_INFORMATION', 'NOTIFICATION_INTERVAL', 'NOTIFICATION_PERIOD', 'NOTIFICATIONS_ENABLED', 'NOTIFICATION_ON_DOWN', 'NOTIFICATION_ON_UNREACHABLE', 'NOTIFICATION_ON_RECOVERY', 'NOTIFICATION_ON_FLAPPING', 'NOTIFICATION_ON_SCHEDULED_DOWNTIME', 'STALKING_ON_UP', 'STALKING_ON_DOWN', 'STALKING_ON_UNREACHABLE', 'FAILURE_PREDICTION_ENABLED', 'FLAP_DETECTION_ON_UP', 'FLAP_DETECTION_ON_DOWN', 'FLAP_DETECTION_ON_UNREACHABLE', 'NOTES', 'NOTES_URL', 'ACTION_URL', 'ICON_IMAGE', 'ICON_IMAGE_ALT', 'VRML_IMAGE', 'STATUSMAP_IMAGE', 'TWO_D_COORDS', 'THREE_D_COORDS', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'alias', 'display_name', 'initial_state', 'address', 'check_command', 'retry_interval', 'first_notification_delay', 'maximum_check_attempts', 'check_interval', 'passive_checks_enabled', 'check_period', 'obsess_over_host', 'check_freshness', 'freshness_threshold', 'active_checks_enabled', 'checks_enabled', 'event_handler', 'event_handler_enabled', 'low_flap_threshold', 'high_flap_threshold', 'flap_detection_enabled', 'process_perf_data', 'retain_status_information', 'retain_nonstatus_information', 'notification_interval', 'notification_period', 'notifications_enabled', 'notification_on_down', 'notification_on_unreachable', 'notification_on_recovery', 'notification_on_flapping', 'notification_on_scheduled_downtime', 'stalking_on_up', 'stalking_on_down', 'stalking_on_unreachable', 'failure_prediction_enabled', 'flap_detection_on_up', 'flap_detection_on_down', 'flap_detection_on_unreachable', 'notes', 'notes_url', 'action_url', 'icon_image', 'icon_image_alt', 'vrml_image', 'statusmap_image', 'two_d_coords', 'three_d_coords', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, )
 	);
@@ -208,25 +217,15 @@ abstract class BaseNagiosHostPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Alias' => 2, 'DisplayName' => 3, 'InitialState' => 4, 'Address' => 5, 'CheckCommand' => 6, 'RetryInterval' => 7, 'FirstNotificationDelay' => 8, 'MaximumCheckAttempts' => 9, 'CheckInterval' => 10, 'PassiveChecksEnabled' => 11, 'CheckPeriod' => 12, 'ObsessOverHost' => 13, 'CheckFreshness' => 14, 'FreshnessThreshold' => 15, 'ActiveChecksEnabled' => 16, 'ChecksEnabled' => 17, 'EventHandler' => 18, 'EventHandlerEnabled' => 19, 'LowFlapThreshold' => 20, 'HighFlapThreshold' => 21, 'FlapDetectionEnabled' => 22, 'ProcessPerfData' => 23, 'RetainStatusInformation' => 24, 'RetainNonstatusInformation' => 25, 'NotificationInterval' => 26, 'NotificationPeriod' => 27, 'NotificationsEnabled' => 28, 'NotificationOnDown' => 29, 'NotificationOnUnreachable' => 30, 'NotificationOnRecovery' => 31, 'NotificationOnFlapping' => 32, 'NotificationOnScheduledDowntime' => 33, 'StalkingOnUp' => 34, 'StalkingOnDown' => 35, 'StalkingOnUnreachable' => 36, 'FailurePredictionEnabled' => 37, 'FlapDetectionOnUp' => 38, 'FlapDetectionOnDown' => 39, 'FlapDetectionOnUnreachable' => 40, 'Notes' => 41, 'NotesUrl' => 42, 'ActionUrl' => 43, 'IconImage' => 44, 'IconImageAlt' => 45, 'VrmlImage' => 46, 'StatusmapImage' => 47, 'TwoDCoords' => 48, 'ThreeDCoords' => 49, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, 'displayName' => 3, 'initialState' => 4, 'address' => 5, 'checkCommand' => 6, 'retryInterval' => 7, 'firstNotificationDelay' => 8, 'maximumCheckAttempts' => 9, 'checkInterval' => 10, 'passiveChecksEnabled' => 11, 'checkPeriod' => 12, 'obsessOverHost' => 13, 'checkFreshness' => 14, 'freshnessThreshold' => 15, 'activeChecksEnabled' => 16, 'checksEnabled' => 17, 'eventHandler' => 18, 'eventHandlerEnabled' => 19, 'lowFlapThreshold' => 20, 'highFlapThreshold' => 21, 'flapDetectionEnabled' => 22, 'processPerfData' => 23, 'retainStatusInformation' => 24, 'retainNonstatusInformation' => 25, 'notificationInterval' => 26, 'notificationPeriod' => 27, 'notificationsEnabled' => 28, 'notificationOnDown' => 29, 'notificationOnUnreachable' => 30, 'notificationOnRecovery' => 31, 'notificationOnFlapping' => 32, 'notificationOnScheduledDowntime' => 33, 'stalkingOnUp' => 34, 'stalkingOnDown' => 35, 'stalkingOnUnreachable' => 36, 'failurePredictionEnabled' => 37, 'flapDetectionOnUp' => 38, 'flapDetectionOnDown' => 39, 'flapDetectionOnUnreachable' => 40, 'notes' => 41, 'notesUrl' => 42, 'actionUrl' => 43, 'iconImage' => 44, 'iconImageAlt' => 45, 'vrmlImage' => 46, 'statusmapImage' => 47, 'twoDCoords' => 48, 'threeDCoords' => 49, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::ALIAS => 2, self::DISPLAY_NAME => 3, self::INITIAL_STATE => 4, self::ADDRESS => 5, self::CHECK_COMMAND => 6, self::RETRY_INTERVAL => 7, self::FIRST_NOTIFICATION_DELAY => 8, self::MAXIMUM_CHECK_ATTEMPTS => 9, self::CHECK_INTERVAL => 10, self::PASSIVE_CHECKS_ENABLED => 11, self::CHECK_PERIOD => 12, self::OBSESS_OVER_HOST => 13, self::CHECK_FRESHNESS => 14, self::FRESHNESS_THRESHOLD => 15, self::ACTIVE_CHECKS_ENABLED => 16, self::CHECKS_ENABLED => 17, self::EVENT_HANDLER => 18, self::EVENT_HANDLER_ENABLED => 19, self::LOW_FLAP_THRESHOLD => 20, self::HIGH_FLAP_THRESHOLD => 21, self::FLAP_DETECTION_ENABLED => 22, self::PROCESS_PERF_DATA => 23, self::RETAIN_STATUS_INFORMATION => 24, self::RETAIN_NONSTATUS_INFORMATION => 25, self::NOTIFICATION_INTERVAL => 26, self::NOTIFICATION_PERIOD => 27, self::NOTIFICATIONS_ENABLED => 28, self::NOTIFICATION_ON_DOWN => 29, self::NOTIFICATION_ON_UNREACHABLE => 30, self::NOTIFICATION_ON_RECOVERY => 31, self::NOTIFICATION_ON_FLAPPING => 32, self::NOTIFICATION_ON_SCHEDULED_DOWNTIME => 33, self::STALKING_ON_UP => 34, self::STALKING_ON_DOWN => 35, self::STALKING_ON_UNREACHABLE => 36, self::FAILURE_PREDICTION_ENABLED => 37, self::FLAP_DETECTION_ON_UP => 38, self::FLAP_DETECTION_ON_DOWN => 39, self::FLAP_DETECTION_ON_UNREACHABLE => 40, self::NOTES => 41, self::NOTES_URL => 42, self::ACTION_URL => 43, self::ICON_IMAGE => 44, self::ICON_IMAGE_ALT => 45, self::VRML_IMAGE => 46, self::STATUSMAP_IMAGE => 47, self::TWO_D_COORDS => 48, self::THREE_D_COORDS => 49, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ALIAS' => 2, 'DISPLAY_NAME' => 3, 'INITIAL_STATE' => 4, 'ADDRESS' => 5, 'CHECK_COMMAND' => 6, 'RETRY_INTERVAL' => 7, 'FIRST_NOTIFICATION_DELAY' => 8, 'MAXIMUM_CHECK_ATTEMPTS' => 9, 'CHECK_INTERVAL' => 10, 'PASSIVE_CHECKS_ENABLED' => 11, 'CHECK_PERIOD' => 12, 'OBSESS_OVER_HOST' => 13, 'CHECK_FRESHNESS' => 14, 'FRESHNESS_THRESHOLD' => 15, 'ACTIVE_CHECKS_ENABLED' => 16, 'CHECKS_ENABLED' => 17, 'EVENT_HANDLER' => 18, 'EVENT_HANDLER_ENABLED' => 19, 'LOW_FLAP_THRESHOLD' => 20, 'HIGH_FLAP_THRESHOLD' => 21, 'FLAP_DETECTION_ENABLED' => 22, 'PROCESS_PERF_DATA' => 23, 'RETAIN_STATUS_INFORMATION' => 24, 'RETAIN_NONSTATUS_INFORMATION' => 25, 'NOTIFICATION_INTERVAL' => 26, 'NOTIFICATION_PERIOD' => 27, 'NOTIFICATIONS_ENABLED' => 28, 'NOTIFICATION_ON_DOWN' => 29, 'NOTIFICATION_ON_UNREACHABLE' => 30, 'NOTIFICATION_ON_RECOVERY' => 31, 'NOTIFICATION_ON_FLAPPING' => 32, 'NOTIFICATION_ON_SCHEDULED_DOWNTIME' => 33, 'STALKING_ON_UP' => 34, 'STALKING_ON_DOWN' => 35, 'STALKING_ON_UNREACHABLE' => 36, 'FAILURE_PREDICTION_ENABLED' => 37, 'FLAP_DETECTION_ON_UP' => 38, 'FLAP_DETECTION_ON_DOWN' => 39, 'FLAP_DETECTION_ON_UNREACHABLE' => 40, 'NOTES' => 41, 'NOTES_URL' => 42, 'ACTION_URL' => 43, 'ICON_IMAGE' => 44, 'ICON_IMAGE_ALT' => 45, 'VRML_IMAGE' => 46, 'STATUSMAP_IMAGE' => 47, 'TWO_D_COORDS' => 48, 'THREE_D_COORDS' => 49, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, 'display_name' => 3, 'initial_state' => 4, 'address' => 5, 'check_command' => 6, 'retry_interval' => 7, 'first_notification_delay' => 8, 'maximum_check_attempts' => 9, 'check_interval' => 10, 'passive_checks_enabled' => 11, 'check_period' => 12, 'obsess_over_host' => 13, 'check_freshness' => 14, 'freshness_threshold' => 15, 'active_checks_enabled' => 16, 'checks_enabled' => 17, 'event_handler' => 18, 'event_handler_enabled' => 19, 'low_flap_threshold' => 20, 'high_flap_threshold' => 21, 'flap_detection_enabled' => 22, 'process_perf_data' => 23, 'retain_status_information' => 24, 'retain_nonstatus_information' => 25, 'notification_interval' => 26, 'notification_period' => 27, 'notifications_enabled' => 28, 'notification_on_down' => 29, 'notification_on_unreachable' => 30, 'notification_on_recovery' => 31, 'notification_on_flapping' => 32, 'notification_on_scheduled_downtime' => 33, 'stalking_on_up' => 34, 'stalking_on_down' => 35, 'stalking_on_unreachable' => 36, 'failure_prediction_enabled' => 37, 'flap_detection_on_up' => 38, 'flap_detection_on_down' => 39, 'flap_detection_on_unreachable' => 40, 'notes' => 41, 'notes_url' => 42, 'action_url' => 43, 'icon_image' => 44, 'icon_image_alt' => 45, 'vrml_image' => 46, 'statusmap_image' => 47, 'two_d_coords' => 48, 'three_d_coords' => 49, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosHostMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -288,113 +287,116 @@ abstract class BaseNagiosHostPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosHostPeer::ID);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NAME);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ALIAS);
-
-		$criteria->addSelectColumn(NagiosHostPeer::DISPLAY_NAME);
-
-		$criteria->addSelectColumn(NagiosHostPeer::INITIAL_STATE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ADDRESS);
-
-		$criteria->addSelectColumn(NagiosHostPeer::CHECK_COMMAND);
-
-		$criteria->addSelectColumn(NagiosHostPeer::RETRY_INTERVAL);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FIRST_NOTIFICATION_DELAY);
-
-		$criteria->addSelectColumn(NagiosHostPeer::MAXIMUM_CHECK_ATTEMPTS);
-
-		$criteria->addSelectColumn(NagiosHostPeer::CHECK_INTERVAL);
-
-		$criteria->addSelectColumn(NagiosHostPeer::PASSIVE_CHECKS_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::CHECK_PERIOD);
-
-		$criteria->addSelectColumn(NagiosHostPeer::OBSESS_OVER_HOST);
-
-		$criteria->addSelectColumn(NagiosHostPeer::CHECK_FRESHNESS);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FRESHNESS_THRESHOLD);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ACTIVE_CHECKS_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::CHECKS_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::EVENT_HANDLER);
-
-		$criteria->addSelectColumn(NagiosHostPeer::EVENT_HANDLER_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::LOW_FLAP_THRESHOLD);
-
-		$criteria->addSelectColumn(NagiosHostPeer::HIGH_FLAP_THRESHOLD);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::PROCESS_PERF_DATA);
-
-		$criteria->addSelectColumn(NagiosHostPeer::RETAIN_STATUS_INFORMATION);
-
-		$criteria->addSelectColumn(NagiosHostPeer::RETAIN_NONSTATUS_INFORMATION);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_INTERVAL);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_PERIOD);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATIONS_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_DOWN);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_UNREACHABLE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_RECOVERY);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_FLAPPING);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_SCHEDULED_DOWNTIME);
-
-		$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_UP);
-
-		$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_DOWN);
-
-		$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_UNREACHABLE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FAILURE_PREDICTION_ENABLED);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_UP);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_DOWN);
-
-		$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_UNREACHABLE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTES);
-
-		$criteria->addSelectColumn(NagiosHostPeer::NOTES_URL);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ACTION_URL);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ICON_IMAGE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::ICON_IMAGE_ALT);
-
-		$criteria->addSelectColumn(NagiosHostPeer::VRML_IMAGE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::STATUSMAP_IMAGE);
-
-		$criteria->addSelectColumn(NagiosHostPeer::TWO_D_COORDS);
-
-		$criteria->addSelectColumn(NagiosHostPeer::THREE_D_COORDS);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosHostPeer::ID);
+			$criteria->addSelectColumn(NagiosHostPeer::NAME);
+			$criteria->addSelectColumn(NagiosHostPeer::ALIAS);
+			$criteria->addSelectColumn(NagiosHostPeer::DISPLAY_NAME);
+			$criteria->addSelectColumn(NagiosHostPeer::INITIAL_STATE);
+			$criteria->addSelectColumn(NagiosHostPeer::ADDRESS);
+			$criteria->addSelectColumn(NagiosHostPeer::CHECK_COMMAND);
+			$criteria->addSelectColumn(NagiosHostPeer::RETRY_INTERVAL);
+			$criteria->addSelectColumn(NagiosHostPeer::FIRST_NOTIFICATION_DELAY);
+			$criteria->addSelectColumn(NagiosHostPeer::MAXIMUM_CHECK_ATTEMPTS);
+			$criteria->addSelectColumn(NagiosHostPeer::CHECK_INTERVAL);
+			$criteria->addSelectColumn(NagiosHostPeer::PASSIVE_CHECKS_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::CHECK_PERIOD);
+			$criteria->addSelectColumn(NagiosHostPeer::OBSESS_OVER_HOST);
+			$criteria->addSelectColumn(NagiosHostPeer::CHECK_FRESHNESS);
+			$criteria->addSelectColumn(NagiosHostPeer::FRESHNESS_THRESHOLD);
+			$criteria->addSelectColumn(NagiosHostPeer::ACTIVE_CHECKS_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::CHECKS_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::EVENT_HANDLER);
+			$criteria->addSelectColumn(NagiosHostPeer::EVENT_HANDLER_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::LOW_FLAP_THRESHOLD);
+			$criteria->addSelectColumn(NagiosHostPeer::HIGH_FLAP_THRESHOLD);
+			$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::PROCESS_PERF_DATA);
+			$criteria->addSelectColumn(NagiosHostPeer::RETAIN_STATUS_INFORMATION);
+			$criteria->addSelectColumn(NagiosHostPeer::RETAIN_NONSTATUS_INFORMATION);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_INTERVAL);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_PERIOD);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATIONS_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_DOWN);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_UNREACHABLE);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_RECOVERY);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_FLAPPING);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTIFICATION_ON_SCHEDULED_DOWNTIME);
+			$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_UP);
+			$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_DOWN);
+			$criteria->addSelectColumn(NagiosHostPeer::STALKING_ON_UNREACHABLE);
+			$criteria->addSelectColumn(NagiosHostPeer::FAILURE_PREDICTION_ENABLED);
+			$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_UP);
+			$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_DOWN);
+			$criteria->addSelectColumn(NagiosHostPeer::FLAP_DETECTION_ON_UNREACHABLE);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTES);
+			$criteria->addSelectColumn(NagiosHostPeer::NOTES_URL);
+			$criteria->addSelectColumn(NagiosHostPeer::ACTION_URL);
+			$criteria->addSelectColumn(NagiosHostPeer::ICON_IMAGE);
+			$criteria->addSelectColumn(NagiosHostPeer::ICON_IMAGE_ALT);
+			$criteria->addSelectColumn(NagiosHostPeer::VRML_IMAGE);
+			$criteria->addSelectColumn(NagiosHostPeer::STATUSMAP_IMAGE);
+			$criteria->addSelectColumn(NagiosHostPeer::TWO_D_COORDS);
+			$criteria->addSelectColumn(NagiosHostPeer::THREE_D_COORDS);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.ALIAS');
+			$criteria->addSelectColumn($alias . '.DISPLAY_NAME');
+			$criteria->addSelectColumn($alias . '.INITIAL_STATE');
+			$criteria->addSelectColumn($alias . '.ADDRESS');
+			$criteria->addSelectColumn($alias . '.CHECK_COMMAND');
+			$criteria->addSelectColumn($alias . '.RETRY_INTERVAL');
+			$criteria->addSelectColumn($alias . '.FIRST_NOTIFICATION_DELAY');
+			$criteria->addSelectColumn($alias . '.MAXIMUM_CHECK_ATTEMPTS');
+			$criteria->addSelectColumn($alias . '.CHECK_INTERVAL');
+			$criteria->addSelectColumn($alias . '.PASSIVE_CHECKS_ENABLED');
+			$criteria->addSelectColumn($alias . '.CHECK_PERIOD');
+			$criteria->addSelectColumn($alias . '.OBSESS_OVER_HOST');
+			$criteria->addSelectColumn($alias . '.CHECK_FRESHNESS');
+			$criteria->addSelectColumn($alias . '.FRESHNESS_THRESHOLD');
+			$criteria->addSelectColumn($alias . '.ACTIVE_CHECKS_ENABLED');
+			$criteria->addSelectColumn($alias . '.CHECKS_ENABLED');
+			$criteria->addSelectColumn($alias . '.EVENT_HANDLER');
+			$criteria->addSelectColumn($alias . '.EVENT_HANDLER_ENABLED');
+			$criteria->addSelectColumn($alias . '.LOW_FLAP_THRESHOLD');
+			$criteria->addSelectColumn($alias . '.HIGH_FLAP_THRESHOLD');
+			$criteria->addSelectColumn($alias . '.FLAP_DETECTION_ENABLED');
+			$criteria->addSelectColumn($alias . '.PROCESS_PERF_DATA');
+			$criteria->addSelectColumn($alias . '.RETAIN_STATUS_INFORMATION');
+			$criteria->addSelectColumn($alias . '.RETAIN_NONSTATUS_INFORMATION');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_INTERVAL');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_PERIOD');
+			$criteria->addSelectColumn($alias . '.NOTIFICATIONS_ENABLED');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_ON_DOWN');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_ON_UNREACHABLE');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_ON_RECOVERY');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_ON_FLAPPING');
+			$criteria->addSelectColumn($alias . '.NOTIFICATION_ON_SCHEDULED_DOWNTIME');
+			$criteria->addSelectColumn($alias . '.STALKING_ON_UP');
+			$criteria->addSelectColumn($alias . '.STALKING_ON_DOWN');
+			$criteria->addSelectColumn($alias . '.STALKING_ON_UNREACHABLE');
+			$criteria->addSelectColumn($alias . '.FAILURE_PREDICTION_ENABLED');
+			$criteria->addSelectColumn($alias . '.FLAP_DETECTION_ON_UP');
+			$criteria->addSelectColumn($alias . '.FLAP_DETECTION_ON_DOWN');
+			$criteria->addSelectColumn($alias . '.FLAP_DETECTION_ON_UNREACHABLE');
+			$criteria->addSelectColumn($alias . '.NOTES');
+			$criteria->addSelectColumn($alias . '.NOTES_URL');
+			$criteria->addSelectColumn($alias . '.ACTION_URL');
+			$criteria->addSelectColumn($alias . '.ICON_IMAGE');
+			$criteria->addSelectColumn($alias . '.ICON_IMAGE_ALT');
+			$criteria->addSelectColumn($alias . '.VRML_IMAGE');
+			$criteria->addSelectColumn($alias . '.STATUSMAP_IMAGE');
+			$criteria->addSelectColumn($alias . '.TWO_D_COORDS');
+			$criteria->addSelectColumn($alias . '.THREE_D_COORDS');
+		}
 	}
 
 	/**
@@ -441,7 +443,7 @@ abstract class BaseNagiosHostPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -460,7 +462,7 @@ abstract class BaseNagiosHostPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -514,7 +516,7 @@ abstract class BaseNagiosHostPeer {
 	 * @param      NagiosHost $value A NagiosHost object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosHost $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -582,6 +584,53 @@ abstract class BaseNagiosHostPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_host
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in NagiosServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServicePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostContactMemberPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostContactMemberPeer::clearInstancePool();
+		// Invalidate objects in NagiosDependencyPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosDependencyPeer::clearInstancePool();
+		// Invalidate objects in NagiosDependencyTargetPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosDependencyTargetPeer::clearInstancePool();
+		// Invalidate objects in NagiosEscalationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosEscalationPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostContactgroupPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostContactgroupPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostgroupMembershipPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostgroupMembershipPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostCheckCommandParameterPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostCheckCommandParameterPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostParentPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostParentPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostParentPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostParentPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostTemplateInheritancePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostTemplateInheritancePeer::clearInstancePool();
+		// Invalidate objects in AutodiscoveryDevicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		AutodiscoveryDevicePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostCustomObjectVarPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostCustomObjectVarPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -594,12 +643,26 @@ abstract class BaseNagiosHostPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -612,18 +675,16 @@ abstract class BaseNagiosHostPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosHostPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosHostPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosHostPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -633,11 +694,37 @@ abstract class BaseNagiosHostPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosHost object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosHostPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosHostPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosHostPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosHostPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosHostPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommandRelatedByCheckCommand table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -670,7 +757,8 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -686,7 +774,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommandRelatedByEventHandler table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -719,7 +807,8 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -735,7 +824,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosTimeperiodRelatedByCheckPeriod table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -768,7 +857,8 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -784,7 +874,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosTimeperiodRelatedByNotificationPeriod table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -817,7 +907,8 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -832,41 +923,41 @@ abstract class BaseNagiosHostPeer {
 
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with their NagiosCommand objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosCommandRelatedByCheckCommand(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosCommandRelatedByCheckCommand(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosCommandPeer::addSelectColumns($c);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
+		NagiosCommandPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -877,9 +968,8 @@ abstract class BaseNagiosHostPeer {
 				$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -899,41 +989,41 @@ abstract class BaseNagiosHostPeer {
 
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with their NagiosCommand objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosCommandRelatedByEventHandler(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosCommandRelatedByEventHandler(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosCommandPeer::addSelectColumns($c);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
+		NagiosCommandPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -944,9 +1034,8 @@ abstract class BaseNagiosHostPeer {
 				$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -966,41 +1055,41 @@ abstract class BaseNagiosHostPeer {
 
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with their NagiosTimeperiod objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosTimeperiodRelatedByCheckPeriod(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosTimeperiodRelatedByCheckPeriod(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosTimeperiodPeer::addSelectColumns($c);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1011,9 +1100,8 @@ abstract class BaseNagiosHostPeer {
 				$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -1033,41 +1121,41 @@ abstract class BaseNagiosHostPeer {
 
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with their NagiosTimeperiod objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosTimeperiodRelatedByNotificationPeriod(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosTimeperiodRelatedByNotificationPeriod(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosTimeperiodPeer::addSelectColumns($c);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1078,9 +1166,8 @@ abstract class BaseNagiosHostPeer {
 				$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -1101,7 +1188,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1134,10 +1221,14 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1152,54 +1243,57 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol6 = $startcol5 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1212,10 +1306,8 @@ abstract class BaseNagiosHostPeer {
 				$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -1232,10 +1324,8 @@ abstract class BaseNagiosHostPeer {
 				$obj3 = NagiosCommandPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosCommandPeer::addInstanceToPool($obj3, $key3);
@@ -1252,10 +1342,8 @@ abstract class BaseNagiosHostPeer {
 				$obj4 = NagiosTimeperiodPeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosTimeperiodPeer::addInstanceToPool($obj4, $key4);
@@ -1272,10 +1360,8 @@ abstract class BaseNagiosHostPeer {
 				$obj5 = NagiosTimeperiodPeer::getInstanceFromPool($key5);
 				if (!$obj5) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj5 = new $cls();
 					$obj5->hydrate($row, $startcol5);
 					NagiosTimeperiodPeer::addInstanceToPool($obj5, $key5);
@@ -1295,7 +1381,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommandRelatedByCheckCommand table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1328,8 +1414,10 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1345,7 +1433,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommandRelatedByEventHandler table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1378,8 +1466,10 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1395,7 +1485,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosTimeperiodRelatedByCheckPeriod table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1428,8 +1518,10 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1445,7 +1537,7 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosTimeperiodRelatedByNotificationPeriod table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1478,8 +1570,10 @@ abstract class BaseNagiosHostPeer {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1495,49 +1589,50 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with all related objects except NagiosCommandRelatedByCheckCommand.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosCommandRelatedByCheckCommand(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosCommandRelatedByCheckCommand(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1550,10 +1645,8 @@ abstract class BaseNagiosHostPeer {
 					$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosTimeperiodPeer::getOMClass();
+						$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -1571,10 +1664,8 @@ abstract class BaseNagiosHostPeer {
 					$obj3 = NagiosTimeperiodPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosTimeperiodPeer::getOMClass();
+						$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosTimeperiodPeer::addInstanceToPool($obj3, $key3);
@@ -1595,49 +1686,50 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with all related objects except NagiosCommandRelatedByEventHandler.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosCommandRelatedByEventHandler(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosCommandRelatedByEventHandler(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostPeer::CHECK_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostPeer::NOTIFICATION_PERIOD,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::NOTIFICATION_PERIOD, NagiosTimeperiodPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1650,10 +1742,8 @@ abstract class BaseNagiosHostPeer {
 					$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosTimeperiodPeer::getOMClass();
+						$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -1671,10 +1761,8 @@ abstract class BaseNagiosHostPeer {
 					$obj3 = NagiosTimeperiodPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosTimeperiodPeer::getOMClass();
+						$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosTimeperiodPeer::addInstanceToPool($obj3, $key3);
@@ -1695,49 +1783,50 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with all related objects except NagiosTimeperiodRelatedByCheckPeriod.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosTimeperiodRelatedByCheckPeriod(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosTimeperiodRelatedByCheckPeriod(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1750,10 +1839,8 @@ abstract class BaseNagiosHostPeer {
 					$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosCommandPeer::getOMClass();
+						$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -1771,10 +1858,8 @@ abstract class BaseNagiosHostPeer {
 					$obj3 = NagiosCommandPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosCommandPeer::getOMClass();
+						$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosCommandPeer::addInstanceToPool($obj3, $key3);
@@ -1795,49 +1880,50 @@ abstract class BaseNagiosHostPeer {
 	/**
 	 * Selects a collection of NagiosHost objects pre-filled with all related objects except NagiosTimeperiodRelatedByNotificationPeriod.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosHost objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosTimeperiodRelatedByNotificationPeriod(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosTimeperiodRelatedByNotificationPeriod(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosHostPeer::addSelectColumns($c);
-		$startcol2 = (NagiosHostPeer::NUM_COLUMNS - NagiosHostPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosHostPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosHostPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosHostPeer::CHECK_COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosHostPeer::EVENT_HANDLER,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosHostPeer::CHECK_COMMAND, NagiosCommandPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosHostPeer::EVENT_HANDLER, NagiosCommandPeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosHostPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosHostPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosHostPeer::getOMClass();
+				$cls = NagiosHostPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosHostPeer::addInstanceToPool($obj1, $key1);
@@ -1850,10 +1936,8 @@ abstract class BaseNagiosHostPeer {
 					$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosCommandPeer::getOMClass();
+						$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -1871,10 +1955,8 @@ abstract class BaseNagiosHostPeer {
 					$obj3 = NagiosCommandPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosCommandPeer::getOMClass();
+						$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosCommandPeer::addInstanceToPool($obj3, $key3);
@@ -1904,21 +1986,35 @@ abstract class BaseNagiosHostPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosHostPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosHostPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosHostPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosHostTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosHost or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosHostPeer::CLASS_DEFAULT : NagiosHostPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosHost or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosHost object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1961,7 +2057,7 @@ abstract class BaseNagiosHostPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosHost or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosHost or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosHost object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1981,7 +2077,12 @@ abstract class BaseNagiosHostPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosHostPeer::ID);
-			$selectCriteria->add(NagiosHostPeer::ID, $criteria->remove(NagiosHostPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosHostPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosHostPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosHostPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosHost object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1995,11 +2096,12 @@ abstract class BaseNagiosHostPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_host table.
+	 * Deletes all rows from the nagios_host table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosHostPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -2011,7 +2113,12 @@ abstract class BaseNagiosHostPeer {
 			$con->beginTransaction();
 			$affectedRows += NagiosHostPeer::doOnDeleteCascade(new Criteria(NagiosHostPeer::DATABASE_NAME), $con);
 			NagiosHostPeer::doOnDeleteSetNull(new Criteria(NagiosHostPeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(NagiosHostPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosHostPeer::TABLE_NAME, $con, NagiosHostPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosHostPeer::clearInstancePool();
+			NagiosHostPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -2021,7 +2128,7 @@ abstract class BaseNagiosHostPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosHost or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosHost or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosHost object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -2038,30 +2145,14 @@ abstract class BaseNagiosHostPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			NagiosHostPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosHost) {
-			// invalidate the cache for this single object
-			NagiosHostPeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof NagiosHost) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosHostPeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				NagiosHostPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -2073,56 +2164,30 @@ abstract class BaseNagiosHostPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += NagiosHostPeer::doOnDeleteCascade($criteria, $con);
-			NagiosHostPeer::doOnDeleteSetNull($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					NagiosHostPeer::clearInstancePool();
-				} else { // it's a PK or object
-					NagiosHostPeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += NagiosHostPeer::doOnDeleteCascade($c, $con);
+			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			NagiosHostPeer::doOnDeleteSetNull($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				NagiosHostPeer::clearInstancePool();
+			} elseif ($values instanceof NagiosHost) { // it's a model object
+				NagiosHostPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					NagiosHostPeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in NagiosServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServicePeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostContactMemberPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostContactMemberPeer::clearInstancePool();
-
-			// invalidate objects in NagiosDependencyPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosDependencyPeer::clearInstancePool();
-
-			// invalidate objects in NagiosDependencyTargetPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosDependencyTargetPeer::clearInstancePool();
-
-			// invalidate objects in NagiosEscalationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosEscalationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostContactgroupPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostContactgroupPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostgroupMembershipPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostgroupMembershipPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostCheckCommandParameterPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostCheckCommandParameterPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostParentPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostParentPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostParentPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostParentPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostTemplateInheritancePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostTemplateInheritancePeer::clearInstancePool();
-
-			// invalidate objects in AutodiscoveryDevicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			AutodiscoveryDevicePeer::clearInstancePool();
-
+			NagiosHostPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -2155,70 +2220,76 @@ abstract class BaseNagiosHostPeer {
 
 
 			// delete related NagiosService objects
-			$c = new Criteria(NagiosServicePeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosServicePeer::DATABASE_NAME);
 			
-			$c->add(NagiosServicePeer::HOST, $obj->getId());
-			$affectedRows += NagiosServicePeer::doDelete($c, $con);
+			$criteria->add(NagiosServicePeer::HOST, $obj->getId());
+			$affectedRows += NagiosServicePeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostContactMember objects
-			$c = new Criteria(NagiosHostContactMemberPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostContactMemberPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostContactMemberPeer::HOST, $obj->getId());
-			$affectedRows += NagiosHostContactMemberPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostContactMemberPeer::HOST, $obj->getId());
+			$affectedRows += NagiosHostContactMemberPeer::doDelete($criteria, $con);
 
 			// delete related NagiosDependency objects
-			$c = new Criteria(NagiosDependencyPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosDependencyPeer::DATABASE_NAME);
 			
-			$c->add(NagiosDependencyPeer::HOST, $obj->getId());
-			$affectedRows += NagiosDependencyPeer::doDelete($c, $con);
+			$criteria->add(NagiosDependencyPeer::HOST, $obj->getId());
+			$affectedRows += NagiosDependencyPeer::doDelete($criteria, $con);
 
 			// delete related NagiosDependencyTarget objects
-			$c = new Criteria(NagiosDependencyTargetPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosDependencyTargetPeer::DATABASE_NAME);
 			
-			$c->add(NagiosDependencyTargetPeer::TARGET_HOST, $obj->getId());
-			$affectedRows += NagiosDependencyTargetPeer::doDelete($c, $con);
+			$criteria->add(NagiosDependencyTargetPeer::TARGET_HOST, $obj->getId());
+			$affectedRows += NagiosDependencyTargetPeer::doDelete($criteria, $con);
 
 			// delete related NagiosEscalation objects
-			$c = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosEscalationPeer::HOST, $obj->getId());
-			$affectedRows += NagiosEscalationPeer::doDelete($c, $con);
+			$criteria->add(NagiosEscalationPeer::HOST, $obj->getId());
+			$affectedRows += NagiosEscalationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostContactgroup objects
-			$c = new Criteria(NagiosHostContactgroupPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostContactgroupPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostContactgroupPeer::HOST, $obj->getId());
-			$affectedRows += NagiosHostContactgroupPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostContactgroupPeer::HOST, $obj->getId());
+			$affectedRows += NagiosHostContactgroupPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostgroupMembership objects
-			$c = new Criteria(NagiosHostgroupMembershipPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostgroupMembershipPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostgroupMembershipPeer::HOST, $obj->getId());
-			$affectedRows += NagiosHostgroupMembershipPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostgroupMembershipPeer::HOST, $obj->getId());
+			$affectedRows += NagiosHostgroupMembershipPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostCheckCommandParameter objects
-			$c = new Criteria(NagiosHostCheckCommandParameterPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostCheckCommandParameterPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostCheckCommandParameterPeer::HOST, $obj->getId());
-			$affectedRows += NagiosHostCheckCommandParameterPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostCheckCommandParameterPeer::HOST, $obj->getId());
+			$affectedRows += NagiosHostCheckCommandParameterPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostParent objects
-			$c = new Criteria(NagiosHostParentPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostParentPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostParentPeer::CHILD_HOST, $obj->getId());
-			$affectedRows += NagiosHostParentPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostParentPeer::CHILD_HOST, $obj->getId());
+			$affectedRows += NagiosHostParentPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostParent objects
-			$c = new Criteria(NagiosHostParentPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostParentPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostParentPeer::PARENT_HOST, $obj->getId());
-			$affectedRows += NagiosHostParentPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostParentPeer::PARENT_HOST, $obj->getId());
+			$affectedRows += NagiosHostParentPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostTemplateInheritance objects
-			$c = new Criteria(NagiosHostTemplateInheritancePeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostTemplateInheritancePeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, $obj->getId());
-			$affectedRows += NagiosHostTemplateInheritancePeer::doDelete($c, $con);
+			$criteria->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, $obj->getId());
+			$affectedRows += NagiosHostTemplateInheritancePeer::doDelete($criteria, $con);
+
+			// delete related NagiosHostCustomObjectVar objects
+			$criteria = new Criteria(NagiosHostCustomObjectVarPeer::DATABASE_NAME);
+			
+			$criteria->add(NagiosHostCustomObjectVarPeer::HOST, $obj->getId());
+			$affectedRows += NagiosHostCustomObjectVarPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -2249,7 +2320,7 @@ abstract class BaseNagiosHostPeer {
 			$selectCriteria->add(AutodiscoveryDevicePeer::PROPOSED_PARENT, $obj->getId());
 			$updateValues->add(AutodiscoveryDevicePeer::PROPOSED_PARENT, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 		}
 	}
@@ -2266,7 +2337,7 @@ abstract class BaseNagiosHostPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosHost $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -2344,14 +2415,7 @@ abstract class BaseNagiosHostPeer {
 
 } // BaseNagiosHostPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosHostPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosHostPeer class:
-//
-// Propel::getDatabaseMap(NagiosHostPeer::DATABASE_NAME)->addTableBuilder(NagiosHostPeer::TABLE_NAME, NagiosHostPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosHostPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosHostPeer::TABLE_NAME, BaseNagiosHostPeer::getMapBuilder());
+BaseNagiosHostPeer::buildTableMap();
 

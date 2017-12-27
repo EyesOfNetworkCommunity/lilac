@@ -10,17 +10,21 @@ class NagiosCommandExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function export() {
+	public function export($objectDiff=false) {
 		// Grab our export job
 		$engine = $this->getEngine();
 		$job = $engine->getJob();
 		$job->addNotice("NagiosCommandExporter attempting to export command configuration.");
 
 		$fp = $this->getOutputFile();
-		fputs($fp, "# Written by NagiosCommandExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
 		
-		$commands = NagiosCommandPeer::doSelect(new Criteria());
-
+		if(!$objectDiff){
+			fputs($fp, "# Written by NagiosCommandExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$commands = NagiosCommandPeer::doSelect(new Criteria());
+		}else{
+			$commands[] = $objectDiff;
+		}
+		
 		foreach($commands as $command) {
 			fputs($fp, "define command {\n");
 			$finalArray = array();

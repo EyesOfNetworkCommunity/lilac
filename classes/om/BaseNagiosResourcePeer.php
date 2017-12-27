@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_resource' table.
  *
  * Nagios Resource
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosResourcePeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosResourcePeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_resource';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosResource';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosResource';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosResourceTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 33;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 33;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_resource.ID';
@@ -123,6 +133,9 @@ abstract class BaseNagiosResourcePeer {
 	/** the column name for the USER32 field */
 	const USER32 = 'nagios_resource.USER32';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosResource objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -131,11 +144,6 @@ abstract class BaseNagiosResourcePeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -143,10 +151,11 @@ abstract class BaseNagiosResourcePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'User1', 'User2', 'User3', 'User4', 'User5', 'User6', 'User7', 'User8', 'User9', 'User10', 'User11', 'User12', 'User13', 'User14', 'User15', 'User16', 'User17', 'User18', 'User19', 'User20', 'User21', 'User22', 'User23', 'User24', 'User25', 'User26', 'User27', 'User28', 'User29', 'User30', 'User31', 'User32', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'user11', 'user12', 'user13', 'user14', 'user15', 'user16', 'user17', 'user18', 'user19', 'user20', 'user21', 'user22', 'user23', 'user24', 'user25', 'user26', 'user27', 'user28', 'user29', 'user30', 'user31', 'user32', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::USER1, self::USER2, self::USER3, self::USER4, self::USER5, self::USER6, self::USER7, self::USER8, self::USER9, self::USER10, self::USER11, self::USER12, self::USER13, self::USER14, self::USER15, self::USER16, self::USER17, self::USER18, self::USER19, self::USER20, self::USER21, self::USER22, self::USER23, self::USER24, self::USER25, self::USER26, self::USER27, self::USER28, self::USER29, self::USER30, self::USER31, self::USER32, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER1', 'USER2', 'USER3', 'USER4', 'USER5', 'USER6', 'USER7', 'USER8', 'USER9', 'USER10', 'USER11', 'USER12', 'USER13', 'USER14', 'USER15', 'USER16', 'USER17', 'USER18', 'USER19', 'USER20', 'USER21', 'USER22', 'USER23', 'USER24', 'USER25', 'USER26', 'USER27', 'USER28', 'USER29', 'USER30', 'USER31', 'USER32', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8', 'user9', 'user10', 'user11', 'user12', 'user13', 'user14', 'user15', 'user16', 'user17', 'user18', 'user19', 'user20', 'user21', 'user22', 'user23', 'user24', 'user25', 'user26', 'user27', 'user28', 'user29', 'user30', 'user31', 'user32', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, )
 	);
@@ -157,25 +166,15 @@ abstract class BaseNagiosResourcePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'User1' => 1, 'User2' => 2, 'User3' => 3, 'User4' => 4, 'User5' => 5, 'User6' => 6, 'User7' => 7, 'User8' => 8, 'User9' => 9, 'User10' => 10, 'User11' => 11, 'User12' => 12, 'User13' => 13, 'User14' => 14, 'User15' => 15, 'User16' => 16, 'User17' => 17, 'User18' => 18, 'User19' => 19, 'User20' => 20, 'User21' => 21, 'User22' => 22, 'User23' => 23, 'User24' => 24, 'User25' => 25, 'User26' => 26, 'User27' => 27, 'User28' => 28, 'User29' => 29, 'User30' => 30, 'User31' => 31, 'User32' => 32, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'user1' => 1, 'user2' => 2, 'user3' => 3, 'user4' => 4, 'user5' => 5, 'user6' => 6, 'user7' => 7, 'user8' => 8, 'user9' => 9, 'user10' => 10, 'user11' => 11, 'user12' => 12, 'user13' => 13, 'user14' => 14, 'user15' => 15, 'user16' => 16, 'user17' => 17, 'user18' => 18, 'user19' => 19, 'user20' => 20, 'user21' => 21, 'user22' => 22, 'user23' => 23, 'user24' => 24, 'user25' => 25, 'user26' => 26, 'user27' => 27, 'user28' => 28, 'user29' => 29, 'user30' => 30, 'user31' => 31, 'user32' => 32, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER1 => 1, self::USER2 => 2, self::USER3 => 3, self::USER4 => 4, self::USER5 => 5, self::USER6 => 6, self::USER7 => 7, self::USER8 => 8, self::USER9 => 9, self::USER10 => 10, self::USER11 => 11, self::USER12 => 12, self::USER13 => 13, self::USER14 => 14, self::USER15 => 15, self::USER16 => 16, self::USER17 => 17, self::USER18 => 18, self::USER19 => 19, self::USER20 => 20, self::USER21 => 21, self::USER22 => 22, self::USER23 => 23, self::USER24 => 24, self::USER25 => 25, self::USER26 => 26, self::USER27 => 27, self::USER28 => 28, self::USER29 => 29, self::USER30 => 30, self::USER31 => 31, self::USER32 => 32, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER1' => 1, 'USER2' => 2, 'USER3' => 3, 'USER4' => 4, 'USER5' => 5, 'USER6' => 6, 'USER7' => 7, 'USER8' => 8, 'USER9' => 9, 'USER10' => 10, 'USER11' => 11, 'USER12' => 12, 'USER13' => 13, 'USER14' => 14, 'USER15' => 15, 'USER16' => 16, 'USER17' => 17, 'USER18' => 18, 'USER19' => 19, 'USER20' => 20, 'USER21' => 21, 'USER22' => 22, 'USER23' => 23, 'USER24' => 24, 'USER25' => 25, 'USER26' => 26, 'USER27' => 27, 'USER28' => 28, 'USER29' => 29, 'USER30' => 30, 'USER31' => 31, 'USER32' => 32, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user1' => 1, 'user2' => 2, 'user3' => 3, 'user4' => 4, 'user5' => 5, 'user6' => 6, 'user7' => 7, 'user8' => 8, 'user9' => 9, 'user10' => 10, 'user11' => 11, 'user12' => 12, 'user13' => 13, 'user14' => 14, 'user15' => 15, 'user16' => 16, 'user17' => 17, 'user18' => 18, 'user19' => 19, 'user20' => 20, 'user21' => 21, 'user22' => 22, 'user23' => 23, 'user24' => 24, 'user25' => 25, 'user26' => 26, 'user27' => 27, 'user28' => 28, 'user29' => 29, 'user30' => 30, 'user31' => 31, 'user32' => 32, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosResourceMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -237,79 +236,82 @@ abstract class BaseNagiosResourcePeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosResourcePeer::ID);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER1);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER2);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER3);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER4);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER5);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER6);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER7);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER8);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER9);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER10);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER11);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER12);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER13);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER14);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER15);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER16);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER17);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER18);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER19);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER20);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER21);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER22);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER23);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER24);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER25);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER26);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER27);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER28);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER29);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER30);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER31);
-
-		$criteria->addSelectColumn(NagiosResourcePeer::USER32);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosResourcePeer::ID);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER1);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER2);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER3);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER4);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER5);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER6);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER7);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER8);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER9);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER10);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER11);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER12);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER13);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER14);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER15);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER16);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER17);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER18);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER19);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER20);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER21);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER22);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER23);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER24);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER25);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER26);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER27);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER28);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER29);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER30);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER31);
+			$criteria->addSelectColumn(NagiosResourcePeer::USER32);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.USER1');
+			$criteria->addSelectColumn($alias . '.USER2');
+			$criteria->addSelectColumn($alias . '.USER3');
+			$criteria->addSelectColumn($alias . '.USER4');
+			$criteria->addSelectColumn($alias . '.USER5');
+			$criteria->addSelectColumn($alias . '.USER6');
+			$criteria->addSelectColumn($alias . '.USER7');
+			$criteria->addSelectColumn($alias . '.USER8');
+			$criteria->addSelectColumn($alias . '.USER9');
+			$criteria->addSelectColumn($alias . '.USER10');
+			$criteria->addSelectColumn($alias . '.USER11');
+			$criteria->addSelectColumn($alias . '.USER12');
+			$criteria->addSelectColumn($alias . '.USER13');
+			$criteria->addSelectColumn($alias . '.USER14');
+			$criteria->addSelectColumn($alias . '.USER15');
+			$criteria->addSelectColumn($alias . '.USER16');
+			$criteria->addSelectColumn($alias . '.USER17');
+			$criteria->addSelectColumn($alias . '.USER18');
+			$criteria->addSelectColumn($alias . '.USER19');
+			$criteria->addSelectColumn($alias . '.USER20');
+			$criteria->addSelectColumn($alias . '.USER21');
+			$criteria->addSelectColumn($alias . '.USER22');
+			$criteria->addSelectColumn($alias . '.USER23');
+			$criteria->addSelectColumn($alias . '.USER24');
+			$criteria->addSelectColumn($alias . '.USER25');
+			$criteria->addSelectColumn($alias . '.USER26');
+			$criteria->addSelectColumn($alias . '.USER27');
+			$criteria->addSelectColumn($alias . '.USER28');
+			$criteria->addSelectColumn($alias . '.USER29');
+			$criteria->addSelectColumn($alias . '.USER30');
+			$criteria->addSelectColumn($alias . '.USER31');
+			$criteria->addSelectColumn($alias . '.USER32');
+		}
 	}
 
 	/**
@@ -356,7 +358,7 @@ abstract class BaseNagiosResourcePeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -375,7 +377,7 @@ abstract class BaseNagiosResourcePeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -429,7 +431,7 @@ abstract class BaseNagiosResourcePeer {
 	 * @param      NagiosResource $value A NagiosResource object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosResource $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -497,6 +499,14 @@ abstract class BaseNagiosResourcePeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_resource
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -509,12 +519,26 @@ abstract class BaseNagiosResourcePeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -527,18 +551,16 @@ abstract class BaseNagiosResourcePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosResourcePeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosResourcePeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosResourcePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosResourcePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -548,6 +570,32 @@ abstract class BaseNagiosResourcePeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosResource object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosResourcePeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosResourcePeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosResourcePeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosResourcePeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosResourcePeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -561,21 +609,35 @@ abstract class BaseNagiosResourcePeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosResourcePeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosResourcePeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosResourcePeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosResourceTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosResource or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosResourcePeer::CLASS_DEFAULT : NagiosResourcePeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosResource or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosResource object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -618,7 +680,7 @@ abstract class BaseNagiosResourcePeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosResource or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosResource or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosResource object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -638,7 +700,12 @@ abstract class BaseNagiosResourcePeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosResourcePeer::ID);
-			$selectCriteria->add(NagiosResourcePeer::ID, $criteria->remove(NagiosResourcePeer::ID), $comparison);
+			$value = $criteria->remove(NagiosResourcePeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosResourcePeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosResourcePeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosResource object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -652,11 +719,12 @@ abstract class BaseNagiosResourcePeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_resource table.
+	 * Deletes all rows from the nagios_resource table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosResourcePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -666,7 +734,12 @@ abstract class BaseNagiosResourcePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosResourcePeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosResourcePeer::TABLE_NAME, $con, NagiosResourcePeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosResourcePeer::clearInstancePool();
+			NagiosResourcePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -676,7 +749,7 @@ abstract class BaseNagiosResourcePeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosResource or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosResource or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosResource object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -697,24 +770,18 @@ abstract class BaseNagiosResourcePeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosResourcePeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosResource) {
+		} elseif ($values instanceof NagiosResource) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosResourcePeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosResourcePeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosResourcePeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -730,7 +797,7 @@ abstract class BaseNagiosResourcePeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosResourcePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -751,7 +818,7 @@ abstract class BaseNagiosResourcePeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosResource $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -829,14 +896,7 @@ abstract class BaseNagiosResourcePeer {
 
 } // BaseNagiosResourcePeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosResourcePeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosResourcePeer class:
-//
-// Propel::getDatabaseMap(NagiosResourcePeer::DATABASE_NAME)->addTableBuilder(NagiosResourcePeer::TABLE_NAME, NagiosResourcePeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosResourcePeer::DATABASE_NAME)->addTableBuilder(BaseNagiosResourcePeer::TABLE_NAME, BaseNagiosResourcePeer::getMapBuilder());
+BaseNagiosResourcePeer::buildTableMap();
 

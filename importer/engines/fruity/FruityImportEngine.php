@@ -241,9 +241,9 @@ class FruityImportEngine extends ImportEngine {
 		$importer->import();
 		$importer = new FruityServiceTemplateImporter($this, $this->dbConn);
 		$importer->import();
-		$importer = new FruityHostGroupImporter($this, $this->dbConn);
-		$importer->import();
 		$importer = new FruityHostTemplateImporter($this, $this->dbConn);
+		$importer->import();
+		$importer = new FruityHostGroupImporter($this, $this->dbConn);
 		$importer->import();
 		$importer = new FruityHostImporter($this, $this->dbConn);
 		$importer->import();

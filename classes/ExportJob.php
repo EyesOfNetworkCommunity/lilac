@@ -1,6 +1,5 @@
 <?php
 
-require_once 'om/BaseExportJob.php';
 
 
 /**
@@ -12,10 +11,10 @@ require_once 'om/BaseExportJob.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class ExportJob extends BaseExportJob {
-
+	
 	const CMD_START = "start";
 	const CMD_STOP = "stop";
 
@@ -64,5 +63,5 @@ class ExportJob extends BaseExportJob {
 	public function addNotice($text) {
 		$this->addLogEntry($text, ImportLogEntry::TYPE_NOTICE);
 	}
-	
+
 } // ExportJob

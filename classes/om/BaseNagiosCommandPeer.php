@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_command' table.
  *
  * Nagios Command
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosCommandPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosCommandPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_command';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosCommand';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosCommand';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosCommandTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_command.ID';
@@ -36,6 +46,9 @@ abstract class BaseNagiosCommandPeer {
 	/** the column name for the DESCRIPTION field */
 	const DESCRIPTION = 'nagios_command.DESCRIPTION';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosCommand objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -44,11 +57,6 @@ abstract class BaseNagiosCommandPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -56,10 +64,11 @@ abstract class BaseNagiosCommandPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Line', 'Description', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'line', 'description', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::LINE, self::DESCRIPTION, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'LINE', 'DESCRIPTION', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'line', 'description', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
@@ -70,25 +79,15 @@ abstract class BaseNagiosCommandPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Line' => 2, 'Description' => 3, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'line' => 2, 'description' => 3, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::LINE => 2, self::DESCRIPTION => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'LINE' => 2, 'DESCRIPTION' => 3, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'line' => 2, 'description' => 3, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosCommandMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -150,21 +149,24 @@ abstract class BaseNagiosCommandPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosCommandPeer::ID);
-
-		$criteria->addSelectColumn(NagiosCommandPeer::NAME);
-
-		$criteria->addSelectColumn(NagiosCommandPeer::LINE);
-
-		$criteria->addSelectColumn(NagiosCommandPeer::DESCRIPTION);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosCommandPeer::ID);
+			$criteria->addSelectColumn(NagiosCommandPeer::NAME);
+			$criteria->addSelectColumn(NagiosCommandPeer::LINE);
+			$criteria->addSelectColumn(NagiosCommandPeer::DESCRIPTION);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.LINE');
+			$criteria->addSelectColumn($alias . '.DESCRIPTION');
+		}
 	}
 
 	/**
@@ -211,7 +213,7 @@ abstract class BaseNagiosCommandPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -230,7 +232,7 @@ abstract class BaseNagiosCommandPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -284,7 +286,7 @@ abstract class BaseNagiosCommandPeer {
 	 * @param      NagiosCommand $value A NagiosCommand object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosCommand $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -352,6 +354,65 @@ abstract class BaseNagiosCommandPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_command
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in NagiosContactNotificationCommandPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosContactNotificationCommandPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosHostPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostPeer::clearInstancePool();
+		// Invalidate objects in NagiosServiceTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServiceTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosServiceTemplatePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServiceTemplatePeer::clearInstancePool();
+		// Invalidate objects in NagiosServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServicePeer::clearInstancePool();
+		// Invalidate objects in NagiosServicePeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServicePeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+		// Invalidate objects in NagiosMainConfigurationPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosMainConfigurationPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -364,12 +425,26 @@ abstract class BaseNagiosCommandPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -382,18 +457,16 @@ abstract class BaseNagiosCommandPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosCommandPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosCommandPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosCommandPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -403,6 +476,32 @@ abstract class BaseNagiosCommandPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosCommand object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosCommandPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosCommandPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosCommandPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosCommandPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -416,21 +515,35 @@ abstract class BaseNagiosCommandPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosCommandPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosCommandPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosCommandPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosCommandTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosCommand or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosCommandPeer::CLASS_DEFAULT : NagiosCommandPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosCommand or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosCommand object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -473,7 +586,7 @@ abstract class BaseNagiosCommandPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosCommand or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosCommand or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosCommand object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -493,7 +606,12 @@ abstract class BaseNagiosCommandPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosCommandPeer::ID);
-			$selectCriteria->add(NagiosCommandPeer::ID, $criteria->remove(NagiosCommandPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosCommandPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosCommandPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosCommandPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosCommand object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -507,11 +625,12 @@ abstract class BaseNagiosCommandPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_command table.
+	 * Deletes all rows from the nagios_command table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosCommandPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -523,7 +642,12 @@ abstract class BaseNagiosCommandPeer {
 			$con->beginTransaction();
 			$affectedRows += NagiosCommandPeer::doOnDeleteCascade(new Criteria(NagiosCommandPeer::DATABASE_NAME), $con);
 			NagiosCommandPeer::doOnDeleteSetNull(new Criteria(NagiosCommandPeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(NagiosCommandPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosCommandPeer::TABLE_NAME, $con, NagiosCommandPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosCommandPeer::clearInstancePool();
+			NagiosCommandPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -533,7 +657,7 @@ abstract class BaseNagiosCommandPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosCommand or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosCommand or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosCommand object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -550,30 +674,14 @@ abstract class BaseNagiosCommandPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			NagiosCommandPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosCommand) {
-			// invalidate the cache for this single object
-			NagiosCommandPeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof NagiosCommand) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosCommandPeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				NagiosCommandPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -585,71 +693,30 @@ abstract class BaseNagiosCommandPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += NagiosCommandPeer::doOnDeleteCascade($criteria, $con);
-			NagiosCommandPeer::doOnDeleteSetNull($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					NagiosCommandPeer::clearInstancePool();
-				} else { // it's a PK or object
-					NagiosCommandPeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += NagiosCommandPeer::doOnDeleteCascade($c, $con);
+			
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			NagiosCommandPeer::doOnDeleteSetNull($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				NagiosCommandPeer::clearInstancePool();
+			} elseif ($values instanceof NagiosCommand) { // it's a model object
+				NagiosCommandPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					NagiosCommandPeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in NagiosContactNotificationCommandPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosContactNotificationCommandPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostPeer::clearInstancePool();
-
-			// invalidate objects in NagiosServiceTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServiceTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServiceTemplatePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServiceTemplatePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServicePeer::clearInstancePool();
-
-			// invalidate objects in NagiosServicePeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServicePeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
-			// invalidate objects in NagiosMainConfigurationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosMainConfigurationPeer::clearInstancePool();
-
+			NagiosCommandPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -682,58 +749,58 @@ abstract class BaseNagiosCommandPeer {
 
 
 			// delete related NagiosContactNotificationCommand objects
-			$c = new Criteria(NagiosContactNotificationCommandPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosContactNotificationCommandPeer::DATABASE_NAME);
 			
-			$c->add(NagiosContactNotificationCommandPeer::COMMAND, $obj->getId());
-			$affectedRows += NagiosContactNotificationCommandPeer::doDelete($c, $con);
+			$criteria->add(NagiosContactNotificationCommandPeer::COMMAND, $obj->getId());
+			$affectedRows += NagiosContactNotificationCommandPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::OCSP_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::OCSP_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::OCHP_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::OCHP_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::HOST_PERFDATA_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::HOST_PERFDATA_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::SERVICE_PERFDATA_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::SERVICE_PERFDATA_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::HOST_PERFDATA_FILE_PROCESSING_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::HOST_PERFDATA_FILE_PROCESSING_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::SERVICE_PERFDATA_FILE_PROCESSING_COMMAND, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::SERVICE_PERFDATA_FILE_PROCESSING_COMMAND, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::GLOBAL_SERVICE_EVENT_HANDLER, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::GLOBAL_SERVICE_EVENT_HANDLER, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 
 			// delete related NagiosMainConfiguration objects
-			$c = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosMainConfigurationPeer::DATABASE_NAME);
 			
-			$c->add(NagiosMainConfigurationPeer::GLOBAL_HOST_EVENT_HANDLER, $obj->getId());
-			$affectedRows += NagiosMainConfigurationPeer::doDelete($c, $con);
+			$criteria->add(NagiosMainConfigurationPeer::GLOBAL_HOST_EVENT_HANDLER, $obj->getId());
+			$affectedRows += NagiosMainConfigurationPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -764,7 +831,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosHostTemplatePeer::CHECK_COMMAND, $obj->getId());
 			$updateValues->add(NagiosHostTemplatePeer::CHECK_COMMAND, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHostTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -772,7 +839,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosHostTemplatePeer::EVENT_HANDLER, $obj->getId());
 			$updateValues->add(NagiosHostTemplatePeer::EVENT_HANDLER, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHost rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -780,7 +847,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosHostPeer::CHECK_COMMAND, $obj->getId());
 			$updateValues->add(NagiosHostPeer::CHECK_COMMAND, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosHost rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -788,7 +855,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosHostPeer::EVENT_HANDLER, $obj->getId());
 			$updateValues->add(NagiosHostPeer::EVENT_HANDLER, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosServiceTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -796,7 +863,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosServiceTemplatePeer::CHECK_COMMAND, $obj->getId());
 			$updateValues->add(NagiosServiceTemplatePeer::CHECK_COMMAND, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosServiceTemplate rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -804,7 +871,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosServiceTemplatePeer::EVENT_HANDLER, $obj->getId());
 			$updateValues->add(NagiosServiceTemplatePeer::EVENT_HANDLER, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosService rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -812,7 +879,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosServicePeer::CHECK_COMMAND, $obj->getId());
 			$updateValues->add(NagiosServicePeer::CHECK_COMMAND, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 			// set fkey col in related NagiosService rows to NULL
 			$selectCriteria = new Criteria(NagiosCommandPeer::DATABASE_NAME);
@@ -820,7 +887,7 @@ abstract class BaseNagiosCommandPeer {
 			$selectCriteria->add(NagiosServicePeer::EVENT_HANDLER, $obj->getId());
 			$updateValues->add(NagiosServicePeer::EVENT_HANDLER, null);
 
-					BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
+			BasePeer::doUpdate($selectCriteria, $updateValues, $con); // use BasePeer because generated Peer doUpdate() methods only update using pkey
 
 		}
 	}
@@ -837,7 +904,7 @@ abstract class BaseNagiosCommandPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosCommand $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -915,14 +982,7 @@ abstract class BaseNagiosCommandPeer {
 
 } // BaseNagiosCommandPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosCommandPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosCommandPeer class:
-//
-// Propel::getDatabaseMap(NagiosCommandPeer::DATABASE_NAME)->addTableBuilder(NagiosCommandPeer::TABLE_NAME, NagiosCommandPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosCommandPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosCommandPeer::TABLE_NAME, BaseNagiosCommandPeer::getMapBuilder());
+BaseNagiosCommandPeer::buildTableMap();
 

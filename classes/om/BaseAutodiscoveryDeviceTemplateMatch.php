@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'autodiscovery_device_template_match' table.
  *
  * AutoDiscovery Device Matched Template
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implements Persistent {
+abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'AutodiscoveryDeviceTemplateMatchPeer';
 
 	/**
 	 * The Peer class.
@@ -71,26 +77,6 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseAutodiscoveryDeviceTemplateMatch object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -260,11 +246,6 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -300,8 +281,7 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 5; // 5 = AutodiscoveryDeviceTemplateMatchPeer::NUM_COLUMNS - AutodiscoveryDeviceTemplateMatchPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = AutodiscoveryDeviceTemplateMatchPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating AutodiscoveryDeviceTemplateMatch object", $e);
@@ -392,12 +372,20 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 		if ($con === null) {
 			$con = Propel::getConnection(AutodiscoveryDeviceTemplateMatchPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			AutodiscoveryDeviceTemplateMatchPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				AutodiscoveryDeviceTemplateMatchQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -426,12 +414,29 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 		if ($con === null) {
 			$con = Propel::getConnection(AutodiscoveryDeviceTemplateMatchPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				AutodiscoveryDeviceTemplateMatchPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			AutodiscoveryDeviceTemplateMatchPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -482,13 +487,14 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = AutodiscoveryDeviceTemplateMatchPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(AutodiscoveryDeviceTemplateMatchPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.AutodiscoveryDeviceTemplateMatchPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows += 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
 					$affectedRows += AutodiscoveryDeviceTemplateMatchPeer::doUpdate($this, $con);
@@ -646,13 +652,21 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['AutodiscoveryDeviceTemplateMatch'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['AutodiscoveryDeviceTemplateMatch'][$this->getPrimaryKey()] = true;
 		$keys = AutodiscoveryDeviceTemplateMatchPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -661,6 +675,14 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 			$keys[3] => $this->getPercent(),
 			$keys[4] => $this->getComplexity(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->aAutodiscoveryDevice) {
+				$result['AutodiscoveryDevice'] = $this->aAutodiscoveryDevice->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosHostTemplate) {
+				$result['NagiosHostTemplate'] = $this->aNagiosHostTemplate->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+		}
 		return $result;
 	}
 
@@ -766,7 +788,6 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(AutodiscoveryDeviceTemplateMatchPeer::DATABASE_NAME);
-
 		$criteria->add(AutodiscoveryDeviceTemplateMatchPeer::ID, $this->id);
 
 		return $criteria;
@@ -793,6 +814,15 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -800,24 +830,19 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	 *
 	 * @param      object $copyObj An object of AutodiscoveryDeviceTemplateMatch (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setDeviceId($this->device_id);
-
-		$copyObj->setHostTemplate($this->host_template);
-
-		$copyObj->setPercent($this->percent);
-
-		$copyObj->setComplexity($this->complexity);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setDeviceId($this->getDeviceId());
+		$copyObj->setHostTemplate($this->getHostTemplate());
+		$copyObj->setPercent($this->getPercent());
+		$copyObj->setComplexity($this->getComplexity());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -895,15 +920,13 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	public function getAutodiscoveryDevice(PropelPDO $con = null)
 	{
 		if ($this->aAutodiscoveryDevice === null && ($this->device_id !== null)) {
-			$c = new Criteria(AutodiscoveryDevicePeer::DATABASE_NAME);
-			$c->add(AutodiscoveryDevicePeer::ID, $this->device_id);
-			$this->aAutodiscoveryDevice = AutodiscoveryDevicePeer::doSelectOne($c, $con);
+			$this->aAutodiscoveryDevice = AutodiscoveryDeviceQuery::create()->findPk($this->device_id, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aAutodiscoveryDevice->addAutodiscoveryDeviceTemplateMatchs($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aAutodiscoveryDevice->addAutodiscoveryDeviceTemplateMatchs($this);
 			 */
 		}
 		return $this->aAutodiscoveryDevice;
@@ -946,36 +969,81 @@ abstract class BaseAutodiscoveryDeviceTemplateMatch extends BaseObject  implemen
 	public function getNagiosHostTemplate(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHostTemplate === null && ($this->host_template !== null)) {
-			$c = new Criteria(NagiosHostTemplatePeer::DATABASE_NAME);
-			$c->add(NagiosHostTemplatePeer::ID, $this->host_template);
-			$this->aNagiosHostTemplate = NagiosHostTemplatePeer::doSelectOne($c, $con);
+			$this->aNagiosHostTemplate = NagiosHostTemplateQuery::create()->findPk($this->host_template, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHostTemplate->addAutodiscoveryDeviceTemplateMatchs($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHostTemplate->addAutodiscoveryDeviceTemplateMatchs($this);
 			 */
 		}
 		return $this->aNagiosHostTemplate;
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->device_id = null;
+		$this->host_template = null;
+		$this->percent = null;
+		$this->complexity = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
-			$this->aAutodiscoveryDevice = null;
-			$this->aNagiosHostTemplate = null;
+		$this->aAutodiscoveryDevice = null;
+		$this->aNagiosHostTemplate = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(AutodiscoveryDeviceTemplateMatchPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseAutodiscoveryDeviceTemplateMatch

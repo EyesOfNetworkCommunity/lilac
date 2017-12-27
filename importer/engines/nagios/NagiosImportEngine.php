@@ -2,11 +2,11 @@
 
 
 abstract class NagiosImporter extends Importer {
-	
+
 	private $importJob;
 	private $fileSegment;
-	private $needQueued; 
-	
+	private $needQueued;
+
 	public function __construct($engine, $fileSegment) {
 		$this->fileSegment = $fileSegment;
 		parent::__construct($engine);
@@ -21,29 +21,29 @@ abstract class NagiosImporter extends Importer {
 	protected function getSegment() {
 		return $this->fileSegment;
 	}
-	
+
 	abstract function init();
-	
+
 	/**
-	 * Returns if this importer is valid and able to import.  If not, we defer it 
+	 * Returns if this importer is valid and able to import.  If not, we defer it
 	 *
 	 */
 	abstract function valid();
-	
+
 	abstract function import();
-	
+
 }
 
 class NagiosImportFileSegment {
 	private $values;
 	private $fileName;
 	private $line;
-	
+
 	public function __construct($fileName) {
 		$this->fileName = $fileName;
 		$this->values = array();
 	}
-	
+
 	public function add($lineNum, $key, $value, $line) {
 		if($key === null) {
 			$key = '__nokey__';	// Special key value
@@ -52,19 +52,19 @@ class NagiosImportFileSegment {
 			$this->values[$key] = array();
 		}
 		$this->values[$key][] = array(
-			'value' => $value,
-			'line' => $lineNum,
-			'text' => $line
-			);
+				'value' => $value,
+				'line' => $lineNum,
+				'text' => $line
+		);
 	}
-	
+
 	public function get($key) {
 		if(isset($this->values[$key])) {
 			return $this->values[$key];
 		}
 		return null;
 	}
-		
+
 	/**
 	 * Enter description here...
 	 *
@@ -73,12 +73,12 @@ class NagiosImportFileSegment {
 	public function getValues() {
 		return $this->values;
 	}
-	
-	
+
+
 	public function getFilename() {
 		return $this->fileName;
 	}
-	
+
 	public function dump() {
 		print("Contents of Values:\n");
 		var_dump($this->values);
@@ -86,11 +86,11 @@ class NagiosImportFileSegment {
 }
 
 class NagiosImportEngine extends ImportEngine {
-	
+
 	private $objectFiles = array();		// Will contain a list of object files to process
-	
+
 	private $queuedImporters = array();
-	
+
 	public function getDisplayName() {
 		return "Nagios Importer";
 	}
@@ -100,55 +100,110 @@ class NagiosImportEngine extends ImportEngine {
 	}
 
 	public function renderConfig() {
-		?>
-		<p>
-		<fieldset class="checks">
-			<legend>Options</legend>
-			<p>
-			<input type="checkbox" id="overwrite_main" name="overwrite_main" checked="checked" />
-			<label for="overwrite_main">Overwrite Main Configuration</label>
-			</p>
-			<p>
-			<input type="checkbox" id="overwrite_cgi" name="overwrite_cgi" checked="checked" />
-			<label for="overwrite_cgi">Overwrite CGI Configuration</label>
-			</p>
-			<p>
-			<input type="checkbox" id="overwrite_resources" name="overwrite_resources" checked="checked" />
-			<label for="overwrite_resources">Overwrite Resources (resources.cfg)</label>
-			</p>
-			<p>
-			<input type="checkbox" id="delete_existing" name="delete_existing" checked="checked" />
-			<label for="delete_existing">Delete Current Objects</label>
-			</p>
-			<p>
-			<input type="checkbox" name="overwrite_existing" id="overwrite_existing" checked="checked" />
-			<label for="overwrite_existing">Overwrite Existing Objects (Ignored if Deleting Existing Objects)</label>
-			</p>
-			<p>
-			<input type="checkbox" id="continue_error" name="continue_error" />
-			<label for="continue_error">Attempt to Continue on Errors</label>
-			</p>
-		</fieldset>
-		</p>
-		<p>
-		<fieldset>
-			<legend>File Locations</legend>
-			<p>
-			<label for="config_file">Main Configuration File  (nagios.cfg)</label>
-			<input type="text" size="100" maxlength="255" id="config_file" name="config_file" />
-			</p>
-			<p>
-			<label for="cgi_file">CGI Configuration File (cgi.cfg)</label>
-			<input type="text" size="100" maxlength="255" id="cgi_file" name="cgi_file" />
-			</p>
-			<p>
-			<label for="resources_file">Resource File (resource.cfg)</label>
-			<input type="text" size="100" maxlength="255" id="resources_file" name="resources_file" />
-			</p>
-		</fieldset>
-		</p>
-		<?php
 
+		$cfgLocation = $this->guessConfigLocation();
+
+		?>
+<p>
+<fieldset class="checks">
+	<legend>Options</legend>
+	<p>
+		<input type="checkbox" id="overwrite_main" name="overwrite_main"
+			checked="checked" /> <label for="overwrite_main">Overwrite Main
+			Configuration</label>
+	</p>
+	<p>
+		<input type="checkbox" id="overwrite_cgi" name="overwrite_cgi"
+			checked="checked" /> <label for="overwrite_cgi">Overwrite CGI
+			Configuration</label>
+	</p>
+	<p>
+		<input type="checkbox" id="overwrite_resources"
+			name="overwrite_resources" checked="checked" /> <label
+			for="overwrite_resources">Overwrite Resources (resources.cfg)</label>
+	</p>
+	<p>
+		<input type="checkbox" id="delete_existing" name="delete_existing"
+			checked="checked" /> <label for="delete_existing">Delete Current
+			Objects</label>
+	</p>
+	<p>
+		<input type="checkbox" name="overwrite_existing"
+			id="overwrite_existing" checked="checked" /> <label
+			for="overwrite_existing">Overwrite Existing Objects (Ignored if
+			Deleting Existing Objects)</label>
+	</p>
+	<p>
+		<input type="checkbox" name="skip_missing_template_values"
+			id="skip_missing_template_values" checked="checked" /> <label
+			for="skip_missing_template_values">Skip dependency warnings for
+			templates (Warning is still shown in log)</label>
+	</p>
+	<p>
+		<input type="checkbox" id="continue_error" name="continue_error" /> <label
+			for="continue_error">Attempt to Continue on Errors</label>
+	</p>
+</fieldset>
+</p>
+<p>
+<fieldset>
+	<legend>File Locations</legend>
+	<p>
+		<label for="config_file">Main Configuration File (nagios.cfg)</label>
+		<input type="text" size="100" maxlength="255" id="config_file"
+			name="config_file" value="<?php echo $cfgLocation["nagios"]?>" />
+	</p>
+	<p>
+		<label for="cgi_file">CGI Configuration File (cgi.cfg)</label> <input
+			type="text" size="100" maxlength="255" id="cgi_file" name="cgi_file"
+			value="<?php echo $cfgLocation["cgi"]?>" />
+	</p>
+	<p>
+		<label for="resources_file">Resource File (resource.cfg)</label> <input
+			type="text" size="100" maxlength="255" id="resources_file"
+			name="resources_file" value="<?php echo $cfgLocation["resource"]?>" />
+	</p>
+</fieldset>
+</p>
+<?php
+
+	}
+
+	public function guessConfigLocation()
+	{
+		// Most possible locations
+		$posLoc = array("/etc/nagios/", "/etc/nagios3/", "/usr/local/nagios/etc/", "/etc/nagios/private/", "/usr/local/nagios/");
+
+		// Found locations
+		$cfgFound = array("nagios" => "", "cgi" => "", "resource" => "");
+
+		// Search for configs
+		foreach($posLoc as $dir)
+		{
+			
+			if(file_exists($dir . "nagios.cfg"))
+			{
+				$cfgFound["nagios"] = $dir . "nagios.cfg";
+				$cfgFound["cgi"] = $dir . "cgi.cfg";
+				$cfgFound["resource"] = $dir . "resource.cfg";
+			}
+		}
+		
+		foreach($posLoc as $dir)
+		{
+				
+			if(file_exists($dir . "cgi.cfg"))
+			{
+				$cfgFound["cgi"] = $dir . "cgi.cfg";
+			}
+				
+			if(file_exists($dir . "resource.cfg"))
+			{
+				$cfgFound["resource"] = $dir . "resource.cfg";
+			}
+		}
+
+		return $cfgFound;
 	}
 
 	public function validateConfig() {
@@ -172,30 +227,56 @@ class NagiosImportEngine extends ImportEngine {
 		$config->setVar("continue_error", (isset($_POST['continue_error']) ? true : false));
 		$config->setVar("delete_existing", (isset($_POST['delete_existing']) ? true : false));
 		$config->setVar("overwrite_existing", (isset($_POST['overwrite_existing']) ? true : false));
+		$config->setVar("skip_missing_template_values", (isset($_POST['skip_missing_template_values']) ? true : false));
 		$config->setVar("config_file", $_POST['config_file']);
 		$config->setVar("cgi_file", $_POST['cgi_file']);
 		$config->setVar("resources_file", $_POST['resources_file']);
 	}
 
 	public function showJobSupplemental() {
-		?><ul><?php
-		$config = $this->getConfig();
-		if($config->getVar("overwrite_main")) {
-			?><li><strong>Importing Main Configuration</strong></li><?php
-		}
-		if($config->getVar("overwrite_resources")) {
-			?><li><strong>Importing Resources</strong></li><?php
-		}
-		if($config->getVar("overwrite_cgi")) {
-			?><li><strong>Importing CGI Configuration</strong></li><?php
-		}
-		if($config->getVar("overwrite_existing")) {
-			?><li><strong>Overwriting Existing Objects</strong></li><?php
-		}
-		if($config->getVar("continue_error")) {
-			?><li><strong>Attempting to Continue on Errors</strong></li><?php
-		}
-		?></ul><?php
+		?>
+<ul>
+	<?php
+	$config = $this->getConfig();
+	if($config->getVar("overwrite_main")) {
+		?>
+	<li><strong>Importing Main Configuration</strong>
+	</li>
+	<?php
+	}
+	if($config->getVar("overwrite_resources")) {
+		?>
+	<li><strong>Importing Resources</strong>
+	</li>
+	<?php
+	}
+	if($config->getVar("overwrite_cgi")) {
+		?>
+	<li><strong>Importing CGI Configuration</strong>
+	</li>
+	<?php
+	}
+	if($config->getVar("overwrite_existing")) {
+		?>
+	<li><strong>Overwriting Existing Objects</strong>
+	</li>
+	<?php
+	}
+	if($config->getVar("continue_error")) {
+		?>
+	<li><strong>Attempting to Continue on Errors</strong>
+	</li>
+	<?php
+	}
+	if($config->getVar("skip_missing_template_values")) {
+		?>
+	<li><strong>Skip dependency warnings for templates</strong>
+	</li>
+	<?php
+	}
+	?>
+</ul>
+<?php
 	}
 
 	public function addQueuedImporter($importer) {
@@ -204,11 +285,11 @@ class NagiosImportEngine extends ImportEngine {
 
 	public function init() {
 		$job = $this->getJob();
-		
+
 
 		$job->addNotice("NagiosImportEngine Starting...");
 		$config = $this->getConfig();
-				
+
 		// Attempt to try and open each config file
 		$job->addNotice("Attempting to open " . $config->GetVar('config_file'));
 		if(!file_exists($config->getVar('config_file')) || !@fopen($config->getVar('config_file'), "r")) {
@@ -231,7 +312,7 @@ class NagiosImportEngine extends ImportEngine {
 			$job->addNotice("Removing existing Nagios objects.");
 			NagiosTimeperiodPeer::doDeleteAll();
 			NagiosCommandPeer::doDeleteAll();
-            		NagiosContactPeer::doDeleteAll();
+			NagiosContactPeer::doDeleteAll();
 			NagiosContactGroupPeer::doDeleteAll();
 			NagiosHostTemplatePeer::doDeleteAll();
 			NagiosHostPeer::doDeleteAll();
@@ -245,14 +326,14 @@ class NagiosImportEngine extends ImportEngine {
 		}
 		return true;
 	}
-	
+
 	public function import() {
 		$job = $this->getJob();
 		$job->addNotice("NagiosImportEngine beginning import...");
 		$config = $this->getConfig();
 		$fp = fopen($config->getVar('config_file'), 'r');
 		// We have our file pointer.
-		$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('config_file'));		
+		$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('config_file'));
 		$importer = new NagiosMainImporter($this, $segment);
 		$importer->init();
 		if($config->getVar('overwrite_main')) {
@@ -272,9 +353,9 @@ class NagiosImportEngine extends ImportEngine {
 		if($config->getVar('overwrite_cgi')) {
 			$fp = fopen($config->getVar('cgi_file'), 'r');
 			// We have our file pointer.
-			$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('cgi_file'));		
+			$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('cgi_file'));
 			$importer = new NagiosCgiImporter($this, $segment);
-			
+
 			if(!$importer->valid()) {
 				$this->addQueuedImporter($importer);
 				$job->addNotice("NagiosImportEngine queueing up CGI importer until dependencies are valid.");
@@ -286,14 +367,14 @@ class NagiosImportEngine extends ImportEngine {
 						return false;
 					}
 				}
-			}		
+			}
 		}
 		if($config->getVar('overwrite_resources')) {
 			$fp = fopen($config->getVar('resources_file'), 'r');
 			// We have our file pointer.
-			$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('resources_file'));		
+			$segment = $this->buildSegmentFromConfigFile($fp, $config->getVar('resources_file'));
 			$importer = new NagiosResourceImporter($this, $segment);
-			
+
 			if(!$importer->valid()) {
 				$this->addQueuedImporter($importer);
 				$job->addNotice("NagiosImportEngine queueing up resources importer until dependencies are valid.");
@@ -305,9 +386,9 @@ class NagiosImportEngine extends ImportEngine {
 						return false;
 					}
 				}
-			}		
+			}
 		}
-		
+
 		$job->addNotice("Beginning to process " . count($this->objectFiles) . " object files.");
 		foreach($this->objectFiles as $fileName) {
 			$job->addNotice("Parsing file: " . $fileName);
@@ -316,8 +397,8 @@ class NagiosImportEngine extends ImportEngine {
 			}
 			$job->addNotice("Finished Parsing file: " . $fileName);
 		}
-		
-        if(count($this->queuedImporters)) {
+
+		if(count($this->queuedImporters)) {
 			$completed = false;
 			while(!$completed) {
 				$completedOne = false;
@@ -330,9 +411,9 @@ class NagiosImportEngine extends ImportEngine {
 						unset($this->queuedImporters[$key]);
 						$completedOne = true;
 					}
-				}	
+				}
 				if(!$completedOne) {
-					// We were unable to finish any of the importers that were 
+					// We were unable to finish any of the importers that were
 					// queued.
 					break;
 				}
@@ -349,7 +430,7 @@ class NagiosImportEngine extends ImportEngine {
 		$job->addNotice("NagiosImportEngine finished importing.");
 		return true;
 	}
-	
+
 	private function buildSegmentFromConfigFile($fp, $fileName) {
 		$segment = new NagiosImportFileSegment($fileName);
 		$counter = 0;
@@ -360,7 +441,12 @@ class NagiosImportEngine extends ImportEngine {
 				continue;
 			}
 			if (preg_match('/^\s*([^=]+)\s*=\s*([^#;]+)/', $line, $regs)) {
-				$values = explode(',', $regs[2]);
+				if ( "check_command" != trim($regs[1]) ) {
+					$values = explode(',', $regs[2]);
+				} else {
+					$values = array($regs[2]);
+				}
+
 				foreach($values as $val) {
 					if(trim($val) != '') {
 						$segment->add($counter, trim($regs[1]), trim($val), $line);
@@ -374,14 +460,14 @@ class NagiosImportEngine extends ImportEngine {
 		}
 		return $segment;
 	}
-	
-	
+
+
 	public function addObjectFile($fileName) {
 		$job = $this->getJob();
 		$this->objectFiles[] = $fileName;
 		$job->addNotice("NagiosImportEngine: Added " . $fileName . " to list of object config files to parse.");
 	}
-	
+
 	private function parse_object_file($fileName, $importJob) {
 		$fp = @fopen($fileName, 'r');
 		$config = unserialize($importJob->getConfig());
@@ -395,14 +481,14 @@ class NagiosImportEngine extends ImportEngine {
 		while ($line = fgets($fp)) {
 			$lineNumber++;
 			$line = trim($line);
-		    if(preg_match('/^\s*(|#.*)$/', $line)) {
-		    	// This is a comment
+			if(preg_match('/^\s*(|#.*)$/', $line)) {
+				// This is a comment
 				continue;
-		    }
+			}
 
 			// Need to merge lines that have a \ at the end
 			if(preg_match('/\\\$/', $line)) {
-				// We need to merge, so remove the last character of the line, 
+				// We need to merge, so remove the last character of the line,
 				// then merge with next
 				$newLine = substr($line, 0, strlen($line) - 2);
 				do {
@@ -416,236 +502,241 @@ class NagiosImportEngine extends ImportEngine {
 				} while(preg_match('/\\\$/', $line));
 				$line = $newLine;
 			}
-		    
-		    if (preg_match('/^\s*define\s+(\S+)\s*{\s*$/', $line, $regs)) {
-		    	// Setup object name
+
+			if (preg_match('/^\s*define\s+(\S+)\s*{\s*$/', $line, $regs)) {
+				// Setup object name
 				$objectName = $regs[1];
 				$segment = new NagiosImportFileSegment($fileName);
 				continue;
-		    }
-	
-		    if (preg_match('/\s*(\S+)\s+([^#;]+)/', $line, $regs)) {  
-		    	if($regs[1] != ";") {		// Check for a blank line (this is ugly, should fix the regex)
+			}
+
+			if (preg_match('/\s*(\S+)\s+([^#;]+)/', $line, $regs)) {
+				if($regs[1] != ";") {		// Check for a blank line (this is ugly, should fix the regex)
 					// See if the line has a \ on the end
-					$values = explode(',', $regs[2]);
+					if ( "check_command" != trim($regs[1]) ) {
+						$values = explode(',', $regs[2]);
+					} else {
+						$values = array($regs[2]);
+					}
+
 					foreach($values as $val) {
 						if(trim($val) != "") {
 							$segment->add($lineNumber, trim($regs[1]), trim($val), $line);
 						}
 					}
 				}
-			continue;
-		    }
-		    		    
-		    if (preg_match('/^\s*}/', $line)) { //Completed object End curley bracket must be on it's own line
-			switch($objectName) {
-				case 'contactgroup':
-                    $importer = new NagiosContactGroupImporter($this, $segment);
-                    if(!$importer->init()) {
-                        return false;
-                    }
-                    if(!$importer->valid()) {
-                        $this->addQueuedImporter($importer);
-                    }
-                    else {
-                     if(!$importer->import()) {
-                      return false;
-                     }
-                    }
-				    break;
-				case 'contact':
-					$importer = new NagiosContactImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
-							return false;
-						}
-					}
-				    break;
-				case 'host':
-					$importer = new NagiosHostImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
-							return false;
-						}
-					}
-				    break;
-				case 'hostgroup':
-					$importer = new NagiosHostGroupImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
-							return false;
-						}
-					}
-					break;
-				case 'timeperiod':
-					$importer = new NagiosTimeperiodImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
-							return false;
-						}
-					}
-				    break;
+				continue;
+			}
 
-				case 'command':
-					$importer = new NagiosCommandImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+			if (preg_match('/^\s*}/', $line)) { //Completed object End curley bracket must be on it's own line
+				switch($objectName) {
+					case 'contactgroup':
+						$importer = new NagiosContactGroupImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-				    break;
-				case 'service':
-					$importer = new NagiosServiceImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'contact':
+						$importer = new NagiosContactImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-				    break;
-				case 'servicegroup':
-					$importer = new NagiosServiceGroupImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'host':
+						$importer = new NagiosHostImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-				    break;
-				case 'hostextinfo':
-					$importer = new NagiosHostExtInfoImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'hostgroup':
+						$importer = new NagiosHostGroupImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-				    break;
-				case 'serviceextinfo':
-					$importer = new NagiosServiceExtInfoImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'timeperiod':
+						$importer = new NagiosTimeperiodImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-				    break;
-				case 'hostdependency':
-					$importer = new NagiosHostDependencyImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+
+					case 'command':
+						$importer = new NagiosCommandImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-					break;
-				case 'servicedependency':
-					$importer = new NagiosServiceDependencyImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'service':
+						$importer = new NagiosServiceImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-					break;
-				case 'hostescalation':
-					$importer = new NagiosHostEscalationImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'servicegroup':
+						$importer = new NagiosServiceGroupImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-					break;
-				case 'serviceescalation':
-					$importer = new NagiosServiceEscalationImporter($this, $segment);
-					if(!$importer->init()) {
-						return false;
-					}
-					if(!$importer->valid()) {
-						$this->addQueuedImporter($importer);
-					}
-					else {
-						if(!$importer->import()) {
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'hostextinfo':
+						$importer = new NagiosHostExtInfoImporter($this, $segment);
+						if(!$importer->init()) {
 							return false;
 						}
-					}
-					break;
-			} // switch
-			$objectName = '';
-			$importLines = array();
-			continue;
-		    }		    
-	
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'serviceextinfo':
+						$importer = new NagiosServiceExtInfoImporter($this, $segment);
+						if(!$importer->init()) {
+							return false;
+						}
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'hostdependency':
+						$importer = new NagiosHostDependencyImporter($this, $segment);
+						if(!$importer->init()) {
+							return false;
+						}
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'servicedependency':
+						$importer = new NagiosServiceDependencyImporter($this, $segment);
+						if(!$importer->init()) {
+							return false;
+						}
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'hostescalation':
+						$importer = new NagiosHostEscalationImporter($this, $segment);
+						if(!$importer->init()) {
+							return false;
+						}
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+					case 'serviceescalation':
+						$importer = new NagiosServiceEscalationImporter($this, $segment);
+						if(!$importer->init()) {
+							return false;
+						}
+						if(!$importer->valid()) {
+							$this->addQueuedImporter($importer);
+						}
+						else {
+							if(!$importer->import()) {
+								return false;
+							}
+						}
+						break;
+				} // switch
+				$objectName = '';
+				$importLines = array();
+				continue;
+			}
+
 		}
-		return true;		
+		return true;
 	}
-	
+
 }
 
 $path = dirname(__FILE__) . "/../../";

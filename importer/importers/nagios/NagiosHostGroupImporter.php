@@ -111,7 +111,7 @@ class NagiosHostGroupImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $hostgroup, $value);
+					call_user_func(array($hostgroup, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

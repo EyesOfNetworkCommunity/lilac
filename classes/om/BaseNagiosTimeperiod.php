@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_timeperiod' table.
  *
  * Nagios Timeperiods
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
+abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosTimeperiodPeer';
 
 	/**
 	 * The Peer class.
@@ -42,19 +48,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosTimeperiodEntrys;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosTimeperiodEntrys.
-	 */
-	private $lastNagiosTimeperiodEntryCriteria = null;
-
-	/**
 	 * @var        array NagiosTimeperiodExclude[] Collection to store aggregation of NagiosTimeperiodExclude objects.
 	 */
 	protected $collNagiosTimeperiodExcludesRelatedByTimeperiodId;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosTimeperiodExcludesRelatedByTimeperiodId.
-	 */
-	private $lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria = null;
 
 	/**
 	 * @var        array NagiosTimeperiodExclude[] Collection to store aggregation of NagiosTimeperiodExclude objects.
@@ -62,19 +58,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod.
-	 */
-	private $lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria = null;
-
-	/**
 	 * @var        array NagiosContact[] Collection to store aggregation of NagiosContact objects.
 	 */
 	protected $collNagiosContactsRelatedByHostNotificationPeriod;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactsRelatedByHostNotificationPeriod.
-	 */
-	private $lastNagiosContactRelatedByHostNotificationPeriodCriteria = null;
 
 	/**
 	 * @var        array NagiosContact[] Collection to store aggregation of NagiosContact objects.
@@ -82,19 +68,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosContactsRelatedByServiceNotificationPeriod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactsRelatedByServiceNotificationPeriod.
-	 */
-	private $lastNagiosContactRelatedByServiceNotificationPeriodCriteria = null;
-
-	/**
 	 * @var        array NagiosHostTemplate[] Collection to store aggregation of NagiosHostTemplate objects.
 	 */
 	protected $collNagiosHostTemplatesRelatedByCheckPeriod;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostTemplatesRelatedByCheckPeriod.
-	 */
-	private $lastNagiosHostTemplateRelatedByCheckPeriodCriteria = null;
 
 	/**
 	 * @var        array NagiosHostTemplate[] Collection to store aggregation of NagiosHostTemplate objects.
@@ -102,19 +78,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosHostTemplatesRelatedByNotificationPeriod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostTemplatesRelatedByNotificationPeriod.
-	 */
-	private $lastNagiosHostTemplateRelatedByNotificationPeriodCriteria = null;
-
-	/**
 	 * @var        array NagiosHost[] Collection to store aggregation of NagiosHost objects.
 	 */
 	protected $collNagiosHostsRelatedByCheckPeriod;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostsRelatedByCheckPeriod.
-	 */
-	private $lastNagiosHostRelatedByCheckPeriodCriteria = null;
 
 	/**
 	 * @var        array NagiosHost[] Collection to store aggregation of NagiosHost objects.
@@ -122,19 +88,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosHostsRelatedByNotificationPeriod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostsRelatedByNotificationPeriod.
-	 */
-	private $lastNagiosHostRelatedByNotificationPeriodCriteria = null;
-
-	/**
 	 * @var        array NagiosServiceTemplate[] Collection to store aggregation of NagiosServiceTemplate objects.
 	 */
 	protected $collNagiosServiceTemplatesRelatedByCheckPeriod;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServiceTemplatesRelatedByCheckPeriod.
-	 */
-	private $lastNagiosServiceTemplateRelatedByCheckPeriodCriteria = null;
 
 	/**
 	 * @var        array NagiosServiceTemplate[] Collection to store aggregation of NagiosServiceTemplate objects.
@@ -142,19 +98,9 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosServiceTemplatesRelatedByNotificationPeriod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServiceTemplatesRelatedByNotificationPeriod.
-	 */
-	private $lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria = null;
-
-	/**
 	 * @var        array NagiosService[] Collection to store aggregation of NagiosService objects.
 	 */
 	protected $collNagiosServicesRelatedByCheckPeriod;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServicesRelatedByCheckPeriod.
-	 */
-	private $lastNagiosServiceRelatedByCheckPeriodCriteria = null;
 
 	/**
 	 * @var        array NagiosService[] Collection to store aggregation of NagiosService objects.
@@ -162,29 +108,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	protected $collNagiosServicesRelatedByNotificationPeriod;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServicesRelatedByNotificationPeriod.
-	 */
-	private $lastNagiosServiceRelatedByNotificationPeriodCriteria = null;
-
-	/**
 	 * @var        array NagiosDependency[] Collection to store aggregation of NagiosDependency objects.
 	 */
 	protected $collNagiosDependencys;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosDependencys.
-	 */
-	private $lastNagiosDependencyCriteria = null;
-
-	/**
 	 * @var        array NagiosEscalation[] Collection to store aggregation of NagiosEscalation objects.
 	 */
 	protected $collNagiosEscalations;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosEscalations.
-	 */
-	private $lastNagiosEscalationCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -199,26 +130,6 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosTimeperiod object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -320,11 +231,6 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -358,8 +264,7 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 3; // 3 = NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 3; // 3 = NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosTimeperiod object", $e);
@@ -422,49 +327,34 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->collNagiosTimeperiodEntrys = null;
-			$this->lastNagiosTimeperiodEntryCriteria = null;
 
 			$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = null;
-			$this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria = null;
 
 			$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = null;
-			$this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria = null;
 
 			$this->collNagiosContactsRelatedByHostNotificationPeriod = null;
-			$this->lastNagiosContactRelatedByHostNotificationPeriodCriteria = null;
 
 			$this->collNagiosContactsRelatedByServiceNotificationPeriod = null;
-			$this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria = null;
 
 			$this->collNagiosHostTemplatesRelatedByCheckPeriod = null;
-			$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria = null;
 
 			$this->collNagiosHostTemplatesRelatedByNotificationPeriod = null;
-			$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria = null;
 
 			$this->collNagiosHostsRelatedByCheckPeriod = null;
-			$this->lastNagiosHostRelatedByCheckPeriodCriteria = null;
 
 			$this->collNagiosHostsRelatedByNotificationPeriod = null;
-			$this->lastNagiosHostRelatedByNotificationPeriodCriteria = null;
 
 			$this->collNagiosServiceTemplatesRelatedByCheckPeriod = null;
-			$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria = null;
 
 			$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = null;
-			$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria = null;
 
 			$this->collNagiosServicesRelatedByCheckPeriod = null;
-			$this->lastNagiosServiceRelatedByCheckPeriodCriteria = null;
 
 			$this->collNagiosServicesRelatedByNotificationPeriod = null;
-			$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = null;
 
 			$this->collNagiosDependencys = null;
-			$this->lastNagiosDependencyCriteria = null;
 
 			$this->collNagiosEscalations = null;
-			$this->lastNagiosEscalationCriteria = null;
 
 		} // if (deep)
 	}
@@ -487,12 +377,20 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosTimeperiodPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosTimeperiodPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosTimeperiodQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -521,12 +419,29 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosTimeperiodPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosTimeperiodPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosTimeperiodPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -558,16 +473,17 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosTimeperiodPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosTimeperiodPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosTimeperiodPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
-					$affectedRows += NagiosTimeperiodPeer::doUpdate($this, $con);
+					$affectedRows = NagiosTimeperiodPeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -938,19 +854,74 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosTimeperiod'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosTimeperiod'][$this->getPrimaryKey()] = true;
 		$keys = NagiosTimeperiodPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getName(),
 			$keys[2] => $this->getAlias(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collNagiosTimeperiodEntrys) {
+				$result['NagiosTimeperiodEntrys'] = $this->collNagiosTimeperiodEntrys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId) {
+				$result['NagiosTimeperiodExcludesRelatedByTimeperiodId'] = $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod) {
+				$result['NagiosTimeperiodExcludesRelatedByExcludedTimeperiod'] = $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosContactsRelatedByHostNotificationPeriod) {
+				$result['NagiosContactsRelatedByHostNotificationPeriod'] = $this->collNagiosContactsRelatedByHostNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosContactsRelatedByServiceNotificationPeriod) {
+				$result['NagiosContactsRelatedByServiceNotificationPeriod'] = $this->collNagiosContactsRelatedByServiceNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostTemplatesRelatedByCheckPeriod) {
+				$result['NagiosHostTemplatesRelatedByCheckPeriod'] = $this->collNagiosHostTemplatesRelatedByCheckPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostTemplatesRelatedByNotificationPeriod) {
+				$result['NagiosHostTemplatesRelatedByNotificationPeriod'] = $this->collNagiosHostTemplatesRelatedByNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostsRelatedByCheckPeriod) {
+				$result['NagiosHostsRelatedByCheckPeriod'] = $this->collNagiosHostsRelatedByCheckPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostsRelatedByNotificationPeriod) {
+				$result['NagiosHostsRelatedByNotificationPeriod'] = $this->collNagiosHostsRelatedByNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServiceTemplatesRelatedByCheckPeriod) {
+				$result['NagiosServiceTemplatesRelatedByCheckPeriod'] = $this->collNagiosServiceTemplatesRelatedByCheckPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServiceTemplatesRelatedByNotificationPeriod) {
+				$result['NagiosServiceTemplatesRelatedByNotificationPeriod'] = $this->collNagiosServiceTemplatesRelatedByNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServicesRelatedByCheckPeriod) {
+				$result['NagiosServicesRelatedByCheckPeriod'] = $this->collNagiosServicesRelatedByCheckPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServicesRelatedByNotificationPeriod) {
+				$result['NagiosServicesRelatedByNotificationPeriod'] = $this->collNagiosServicesRelatedByNotificationPeriod->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosDependencys) {
+				$result['NagiosDependencys'] = $this->collNagiosDependencys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosEscalations) {
+				$result['NagiosEscalations'] = $this->collNagiosEscalations->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -1046,7 +1017,6 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosTimeperiodPeer::ID, $this->id);
 
 		return $criteria;
@@ -1073,6 +1043,15 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -1080,15 +1059,13 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 *
 	 * @param      object $copyObj An object of NagiosTimeperiod (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setName($this->name);
-
-		$copyObj->setAlias($this->alias);
-
+		$copyObj->setName($this->getName());
+		$copyObj->setAlias($this->getAlias());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1113,85 +1090,84 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 				}
 			}
 
-			/*foreach ($this->getNagiosContactsRelatedByHostNotificationPeriod() as $relObj) {
+			foreach ($this->getNagiosContactsRelatedByHostNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosContactRelatedByHostNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosContactRelatedByHostNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosContactsRelatedByServiceNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosContactRelatedByServiceNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosContactRelatedByServiceNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosHostTemplatesRelatedByCheckPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosHostTemplateRelatedByCheckPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosHostTemplateRelatedByCheckPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosHostTemplatesRelatedByNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosHostTemplateRelatedByNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosHostTemplateRelatedByNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosHostsRelatedByCheckPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosHostRelatedByCheckPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosHostRelatedByCheckPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosHostsRelatedByNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosHostRelatedByNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosHostRelatedByNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosServiceTemplatesRelatedByCheckPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosServiceTemplateRelatedByCheckPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosServiceTemplateRelatedByCheckPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosServiceTemplatesRelatedByNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosServiceTemplateRelatedByNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosServiceTemplateRelatedByNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosServicesRelatedByCheckPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosServiceRelatedByCheckPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosServiceRelatedByCheckPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosServicesRelatedByNotificationPeriod() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosServiceRelatedByNotificationPeriod($relObj->copy($deepCopy));
+					$copyObj->addNagiosServiceRelatedByNotificationPeriod($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosDependencys() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosDependency($relObj->copy($deepCopy));
+					$copyObj->addNagiosDependency($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getNagiosEscalations() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					//$copyObj->addNagiosEscalation($relObj->copy($deepCopy));
+					$copyObj->addNagiosEscalation($relObj->copy($deepCopy));
 				}
-			}*/
+			}
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1232,8 +1208,66 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		return self::$peer;
 	}
 
+
 	/**
-	 * Clears out the collNagiosTimeperiodEntrys collection (array).
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name 
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('NagiosTimeperiodEntry' == $relationName) {
+			return $this->initNagiosTimeperiodEntrys();
+		}
+		if ('NagiosTimeperiodExcludeRelatedByTimeperiodId' == $relationName) {
+			return $this->initNagiosTimeperiodExcludesRelatedByTimeperiodId();
+		}
+		if ('NagiosTimeperiodExcludeRelatedByExcludedTimeperiod' == $relationName) {
+			return $this->initNagiosTimeperiodExcludesRelatedByExcludedTimeperiod();
+		}
+		if ('NagiosContactRelatedByHostNotificationPeriod' == $relationName) {
+			return $this->initNagiosContactsRelatedByHostNotificationPeriod();
+		}
+		if ('NagiosContactRelatedByServiceNotificationPeriod' == $relationName) {
+			return $this->initNagiosContactsRelatedByServiceNotificationPeriod();
+		}
+		if ('NagiosHostTemplateRelatedByCheckPeriod' == $relationName) {
+			return $this->initNagiosHostTemplatesRelatedByCheckPeriod();
+		}
+		if ('NagiosHostTemplateRelatedByNotificationPeriod' == $relationName) {
+			return $this->initNagiosHostTemplatesRelatedByNotificationPeriod();
+		}
+		if ('NagiosHostRelatedByCheckPeriod' == $relationName) {
+			return $this->initNagiosHostsRelatedByCheckPeriod();
+		}
+		if ('NagiosHostRelatedByNotificationPeriod' == $relationName) {
+			return $this->initNagiosHostsRelatedByNotificationPeriod();
+		}
+		if ('NagiosServiceTemplateRelatedByCheckPeriod' == $relationName) {
+			return $this->initNagiosServiceTemplatesRelatedByCheckPeriod();
+		}
+		if ('NagiosServiceTemplateRelatedByNotificationPeriod' == $relationName) {
+			return $this->initNagiosServiceTemplatesRelatedByNotificationPeriod();
+		}
+		if ('NagiosServiceRelatedByCheckPeriod' == $relationName) {
+			return $this->initNagiosServicesRelatedByCheckPeriod();
+		}
+		if ('NagiosServiceRelatedByNotificationPeriod' == $relationName) {
+			return $this->initNagiosServicesRelatedByNotificationPeriod();
+		}
+		if ('NagiosDependency' == $relationName) {
+			return $this->initNagiosDependencys();
+		}
+		if ('NagiosEscalation' == $relationName) {
+			return $this->initNagiosEscalations();
+		}
+	}
+
+	/**
+	 * Clears out the collNagiosTimeperiodEntrys collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1247,69 +1281,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosTimeperiodEntrys collection (array).
+	 * Initializes the collNagiosTimeperiodEntrys collection.
 	 *
 	 * By default this just sets the collNagiosTimeperiodEntrys collection to an empty array (like clearcollNagiosTimeperiodEntrys());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosTimeperiodEntrys()
+	public function initNagiosTimeperiodEntrys($overrideExisting = true)
 	{
-		$this->collNagiosTimeperiodEntrys = array();
+		if (null !== $this->collNagiosTimeperiodEntrys && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosTimeperiodEntrys = new PropelObjectCollection();
+		$this->collNagiosTimeperiodEntrys->setModel('NagiosTimeperiodEntry');
 	}
 
 	/**
 	 * Gets an array of NagiosTimeperiodEntry objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosTimeperiodEntrys from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosTimeperiodEntry[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosTimeperiodEntry[] List of NagiosTimeperiodEntry objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosTimeperiodEntrys($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosTimeperiodEntrys === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosTimeperiodEntrys = array();
+		if(null === $this->collNagiosTimeperiodEntrys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodEntrys) {
+				// return empty collection
+				$this->initNagiosTimeperiodEntrys();
 			} else {
-
-				$criteria->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, $this->id);
-
-				NagiosTimeperiodEntryPeer::addSelectColumns($criteria);
-				$this->collNagiosTimeperiodEntrys = NagiosTimeperiodEntryPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, $this->id);
-
-				NagiosTimeperiodEntryPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosTimeperiodEntryCriteria) || !$this->lastNagiosTimeperiodEntryCriteria->equals($criteria)) {
-					$this->collNagiosTimeperiodEntrys = NagiosTimeperiodEntryPeer::doSelect($criteria, $con);
+				$collNagiosTimeperiodEntrys = NagiosTimeperiodEntryQuery::create(null, $criteria)
+					->filterByNagiosTimeperiod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosTimeperiodEntrys;
 				}
+				$this->collNagiosTimeperiodEntrys = $collNagiosTimeperiodEntrys;
 			}
 		}
-		$this->lastNagiosTimeperiodEntryCriteria = $criteria;
 		return $this->collNagiosTimeperiodEntrys;
 	}
 
@@ -1324,47 +1345,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosTimeperiodEntrys(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosTimeperiodEntrys === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosTimeperiodEntrys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodEntrys) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, $this->id);
-
-				$count = NagiosTimeperiodEntryPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, $this->id);
-
-				if (!isset($this->lastNagiosTimeperiodEntryCriteria) || !$this->lastNagiosTimeperiodEntryCriteria->equals($criteria)) {
-					$count = NagiosTimeperiodEntryPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosTimeperiodEntrys);
+				$query = NagiosTimeperiodEntryQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosTimeperiodEntrys);
+				return $query
+					->filterByNagiosTimeperiod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosTimeperiodEntrys);
 		}
-		return $count;
 	}
 
 	/**
@@ -1380,14 +1375,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosTimeperiodEntrys === null) {
 			$this->initNagiosTimeperiodEntrys();
 		}
-		if (!in_array($l, $this->collNagiosTimeperiodEntrys, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosTimeperiodEntrys, $l);
+		if (!$this->collNagiosTimeperiodEntrys->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosTimeperiodEntrys[]= $l;
 			$l->setNagiosTimeperiod($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosTimeperiodExcludesRelatedByTimeperiodId collection (array).
+	 * Clears out the collNagiosTimeperiodExcludesRelatedByTimeperiodId collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1401,69 +1396,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosTimeperiodExcludesRelatedByTimeperiodId collection (array).
+	 * Initializes the collNagiosTimeperiodExcludesRelatedByTimeperiodId collection.
 	 *
 	 * By default this just sets the collNagiosTimeperiodExcludesRelatedByTimeperiodId collection to an empty array (like clearcollNagiosTimeperiodExcludesRelatedByTimeperiodId());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosTimeperiodExcludesRelatedByTimeperiodId()
+	public function initNagiosTimeperiodExcludesRelatedByTimeperiodId($overrideExisting = true)
 	{
-		$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = array();
+		if (null !== $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = new PropelObjectCollection();
+		$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId->setModel('NagiosTimeperiodExclude');
 	}
 
 	/**
 	 * Gets an array of NagiosTimeperiodExclude objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosTimeperiodExcludesRelatedByTimeperiodId from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosTimeperiodExclude[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosTimeperiodExclude[] List of NagiosTimeperiodExclude objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosTimeperiodExcludesRelatedByTimeperiodId($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = array();
+		if(null === $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId) {
+				// return empty collection
+				$this->initNagiosTimeperiodExcludesRelatedByTimeperiodId();
 			} else {
-
-				$criteria->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, $this->id);
-
-				NagiosTimeperiodExcludePeer::addSelectColumns($criteria);
-				$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = NagiosTimeperiodExcludePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, $this->id);
-
-				NagiosTimeperiodExcludePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria) || !$this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria->equals($criteria)) {
-					$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = NagiosTimeperiodExcludePeer::doSelect($criteria, $con);
+				$collNagiosTimeperiodExcludesRelatedByTimeperiodId = NagiosTimeperiodExcludeQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByTimeperiodId($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosTimeperiodExcludesRelatedByTimeperiodId;
 				}
+				$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = $collNagiosTimeperiodExcludesRelatedByTimeperiodId;
 			}
 		}
-		$this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria = $criteria;
 		return $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId;
 	}
 
@@ -1478,47 +1460,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosTimeperiodExcludesRelatedByTimeperiodId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, $this->id);
-
-				$count = NagiosTimeperiodExcludePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosTimeperiodExcludePeer::TIMEPERIOD_ID, $this->id);
-
-				if (!isset($this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria) || !$this->lastNagiosTimeperiodExcludeRelatedByTimeperiodIdCriteria->equals($criteria)) {
-					$count = NagiosTimeperiodExcludePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId);
+				$query = NagiosTimeperiodExcludeQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId);
+				return $query
+					->filterByNagiosTimeperiodRelatedByTimeperiodId($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId);
 		}
-		return $count;
 	}
 
 	/**
@@ -1534,14 +1490,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId === null) {
 			$this->initNagiosTimeperiodExcludesRelatedByTimeperiodId();
 		}
-		if (!in_array($l, $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId, $l);
+		if (!$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId[]= $l;
 			$l->setNagiosTimeperiodRelatedByTimeperiodId($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod collection (array).
+	 * Clears out the collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1555,69 +1511,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod collection (array).
+	 * Initializes the collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod collection.
 	 *
 	 * By default this just sets the collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod collection to an empty array (like clearcollNagiosTimeperiodExcludesRelatedByExcludedTimeperiod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosTimeperiodExcludesRelatedByExcludedTimeperiod()
+	public function initNagiosTimeperiodExcludesRelatedByExcludedTimeperiod($overrideExisting = true)
 	{
-		$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = array();
+		if (null !== $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = new PropelObjectCollection();
+		$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod->setModel('NagiosTimeperiodExclude');
 	}
 
 	/**
 	 * Gets an array of NagiosTimeperiodExclude objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosTimeperiodExcludesRelatedByExcludedTimeperiod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosTimeperiodExclude[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosTimeperiodExclude[] List of NagiosTimeperiodExclude objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosTimeperiodExcludesRelatedByExcludedTimeperiod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = array();
+		if(null === $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod) {
+				// return empty collection
+				$this->initNagiosTimeperiodExcludesRelatedByExcludedTimeperiod();
 			} else {
-
-				$criteria->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, $this->id);
-
-				NagiosTimeperiodExcludePeer::addSelectColumns($criteria);
-				$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = NagiosTimeperiodExcludePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, $this->id);
-
-				NagiosTimeperiodExcludePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria) || !$this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria->equals($criteria)) {
-					$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = NagiosTimeperiodExcludePeer::doSelect($criteria, $con);
+				$collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = NagiosTimeperiodExcludeQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByExcludedTimeperiod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod;
 				}
+				$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = $collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod;
 			}
 		}
-		$this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria = $criteria;
 		return $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod;
 	}
 
@@ -1632,47 +1575,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosTimeperiodExcludesRelatedByExcludedTimeperiod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, $this->id);
-
-				$count = NagiosTimeperiodExcludePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosTimeperiodExcludePeer::EXCLUDED_TIMEPERIOD, $this->id);
-
-				if (!isset($this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria) || !$this->lastNagiosTimeperiodExcludeRelatedByExcludedTimeperiodCriteria->equals($criteria)) {
-					$count = NagiosTimeperiodExcludePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod);
+				$query = NagiosTimeperiodExcludeQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByExcludedTimeperiod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod);
 		}
-		return $count;
 	}
 
 	/**
@@ -1688,14 +1605,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod === null) {
 			$this->initNagiosTimeperiodExcludesRelatedByExcludedTimeperiod();
 		}
-		if (!in_array($l, $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod, $l);
+		if (!$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod[]= $l;
 			$l->setNagiosTimeperiodRelatedByExcludedTimeperiod($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosContactsRelatedByHostNotificationPeriod collection (array).
+	 * Clears out the collNagiosContactsRelatedByHostNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1709,69 +1626,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosContactsRelatedByHostNotificationPeriod collection (array).
+	 * Initializes the collNagiosContactsRelatedByHostNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosContactsRelatedByHostNotificationPeriod collection to an empty array (like clearcollNagiosContactsRelatedByHostNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactsRelatedByHostNotificationPeriod()
+	public function initNagiosContactsRelatedByHostNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosContactsRelatedByHostNotificationPeriod = array();
+		if (null !== $this->collNagiosContactsRelatedByHostNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactsRelatedByHostNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosContactsRelatedByHostNotificationPeriod->setModel('NagiosContact');
 	}
 
 	/**
 	 * Gets an array of NagiosContact objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosContactsRelatedByHostNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContact[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContact[] List of NagiosContact objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactsRelatedByHostNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactsRelatedByHostNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactsRelatedByHostNotificationPeriod = array();
+		if(null === $this->collNagiosContactsRelatedByHostNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactsRelatedByHostNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosContactsRelatedByHostNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, $this->id);
-
-				NagiosContactPeer::addSelectColumns($criteria);
-				$this->collNagiosContactsRelatedByHostNotificationPeriod = NagiosContactPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, $this->id);
-
-				NagiosContactPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactRelatedByHostNotificationPeriodCriteria) || !$this->lastNagiosContactRelatedByHostNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosContactsRelatedByHostNotificationPeriod = NagiosContactPeer::doSelect($criteria, $con);
+				$collNagiosContactsRelatedByHostNotificationPeriod = NagiosContactQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByHostNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactsRelatedByHostNotificationPeriod;
 				}
+				$this->collNagiosContactsRelatedByHostNotificationPeriod = $collNagiosContactsRelatedByHostNotificationPeriod;
 			}
 		}
-		$this->lastNagiosContactRelatedByHostNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosContactsRelatedByHostNotificationPeriod;
 	}
 
@@ -1786,47 +1690,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosContactsRelatedByHostNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactsRelatedByHostNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactsRelatedByHostNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactsRelatedByHostNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosContactPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactPeer::HOST_NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosContactRelatedByHostNotificationPeriodCriteria) || !$this->lastNagiosContactRelatedByHostNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosContactPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactsRelatedByHostNotificationPeriod);
+				$query = NagiosContactQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactsRelatedByHostNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByHostNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactsRelatedByHostNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -1842,14 +1720,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosContactsRelatedByHostNotificationPeriod === null) {
 			$this->initNagiosContactsRelatedByHostNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosContactsRelatedByHostNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactsRelatedByHostNotificationPeriod, $l);
+		if (!$this->collNagiosContactsRelatedByHostNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactsRelatedByHostNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByHostNotificationPeriod($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosContactsRelatedByServiceNotificationPeriod collection (array).
+	 * Clears out the collNagiosContactsRelatedByServiceNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1863,69 +1741,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosContactsRelatedByServiceNotificationPeriod collection (array).
+	 * Initializes the collNagiosContactsRelatedByServiceNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosContactsRelatedByServiceNotificationPeriod collection to an empty array (like clearcollNagiosContactsRelatedByServiceNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactsRelatedByServiceNotificationPeriod()
+	public function initNagiosContactsRelatedByServiceNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosContactsRelatedByServiceNotificationPeriod = array();
+		if (null !== $this->collNagiosContactsRelatedByServiceNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactsRelatedByServiceNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosContactsRelatedByServiceNotificationPeriod->setModel('NagiosContact');
 	}
 
 	/**
 	 * Gets an array of NagiosContact objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosContactsRelatedByServiceNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContact[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContact[] List of NagiosContact objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactsRelatedByServiceNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactsRelatedByServiceNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactsRelatedByServiceNotificationPeriod = array();
+		if(null === $this->collNagiosContactsRelatedByServiceNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactsRelatedByServiceNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosContactsRelatedByServiceNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, $this->id);
-
-				NagiosContactPeer::addSelectColumns($criteria);
-				$this->collNagiosContactsRelatedByServiceNotificationPeriod = NagiosContactPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, $this->id);
-
-				NagiosContactPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria) || !$this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosContactsRelatedByServiceNotificationPeriod = NagiosContactPeer::doSelect($criteria, $con);
+				$collNagiosContactsRelatedByServiceNotificationPeriod = NagiosContactQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByServiceNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactsRelatedByServiceNotificationPeriod;
 				}
+				$this->collNagiosContactsRelatedByServiceNotificationPeriod = $collNagiosContactsRelatedByServiceNotificationPeriod;
 			}
 		}
-		$this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosContactsRelatedByServiceNotificationPeriod;
 	}
 
@@ -1940,47 +1805,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosContactsRelatedByServiceNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactsRelatedByServiceNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactsRelatedByServiceNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactsRelatedByServiceNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosContactPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactPeer::SERVICE_NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria) || !$this->lastNagiosContactRelatedByServiceNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosContactPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactsRelatedByServiceNotificationPeriod);
+				$query = NagiosContactQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactsRelatedByServiceNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByServiceNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactsRelatedByServiceNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -1996,14 +1835,14 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosContactsRelatedByServiceNotificationPeriod === null) {
 			$this->initNagiosContactsRelatedByServiceNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosContactsRelatedByServiceNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactsRelatedByServiceNotificationPeriod, $l);
+		if (!$this->collNagiosContactsRelatedByServiceNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactsRelatedByServiceNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByServiceNotificationPeriod($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosHostTemplatesRelatedByCheckPeriod collection (array).
+	 * Clears out the collNagiosHostTemplatesRelatedByCheckPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2017,69 +1856,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosHostTemplatesRelatedByCheckPeriod collection (array).
+	 * Initializes the collNagiosHostTemplatesRelatedByCheckPeriod collection.
 	 *
 	 * By default this just sets the collNagiosHostTemplatesRelatedByCheckPeriod collection to an empty array (like clearcollNagiosHostTemplatesRelatedByCheckPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostTemplatesRelatedByCheckPeriod()
+	public function initNagiosHostTemplatesRelatedByCheckPeriod($overrideExisting = true)
 	{
-		$this->collNagiosHostTemplatesRelatedByCheckPeriod = array();
+		if (null !== $this->collNagiosHostTemplatesRelatedByCheckPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostTemplatesRelatedByCheckPeriod = new PropelObjectCollection();
+		$this->collNagiosHostTemplatesRelatedByCheckPeriod->setModel('NagiosHostTemplate');
 	}
 
 	/**
 	 * Gets an array of NagiosHostTemplate objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosHostTemplatesRelatedByCheckPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHostTemplate[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostTemplatesRelatedByCheckPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostTemplatesRelatedByCheckPeriod = array();
+		if(null === $this->collNagiosHostTemplatesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostTemplatesRelatedByCheckPeriod) {
+				// return empty collection
+				$this->initNagiosHostTemplatesRelatedByCheckPeriod();
 			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				NagiosHostTemplatePeer::addSelectColumns($criteria);
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				NagiosHostTemplatePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelect($criteria, $con);
+				$collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplateQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostTemplatesRelatedByCheckPeriod;
 				}
+				$this->collNagiosHostTemplatesRelatedByCheckPeriod = $collNagiosHostTemplatesRelatedByCheckPeriod;
 			}
 		}
-		$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria = $criteria;
 		return $this->collNagiosHostTemplatesRelatedByCheckPeriod;
 	}
 
@@ -2094,47 +1920,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosHostTemplatesRelatedByCheckPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostTemplatesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostTemplatesRelatedByCheckPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$count = NagiosHostTemplatePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$count = NagiosHostTemplatePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostTemplatesRelatedByCheckPeriod);
+				$query = NagiosHostTemplateQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostTemplatesRelatedByCheckPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostTemplatesRelatedByCheckPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -2150,8 +1950,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod === null) {
 			$this->initNagiosHostTemplatesRelatedByCheckPeriod();
 		}
-		if (!in_array($l, $this->collNagiosHostTemplatesRelatedByCheckPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostTemplatesRelatedByCheckPeriod, $l);
+		if (!$this->collNagiosHostTemplatesRelatedByCheckPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostTemplatesRelatedByCheckPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByCheckPeriod($this);
 		}
 	}
@@ -2167,40 +1967,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 */
 	public function getNagiosHostTemplatesRelatedByCheckPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostTemplatesRelatedByCheckPeriod;
+		return $this->getNagiosHostTemplatesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -2214,44 +1992,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 */
 	public function getNagiosHostTemplatesRelatedByCheckPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostTemplatePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostTemplatesRelatedByCheckPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostTemplateRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostTemplatesRelatedByCheckPeriod;
+		return $this->getNagiosHostTemplatesRelatedByCheckPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosHostTemplatesRelatedByNotificationPeriod collection (array).
+	 * Clears out the collNagiosHostTemplatesRelatedByNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2265,69 +2021,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosHostTemplatesRelatedByNotificationPeriod collection (array).
+	 * Initializes the collNagiosHostTemplatesRelatedByNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosHostTemplatesRelatedByNotificationPeriod collection to an empty array (like clearcollNagiosHostTemplatesRelatedByNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostTemplatesRelatedByNotificationPeriod()
+	public function initNagiosHostTemplatesRelatedByNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosHostTemplatesRelatedByNotificationPeriod = array();
+		if (null !== $this->collNagiosHostTemplatesRelatedByNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostTemplatesRelatedByNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosHostTemplatesRelatedByNotificationPeriod->setModel('NagiosHostTemplate');
 	}
 
 	/**
 	 * Gets an array of NagiosHostTemplate objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosHostTemplatesRelatedByNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHostTemplate[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostTemplatesRelatedByNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostTemplatesRelatedByNotificationPeriod = array();
+		if(null === $this->collNagiosHostTemplatesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostTemplatesRelatedByNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosHostTemplatesRelatedByNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosHostTemplatePeer::addSelectColumns($criteria);
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosHostTemplatePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelect($criteria, $con);
+				$collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplateQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostTemplatesRelatedByNotificationPeriod;
 				}
+				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = $collNagiosHostTemplatesRelatedByNotificationPeriod;
 			}
 		}
-		$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosHostTemplatesRelatedByNotificationPeriod;
 	}
 
@@ -2342,47 +2085,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosHostTemplatesRelatedByNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostTemplatesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostTemplatesRelatedByNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosHostTemplatePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosHostTemplatePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostTemplatesRelatedByNotificationPeriod);
+				$query = NagiosHostTemplateQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostTemplatesRelatedByNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostTemplatesRelatedByNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -2398,8 +2115,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod === null) {
 			$this->initNagiosHostTemplatesRelatedByNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosHostTemplatesRelatedByNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostTemplatesRelatedByNotificationPeriod, $l);
+		if (!$this->collNagiosHostTemplatesRelatedByNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostTemplatesRelatedByNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByNotificationPeriod($this);
 		}
 	}
@@ -2415,40 +2132,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 */
 	public function getNagiosHostTemplatesRelatedByNotificationPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostTemplatesRelatedByNotificationPeriod;
+		return $this->getNagiosHostTemplatesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -2462,44 +2157,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostTemplate[] List of NagiosHostTemplate objects
 	 */
 	public function getNagiosHostTemplatesRelatedByNotificationPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostTemplatesRelatedByNotificationPeriod = NagiosHostTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostTemplateRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostTemplatesRelatedByNotificationPeriod;
+		return $this->getNagiosHostTemplatesRelatedByNotificationPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosHostsRelatedByCheckPeriod collection (array).
+	 * Clears out the collNagiosHostsRelatedByCheckPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2513,69 +2186,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosHostsRelatedByCheckPeriod collection (array).
+	 * Initializes the collNagiosHostsRelatedByCheckPeriod collection.
 	 *
 	 * By default this just sets the collNagiosHostsRelatedByCheckPeriod collection to an empty array (like clearcollNagiosHostsRelatedByCheckPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostsRelatedByCheckPeriod()
+	public function initNagiosHostsRelatedByCheckPeriod($overrideExisting = true)
 	{
-		$this->collNagiosHostsRelatedByCheckPeriod = array();
+		if (null !== $this->collNagiosHostsRelatedByCheckPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostsRelatedByCheckPeriod = new PropelObjectCollection();
+		$this->collNagiosHostsRelatedByCheckPeriod->setModel('NagiosHost');
 	}
 
 	/**
 	 * Gets an array of NagiosHost objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosHostsRelatedByCheckPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHost[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostsRelatedByCheckPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostsRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostsRelatedByCheckPeriod = array();
+		if(null === $this->collNagiosHostsRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostsRelatedByCheckPeriod) {
+				// return empty collection
+				$this->initNagiosHostsRelatedByCheckPeriod();
 			} else {
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				NagiosHostPeer::addSelectColumns($criteria);
-				$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				NagiosHostPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelect($criteria, $con);
+				$collNagiosHostsRelatedByCheckPeriod = NagiosHostQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostsRelatedByCheckPeriod;
 				}
+				$this->collNagiosHostsRelatedByCheckPeriod = $collNagiosHostsRelatedByCheckPeriod;
 			}
 		}
-		$this->lastNagiosHostRelatedByCheckPeriodCriteria = $criteria;
 		return $this->collNagiosHostsRelatedByCheckPeriod;
 	}
 
@@ -2590,47 +2250,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosHostsRelatedByCheckPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostsRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostsRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostsRelatedByCheckPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				$count = NagiosHostPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosHostRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$count = NagiosHostPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostsRelatedByCheckPeriod);
+				$query = NagiosHostQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostsRelatedByCheckPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostsRelatedByCheckPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -2646,8 +2280,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosHostsRelatedByCheckPeriod === null) {
 			$this->initNagiosHostsRelatedByCheckPeriod();
 		}
-		if (!in_array($l, $this->collNagiosHostsRelatedByCheckPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostsRelatedByCheckPeriod, $l);
+		if (!$this->collNagiosHostsRelatedByCheckPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostsRelatedByCheckPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByCheckPeriod($this);
 		}
 	}
@@ -2663,40 +2297,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 */
 	public function getNagiosHostsRelatedByCheckPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosHostsRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostsRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostsRelatedByCheckPeriod;
+		return $this->getNagiosHostsRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -2710,44 +2322,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 */
 	public function getNagiosHostsRelatedByCheckPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosHostsRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostsRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostPeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostRelatedByCheckPeriodCriteria) || !$this->lastNagiosHostRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostsRelatedByCheckPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostsRelatedByCheckPeriod;
+		return $this->getNagiosHostsRelatedByCheckPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosHostsRelatedByNotificationPeriod collection (array).
+	 * Clears out the collNagiosHostsRelatedByNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2761,69 +2351,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosHostsRelatedByNotificationPeriod collection (array).
+	 * Initializes the collNagiosHostsRelatedByNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosHostsRelatedByNotificationPeriod collection to an empty array (like clearcollNagiosHostsRelatedByNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostsRelatedByNotificationPeriod()
+	public function initNagiosHostsRelatedByNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosHostsRelatedByNotificationPeriod = array();
+		if (null !== $this->collNagiosHostsRelatedByNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostsRelatedByNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosHostsRelatedByNotificationPeriod->setModel('NagiosHost');
 	}
 
 	/**
 	 * Gets an array of NagiosHost objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosHostsRelatedByNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHost[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostsRelatedByNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostsRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostsRelatedByNotificationPeriod = array();
+		if(null === $this->collNagiosHostsRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostsRelatedByNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosHostsRelatedByNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosHostPeer::addSelectColumns($criteria);
-				$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosHostPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelect($criteria, $con);
+				$collNagiosHostsRelatedByNotificationPeriod = NagiosHostQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostsRelatedByNotificationPeriod;
 				}
+				$this->collNagiosHostsRelatedByNotificationPeriod = $collNagiosHostsRelatedByNotificationPeriod;
 			}
 		}
-		$this->lastNagiosHostRelatedByNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosHostsRelatedByNotificationPeriod;
 	}
 
@@ -2838,47 +2415,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosHostsRelatedByNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostsRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostsRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostsRelatedByNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosHostPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosHostRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosHostPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostsRelatedByNotificationPeriod);
+				$query = NagiosHostQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostsRelatedByNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostsRelatedByNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -2894,8 +2445,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosHostsRelatedByNotificationPeriod === null) {
 			$this->initNagiosHostsRelatedByNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosHostsRelatedByNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostsRelatedByNotificationPeriod, $l);
+		if (!$this->collNagiosHostsRelatedByNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostsRelatedByNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByNotificationPeriod($this);
 		}
 	}
@@ -2911,40 +2462,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 */
 	public function getNagiosHostsRelatedByNotificationPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosHostsRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostsRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostsRelatedByNotificationPeriod;
+		return $this->getNagiosHostsRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -2958,44 +2487,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHost[] List of NagiosHost objects
 	 */
 	public function getNagiosHostsRelatedByNotificationPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosHostsRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostsRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostPeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosHostRelatedByNotificationPeriodCriteria) || !$this->lastNagiosHostRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosHostsRelatedByNotificationPeriod = NagiosHostPeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosHostsRelatedByNotificationPeriod;
+		return $this->getNagiosHostsRelatedByNotificationPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServiceTemplatesRelatedByCheckPeriod collection (array).
+	 * Clears out the collNagiosServiceTemplatesRelatedByCheckPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -3009,69 +2516,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosServiceTemplatesRelatedByCheckPeriod collection (array).
+	 * Initializes the collNagiosServiceTemplatesRelatedByCheckPeriod collection.
 	 *
 	 * By default this just sets the collNagiosServiceTemplatesRelatedByCheckPeriod collection to an empty array (like clearcollNagiosServiceTemplatesRelatedByCheckPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServiceTemplatesRelatedByCheckPeriod()
+	public function initNagiosServiceTemplatesRelatedByCheckPeriod($overrideExisting = true)
 	{
-		$this->collNagiosServiceTemplatesRelatedByCheckPeriod = array();
+		if (null !== $this->collNagiosServiceTemplatesRelatedByCheckPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServiceTemplatesRelatedByCheckPeriod = new PropelObjectCollection();
+		$this->collNagiosServiceTemplatesRelatedByCheckPeriod->setModel('NagiosServiceTemplate');
 	}
 
 	/**
 	 * Gets an array of NagiosServiceTemplate objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosServiceTemplatesRelatedByCheckPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosServiceTemplate[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServiceTemplatesRelatedByCheckPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServiceTemplatesRelatedByCheckPeriod = array();
+		if(null === $this->collNagiosServiceTemplatesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceTemplatesRelatedByCheckPeriod) {
+				// return empty collection
+				$this->initNagiosServiceTemplatesRelatedByCheckPeriod();
 			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				NagiosServiceTemplatePeer::addSelectColumns($criteria);
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				NagiosServiceTemplatePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelect($criteria, $con);
+				$collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplateQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServiceTemplatesRelatedByCheckPeriod;
 				}
+				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = $collNagiosServiceTemplatesRelatedByCheckPeriod;
 			}
 		}
-		$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria = $criteria;
 		return $this->collNagiosServiceTemplatesRelatedByCheckPeriod;
 	}
 
@@ -3086,47 +2580,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosServiceTemplatesRelatedByCheckPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServiceTemplatesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceTemplatesRelatedByCheckPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$count = NagiosServiceTemplatePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$count = NagiosServiceTemplatePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServiceTemplatesRelatedByCheckPeriod);
+				$query = NagiosServiceTemplateQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServiceTemplatesRelatedByCheckPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServiceTemplatesRelatedByCheckPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -3142,8 +2610,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod === null) {
 			$this->initNagiosServiceTemplatesRelatedByCheckPeriod();
 		}
-		if (!in_array($l, $this->collNagiosServiceTemplatesRelatedByCheckPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServiceTemplatesRelatedByCheckPeriod, $l);
+		if (!$this->collNagiosServiceTemplatesRelatedByCheckPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServiceTemplatesRelatedByCheckPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByCheckPeriod($this);
 		}
 	}
@@ -3159,40 +2627,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 */
 	public function getNagiosServiceTemplatesRelatedByCheckPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServiceTemplatesRelatedByCheckPeriod;
+		return $this->getNagiosServiceTemplatesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -3206,44 +2652,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 */
 	public function getNagiosServiceTemplatesRelatedByCheckPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceTemplatePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServiceTemplatesRelatedByCheckPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceTemplateRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServiceTemplatesRelatedByCheckPeriod;
+		return $this->getNagiosServiceTemplatesRelatedByCheckPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServiceTemplatesRelatedByNotificationPeriod collection (array).
+	 * Clears out the collNagiosServiceTemplatesRelatedByNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -3257,69 +2681,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosServiceTemplatesRelatedByNotificationPeriod collection (array).
+	 * Initializes the collNagiosServiceTemplatesRelatedByNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosServiceTemplatesRelatedByNotificationPeriod collection to an empty array (like clearcollNagiosServiceTemplatesRelatedByNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServiceTemplatesRelatedByNotificationPeriod()
+	public function initNagiosServiceTemplatesRelatedByNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = array();
+		if (null !== $this->collNagiosServiceTemplatesRelatedByNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosServiceTemplatesRelatedByNotificationPeriod->setModel('NagiosServiceTemplate');
 	}
 
 	/**
 	 * Gets an array of NagiosServiceTemplate objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosServiceTemplatesRelatedByNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosServiceTemplate[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServiceTemplatesRelatedByNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServiceTemplatesRelatedByNotificationPeriod = array();
+		if(null === $this->collNagiosServiceTemplatesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceTemplatesRelatedByNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosServiceTemplatesRelatedByNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosServiceTemplatePeer::addSelectColumns($criteria);
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosServiceTemplatePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelect($criteria, $con);
+				$collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplateQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServiceTemplatesRelatedByNotificationPeriod;
 				}
+				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = $collNagiosServiceTemplatesRelatedByNotificationPeriod;
 			}
 		}
-		$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosServiceTemplatesRelatedByNotificationPeriod;
 	}
 
@@ -3334,47 +2745,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosServiceTemplatesRelatedByNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServiceTemplatesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceTemplatesRelatedByNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosServiceTemplatePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosServiceTemplatePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServiceTemplatesRelatedByNotificationPeriod);
+				$query = NagiosServiceTemplateQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServiceTemplatesRelatedByNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServiceTemplatesRelatedByNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -3390,8 +2775,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod === null) {
 			$this->initNagiosServiceTemplatesRelatedByNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosServiceTemplatesRelatedByNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServiceTemplatesRelatedByNotificationPeriod, $l);
+		if (!$this->collNagiosServiceTemplatesRelatedByNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServiceTemplatesRelatedByNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByNotificationPeriod($this);
 		}
 	}
@@ -3407,40 +2792,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 */
 	public function getNagiosServiceTemplatesRelatedByNotificationPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServiceTemplatesRelatedByNotificationPeriod;
+		return $this->getNagiosServiceTemplatesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -3454,44 +2817,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceTemplate[] List of NagiosServiceTemplate objects
 	 */
 	public function getNagiosServiceTemplatesRelatedByNotificationPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceTemplateQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceTemplatePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = NagiosServiceTemplatePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceTemplateRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServiceTemplatesRelatedByNotificationPeriod;
+		return $this->getNagiosServiceTemplatesRelatedByNotificationPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServicesRelatedByCheckPeriod collection (array).
+	 * Clears out the collNagiosServicesRelatedByCheckPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -3505,69 +2846,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosServicesRelatedByCheckPeriod collection (array).
+	 * Initializes the collNagiosServicesRelatedByCheckPeriod collection.
 	 *
 	 * By default this just sets the collNagiosServicesRelatedByCheckPeriod collection to an empty array (like clearcollNagiosServicesRelatedByCheckPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServicesRelatedByCheckPeriod()
+	public function initNagiosServicesRelatedByCheckPeriod($overrideExisting = true)
 	{
-		$this->collNagiosServicesRelatedByCheckPeriod = array();
+		if (null !== $this->collNagiosServicesRelatedByCheckPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServicesRelatedByCheckPeriod = new PropelObjectCollection();
+		$this->collNagiosServicesRelatedByCheckPeriod->setModel('NagiosService');
 	}
 
 	/**
 	 * Gets an array of NagiosService objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosServicesRelatedByCheckPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosService[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServicesRelatedByCheckPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServicesRelatedByCheckPeriod = array();
+		if(null === $this->collNagiosServicesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServicesRelatedByCheckPeriod) {
+				// return empty collection
+				$this->initNagiosServicesRelatedByCheckPeriod();
 			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				NagiosServicePeer::addSelectColumns($criteria);
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				NagiosServicePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelect($criteria, $con);
+				$collNagiosServicesRelatedByCheckPeriod = NagiosServiceQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServicesRelatedByCheckPeriod;
 				}
+				$this->collNagiosServicesRelatedByCheckPeriod = $collNagiosServicesRelatedByCheckPeriod;
 			}
 		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
 		return $this->collNagiosServicesRelatedByCheckPeriod;
 	}
 
@@ -3582,47 +2910,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosServicesRelatedByCheckPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServicesRelatedByCheckPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServicesRelatedByCheckPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$count = NagiosServicePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-					$count = NagiosServicePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServicesRelatedByCheckPeriod);
+				$query = NagiosServiceQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServicesRelatedByCheckPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByCheckPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServicesRelatedByCheckPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -3638,8 +2940,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
 			$this->initNagiosServicesRelatedByCheckPeriod();
 		}
-		if (!in_array($l, $this->collNagiosServicesRelatedByCheckPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServicesRelatedByCheckPeriod, $l);
+		if (!$this->collNagiosServicesRelatedByCheckPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServicesRelatedByCheckPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByCheckPeriod($this);
 		}
 	}
@@ -3655,40 +2957,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByCheckPeriodJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByCheckPeriod;
+		return $this->getNagiosServicesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -3702,40 +2982,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByCheckPeriodJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByCheckPeriod;
+		return $this->getNagiosServicesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -3749,40 +3007,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByCheckPeriodJoinNagiosHostgroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostgroup', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByCheckPeriod;
+		return $this->getNagiosServicesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -3796,40 +3032,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByCheckPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByCheckPeriod;
+		return $this->getNagiosServicesRelatedByCheckPeriod($query, $con);
 	}
 
 
@@ -3843,44 +3057,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByCheckPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByCheckPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByCheckPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::CHECK_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByCheckPeriodCriteria) || !$this->lastNagiosServiceRelatedByCheckPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByCheckPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByCheckPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByCheckPeriod;
+		return $this->getNagiosServicesRelatedByCheckPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServicesRelatedByNotificationPeriod collection (array).
+	 * Clears out the collNagiosServicesRelatedByNotificationPeriod collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -3894,69 +3086,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosServicesRelatedByNotificationPeriod collection (array).
+	 * Initializes the collNagiosServicesRelatedByNotificationPeriod collection.
 	 *
 	 * By default this just sets the collNagiosServicesRelatedByNotificationPeriod collection to an empty array (like clearcollNagiosServicesRelatedByNotificationPeriod());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServicesRelatedByNotificationPeriod()
+	public function initNagiosServicesRelatedByNotificationPeriod($overrideExisting = true)
 	{
-		$this->collNagiosServicesRelatedByNotificationPeriod = array();
+		if (null !== $this->collNagiosServicesRelatedByNotificationPeriod && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServicesRelatedByNotificationPeriod = new PropelObjectCollection();
+		$this->collNagiosServicesRelatedByNotificationPeriod->setModel('NagiosService');
 	}
 
 	/**
 	 * Gets an array of NagiosService objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosServicesRelatedByNotificationPeriod from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosService[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriod($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServicesRelatedByNotificationPeriod = array();
+		if(null === $this->collNagiosServicesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServicesRelatedByNotificationPeriod) {
+				// return empty collection
+				$this->initNagiosServicesRelatedByNotificationPeriod();
 			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosServicePeer::addSelectColumns($criteria);
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				NagiosServicePeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelect($criteria, $con);
+				$collNagiosServicesRelatedByNotificationPeriod = NagiosServiceQuery::create(null, $criteria)
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServicesRelatedByNotificationPeriod;
 				}
+				$this->collNagiosServicesRelatedByNotificationPeriod = $collNagiosServicesRelatedByNotificationPeriod;
 			}
 		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
 		return $this->collNagiosServicesRelatedByNotificationPeriod;
 	}
 
@@ -3971,47 +3150,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosServicesRelatedByNotificationPeriod(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServicesRelatedByNotificationPeriod || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServicesRelatedByNotificationPeriod) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$count = NagiosServicePeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-					$count = NagiosServicePeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServicesRelatedByNotificationPeriod);
+				$query = NagiosServiceQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServicesRelatedByNotificationPeriod);
+				return $query
+					->filterByNagiosTimeperiodRelatedByNotificationPeriod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServicesRelatedByNotificationPeriod);
 		}
-		return $count;
 	}
 
 	/**
@@ -4027,8 +3180,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
 			$this->initNagiosServicesRelatedByNotificationPeriod();
 		}
-		if (!in_array($l, $this->collNagiosServicesRelatedByNotificationPeriod, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServicesRelatedByNotificationPeriod, $l);
+		if (!$this->collNagiosServicesRelatedByNotificationPeriod->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServicesRelatedByNotificationPeriod[]= $l;
 			$l->setNagiosTimeperiodRelatedByNotificationPeriod($this);
 		}
 	}
@@ -4044,40 +3197,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriodJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByNotificationPeriod;
+		return $this->getNagiosServicesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -4091,40 +3222,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriodJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByNotificationPeriod;
+		return $this->getNagiosServicesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -4138,40 +3247,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriodJoinNagiosHostgroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostgroup', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByNotificationPeriod;
+		return $this->getNagiosServicesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -4185,40 +3272,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriodJoinNagiosCommandRelatedByCheckCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByCheckCommand', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByCheckCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByNotificationPeriod;
+		return $this->getNagiosServicesRelatedByNotificationPeriod($query, $con);
 	}
 
 
@@ -4232,44 +3297,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosService[] List of NagiosService objects
 	 */
 	public function getNagiosServicesRelatedByNotificationPeriodJoinNagiosCommandRelatedByEventHandler($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommandRelatedByEventHandler', $join_behavior);
 
-		if ($this->collNagiosServicesRelatedByNotificationPeriod === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = array();
-			} else {
-
-				$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServicePeer::NOTIFICATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosServiceRelatedByNotificationPeriodCriteria) || !$this->lastNagiosServiceRelatedByNotificationPeriodCriteria->equals($criteria)) {
-				$this->collNagiosServicesRelatedByNotificationPeriod = NagiosServicePeer::doSelectJoinNagiosCommandRelatedByEventHandler($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceRelatedByNotificationPeriodCriteria = $criteria;
-
-		return $this->collNagiosServicesRelatedByNotificationPeriod;
+		return $this->getNagiosServicesRelatedByNotificationPeriod($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosDependencys collection (array).
+	 * Clears out the collNagiosDependencys collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -4283,69 +3326,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosDependencys collection (array).
+	 * Initializes the collNagiosDependencys collection.
 	 *
 	 * By default this just sets the collNagiosDependencys collection to an empty array (like clearcollNagiosDependencys());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosDependencys()
+	public function initNagiosDependencys($overrideExisting = true)
 	{
-		$this->collNagiosDependencys = array();
+		if (null !== $this->collNagiosDependencys && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosDependencys = new PropelObjectCollection();
+		$this->collNagiosDependencys->setModel('NagiosDependency');
 	}
 
 	/**
 	 * Gets an array of NagiosDependency objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosDependencys from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosDependency[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosDependencys($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosDependencys = array();
+		if(null === $this->collNagiosDependencys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosDependencys) {
+				// return empty collection
+				$this->initNagiosDependencys();
 			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				NagiosDependencyPeer::addSelectColumns($criteria);
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				NagiosDependencyPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-					$this->collNagiosDependencys = NagiosDependencyPeer::doSelect($criteria, $con);
+				$collNagiosDependencys = NagiosDependencyQuery::create(null, $criteria)
+					->filterByNagiosTimeperiod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosDependencys;
 				}
+				$this->collNagiosDependencys = $collNagiosDependencys;
 			}
 		}
-		$this->lastNagiosDependencyCriteria = $criteria;
 		return $this->collNagiosDependencys;
 	}
 
@@ -4360,47 +3390,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosDependencys(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosDependencys || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosDependencys) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$count = NagiosDependencyPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-					$count = NagiosDependencyPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosDependencys);
+				$query = NagiosDependencyQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosDependencys);
+				return $query
+					->filterByNagiosTimeperiod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosDependencys);
 		}
-		return $count;
 	}
 
 	/**
@@ -4416,8 +3420,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosDependencys === null) {
 			$this->initNagiosDependencys();
 		}
-		if (!in_array($l, $this->collNagiosDependencys, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosDependencys, $l);
+		if (!$this->collNagiosDependencys->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosDependencys[]= $l;
 			$l->setNagiosTimeperiod($this);
 		}
 	}
@@ -4433,40 +3437,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 */
 	public function getNagiosDependencysJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosDependencyQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$this->collNagiosDependencys = array();
-			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosDependencyCriteria = $criteria;
-
-		return $this->collNagiosDependencys;
+		return $this->getNagiosDependencys($query, $con);
 	}
 
 
@@ -4480,40 +3462,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 */
 	public function getNagiosDependencysJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosDependencyQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$this->collNagiosDependencys = array();
-			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosDependencyCriteria = $criteria;
-
-		return $this->collNagiosDependencys;
+		return $this->getNagiosDependencys($query, $con);
 	}
 
 
@@ -4527,40 +3487,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 */
 	public function getNagiosDependencysJoinNagiosServiceTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosDependencyQuery::create(null, $criteria);
+		$query->joinWith('NagiosServiceTemplate', $join_behavior);
 
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$this->collNagiosDependencys = array();
-			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosDependencyCriteria = $criteria;
-
-		return $this->collNagiosDependencys;
+		return $this->getNagiosDependencys($query, $con);
 	}
 
 
@@ -4574,40 +3512,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 */
 	public function getNagiosDependencysJoinNagiosService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosDependencyQuery::create(null, $criteria);
+		$query->joinWith('NagiosService', $join_behavior);
 
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$this->collNagiosDependencys = array();
-			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosDependencyCriteria = $criteria;
-
-		return $this->collNagiosDependencys;
+		return $this->getNagiosDependencys($query, $con);
 	}
 
 
@@ -4621,44 +3537,22 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosDependency[] List of NagiosDependency objects
 	 */
 	public function getNagiosDependencysJoinNagiosHostgroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosDependencyQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostgroup', $join_behavior);
 
-		if ($this->collNagiosDependencys === null) {
-			if ($this->isNew()) {
-				$this->collNagiosDependencys = array();
-			} else {
-
-				$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosDependencyPeer::DEPENDENCY_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosDependencyCriteria) || !$this->lastNagiosDependencyCriteria->equals($criteria)) {
-				$this->collNagiosDependencys = NagiosDependencyPeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosDependencyCriteria = $criteria;
-
-		return $this->collNagiosDependencys;
+		return $this->getNagiosDependencys($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosEscalations collection (array).
+	 * Clears out the collNagiosEscalations collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -4672,69 +3566,56 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosEscalations collection (array).
+	 * Initializes the collNagiosEscalations collection.
 	 *
 	 * By default this just sets the collNagiosEscalations collection to an empty array (like clearcollNagiosEscalations());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosEscalations()
+	public function initNagiosEscalations($overrideExisting = true)
 	{
-		$this->collNagiosEscalations = array();
+		if (null !== $this->collNagiosEscalations && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosEscalations = new PropelObjectCollection();
+		$this->collNagiosEscalations->setModel('NagiosEscalation');
 	}
 
 	/**
 	 * Gets an array of NagiosEscalation objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosTimeperiod has previously been saved, it will retrieve
-	 * related NagiosEscalations from storage. If this NagiosTimeperiod is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosTimeperiod is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosEscalation[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosEscalations($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosEscalations = array();
+		if(null === $this->collNagiosEscalations || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalations) {
+				// return empty collection
+				$this->initNagiosEscalations();
 			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				NagiosEscalationPeer::addSelectColumns($criteria);
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				NagiosEscalationPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-					$this->collNagiosEscalations = NagiosEscalationPeer::doSelect($criteria, $con);
+				$collNagiosEscalations = NagiosEscalationQuery::create(null, $criteria)
+					->filterByNagiosTimeperiod($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosEscalations;
 				}
+				$this->collNagiosEscalations = $collNagiosEscalations;
 			}
 		}
-		$this->lastNagiosEscalationCriteria = $criteria;
 		return $this->collNagiosEscalations;
 	}
 
@@ -4749,47 +3630,21 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosEscalations(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosEscalations || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalations) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$count = NagiosEscalationPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-					$count = NagiosEscalationPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosEscalations);
+				$query = NagiosEscalationQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosEscalations);
+				return $query
+					->filterByNagiosTimeperiod($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosEscalations);
 		}
-		return $count;
 	}
 
 	/**
@@ -4805,8 +3660,8 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 		if ($this->collNagiosEscalations === null) {
 			$this->initNagiosEscalations();
 		}
-		if (!in_array($l, $this->collNagiosEscalations, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosEscalations, $l);
+		if (!$this->collNagiosEscalations->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosEscalations[]= $l;
 			$l->setNagiosTimeperiod($this);
 		}
 	}
@@ -4822,40 +3677,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 */
 	public function getNagiosEscalationsJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalations = array();
-			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationCriteria = $criteria;
-
-		return $this->collNagiosEscalations;
+		return $this->getNagiosEscalations($query, $con);
 	}
 
 
@@ -4869,40 +3702,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 */
 	public function getNagiosEscalationsJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalations = array();
-			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationCriteria = $criteria;
-
-		return $this->collNagiosEscalations;
+		return $this->getNagiosEscalations($query, $con);
 	}
 
 
@@ -4916,40 +3727,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 */
 	public function getNagiosEscalationsJoinNagiosServiceTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationQuery::create(null, $criteria);
+		$query->joinWith('NagiosServiceTemplate', $join_behavior);
 
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalations = array();
-			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationCriteria = $criteria;
-
-		return $this->collNagiosEscalations;
+		return $this->getNagiosEscalations($query, $con);
 	}
 
 
@@ -4963,40 +3752,18 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 */
 	public function getNagiosEscalationsJoinNagiosService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationQuery::create(null, $criteria);
+		$query->joinWith('NagiosService', $join_behavior);
 
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalations = array();
-			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationCriteria = $criteria;
-
-		return $this->collNagiosEscalations;
+		return $this->getNagiosEscalations($query, $con);
 	}
 
 
@@ -5010,146 +3777,214 @@ abstract class BaseNagiosTimeperiod extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosTimeperiod.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalation[] List of NagiosEscalation objects
 	 */
 	public function getNagiosEscalationsJoinNagiosHostgroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostgroup', $join_behavior);
 
-		if ($this->collNagiosEscalations === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalations = array();
-			} else {
-
-				$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationPeer::ESCALATION_PERIOD, $this->id);
-
-			if (!isset($this->lastNagiosEscalationCriteria) || !$this->lastNagiosEscalationCriteria->equals($criteria)) {
-				$this->collNagiosEscalations = NagiosEscalationPeer::doSelectJoinNagiosHostgroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationCriteria = $criteria;
-
-		return $this->collNagiosEscalations;
+		return $this->getNagiosEscalations($query, $con);
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->name = null;
+		$this->alias = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collNagiosTimeperiodEntrys) {
-				foreach ((array) $this->collNagiosTimeperiodEntrys as $o) {
+				foreach ($this->collNagiosTimeperiodEntrys as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId) {
-				foreach ((array) $this->collNagiosTimeperiodExcludesRelatedByTimeperiodId as $o) {
+				foreach ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod) {
-				foreach ((array) $this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod as $o) {
+				foreach ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosContactsRelatedByHostNotificationPeriod) {
-				foreach ((array) $this->collNagiosContactsRelatedByHostNotificationPeriod as $o) {
+				foreach ($this->collNagiosContactsRelatedByHostNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosContactsRelatedByServiceNotificationPeriod) {
-				foreach ((array) $this->collNagiosContactsRelatedByServiceNotificationPeriod as $o) {
+				foreach ($this->collNagiosContactsRelatedByServiceNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostTemplatesRelatedByCheckPeriod) {
-				foreach ((array) $this->collNagiosHostTemplatesRelatedByCheckPeriod as $o) {
+				foreach ($this->collNagiosHostTemplatesRelatedByCheckPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod) {
-				foreach ((array) $this->collNagiosHostTemplatesRelatedByNotificationPeriod as $o) {
+				foreach ($this->collNagiosHostTemplatesRelatedByNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostsRelatedByCheckPeriod) {
-				foreach ((array) $this->collNagiosHostsRelatedByCheckPeriod as $o) {
+				foreach ($this->collNagiosHostsRelatedByCheckPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostsRelatedByNotificationPeriod) {
-				foreach ((array) $this->collNagiosHostsRelatedByNotificationPeriod as $o) {
+				foreach ($this->collNagiosHostsRelatedByNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod) {
-				foreach ((array) $this->collNagiosServiceTemplatesRelatedByCheckPeriod as $o) {
+				foreach ($this->collNagiosServiceTemplatesRelatedByCheckPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod) {
-				foreach ((array) $this->collNagiosServiceTemplatesRelatedByNotificationPeriod as $o) {
+				foreach ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServicesRelatedByCheckPeriod) {
-				foreach ((array) $this->collNagiosServicesRelatedByCheckPeriod as $o) {
+				foreach ($this->collNagiosServicesRelatedByCheckPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServicesRelatedByNotificationPeriod) {
-				foreach ((array) $this->collNagiosServicesRelatedByNotificationPeriod as $o) {
+				foreach ($this->collNagiosServicesRelatedByNotificationPeriod as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosDependencys) {
-				foreach ((array) $this->collNagiosDependencys as $o) {
+				foreach ($this->collNagiosDependencys as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosEscalations) {
-				foreach ((array) $this->collNagiosEscalations as $o) {
+				foreach ($this->collNagiosEscalations as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collNagiosTimeperiodEntrys instanceof PropelCollection) {
+			$this->collNagiosTimeperiodEntrys->clearIterator();
+		}
 		$this->collNagiosTimeperiodEntrys = null;
+		if ($this->collNagiosTimeperiodExcludesRelatedByTimeperiodId instanceof PropelCollection) {
+			$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId->clearIterator();
+		}
 		$this->collNagiosTimeperiodExcludesRelatedByTimeperiodId = null;
+		if ($this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod instanceof PropelCollection) {
+			$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod->clearIterator();
+		}
 		$this->collNagiosTimeperiodExcludesRelatedByExcludedTimeperiod = null;
+		if ($this->collNagiosContactsRelatedByHostNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosContactsRelatedByHostNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosContactsRelatedByHostNotificationPeriod = null;
+		if ($this->collNagiosContactsRelatedByServiceNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosContactsRelatedByServiceNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosContactsRelatedByServiceNotificationPeriod = null;
+		if ($this->collNagiosHostTemplatesRelatedByCheckPeriod instanceof PropelCollection) {
+			$this->collNagiosHostTemplatesRelatedByCheckPeriod->clearIterator();
+		}
 		$this->collNagiosHostTemplatesRelatedByCheckPeriod = null;
+		if ($this->collNagiosHostTemplatesRelatedByNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosHostTemplatesRelatedByNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosHostTemplatesRelatedByNotificationPeriod = null;
+		if ($this->collNagiosHostsRelatedByCheckPeriod instanceof PropelCollection) {
+			$this->collNagiosHostsRelatedByCheckPeriod->clearIterator();
+		}
 		$this->collNagiosHostsRelatedByCheckPeriod = null;
+		if ($this->collNagiosHostsRelatedByNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosHostsRelatedByNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosHostsRelatedByNotificationPeriod = null;
+		if ($this->collNagiosServiceTemplatesRelatedByCheckPeriod instanceof PropelCollection) {
+			$this->collNagiosServiceTemplatesRelatedByCheckPeriod->clearIterator();
+		}
 		$this->collNagiosServiceTemplatesRelatedByCheckPeriod = null;
+		if ($this->collNagiosServiceTemplatesRelatedByNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosServiceTemplatesRelatedByNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosServiceTemplatesRelatedByNotificationPeriod = null;
+		if ($this->collNagiosServicesRelatedByCheckPeriod instanceof PropelCollection) {
+			$this->collNagiosServicesRelatedByCheckPeriod->clearIterator();
+		}
 		$this->collNagiosServicesRelatedByCheckPeriod = null;
+		if ($this->collNagiosServicesRelatedByNotificationPeriod instanceof PropelCollection) {
+			$this->collNagiosServicesRelatedByNotificationPeriod->clearIterator();
+		}
 		$this->collNagiosServicesRelatedByNotificationPeriod = null;
+		if ($this->collNagiosDependencys instanceof PropelCollection) {
+			$this->collNagiosDependencys->clearIterator();
+		}
 		$this->collNagiosDependencys = null;
+		if ($this->collNagiosEscalations instanceof PropelCollection) {
+			$this->collNagiosEscalations->clearIterator();
+		}
 		$this->collNagiosEscalations = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosTimeperiodPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosTimeperiod

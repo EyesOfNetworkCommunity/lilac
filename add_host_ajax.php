@@ -54,7 +54,7 @@ session_start();
 		if ( $_POST['option'] != "delete"){
 			//Search the new element
 	        foreach ($templateList as $template){
-	        	if (in_array($template,$_SESSION['templates'])) continue;
+	        	#if (in_array($template,$_SESSION['templates'])) continue;
 
 	        	if ($template->getId() == $_POST['id']){
 	        		if ($i%2) echo "<tr class='altRow1'>";

@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_contact_notification_command' table.
  *
  * Notification Command for a Nagios Contact
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosContactNotificationCommandPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_contact_notification_command';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosContactNotificationCommand';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosContactNotificationCommand';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosContactNotificationCommandTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_contact_notification_command.ID';
@@ -36,6 +46,9 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/** the column name for the TYPE field */
 	const TYPE = 'nagios_contact_notification_command.TYPE';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosContactNotificationCommand objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -44,11 +57,6 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -56,10 +64,11 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'ContactId', 'Command', 'Type', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'contactId', 'command', 'type', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::CONTACT_ID, self::COMMAND, self::TYPE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'CONTACT_ID', 'COMMAND', 'TYPE', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'contact_id', 'command', 'type', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
@@ -70,25 +79,15 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ContactId' => 1, 'Command' => 2, 'Type' => 3, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'contactId' => 1, 'command' => 2, 'type' => 3, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CONTACT_ID => 1, self::COMMAND => 2, self::TYPE => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'CONTACT_ID' => 1, 'COMMAND' => 2, 'TYPE' => 3, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'contact_id' => 1, 'command' => 2, 'type' => 3, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosContactNotificationCommandMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -150,21 +149,24 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::ID);
-
-		$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::CONTACT_ID);
-
-		$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::COMMAND);
-
-		$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::TYPE);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::ID);
+			$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::CONTACT_ID);
+			$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::COMMAND);
+			$criteria->addSelectColumn(NagiosContactNotificationCommandPeer::TYPE);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.CONTACT_ID');
+			$criteria->addSelectColumn($alias . '.COMMAND');
+			$criteria->addSelectColumn($alias . '.TYPE');
+		}
 	}
 
 	/**
@@ -211,7 +213,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -230,7 +232,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -284,7 +286,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 * @param      NagiosContactNotificationCommand $value A NagiosContactNotificationCommand object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosContactNotificationCommand $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -352,6 +354,14 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_contact_notification_command
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -364,12 +374,26 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -382,18 +406,16 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosContactNotificationCommandPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosContactNotificationCommandPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -403,11 +425,37 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosContactNotificationCommand object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosContactNotificationCommandPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosContactNotificationCommandPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosContactNotificationCommandPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosContact table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -440,7 +488,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -456,7 +505,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommand table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -489,7 +538,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -504,41 +554,41 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 
 	/**
 	 * Selects a collection of NagiosContactNotificationCommand objects pre-filled with their NagiosContact objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosContactNotificationCommand objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosContact(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosContact(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosContactNotificationCommandPeer::addSelectColumns($c);
-		$startcol = (NagiosContactNotificationCommandPeer::NUM_COLUMNS - NagiosContactNotificationCommandPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosContactPeer::addSelectColumns($c);
+		NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
+		$startcol = NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
+		NagiosContactPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosContactNotificationCommandPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosContactNotificationCommandPeer::getOMClass();
+				$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosContactNotificationCommandPeer::addInstanceToPool($obj1, $key1);
@@ -549,9 +599,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 				$obj2 = NagiosContactPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosContactPeer::getOMClass();
+					$cls = NagiosContactPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosContactPeer::addInstanceToPool($obj2, $key2);
@@ -571,41 +620,41 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 
 	/**
 	 * Selects a collection of NagiosContactNotificationCommand objects pre-filled with their NagiosCommand objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosContactNotificationCommand objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosCommand(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosCommand(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosContactNotificationCommandPeer::addSelectColumns($c);
-		$startcol = (NagiosContactNotificationCommandPeer::NUM_COLUMNS - NagiosContactNotificationCommandPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosCommandPeer::addSelectColumns($c);
+		NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
+		$startcol = NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
+		NagiosCommandPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosContactNotificationCommandPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosContactNotificationCommandPeer::getOMClass();
+				$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosContactNotificationCommandPeer::addInstanceToPool($obj1, $key1);
@@ -616,9 +665,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 				$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -639,7 +687,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -672,8 +720,10 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -688,46 +738,47 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Selects a collection of NagiosContactNotificationCommand objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosContactNotificationCommand objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosContactNotificationCommandPeer::addSelectColumns($c);
-		$startcol2 = (NagiosContactNotificationCommandPeer::NUM_COLUMNS - NagiosContactNotificationCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosContactPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosContactPeer::NUM_COLUMNS - NagiosContactPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosContactPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosContactNotificationCommandPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosContactNotificationCommandPeer::getOMClass();
+				$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosContactNotificationCommandPeer::addInstanceToPool($obj1, $key1);
@@ -740,10 +791,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 				$obj2 = NagiosContactPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosContactPeer::getOMClass();
+					$cls = NagiosContactPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosContactPeer::addInstanceToPool($obj2, $key2);
@@ -760,10 +809,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 				$obj3 = NagiosCommandPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosCommandPeer::getOMClass();
+					$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosCommandPeer::addInstanceToPool($obj3, $key3);
@@ -783,7 +830,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosContact table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -816,7 +863,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -832,7 +880,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosCommand table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -865,7 +913,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -881,45 +930,45 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Selects a collection of NagiosContactNotificationCommand objects pre-filled with all related objects except NagiosContact.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosContactNotificationCommand objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosContact(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosContact(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosContactNotificationCommandPeer::addSelectColumns($c);
-		$startcol2 = (NagiosContactNotificationCommandPeer::NUM_COLUMNS - NagiosContactNotificationCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosCommandPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosCommandPeer::NUM_COLUMNS - NagiosCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosCommandPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosCommandPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosContactNotificationCommandPeer::COMMAND,), array(NagiosCommandPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::COMMAND, NagiosCommandPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosContactNotificationCommandPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosContactNotificationCommandPeer::getOMClass();
+				$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosContactNotificationCommandPeer::addInstanceToPool($obj1, $key1);
@@ -932,10 +981,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 					$obj2 = NagiosCommandPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosCommandPeer::getOMClass();
+						$cls = NagiosCommandPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosCommandPeer::addInstanceToPool($obj2, $key2);
@@ -956,45 +1003,45 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	/**
 	 * Selects a collection of NagiosContactNotificationCommand objects pre-filled with all related objects except NagiosCommand.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosContactNotificationCommand objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosCommand(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosCommand(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosContactNotificationCommandPeer::addSelectColumns($c);
-		$startcol2 = (NagiosContactNotificationCommandPeer::NUM_COLUMNS - NagiosContactNotificationCommandPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosContactNotificationCommandPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosContactPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosContactPeer::NUM_COLUMNS - NagiosContactPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosContactPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosContactPeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosContactNotificationCommandPeer::CONTACT_ID,), array(NagiosContactPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosContactNotificationCommandPeer::CONTACT_ID, NagiosContactPeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosContactNotificationCommandPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosContactNotificationCommandPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosContactNotificationCommandPeer::getOMClass();
+				$cls = NagiosContactNotificationCommandPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosContactNotificationCommandPeer::addInstanceToPool($obj1, $key1);
@@ -1007,10 +1054,8 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 					$obj2 = NagiosContactPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosContactPeer::getOMClass();
+						$cls = NagiosContactPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosContactPeer::addInstanceToPool($obj2, $key2);
@@ -1040,21 +1085,35 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosContactNotificationCommandPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosContactNotificationCommandPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosContactNotificationCommandPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosContactNotificationCommandTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosContactNotificationCommand or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosContactNotificationCommandPeer::CLASS_DEFAULT : NagiosContactNotificationCommandPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosContactNotificationCommand or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactNotificationCommand object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1097,7 +1156,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosContactNotificationCommand or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosContactNotificationCommand or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactNotificationCommand object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1117,7 +1176,12 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosContactNotificationCommandPeer::ID);
-			$selectCriteria->add(NagiosContactNotificationCommandPeer::ID, $criteria->remove(NagiosContactNotificationCommandPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosContactNotificationCommandPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosContactNotificationCommandPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosContactNotificationCommandPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosContactNotificationCommand object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1131,11 +1195,12 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_contact_notification_command table.
+	 * Deletes all rows from the nagios_contact_notification_command table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactNotificationCommandPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1145,7 +1210,12 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosContactNotificationCommandPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosContactNotificationCommandPeer::TABLE_NAME, $con, NagiosContactNotificationCommandPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosContactNotificationCommandPeer::clearInstancePool();
+			NagiosContactNotificationCommandPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1155,7 +1225,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosContactNotificationCommand or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosContactNotificationCommand or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactNotificationCommand object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1176,24 +1246,18 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosContactNotificationCommandPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosContactNotificationCommand) {
+		} elseif ($values instanceof NagiosContactNotificationCommand) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosContactNotificationCommandPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosContactNotificationCommandPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosContactNotificationCommandPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -1209,7 +1273,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosContactNotificationCommandPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1230,7 +1294,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosContactNotificationCommand $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -1308,14 +1372,7 @@ abstract class BaseNagiosContactNotificationCommandPeer {
 
 } // BaseNagiosContactNotificationCommandPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosContactNotificationCommandPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosContactNotificationCommandPeer class:
-//
-// Propel::getDatabaseMap(NagiosContactNotificationCommandPeer::DATABASE_NAME)->addTableBuilder(NagiosContactNotificationCommandPeer::TABLE_NAME, NagiosContactNotificationCommandPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosContactNotificationCommandPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosContactNotificationCommandPeer::TABLE_NAME, BaseNagiosContactNotificationCommandPeer::getMapBuilder());
+BaseNagiosContactNotificationCommandPeer::buildTableMap();
 

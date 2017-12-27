@@ -221,7 +221,7 @@ class NagiosHostEscalationImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $escalation, $value);
+					call_user_func(array($escalation, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

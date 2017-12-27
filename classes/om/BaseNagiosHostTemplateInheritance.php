@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_host_template_inheritance' table.
  *
  * Nagios Host Template Inheritance
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements Persistent {
+abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosHostTemplateInheritancePeer';
 
 	/**
 	 * The Peer class.
@@ -76,26 +82,6 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosHostTemplateInheritance object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -269,11 +255,6 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -309,8 +290,7 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 5; // 5 = NagiosHostTemplateInheritancePeer::NUM_COLUMNS - NagiosHostTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = NagiosHostTemplateInheritancePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosHostTemplateInheritance object", $e);
@@ -405,12 +385,20 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosHostTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosHostTemplateInheritancePeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosHostTemplateInheritanceQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -439,12 +427,29 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosHostTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosHostTemplateInheritancePeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosHostTemplateInheritancePeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -502,13 +507,14 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosHostTemplateInheritancePeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosHostTemplateInheritancePeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosHostTemplateInheritancePeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows += 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
 					$affectedRows += NagiosHostTemplateInheritancePeer::doUpdate($this, $con);
@@ -672,13 +678,21 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosHostTemplateInheritance'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosHostTemplateInheritance'][$this->getPrimaryKey()] = true;
 		$keys = NagiosHostTemplateInheritancePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -687,6 +701,17 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 			$keys[3] => $this->getTargetTemplate(),
 			$keys[4] => $this->getOrder(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->aNagiosHost) {
+				$result['NagiosHost'] = $this->aNagiosHost->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosHostTemplateRelatedBySourceTemplate) {
+				$result['NagiosHostTemplateRelatedBySourceTemplate'] = $this->aNagiosHostTemplateRelatedBySourceTemplate->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosHostTemplateRelatedByTargetTemplate) {
+				$result['NagiosHostTemplateRelatedByTargetTemplate'] = $this->aNagiosHostTemplateRelatedByTargetTemplate->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+		}
 		return $result;
 	}
 
@@ -792,7 +817,6 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosHostTemplateInheritancePeer::DATABASE_NAME);
-
 		$criteria->add(NagiosHostTemplateInheritancePeer::ID, $this->id);
 
 		return $criteria;
@@ -819,6 +843,15 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -826,24 +859,19 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	 *
 	 * @param      object $copyObj An object of NagiosHostTemplateInheritance (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setSourceHost($this->source_host);
-
-		$copyObj->setSourceTemplate($this->source_template);
-
-		$copyObj->setTargetTemplate($this->target_template);
-
-		$copyObj->setOrder($this->order);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setSourceHost($this->getSourceHost());
+		$copyObj->setSourceTemplate($this->getSourceTemplate());
+		$copyObj->setTargetTemplate($this->getTargetTemplate());
+		$copyObj->setOrder($this->getOrder());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -921,15 +949,13 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	public function getNagiosHost(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHost === null && ($this->source_host !== null)) {
-			$c = new Criteria(NagiosHostPeer::DATABASE_NAME);
-			$c->add(NagiosHostPeer::ID, $this->source_host);
-			$this->aNagiosHost = NagiosHostPeer::doSelectOne($c, $con);
+			$this->aNagiosHost = NagiosHostQuery::create()->findPk($this->source_host, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHost->addNagiosHostTemplateInheritances($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHost->addNagiosHostTemplateInheritances($this);
 			 */
 		}
 		return $this->aNagiosHost;
@@ -972,15 +998,13 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	public function getNagiosHostTemplateRelatedBySourceTemplate(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHostTemplateRelatedBySourceTemplate === null && ($this->source_template !== null)) {
-			$c = new Criteria(NagiosHostTemplatePeer::DATABASE_NAME);
-			$c->add(NagiosHostTemplatePeer::ID, $this->source_template);
-			$this->aNagiosHostTemplateRelatedBySourceTemplate = NagiosHostTemplatePeer::doSelectOne($c, $con);
+			$this->aNagiosHostTemplateRelatedBySourceTemplate = NagiosHostTemplateQuery::create()->findPk($this->source_template, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHostTemplateRelatedBySourceTemplate->addNagiosHostTemplateInheritancesRelatedBySourceTemplate($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHostTemplateRelatedBySourceTemplate->addNagiosHostTemplateInheritancesRelatedBySourceTemplate($this);
 			 */
 		}
 		return $this->aNagiosHostTemplateRelatedBySourceTemplate;
@@ -1023,37 +1047,82 @@ abstract class BaseNagiosHostTemplateInheritance extends BaseObject  implements 
 	public function getNagiosHostTemplateRelatedByTargetTemplate(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHostTemplateRelatedByTargetTemplate === null && ($this->target_template !== null)) {
-			$c = new Criteria(NagiosHostTemplatePeer::DATABASE_NAME);
-			$c->add(NagiosHostTemplatePeer::ID, $this->target_template);
-			$this->aNagiosHostTemplateRelatedByTargetTemplate = NagiosHostTemplatePeer::doSelectOne($c, $con);
+			$this->aNagiosHostTemplateRelatedByTargetTemplate = NagiosHostTemplateQuery::create()->findPk($this->target_template, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHostTemplateRelatedByTargetTemplate->addNagiosHostTemplateInheritancesRelatedByTargetTemplate($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHostTemplateRelatedByTargetTemplate->addNagiosHostTemplateInheritancesRelatedByTargetTemplate($this);
 			 */
 		}
 		return $this->aNagiosHostTemplateRelatedByTargetTemplate;
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->source_host = null;
+		$this->source_template = null;
+		$this->target_template = null;
+		$this->order = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
-			$this->aNagiosHost = null;
-			$this->aNagiosHostTemplateRelatedBySourceTemplate = null;
-			$this->aNagiosHostTemplateRelatedByTargetTemplate = null;
+		$this->aNagiosHost = null;
+		$this->aNagiosHostTemplateRelatedBySourceTemplate = null;
+		$this->aNagiosHostTemplateRelatedByTargetTemplate = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosHostTemplateInheritancePeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosHostTemplateInheritance
