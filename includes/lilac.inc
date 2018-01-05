@@ -143,7 +143,7 @@ class Lilac {
 	}
 
 	function hosttemplate_exists($template_name) {
-		$this->host_template_exists($template_name);
+		return $this->host_template_exists($template_name);
 	}
 
 	function service_template_exists($template_name) {
@@ -160,7 +160,7 @@ class Lilac {
 	}	
 
 	function servicetemplate_exists($template_name) {
-		$this->service_template_exists($template_name);	
+		return $this->service_template_exists($template_name);	
 	}
 	
 	function get_command($command_id, &$command) {
@@ -443,11 +443,7 @@ class Lilac {
 	}
 
         function timeperiod_exists($period_name) {
-		if($this->period_exists($period_name)) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->period_exists($period_name);
         }
 	
 	function add_command($command) {
