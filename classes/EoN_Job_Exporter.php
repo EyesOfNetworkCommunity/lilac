@@ -288,10 +288,17 @@ class EoN_Job_Exporter {
 				AND type='".$type."'
 				AND parent_name='".$parent_name."'
 				AND parent_type='".$parent_type."'"
-			);	
+			);
+		
+			if(isset($_COOKIE['user_name'])) {
+				$user_name = $_COOKIE['user_name'];	
+			} else {
+				$user_name = "admin";
+			}	
+	
 			sqlrequest($database_lilac,"INSERT INTO export_job_history 
 				(name,type,parent_name,parent_type,date,user,action) 
-				VALUES ('".$name."', '".$type."', '".$parent_name."', '".$parent_type."', '".$date."', '".$_COOKIE['user_name']."', '".$action."')"
+				VALUES ('".$name."', '".$type."', '".$parent_name."', '".$parent_type."', '".$date."', '".$user_name."', '".$action."')"
 			);			
 		}
 

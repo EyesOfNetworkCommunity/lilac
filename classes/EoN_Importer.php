@@ -180,7 +180,9 @@ class EoN_Importer {
 					}
 					else {
 						// --- Update each field
-						$object_sql=call_user_func(array($object_class.'Peer','getByName'),$name);
+						$tmp_object_name=$object_class."Peer";
+						$tmp_object=new $tmp_object_name();
+						$object_sql=$tmp_object->getByName($name);
 						foreach($result as $result_field => $result_value) {
 							$function="set".$result_field;
 							$object_sql->$function($result_value);
@@ -424,8 +426,11 @@ class EoN_Importer {
 								// No Options
 								else {					
 									// Get Link ID in SQL
-									$link_created=call_user_func(array('Nagios'.$zero_value.'Peer','getByName'),$link_name);
+				                                        $tmp_object_name='Nagios'.$zero_value.'Peer';
+                                                			$tmp_object=new $tmp_object_name();
+									$link_created=$tmp_object->getByName($link_name);
 									$link_created_id=$link_created->getId();
+
 									// Set Link
 									$link_function="set".$zero_field;
 									$object_sql->$link_function($link_created_id);
@@ -488,8 +493,10 @@ class EoN_Importer {
 										$this->import_msg[]=$this->EoN_Msg_Success($type,"nolink","blue",$name);
 									}
 									// No Options
-									else {				
-										$link_created=call_user_func(array('Nagios'.$type.'Peer','getByName'),$name);
+									else {	
+                                                                        	$tmp_object_name='Nagios'.$type.'Peer';
+                                                                        	$tmp_object=new $tmp_object_name();
+										$link_created=$tmp_object->getByName($name);	
 										$link_created_id=$link_created->getId();
 									}
 								}

@@ -343,7 +343,7 @@ class Lilac {
 			return true;
 		}
 	}
-	
+
 	function host_exists($host_name) {
 		$c = new Criteria();
 		$c->add(NagiosHostPeer::NAME, $host_name);
@@ -443,7 +443,11 @@ class Lilac {
 	}
 
         function timeperiod_exists($period_name) {
-		$this->period_exists($period_name);
+		if($this->period_exists($period_name)) {
+			return true;
+		} else {
+			return false;
+		}
         }
 	
 	function add_command($command) {
