@@ -193,6 +193,13 @@ if(isset($_GET['request'])) {
 			$commandParameter->save();
 			$success = "Check Command Parameter Updated.";
 		}
+		if($_GET['request'] == "delete" && $_GET['section'] == 'customobjectvars') {
+			$customObjectVar = NagiosServiceCustomObjectVarPeer::retrieveByPK($_GET['customobjectvariable_id']);
+			if($customObjectVar) {
+				$customObjectVar->delete();
+			}
+			$success = "Custom Object Variable Deleted.";
+		}
 }
 
 if(isset($_POST['request'])) {
@@ -748,6 +755,24 @@ if(isset($_POST['request'])) {
 			$success = "Command Parameter added.";
 		}
 	}
+	else if($_POST['request'] == 'custom_object_variable_add') {
+		try
+		{
+			// All is well for error checking, modify the command.
+			$param = new NagiosServiceCustomObjectVar();
+			$param->setNagiosService(NagiosServicePeer::retrieveByPK($_GET['id']));
+			$param->setVarName($_POST['service_manage']['custom_variable_name']);
+			$param->setVarValue($_POST['service_manage']['custom_variable_value']);
+			$param->save();
+			// Remove session data
+			unset($param);
+			$success = "Custom object variable added.";
+		}
+		catch(Exception $e)
+		{
+			$error = $e->getMessage();
+		}
+	}
 	
 	
 }
@@ -817,7 +842,8 @@ $subnav = array(
 	'contacts' => 'Contacts',
 	'extended' => 'Extended Information',
 	'dependencies' => 'Dependencies',
-	'escalations' => 'Escalations'
+	'escalations' => 'Escalations',
+	'customobjectvars' => 'Custom Object Variables'
 	);
 if(isset($tempServiceTemplateInfo['check_command']) || isset($serviceValues['check_command'])) {
 	$subnav['checkcommand'] = "Check Command Parameters";
@@ -1840,6 +1866,93 @@ print_header("Service Editor");
 			</table>
 			<?php
 		}
+		else if($_GET['section'] == "customobjectvars") {
+			$inherited_list = $service->getInheritedCustomObjectVariables();
+		
+			// Get List Of Custom object variables for this service and check
+			$customObjectVariables = $service->getNagiosServiceCustomObjectVariables();
+		
+			$parameterCounter = 0;
+			?>
+					<table width="90%" align="center" border="0">
+					<tr>
+					<td>
+						<?php
+						if(count($inherited_list)) {
+							?>
+							<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
+								<tr class="altTop">
+								<td colspan="2">Custom Object Variables Inherited By Templates:</td>
+								</tr>
+								<?php
+								if(count($inherited_list)) {
+									$counter = 1;
+									foreach($inherited_list as $customObjectVariable) {
+										if($counter % 2) {
+											?>
+											<tr class="altRow1">
+											<?php
+										}
+										else {
+											?>
+											<tr class="altRow2">
+											<?php
+										}
+										?>
+										<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;</td>
+										<td height="20" class="altRight"><b>$_SERVICE<?php echo $customObjectVariable->getVarName();?>$:</b> <?php echo $customObjectVariable->getVarValue();?> from <strong>(service template) <?php echo $customObjectVariable->getNagiosServiceTemplate()->getName(); ?></strong></td>
+										</tr>
+										<?php
+										
+										$counter++;
+									}
+								}
+								?>
+							</table>
+							<br />
+							<?php
+						}
+						?>
+						<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
+							<tr class="altTop">
+							<td colspan="2">Custom Object Variables:</td>
+							</tr>
+							<?php
+							$counter = 0;
+							foreach($customObjectVariables as $customObjectVariable) {
+								if($counter % 2) {
+									?>
+									<tr class="altRow1">
+									<?php
+								}
+								else {
+									?>
+									<tr class="altRow2">
+									<?php
+								}
+								?>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" class="altRight"><b>$_SERVICE<?php echo $customObjectVariable->getVarName();?>$:</b> <?php echo $customObjectVariable->getVarValue();?></td>
+								</tr>
+								<?php
+								
+								$counter++;
+							}
+							?>
+						</table>
+					<br />
+					<br />
+					<form name="add_custom_object_variable" method="post" action="service.php?section=customobjectvars&id=<?php echo $_GET['id'];?>">
+					<input type="hidden" name="request" value="custom_object_variable_add" />
+					New Custom Object Variable Name: <input type="text" name="service_manage[custom_variable_name]" />
+					Value: <input type="text" name="service_manage[custom_variable_value]" /> 
+					<input type="submit" value="Add Variable" />
+					</form>
+					</td>
+					</tr>
+					</table>
+					<?php
+				}
 		else if($_GET['section'] == 'escalations') {
 			$inherited_list = $service->getInheritedEscalations();
 			$numOfInheritedEscalations = count($inherited_list);
