@@ -237,7 +237,7 @@ class NagiosHost extends BaseNagiosHost {
 		}
 		# Filter services to unique list
 		$services = $this->getNagiosServices();
-		$servicenames = [];
+		$servicenames = array();
 		foreach($services as $service) {
 			$servicenames[$service->getDescription()]=1;
 		}
