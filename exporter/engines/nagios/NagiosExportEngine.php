@@ -310,7 +310,7 @@ class NagiosExportEngine extends ExportEngine {
 						}
 							
 						// Delete Services
-						$ExportDiff->ModifyCfgFile($job,$this->exportDir, "", "service", $row["name"], 'host');	
+						$ExportDiff->ModifyCfgFile($job,$this->exportDir, false, "service", $row["name"], 'host');	
 						
 						// Create all services
 						$tmpHost = NagiosHostPeer::getByName($row["name"]);
@@ -345,7 +345,7 @@ class NagiosExportEngine extends ExportEngine {
 						foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance){
 							if($tmpHostInheritance->getNagiosHost()!=null){
 								// Delete Services
-								$ExportDiff->ModifyCfgFile($job,$this->exportDir, "", "service", $tmpHostInheritance->getNagiosHost()->getName(), 'host');	
+								$ExportDiff->ModifyCfgFile($job,$this->exportDir, false, "service", $tmpHostInheritance->getNagiosHost()->getName(), 'host');	
 								
 								// Create all services
 								$tmpHost = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());

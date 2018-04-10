@@ -310,9 +310,9 @@ class EoN_Job_Exporter {
 		$lecture=file_get_contents($file);
 		$writer=$lecture;		
 		
-		if($type == 'service'){
+		if($type == 'service' && $name){
 			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\\n\\tservice_description\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
-		}elseif($type == 'service' && $name=""){
+		}elseif($type == 'service'){
 			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}else{
 			preg_match_all("#define ".$type." {\\n\\t".$type."_name\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
@@ -339,8 +339,10 @@ class EoN_Job_Exporter {
 		fclose ($fp);
 		
 		// Notice
-		if($type == 'service') {
+		if($type == 'service' && $name){
 			$job->addNotice(ucfirst($type)." ".$name." has been deleted on ".$parent_type." ".$parent_name);
+		}elseif($type == 'service'){
+			$job->addNotice("All Services have been deleted on ".$parent_type." ".$parent_name);
 		} else {
 			$job->addNotice(ucfirst($type)." ".$name." has been deleted");
 		}
