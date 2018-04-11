@@ -48,7 +48,9 @@ class NagiosServiceContactGroupMember extends BaseNagiosServiceContactGroupMembe
 			}elseif($this->getService() != null){
 				$object = NagiosServicePeer::retrieveByPK($this->getService());
 				$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
-				$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				if($objectHost) {
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}
 			}
         	}
 

@@ -69,6 +69,7 @@ if(isset($_POST['EoN_Import_Action'])) {
 			$success="Object(s) imported.";
 			$import_msg_array=array_unique($import_msg);
 			unset($import_msg);
+			$import_msg="";
 			foreach($import_msg_array as $html) {
 				$import_msg=$import_msg.$html;
 			}
