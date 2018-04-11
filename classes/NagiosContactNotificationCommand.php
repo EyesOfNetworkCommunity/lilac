@@ -30,7 +30,9 @@ class NagiosContactNotificationCommand extends BaseNagiosContactNotificationComm
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+			if($this->getNagiosContact()) {
+				$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+			}
 		}
 
 		return parent::save($con);

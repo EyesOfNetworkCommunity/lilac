@@ -28,15 +28,19 @@ class EoN_Job_Exporter {
 	public function getInheritances($templateInheritance,$continue=true) {
 		if($templateInheritance->getSourceHost() == null) {
 			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getSourceTemplate());
-			$this->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
-			$template_ins = $tmpTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate();
-			foreach($template_ins as $template_in) {
-				$this->getInheritances($template_in,false);
+			if($tmpTemplate) {
+				$this->insertAction($tmpTemplate->getName(),"hosttemplate","modify");
+				$template_ins = $tmpTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate();
+				foreach($template_ins as $template_in) {
+					$this->getInheritances($template_in,false);
+				}
 			}
 		} elseif($continue) {
 			$tmpHost = NagiosHostPeer::retrieveByPK($templateInheritance->getSourceHost());
 			$tmpTemplate = NagiosHostTemplatePeer::retrieveByPK($templateInheritance->getTargetTemplate());
-			$this->insertAction($tmpHost->getName(),"host","modify",$tmpTemplate->getName(),"hosttemplate");			
+			if($tmpHost) {
+				$this->insertAction($tmpHost->getName(),"host","modify",$tmpTemplate->getName(),"hosttemplate");			
+			}
 		}
 	}
 
