@@ -318,10 +318,8 @@ class NagiosExportEngine extends ExportEngine {
 							foreach($tmpHost->getInheritedServices() as $tmpService) {
 								$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
 								$objectExporter = new NagiosServiceExporter($this, $fp);
-								$object = NagiosServicePeer::getByHostTemplateAndDescription($row["parent_name"],$tmpService->getDescription());
-								
-								if($object && $tmpHost) {
-									$objectExporter->_exportService($object, 'host', $tmpHost);
+								if($tmpService && $tmpHost) {
+									$objectExporter->_exportService($tmpService, 'host', $tmpHost);
 									$job->addNotice("Service ".$tmpService->getDescription()." has been added on host ".$row["name"]);
 								}
 							}
@@ -330,10 +328,8 @@ class NagiosExportEngine extends ExportEngine {
 							foreach($tmpHost->getNagiosServices() as $tmpService) {								
 								$fp = @fopen($this->exportDir."/objects/services.cfg", "a");
 								$objectExporter = new NagiosServiceExporter($this, $fp);
-								$object = NagiosServicePeer::getByHostAndDescription($row["name"],$tmpService->getDescription());
-								
-								if($object && $tmpHost) {
-									$objectExporter->_exportService($object, 'host', $tmpHost);
+								if($tmpService && $tmpHost) {
+									$objectExporter->_exportService($tmpService, 'host', $tmpHost);
 									$job->addNotice("Service ".$tmpService->getDescription()." has been added on host ".$row["name"]);
 								}
 							}
