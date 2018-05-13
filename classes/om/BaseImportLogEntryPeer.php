@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'import_log_entry' table.
  *
  * Import Job Entry
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseImportLogEntryPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseImportLogEntryPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'import_log_entry';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'ImportLogEntry';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'ImportLogEntry';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'ImportLogEntryTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 5;
 
 	/** the column name for the ID field */
 	const ID = 'import_log_entry.ID';
@@ -39,6 +49,9 @@ abstract class BaseImportLogEntryPeer {
 	/** the column name for the TYPE field */
 	const TYPE = 'import_log_entry.TYPE';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of ImportLogEntry objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -47,11 +60,6 @@ abstract class BaseImportLogEntryPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -59,10 +67,11 @@ abstract class BaseImportLogEntryPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Job', 'Time', 'Text', 'Type', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'job', 'time', 'text', 'type', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::JOB, self::TIME, self::TEXT, self::TYPE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'JOB', 'TIME', 'TEXT', 'TYPE', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'job', 'time', 'text', 'type', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
@@ -73,25 +82,15 @@ abstract class BaseImportLogEntryPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Job' => 1, 'Time' => 2, 'Text' => 3, 'Type' => 4, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'job' => 1, 'time' => 2, 'text' => 3, 'type' => 4, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::JOB => 1, self::TIME => 2, self::TEXT => 3, self::TYPE => 4, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'JOB' => 1, 'TIME' => 2, 'TEXT' => 3, 'TYPE' => 4, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'job' => 1, 'time' => 2, 'text' => 3, 'type' => 4, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new ImportLogEntryMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -153,23 +152,26 @@ abstract class BaseImportLogEntryPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(ImportLogEntryPeer::ID);
-
-		$criteria->addSelectColumn(ImportLogEntryPeer::JOB);
-
-		$criteria->addSelectColumn(ImportLogEntryPeer::TIME);
-
-		$criteria->addSelectColumn(ImportLogEntryPeer::TEXT);
-
-		$criteria->addSelectColumn(ImportLogEntryPeer::TYPE);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(ImportLogEntryPeer::ID);
+			$criteria->addSelectColumn(ImportLogEntryPeer::JOB);
+			$criteria->addSelectColumn(ImportLogEntryPeer::TIME);
+			$criteria->addSelectColumn(ImportLogEntryPeer::TEXT);
+			$criteria->addSelectColumn(ImportLogEntryPeer::TYPE);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.JOB');
+			$criteria->addSelectColumn($alias . '.TIME');
+			$criteria->addSelectColumn($alias . '.TEXT');
+			$criteria->addSelectColumn($alias . '.TYPE');
+		}
 	}
 
 	/**
@@ -216,7 +218,7 @@ abstract class BaseImportLogEntryPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -235,7 +237,7 @@ abstract class BaseImportLogEntryPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -289,7 +291,7 @@ abstract class BaseImportLogEntryPeer {
 	 * @param      ImportLogEntry $value A ImportLogEntry object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(ImportLogEntry $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -357,6 +359,14 @@ abstract class BaseImportLogEntryPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to import_log_entry
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -369,12 +379,26 @@ abstract class BaseImportLogEntryPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -387,18 +411,16 @@ abstract class BaseImportLogEntryPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = ImportLogEntryPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = ImportLogEntryPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = ImportLogEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = ImportLogEntryPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -408,11 +430,37 @@ abstract class BaseImportLogEntryPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (ImportLogEntry object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = ImportLogEntryPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = ImportLogEntryPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + ImportLogEntryPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = ImportLogEntryPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			ImportLogEntryPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related ImportJob table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -445,7 +493,8 @@ abstract class BaseImportLogEntryPeer {
 			$con = Propel::getConnection(ImportLogEntryPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(ImportLogEntryPeer::JOB,), array(ImportJobPeer::ID,), $join_behavior);
+		$criteria->addJoin(ImportLogEntryPeer::JOB, ImportJobPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -460,41 +509,41 @@ abstract class BaseImportLogEntryPeer {
 
 	/**
 	 * Selects a collection of ImportLogEntry objects pre-filled with their ImportJob objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of ImportLogEntry objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinImportJob(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinImportJob(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		ImportLogEntryPeer::addSelectColumns($c);
-		$startcol = (ImportLogEntryPeer::NUM_COLUMNS - ImportLogEntryPeer::NUM_LAZY_LOAD_COLUMNS);
-		ImportJobPeer::addSelectColumns($c);
+		ImportLogEntryPeer::addSelectColumns($criteria);
+		$startcol = ImportLogEntryPeer::NUM_HYDRATE_COLUMNS;
+		ImportJobPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(ImportLogEntryPeer::JOB,), array(ImportJobPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(ImportLogEntryPeer::JOB, ImportJobPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = ImportLogEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = ImportLogEntryPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = ImportLogEntryPeer::getOMClass();
+				$cls = ImportLogEntryPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				ImportLogEntryPeer::addInstanceToPool($obj1, $key1);
@@ -505,9 +554,8 @@ abstract class BaseImportLogEntryPeer {
 				$obj2 = ImportJobPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = ImportJobPeer::getOMClass();
+					$cls = ImportJobPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					ImportJobPeer::addInstanceToPool($obj2, $key2);
@@ -528,7 +576,7 @@ abstract class BaseImportLogEntryPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -561,7 +609,8 @@ abstract class BaseImportLogEntryPeer {
 			$con = Propel::getConnection(ImportLogEntryPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(ImportLogEntryPeer::JOB,), array(ImportJobPeer::ID,), $join_behavior);
+		$criteria->addJoin(ImportLogEntryPeer::JOB, ImportJobPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -576,42 +625,42 @@ abstract class BaseImportLogEntryPeer {
 	/**
 	 * Selects a collection of ImportLogEntry objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of ImportLogEntry objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		ImportLogEntryPeer::addSelectColumns($c);
-		$startcol2 = (ImportLogEntryPeer::NUM_COLUMNS - ImportLogEntryPeer::NUM_LAZY_LOAD_COLUMNS);
+		ImportLogEntryPeer::addSelectColumns($criteria);
+		$startcol2 = ImportLogEntryPeer::NUM_HYDRATE_COLUMNS;
 
-		ImportJobPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (ImportJobPeer::NUM_COLUMNS - ImportJobPeer::NUM_LAZY_LOAD_COLUMNS);
+		ImportJobPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + ImportJobPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(ImportLogEntryPeer::JOB,), array(ImportJobPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(ImportLogEntryPeer::JOB, ImportJobPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = ImportLogEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = ImportLogEntryPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = ImportLogEntryPeer::getOMClass();
+				$cls = ImportLogEntryPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				ImportLogEntryPeer::addInstanceToPool($obj1, $key1);
@@ -624,10 +673,8 @@ abstract class BaseImportLogEntryPeer {
 				$obj2 = ImportJobPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = ImportJobPeer::getOMClass();
+					$cls = ImportJobPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					ImportJobPeer::addInstanceToPool($obj2, $key2);
@@ -656,21 +703,35 @@ abstract class BaseImportLogEntryPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return ImportLogEntryPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseImportLogEntryPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseImportLogEntryPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new ImportLogEntryTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a ImportLogEntry or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? ImportLogEntryPeer::CLASS_DEFAULT : ImportLogEntryPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a ImportLogEntry or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or ImportLogEntry object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -713,7 +774,7 @@ abstract class BaseImportLogEntryPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a ImportLogEntry or Criteria object.
+	 * Performs an UPDATE on the database, given a ImportLogEntry or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or ImportLogEntry object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -733,7 +794,12 @@ abstract class BaseImportLogEntryPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(ImportLogEntryPeer::ID);
-			$selectCriteria->add(ImportLogEntryPeer::ID, $criteria->remove(ImportLogEntryPeer::ID), $comparison);
+			$value = $criteria->remove(ImportLogEntryPeer::ID);
+			if ($value) {
+				$selectCriteria->add(ImportLogEntryPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(ImportLogEntryPeer::TABLE_NAME);
+			}
 
 		} else { // $values is ImportLogEntry object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -747,11 +813,12 @@ abstract class BaseImportLogEntryPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the import_log_entry table.
+	 * Deletes all rows from the import_log_entry table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(ImportLogEntryPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -761,7 +828,12 @@ abstract class BaseImportLogEntryPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(ImportLogEntryPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(ImportLogEntryPeer::TABLE_NAME, $con, ImportLogEntryPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			ImportLogEntryPeer::clearInstancePool();
+			ImportLogEntryPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -771,7 +843,7 @@ abstract class BaseImportLogEntryPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a ImportLogEntry or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a ImportLogEntry or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or ImportLogEntry object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -792,24 +864,18 @@ abstract class BaseImportLogEntryPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			ImportLogEntryPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof ImportLogEntry) {
+		} elseif ($values instanceof ImportLogEntry) { // it's a model object
 			// invalidate the cache for this single object
 			ImportLogEntryPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(ImportLogEntryPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				ImportLogEntryPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -825,7 +891,7 @@ abstract class BaseImportLogEntryPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			ImportLogEntryPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -846,7 +912,7 @@ abstract class BaseImportLogEntryPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(ImportLogEntry $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -924,14 +990,7 @@ abstract class BaseImportLogEntryPeer {
 
 } // BaseImportLogEntryPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the ImportLogEntryPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the ImportLogEntryPeer class:
-//
-// Propel::getDatabaseMap(ImportLogEntryPeer::DATABASE_NAME)->addTableBuilder(ImportLogEntryPeer::TABLE_NAME, ImportLogEntryPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseImportLogEntryPeer::DATABASE_NAME)->addTableBuilder(BaseImportLogEntryPeer::TABLE_NAME, BaseImportLogEntryPeer::getMapBuilder());
+BaseImportLogEntryPeer::buildTableMap();
 

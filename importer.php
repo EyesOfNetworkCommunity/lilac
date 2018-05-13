@@ -69,6 +69,7 @@ if(isset($_POST['EoN_Import_Action'])) {
 			$success="Object(s) imported.";
 			$import_msg_array=array_unique($import_msg);
 			unset($import_msg);
+			$import_msg="";
 			foreach($import_msg_array as $html) {
 				$import_msg=$import_msg.$html;
 			}
@@ -93,7 +94,6 @@ if(isset($import) && isset($success)) {
 
 ?>
 <form action="importer.php" method="post" enctype="multipart/form-data">
-<hr>
 <div align="left">
 	<b>Import Options :</b>
 	<br /><br />
@@ -106,9 +106,9 @@ if(isset($import) && isset($success)) {
 	<b>Import your XML File :</b>
 	<br /><br />
 	<input type="file" name="EoN_Import_XML">
+	<br />
 	<input class="btn btn-primary" type="submit" name="EoN_Import_Action" value="Submit" onClick="javascript:return confirmDelete();">
 </div>
-<hr>
 </form>
 <?php
 

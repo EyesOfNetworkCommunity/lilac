@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosServiceContactMember.php';
 
 
 /**
@@ -12,19 +11,54 @@ require 'om/BaseNagiosServiceContactMember.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosServiceContactMember extends BaseNagiosServiceContactMember {
 
-	/**
-	 * Initializes internal state of NagiosServiceContactMember object.
-	 * @see        parent::__construct()
-	 */
-	public function __construct()
-	{
-		// Make sure that parent constructor is always invoked, since that
-		// is where any default values for this object are set.
-		parent::__construct();
+	public function delete(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			if($this->getTemplate() != null){
+				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
+				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
+			}elseif($this->getService() != null){
+				$object = NagiosServicePeer::retrieveByPK($this->getService());
+				if($object->getHost() != null){
+					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}elseif($object->getHostTemplate() != null){
+					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
+				}
+			}
+		}
+
+		return parent::delete($con);
+
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			if($this->getTemplate() != null){
+				$object = NagiosServiceTemplatePeer::retrieveByPK($this->getTemplate());
+				$JobExport->insertAction($object->getName(),'servicetemplate','modify');
+			}elseif($this->getService() != null){
+				$object = NagiosServicePeer::retrieveByPK($this->getService());
+				if($object->getHost() != null){
+					$objectHost = NagiosHostPeer::retrieveByPK($object->getHost());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'host');
+				}elseif($object->getHostTemplate() != null){
+					$objectHost = NagiosHostTemplatePeer::retrieveByPK($object->getHostTemplate());
+					$JobExport->insertAction($object->getDescription(),'service','modify', $objectHost->getName(), 'hosttemplate');
+				}
+			}
+        }
+
+		return parent::save($con);
+
 	}
 
 } // NagiosServiceContactMember

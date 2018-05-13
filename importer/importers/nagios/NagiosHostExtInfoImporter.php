@@ -245,28 +245,12 @@ class NagiosHostExtInfoImporter extends NagiosImporter {
 		}
 		$appliedHosts = $this->getAppliedHosts(empty($values['host_name']) ? array() : $values['host_name'], empty($values['hostgroup_name']) ? array() : $values['hostgroup_name']);
 		foreach($appliedHosts as $host) {
-	                // First let's go and re-merge the coords
-        	        foreach($values as $key => $entries) {
-                	        if($key == "2d_coords" || $key == "3d_coords") {
-                        	        foreach($entries as $entry) {
-                                	        if(empty($newEntry) || $newEntry['value']=="") {
-                                        	        $newEntry = $entry;
-                                        	}
-                                        	else {
-                                                	$newEntry['value'] .= "," . $entry['value'];
-                                        	}
-                                	}
-					call_user_method($this->fieldMethods[$key], $host, $newEntry['value']);
-					unset($newEntry['value']);
-                                	continue;
-                                }
-                        }
 			foreach($values as $key => $entries) {
 				foreach($entries as $entry) {
 					// Skips
 					$value = $entry['value'];
 					$lineNum = $entry['line'];
-					if($key == 'use' || $key == 'name' || $key == 'register' || $key == 'host_name' || $key == 'hostgroup_name' || $key == "2d_coords" || $key == "3d_coords")
+					if($key == 'use' || $key == 'name' || $key == 'register' || $key == 'host_name' || $key == 'hostgroup_name')
 						continue;
 
 					// Okay, let's check that the method DOES exist
@@ -277,7 +261,7 @@ class NagiosHostExtInfoImporter extends NagiosImporter {
 						}	
 					}
 					else {
-						call_user_method($this->fieldMethods[$key], $host, $value);
+						call_user_func(array($host, $this->fieldMethods[$key]), $value);
 					}
 
 				}

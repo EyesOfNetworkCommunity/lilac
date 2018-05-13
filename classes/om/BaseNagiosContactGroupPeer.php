@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_contact_group' table.
  *
  * Nagios Contact Group
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosContactGroupPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosContactGroupPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_contact_group';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosContactGroup';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosContactGroup';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosContactGroupTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 3;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 3;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_contact_group.ID';
@@ -33,6 +43,9 @@ abstract class BaseNagiosContactGroupPeer {
 	/** the column name for the ALIAS field */
 	const ALIAS = 'nagios_contact_group.ALIAS';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosContactGroup objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -41,11 +54,6 @@ abstract class BaseNagiosContactGroupPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -53,10 +61,11 @@ abstract class BaseNagiosContactGroupPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Alias', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'alias', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::ALIAS, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'ALIAS', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'alias', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
@@ -67,25 +76,15 @@ abstract class BaseNagiosContactGroupPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Alias' => 2, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::ALIAS => 2, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'ALIAS' => 2, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'alias' => 2, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosContactGroupMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -147,19 +146,22 @@ abstract class BaseNagiosContactGroupPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosContactGroupPeer::ID);
-
-		$criteria->addSelectColumn(NagiosContactGroupPeer::NAME);
-
-		$criteria->addSelectColumn(NagiosContactGroupPeer::ALIAS);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosContactGroupPeer::ID);
+			$criteria->addSelectColumn(NagiosContactGroupPeer::NAME);
+			$criteria->addSelectColumn(NagiosContactGroupPeer::ALIAS);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.ALIAS');
+		}
 	}
 
 	/**
@@ -206,7 +208,7 @@ abstract class BaseNagiosContactGroupPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -225,7 +227,7 @@ abstract class BaseNagiosContactGroupPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -279,7 +281,7 @@ abstract class BaseNagiosContactGroupPeer {
 	 * @param      NagiosContactGroup $value A NagiosContactGroup object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosContactGroup $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -347,6 +349,26 @@ abstract class BaseNagiosContactGroupPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_contact_group
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+		// Invalidate objects in NagiosContactGroupMemberPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosContactGroupMemberPeer::clearInstancePool();
+		// Invalidate objects in NagiosServiceContactGroupMemberPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosServiceContactGroupMemberPeer::clearInstancePool();
+		// Invalidate objects in NagiosEscalationContactgroupPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosEscalationContactgroupPeer::clearInstancePool();
+		// Invalidate objects in NagiosHostContactgroupPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		NagiosHostContactgroupPeer::clearInstancePool();
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -359,12 +381,26 @@ abstract class BaseNagiosContactGroupPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -377,18 +413,16 @@ abstract class BaseNagiosContactGroupPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosContactGroupPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosContactGroupPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosContactGroupPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosContactGroupPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -398,6 +432,32 @@ abstract class BaseNagiosContactGroupPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosContactGroup object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosContactGroupPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosContactGroupPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosContactGroupPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosContactGroupPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosContactGroupPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -411,21 +471,35 @@ abstract class BaseNagiosContactGroupPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosContactGroupPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosContactGroupPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosContactGroupPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosContactGroupTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosContactGroup or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosContactGroupPeer::CLASS_DEFAULT : NagiosContactGroupPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosContactGroup or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactGroup object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -468,7 +542,7 @@ abstract class BaseNagiosContactGroupPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosContactGroup or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosContactGroup or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactGroup object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -488,7 +562,12 @@ abstract class BaseNagiosContactGroupPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosContactGroupPeer::ID);
-			$selectCriteria->add(NagiosContactGroupPeer::ID, $criteria->remove(NagiosContactGroupPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosContactGroupPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosContactGroupPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosContactGroupPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosContactGroup object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -502,11 +581,12 @@ abstract class BaseNagiosContactGroupPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_contact_group table.
+	 * Deletes all rows from the nagios_contact_group table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactGroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -517,7 +597,12 @@ abstract class BaseNagiosContactGroupPeer {
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
 			$affectedRows += NagiosContactGroupPeer::doOnDeleteCascade(new Criteria(NagiosContactGroupPeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(NagiosContactGroupPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosContactGroupPeer::TABLE_NAME, $con, NagiosContactGroupPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosContactGroupPeer::clearInstancePool();
+			NagiosContactGroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -527,7 +612,7 @@ abstract class BaseNagiosContactGroupPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosContactGroup or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosContactGroup or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosContactGroup object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -544,30 +629,14 @@ abstract class BaseNagiosContactGroupPeer {
 		}
 
 		if ($values instanceof Criteria) {
-			// invalidate the cache for all objects of this type, since we have no
-			// way of knowing (without running a query) what objects should be invalidated
-			// from the cache based on this Criteria.
-			NagiosContactGroupPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosContactGroup) {
-			// invalidate the cache for this single object
-			NagiosContactGroupPeer::removeInstanceFromPool($values);
+		} elseif ($values instanceof NagiosContactGroup) { // it's a model object
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosContactGroupPeer::ID, (array) $values, Criteria::IN);
-
-			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
-				NagiosContactGroupPeer::removeInstanceFromPool($singleval);
-			}
 		}
 
 		// Set the correct dbName
@@ -579,31 +648,26 @@ abstract class BaseNagiosContactGroupPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += NagiosContactGroupPeer::doOnDeleteCascade($criteria, $con);
 			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					NagiosContactGroupPeer::clearInstancePool();
-				} else { // it's a PK or object
-					NagiosContactGroupPeer::removeInstanceFromPool($values);
+			// cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+			$c = clone $criteria;
+			$affectedRows += NagiosContactGroupPeer::doOnDeleteCascade($c, $con);
+			
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			if ($values instanceof Criteria) {
+				NagiosContactGroupPeer::clearInstancePool();
+			} elseif ($values instanceof NagiosContactGroup) { // it's a model object
+				NagiosContactGroupPeer::removeInstanceFromPool($values);
+			} else { // it's a primary key, or an array of pks
+				foreach ((array) $values as $singleval) {
+					NagiosContactGroupPeer::removeInstanceFromPool($singleval);
 				}
+			}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in NagiosContactGroupMemberPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosContactGroupMemberPeer::clearInstancePool();
-
-			// invalidate objects in NagiosServiceContactGroupMemberPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosServiceContactGroupMemberPeer::clearInstancePool();
-
-			// invalidate objects in NagiosEscalationContactgroupPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosEscalationContactgroupPeer::clearInstancePool();
-
-			// invalidate objects in NagiosHostContactgroupPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			NagiosHostContactgroupPeer::clearInstancePool();
-
+			NagiosContactGroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -636,28 +700,28 @@ abstract class BaseNagiosContactGroupPeer {
 
 
 			// delete related NagiosContactGroupMember objects
-			$c = new Criteria(NagiosContactGroupMemberPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosContactGroupMemberPeer::DATABASE_NAME);
 			
-			$c->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $obj->getId());
-			$affectedRows += NagiosContactGroupMemberPeer::doDelete($c, $con);
+			$criteria->add(NagiosContactGroupMemberPeer::CONTACTGROUP, $obj->getId());
+			$affectedRows += NagiosContactGroupMemberPeer::doDelete($criteria, $con);
 
 			// delete related NagiosServiceContactGroupMember objects
-			$c = new Criteria(NagiosServiceContactGroupMemberPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosServiceContactGroupMemberPeer::DATABASE_NAME);
 			
-			$c->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $obj->getId());
-			$affectedRows += NagiosServiceContactGroupMemberPeer::doDelete($c, $con);
+			$criteria->add(NagiosServiceContactGroupMemberPeer::CONTACT_GROUP, $obj->getId());
+			$affectedRows += NagiosServiceContactGroupMemberPeer::doDelete($criteria, $con);
 
 			// delete related NagiosEscalationContactgroup objects
-			$c = new Criteria(NagiosEscalationContactgroupPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosEscalationContactgroupPeer::DATABASE_NAME);
 			
-			$c->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $obj->getId());
-			$affectedRows += NagiosEscalationContactgroupPeer::doDelete($c, $con);
+			$criteria->add(NagiosEscalationContactgroupPeer::CONTACTGROUP, $obj->getId());
+			$affectedRows += NagiosEscalationContactgroupPeer::doDelete($criteria, $con);
 
 			// delete related NagiosHostContactgroup objects
-			$c = new Criteria(NagiosHostContactgroupPeer::DATABASE_NAME);
+			$criteria = new Criteria(NagiosHostContactgroupPeer::DATABASE_NAME);
 			
-			$c->add(NagiosHostContactgroupPeer::CONTACTGROUP, $obj->getId());
-			$affectedRows += NagiosHostContactgroupPeer::doDelete($c, $con);
+			$criteria->add(NagiosHostContactgroupPeer::CONTACTGROUP, $obj->getId());
+			$affectedRows += NagiosHostContactgroupPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
@@ -674,7 +738,7 @@ abstract class BaseNagiosContactGroupPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosContactGroup $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -752,14 +816,7 @@ abstract class BaseNagiosContactGroupPeer {
 
 } // BaseNagiosContactGroupPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosContactGroupPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosContactGroupPeer class:
-//
-// Propel::getDatabaseMap(NagiosContactGroupPeer::DATABASE_NAME)->addTableBuilder(NagiosContactGroupPeer::TABLE_NAME, NagiosContactGroupPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosContactGroupPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosContactGroupPeer::TABLE_NAME, BaseNagiosContactGroupPeer::getMapBuilder());
+BaseNagiosContactGroupPeer::buildTableMap();
 

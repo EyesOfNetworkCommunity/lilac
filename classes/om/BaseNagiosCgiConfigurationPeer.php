@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_cgi_configuration' table.
  *
  * CGI Configuration
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosCgiConfigurationPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_cgi_configuration';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosCgiConfiguration';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosCgiConfiguration';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosCgiConfigurationTableMap';
+	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 29;
+	const NUM_COLUMNS = 35;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 35;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_cgi_configuration.ID';
@@ -111,6 +121,27 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	/** the column name for the SPLUNK_URL field */
 	const SPLUNK_URL = 'nagios_cgi_configuration.SPLUNK_URL';
 
+	/** the column name for the AUTHORIZED_FOR_READ_ONLY field */
+	const AUTHORIZED_FOR_READ_ONLY = 'nagios_cgi_configuration.AUTHORIZED_FOR_READ_ONLY';
+
+	/** the column name for the COLOR_TRANSPARENCY_INDEX_R field */
+	const COLOR_TRANSPARENCY_INDEX_R = 'nagios_cgi_configuration.COLOR_TRANSPARENCY_INDEX_R';
+
+	/** the column name for the COLOR_TRANSPARENCY_INDEX_G field */
+	const COLOR_TRANSPARENCY_INDEX_G = 'nagios_cgi_configuration.COLOR_TRANSPARENCY_INDEX_G';
+
+	/** the column name for the COLOR_TRANSPARENCY_INDEX_B field */
+	const COLOR_TRANSPARENCY_INDEX_B = 'nagios_cgi_configuration.COLOR_TRANSPARENCY_INDEX_B';
+
+	/** the column name for the RESULT_LIMIT field */
+	const RESULT_LIMIT = 'nagios_cgi_configuration.RESULT_LIMIT';
+
+	/** the column name for the NAGIOS_CHECK_COMMAND field */
+	const NAGIOS_CHECK_COMMAND = 'nagios_cgi_configuration.NAGIOS_CHECK_COMMAND';
+
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosCgiConfiguration objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -119,11 +150,6 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -131,12 +157,13 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PhysicalHtmlPath', 'UrlHtmlPath', 'UseAuthentication', 'DefaultUserName', 'AuthorizedForSystemInformation', 'AuthorizedForSystemCommands', 'AuthorizedForConfigurationInformation', 'AuthorizedForAllHosts', 'AuthorizedForAllHostCommands', 'AuthorizedForAllServices', 'AuthorizedForAllServiceCommands', 'LockAuthorNames', 'StatusmapBackgroundImage', 'DefaultStatusmapLayout', 'StatuswrlInclude', 'DefaultStatuswrlLayout', 'RefreshRate', 'HostUnreachableSound', 'HostDownSound', 'ServiceCriticalSound', 'ServiceWarningSound', 'ServiceUnknownSound', 'PingSyntax', 'EscapeHtmlTags', 'NotesUrlTarget', 'ActionUrlTarget', 'EnableSplunkIntegration', 'SplunkUrl', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'physicalHtmlPath', 'urlHtmlPath', 'useAuthentication', 'defaultUserName', 'authorizedForSystemInformation', 'authorizedForSystemCommands', 'authorizedForConfigurationInformation', 'authorizedForAllHosts', 'authorizedForAllHostCommands', 'authorizedForAllServices', 'authorizedForAllServiceCommands', 'lockAuthorNames', 'statusmapBackgroundImage', 'defaultStatusmapLayout', 'statuswrlInclude', 'defaultStatuswrlLayout', 'refreshRate', 'hostUnreachableSound', 'hostDownSound', 'serviceCriticalSound', 'serviceWarningSound', 'serviceUnknownSound', 'pingSyntax', 'escapeHtmlTags', 'notesUrlTarget', 'actionUrlTarget', 'enableSplunkIntegration', 'splunkUrl', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PHYSICAL_HTML_PATH, self::URL_HTML_PATH, self::USE_AUTHENTICATION, self::DEFAULT_USER_NAME, self::AUTHORIZED_FOR_SYSTEM_INFORMATION, self::AUTHORIZED_FOR_SYSTEM_COMMANDS, self::AUTHORIZED_FOR_CONFIGURATION_INFORMATION, self::AUTHORIZED_FOR_ALL_HOSTS, self::AUTHORIZED_FOR_ALL_HOST_COMMANDS, self::AUTHORIZED_FOR_ALL_SERVICES, self::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS, self::LOCK_AUTHOR_NAMES, self::STATUSMAP_BACKGROUND_IMAGE, self::DEFAULT_STATUSMAP_LAYOUT, self::STATUSWRL_INCLUDE, self::DEFAULT_STATUSWRL_LAYOUT, self::REFRESH_RATE, self::HOST_UNREACHABLE_SOUND, self::HOST_DOWN_SOUND, self::SERVICE_CRITICAL_SOUND, self::SERVICE_WARNING_SOUND, self::SERVICE_UNKNOWN_SOUND, self::PING_SYNTAX, self::ESCAPE_HTML_TAGS, self::NOTES_URL_TARGET, self::ACTION_URL_TARGET, self::ENABLE_SPLUNK_INTEGRATION, self::SPLUNK_URL, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'physical_html_path', 'url_html_path', 'use_authentication', 'default_user_name', 'authorized_for_system_information', 'authorized_for_system_commands', 'authorized_for_configuration_information', 'authorized_for_all_hosts', 'authorized_for_all_host_commands', 'authorized_for_all_services', 'authorized_for_all_service_commands', 'lock_author_names', 'statusmap_background_image', 'default_statusmap_layout', 'statuswrl_include', 'default_statuswrl_layout', 'refresh_rate', 'host_unreachable_sound', 'host_down_sound', 'service_critical_sound', 'service_warning_sound', 'service_unknown_sound', 'ping_syntax', 'escape_html_tags', 'notes_url_target', 'action_url_target', 'enable_splunk_integration', 'splunk_url', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
+	protected static $fieldNames = array (
+		BasePeer::TYPE_PHPNAME => array ('Id', 'PhysicalHtmlPath', 'UrlHtmlPath', 'UseAuthentication', 'DefaultUserName', 'AuthorizedForSystemInformation', 'AuthorizedForSystemCommands', 'AuthorizedForConfigurationInformation', 'AuthorizedForAllHosts', 'AuthorizedForAllHostCommands', 'AuthorizedForAllServices', 'AuthorizedForAllServiceCommands', 'LockAuthorNames', 'StatusmapBackgroundImage', 'DefaultStatusmapLayout', 'StatuswrlInclude', 'DefaultStatuswrlLayout', 'RefreshRate', 'HostUnreachableSound', 'HostDownSound', 'ServiceCriticalSound', 'ServiceWarningSound', 'ServiceUnknownSound', 'PingSyntax', 'EscapeHtmlTags', 'NotesUrlTarget', 'ActionUrlTarget', 'EnableSplunkIntegration', 'SplunkUrl', 'AuthorizedForReadOnly', 'ColorTransparencyIndexR', 'ColorTransparencyIndexG', 'ColorTransparencyIndexB', 'ResultLimit', 'NagiosCheckCommand', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'physicalHtmlPath', 'urlHtmlPath', 'useAuthentication', 'defaultUserName', 'authorizedForSystemInformation', 'authorizedForSystemCommands', 'authorizedForConfigurationInformation', 'authorizedForAllHosts', 'authorizedForAllHostCommands', 'authorizedForAllServices', 'authorizedForAllServiceCommands', 'lockAuthorNames', 'statusmapBackgroundImage', 'defaultStatusmapLayout', 'statuswrlInclude', 'defaultStatuswrlLayout', 'refreshRate', 'hostUnreachableSound', 'hostDownSound', 'serviceCriticalSound', 'serviceWarningSound', 'serviceUnknownSound', 'pingSyntax', 'escapeHtmlTags', 'notesUrlTarget', 'actionUrlTarget', 'enableSplunkIntegration', 'splunkUrl', 'authorizedForReadOnly', 'colorTransparencyIndexR', 'colorTransparencyIndexG', 'colorTransparencyIndexB', 'resultLimit', 'nagiosCheckCommand', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PHYSICAL_HTML_PATH, self::URL_HTML_PATH, self::USE_AUTHENTICATION, self::DEFAULT_USER_NAME, self::AUTHORIZED_FOR_SYSTEM_INFORMATION, self::AUTHORIZED_FOR_SYSTEM_COMMANDS, self::AUTHORIZED_FOR_CONFIGURATION_INFORMATION, self::AUTHORIZED_FOR_ALL_HOSTS, self::AUTHORIZED_FOR_ALL_HOST_COMMANDS, self::AUTHORIZED_FOR_ALL_SERVICES, self::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS, self::LOCK_AUTHOR_NAMES, self::STATUSMAP_BACKGROUND_IMAGE, self::DEFAULT_STATUSMAP_LAYOUT, self::STATUSWRL_INCLUDE, self::DEFAULT_STATUSWRL_LAYOUT, self::REFRESH_RATE, self::HOST_UNREACHABLE_SOUND, self::HOST_DOWN_SOUND, self::SERVICE_CRITICAL_SOUND, self::SERVICE_WARNING_SOUND, self::SERVICE_UNKNOWN_SOUND, self::PING_SYNTAX, self::ESCAPE_HTML_TAGS, self::NOTES_URL_TARGET, self::ACTION_URL_TARGET, self::ENABLE_SPLUNK_INTEGRATION, self::SPLUNK_URL, self::AUTHORIZED_FOR_READ_ONLY, self::COLOR_TRANSPARENCY_INDEX_R, self::COLOR_TRANSPARENCY_INDEX_G, self::COLOR_TRANSPARENCY_INDEX_B, self::RESULT_LIMIT, self::NAGIOS_CHECK_COMMAND, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PHYSICAL_HTML_PATH', 'URL_HTML_PATH', 'USE_AUTHENTICATION', 'DEFAULT_USER_NAME', 'AUTHORIZED_FOR_SYSTEM_INFORMATION', 'AUTHORIZED_FOR_SYSTEM_COMMANDS', 'AUTHORIZED_FOR_CONFIGURATION_INFORMATION', 'AUTHORIZED_FOR_ALL_HOSTS', 'AUTHORIZED_FOR_ALL_HOST_COMMANDS', 'AUTHORIZED_FOR_ALL_SERVICES', 'AUTHORIZED_FOR_ALL_SERVICE_COMMANDS', 'LOCK_AUTHOR_NAMES', 'STATUSMAP_BACKGROUND_IMAGE', 'DEFAULT_STATUSMAP_LAYOUT', 'STATUSWRL_INCLUDE', 'DEFAULT_STATUSWRL_LAYOUT', 'REFRESH_RATE', 'HOST_UNREACHABLE_SOUND', 'HOST_DOWN_SOUND', 'SERVICE_CRITICAL_SOUND', 'SERVICE_WARNING_SOUND', 'SERVICE_UNKNOWN_SOUND', 'PING_SYNTAX', 'ESCAPE_HTML_TAGS', 'NOTES_URL_TARGET', 'ACTION_URL_TARGET', 'ENABLE_SPLUNK_INTEGRATION', 'SPLUNK_URL', 'AUTHORIZED_FOR_READ_ONLY', 'COLOR_TRANSPARENCY_INDEX_R', 'COLOR_TRANSPARENCY_INDEX_G', 'COLOR_TRANSPARENCY_INDEX_B', 'RESULT_LIMIT', 'NAGIOS_CHECK_COMMAND', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'physical_html_path', 'url_html_path', 'use_authentication', 'default_user_name', 'authorized_for_system_information', 'authorized_for_system_commands', 'authorized_for_configuration_information', 'authorized_for_all_hosts', 'authorized_for_all_host_commands', 'authorized_for_all_services', 'authorized_for_all_service_commands', 'lock_author_names', 'statusmap_background_image', 'default_statusmap_layout', 'statuswrl_include', 'default_statuswrl_layout', 'refresh_rate', 'host_unreachable_sound', 'host_down_sound', 'service_critical_sound', 'service_warning_sound', 'service_unknown_sound', 'ping_syntax', 'escape_html_tags', 'notes_url_target', 'action_url_target', 'enable_splunk_integration', 'splunk_url', 'authorized_for_read_only', 'color_transparency_index_r', 'color_transparency_index_g', 'color_transparency_index_b', 'result_limit', 'nagios_check_command', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, )
 	);
 
 	/**
@@ -145,25 +172,15 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PhysicalHtmlPath' => 1, 'UrlHtmlPath' => 2, 'UseAuthentication' => 3, 'DefaultUserName' => 4, 'AuthorizedForSystemInformation' => 5, 'AuthorizedForSystemCommands' => 6, 'AuthorizedForConfigurationInformation' => 7, 'AuthorizedForAllHosts' => 8, 'AuthorizedForAllHostCommands' => 9, 'AuthorizedForAllServices' => 10, 'AuthorizedForAllServiceCommands' => 11, 'LockAuthorNames' => 12, 'StatusmapBackgroundImage' => 13, 'DefaultStatusmapLayout' => 14, 'StatuswrlInclude' => 15, 'DefaultStatuswrlLayout' => 16, 'RefreshRate' => 17, 'HostUnreachableSound' => 18, 'HostDownSound' => 19, 'ServiceCriticalSound' => 20, 'ServiceWarningSound' => 21, 'ServiceUnknownSound' => 22, 'PingSyntax' => 23, 'EscapeHtmlTags' => 24, 'NotesUrlTarget' => 25, 'ActionUrlTarget' => 26, 'EnableSplunkIntegration' => 27, 'SplunkUrl' => 28, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'physicalHtmlPath' => 1, 'urlHtmlPath' => 2, 'useAuthentication' => 3, 'defaultUserName' => 4, 'authorizedForSystemInformation' => 5, 'authorizedForSystemCommands' => 6, 'authorizedForConfigurationInformation' => 7, 'authorizedForAllHosts' => 8, 'authorizedForAllHostCommands' => 9, 'authorizedForAllServices' => 10, 'authorizedForAllServiceCommands' => 11, 'lockAuthorNames' => 12, 'statusmapBackgroundImage' => 13, 'defaultStatusmapLayout' => 14, 'statuswrlInclude' => 15, 'defaultStatuswrlLayout' => 16, 'refreshRate' => 17, 'hostUnreachableSound' => 18, 'hostDownSound' => 19, 'serviceCriticalSound' => 20, 'serviceWarningSound' => 21, 'serviceUnknownSound' => 22, 'pingSyntax' => 23, 'escapeHtmlTags' => 24, 'notesUrlTarget' => 25, 'actionUrlTarget' => 26, 'enableSplunkIntegration' => 27, 'splunkUrl' => 28, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PHYSICAL_HTML_PATH => 1, self::URL_HTML_PATH => 2, self::USE_AUTHENTICATION => 3, self::DEFAULT_USER_NAME => 4, self::AUTHORIZED_FOR_SYSTEM_INFORMATION => 5, self::AUTHORIZED_FOR_SYSTEM_COMMANDS => 6, self::AUTHORIZED_FOR_CONFIGURATION_INFORMATION => 7, self::AUTHORIZED_FOR_ALL_HOSTS => 8, self::AUTHORIZED_FOR_ALL_HOST_COMMANDS => 9, self::AUTHORIZED_FOR_ALL_SERVICES => 10, self::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS => 11, self::LOCK_AUTHOR_NAMES => 12, self::STATUSMAP_BACKGROUND_IMAGE => 13, self::DEFAULT_STATUSMAP_LAYOUT => 14, self::STATUSWRL_INCLUDE => 15, self::DEFAULT_STATUSWRL_LAYOUT => 16, self::REFRESH_RATE => 17, self::HOST_UNREACHABLE_SOUND => 18, self::HOST_DOWN_SOUND => 19, self::SERVICE_CRITICAL_SOUND => 20, self::SERVICE_WARNING_SOUND => 21, self::SERVICE_UNKNOWN_SOUND => 22, self::PING_SYNTAX => 23, self::ESCAPE_HTML_TAGS => 24, self::NOTES_URL_TARGET => 25, self::ACTION_URL_TARGET => 26, self::ENABLE_SPLUNK_INTEGRATION => 27, self::SPLUNK_URL => 28, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'physical_html_path' => 1, 'url_html_path' => 2, 'use_authentication' => 3, 'default_user_name' => 4, 'authorized_for_system_information' => 5, 'authorized_for_system_commands' => 6, 'authorized_for_configuration_information' => 7, 'authorized_for_all_hosts' => 8, 'authorized_for_all_host_commands' => 9, 'authorized_for_all_services' => 10, 'authorized_for_all_service_commands' => 11, 'lock_author_names' => 12, 'statusmap_background_image' => 13, 'default_statusmap_layout' => 14, 'statuswrl_include' => 15, 'default_statuswrl_layout' => 16, 'refresh_rate' => 17, 'host_unreachable_sound' => 18, 'host_down_sound' => 19, 'service_critical_sound' => 20, 'service_warning_sound' => 21, 'service_unknown_sound' => 22, 'ping_syntax' => 23, 'escape_html_tags' => 24, 'notes_url_target' => 25, 'action_url_target' => 26, 'enable_splunk_integration' => 27, 'splunk_url' => 28, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
+	protected static $fieldKeys = array (
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PhysicalHtmlPath' => 1, 'UrlHtmlPath' => 2, 'UseAuthentication' => 3, 'DefaultUserName' => 4, 'AuthorizedForSystemInformation' => 5, 'AuthorizedForSystemCommands' => 6, 'AuthorizedForConfigurationInformation' => 7, 'AuthorizedForAllHosts' => 8, 'AuthorizedForAllHostCommands' => 9, 'AuthorizedForAllServices' => 10, 'AuthorizedForAllServiceCommands' => 11, 'LockAuthorNames' => 12, 'StatusmapBackgroundImage' => 13, 'DefaultStatusmapLayout' => 14, 'StatuswrlInclude' => 15, 'DefaultStatuswrlLayout' => 16, 'RefreshRate' => 17, 'HostUnreachableSound' => 18, 'HostDownSound' => 19, 'ServiceCriticalSound' => 20, 'ServiceWarningSound' => 21, 'ServiceUnknownSound' => 22, 'PingSyntax' => 23, 'EscapeHtmlTags' => 24, 'NotesUrlTarget' => 25, 'ActionUrlTarget' => 26, 'EnableSplunkIntegration' => 27, 'SplunkUrl' => 28, 'AuthorizedForReadOnly' => 29, 'ColorTransparencyIndexR' => 30, 'ColorTransparencyIndexG' => 31, 'ColorTransparencyIndexB' => 32, 'ResultLimit' => 33, 'NagiosCheckCommand' => 34, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'physicalHtmlPath' => 1, 'urlHtmlPath' => 2, 'useAuthentication' => 3, 'defaultUserName' => 4, 'authorizedForSystemInformation' => 5, 'authorizedForSystemCommands' => 6, 'authorizedForConfigurationInformation' => 7, 'authorizedForAllHosts' => 8, 'authorizedForAllHostCommands' => 9, 'authorizedForAllServices' => 10, 'authorizedForAllServiceCommands' => 11, 'lockAuthorNames' => 12, 'statusmapBackgroundImage' => 13, 'defaultStatusmapLayout' => 14, 'statuswrlInclude' => 15, 'defaultStatuswrlLayout' => 16, 'refreshRate' => 17, 'hostUnreachableSound' => 18, 'hostDownSound' => 19, 'serviceCriticalSound' => 20, 'serviceWarningSound' => 21, 'serviceUnknownSound' => 22, 'pingSyntax' => 23, 'escapeHtmlTags' => 24, 'notesUrlTarget' => 25, 'actionUrlTarget' => 26, 'enableSplunkIntegration' => 27, 'splunkUrl' => 28, 'authorizedForReadOnly' => 29, 'colorTransparencyIndexR' => 30, 'colorTransparencyIndexG' => 31, 'colorTransparencyIndexB' => 32, 'resultLimit' => 33, 'nagiosCheckCommand' => 34, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PHYSICAL_HTML_PATH => 1, self::URL_HTML_PATH => 2, self::USE_AUTHENTICATION => 3, self::DEFAULT_USER_NAME => 4, self::AUTHORIZED_FOR_SYSTEM_INFORMATION => 5, self::AUTHORIZED_FOR_SYSTEM_COMMANDS => 6, self::AUTHORIZED_FOR_CONFIGURATION_INFORMATION => 7, self::AUTHORIZED_FOR_ALL_HOSTS => 8, self::AUTHORIZED_FOR_ALL_HOST_COMMANDS => 9, self::AUTHORIZED_FOR_ALL_SERVICES => 10, self::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS => 11, self::LOCK_AUTHOR_NAMES => 12, self::STATUSMAP_BACKGROUND_IMAGE => 13, self::DEFAULT_STATUSMAP_LAYOUT => 14, self::STATUSWRL_INCLUDE => 15, self::DEFAULT_STATUSWRL_LAYOUT => 16, self::REFRESH_RATE => 17, self::HOST_UNREACHABLE_SOUND => 18, self::HOST_DOWN_SOUND => 19, self::SERVICE_CRITICAL_SOUND => 20, self::SERVICE_WARNING_SOUND => 21, self::SERVICE_UNKNOWN_SOUND => 22, self::PING_SYNTAX => 23, self::ESCAPE_HTML_TAGS => 24, self::NOTES_URL_TARGET => 25, self::ACTION_URL_TARGET => 26, self::ENABLE_SPLUNK_INTEGRATION => 27, self::SPLUNK_URL => 28, self::AUTHORIZED_FOR_READ_ONLY => 29, self::COLOR_TRANSPARENCY_INDEX_R => 30, self::COLOR_TRANSPARENCY_INDEX_G => 31, self::COLOR_TRANSPARENCY_INDEX_B => 32, self::RESULT_LIMIT => 33, self::NAGIOS_CHECK_COMMAND => 34, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PHYSICAL_HTML_PATH' => 1, 'URL_HTML_PATH' => 2, 'USE_AUTHENTICATION' => 3, 'DEFAULT_USER_NAME' => 4, 'AUTHORIZED_FOR_SYSTEM_INFORMATION' => 5, 'AUTHORIZED_FOR_SYSTEM_COMMANDS' => 6, 'AUTHORIZED_FOR_CONFIGURATION_INFORMATION' => 7, 'AUTHORIZED_FOR_ALL_HOSTS' => 8, 'AUTHORIZED_FOR_ALL_HOST_COMMANDS' => 9, 'AUTHORIZED_FOR_ALL_SERVICES' => 10, 'AUTHORIZED_FOR_ALL_SERVICE_COMMANDS' => 11, 'LOCK_AUTHOR_NAMES' => 12, 'STATUSMAP_BACKGROUND_IMAGE' => 13, 'DEFAULT_STATUSMAP_LAYOUT' => 14, 'STATUSWRL_INCLUDE' => 15, 'DEFAULT_STATUSWRL_LAYOUT' => 16, 'REFRESH_RATE' => 17, 'HOST_UNREACHABLE_SOUND' => 18, 'HOST_DOWN_SOUND' => 19, 'SERVICE_CRITICAL_SOUND' => 20, 'SERVICE_WARNING_SOUND' => 21, 'SERVICE_UNKNOWN_SOUND' => 22, 'PING_SYNTAX' => 23, 'ESCAPE_HTML_TAGS' => 24, 'NOTES_URL_TARGET' => 25, 'ACTION_URL_TARGET' => 26, 'ENABLE_SPLUNK_INTEGRATION' => 27, 'SPLUNK_URL' => 28, 'AUTHORIZED_FOR_READ_ONLY' => 29, 'COLOR_TRANSPARENCY_INDEX_R' => 30, 'COLOR_TRANSPARENCY_INDEX_G' => 31, 'COLOR_TRANSPARENCY_INDEX_B' => 32, 'RESULT_LIMIT' => 33, 'NAGIOS_CHECK_COMMAND' => 34, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'physical_html_path' => 1, 'url_html_path' => 2, 'use_authentication' => 3, 'default_user_name' => 4, 'authorized_for_system_information' => 5, 'authorized_for_system_commands' => 6, 'authorized_for_configuration_information' => 7, 'authorized_for_all_hosts' => 8, 'authorized_for_all_host_commands' => 9, 'authorized_for_all_services' => 10, 'authorized_for_all_service_commands' => 11, 'lock_author_names' => 12, 'statusmap_background_image' => 13, 'default_statusmap_layout' => 14, 'statuswrl_include' => 15, 'default_statuswrl_layout' => 16, 'refresh_rate' => 17, 'host_unreachable_sound' => 18, 'host_down_sound' => 19, 'service_critical_sound' => 20, 'service_warning_sound' => 21, 'service_unknown_sound' => 22, 'ping_syntax' => 23, 'escape_html_tags' => 24, 'notes_url_target' => 25, 'action_url_target' => 26, 'enable_splunk_integration' => 27, 'splunk_url' => 28, 'authorized_for_read_only' => 29, 'color_transparency_index_r' => 30, 'color_transparency_index_g' => 31, 'color_transparency_index_b' => 32, 'result_limit' => 33, 'nagios_check_command' => 34, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosCgiConfigurationMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -225,71 +242,86 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ID);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::PHYSICAL_HTML_PATH);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::URL_HTML_PATH);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::USE_AUTHENTICATION);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_USER_NAME);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_SYSTEM_INFORMATION);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_SYSTEM_COMMANDS);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_CONFIGURATION_INFORMATION);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_HOSTS);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_HOST_COMMANDS);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_SERVICES);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::LOCK_AUTHOR_NAMES);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::STATUSMAP_BACKGROUND_IMAGE);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_STATUSMAP_LAYOUT);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::STATUSWRL_INCLUDE);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_STATUSWRL_LAYOUT);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::REFRESH_RATE);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::HOST_UNREACHABLE_SOUND);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::HOST_DOWN_SOUND);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_CRITICAL_SOUND);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_WARNING_SOUND);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_UNKNOWN_SOUND);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::PING_SYNTAX);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ESCAPE_HTML_TAGS);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::NOTES_URL_TARGET);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ACTION_URL_TARGET);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ENABLE_SPLUNK_INTEGRATION);
-
-		$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SPLUNK_URL);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ID);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::PHYSICAL_HTML_PATH);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::URL_HTML_PATH);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::USE_AUTHENTICATION);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_USER_NAME);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_SYSTEM_INFORMATION);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_SYSTEM_COMMANDS);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_CONFIGURATION_INFORMATION);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_HOSTS);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_HOST_COMMANDS);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_SERVICES);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_ALL_SERVICE_COMMANDS);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::LOCK_AUTHOR_NAMES);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::STATUSMAP_BACKGROUND_IMAGE);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_STATUSMAP_LAYOUT);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::STATUSWRL_INCLUDE);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::DEFAULT_STATUSWRL_LAYOUT);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::REFRESH_RATE);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::HOST_UNREACHABLE_SOUND);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::HOST_DOWN_SOUND);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_CRITICAL_SOUND);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_WARNING_SOUND);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SERVICE_UNKNOWN_SOUND);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::PING_SYNTAX);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ESCAPE_HTML_TAGS);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::NOTES_URL_TARGET);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ACTION_URL_TARGET);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::ENABLE_SPLUNK_INTEGRATION);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::SPLUNK_URL);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::AUTHORIZED_FOR_READ_ONLY);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_R);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_G);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::COLOR_TRANSPARENCY_INDEX_B);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::RESULT_LIMIT);
+			$criteria->addSelectColumn(NagiosCgiConfigurationPeer::NAGIOS_CHECK_COMMAND);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.PHYSICAL_HTML_PATH');
+			$criteria->addSelectColumn($alias . '.URL_HTML_PATH');
+			$criteria->addSelectColumn($alias . '.USE_AUTHENTICATION');
+			$criteria->addSelectColumn($alias . '.DEFAULT_USER_NAME');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_SYSTEM_INFORMATION');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_SYSTEM_COMMANDS');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_CONFIGURATION_INFORMATION');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_ALL_HOSTS');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_ALL_HOST_COMMANDS');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_ALL_SERVICES');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_ALL_SERVICE_COMMANDS');
+			$criteria->addSelectColumn($alias . '.LOCK_AUTHOR_NAMES');
+			$criteria->addSelectColumn($alias . '.STATUSMAP_BACKGROUND_IMAGE');
+			$criteria->addSelectColumn($alias . '.DEFAULT_STATUSMAP_LAYOUT');
+			$criteria->addSelectColumn($alias . '.STATUSWRL_INCLUDE');
+			$criteria->addSelectColumn($alias . '.DEFAULT_STATUSWRL_LAYOUT');
+			$criteria->addSelectColumn($alias . '.REFRESH_RATE');
+			$criteria->addSelectColumn($alias . '.HOST_UNREACHABLE_SOUND');
+			$criteria->addSelectColumn($alias . '.HOST_DOWN_SOUND');
+			$criteria->addSelectColumn($alias . '.SERVICE_CRITICAL_SOUND');
+			$criteria->addSelectColumn($alias . '.SERVICE_WARNING_SOUND');
+			$criteria->addSelectColumn($alias . '.SERVICE_UNKNOWN_SOUND');
+			$criteria->addSelectColumn($alias . '.PING_SYNTAX');
+			$criteria->addSelectColumn($alias . '.ESCAPE_HTML_TAGS');
+			$criteria->addSelectColumn($alias . '.NOTES_URL_TARGET');
+			$criteria->addSelectColumn($alias . '.ACTION_URL_TARGET');
+			$criteria->addSelectColumn($alias . '.ENABLE_SPLUNK_INTEGRATION');
+			$criteria->addSelectColumn($alias . '.SPLUNK_URL');
+			$criteria->addSelectColumn($alias . '.AUTHORIZED_FOR_READ_ONLY');
+			$criteria->addSelectColumn($alias . '.COLOR_TRANSPARENCY_INDEX_R');
+			$criteria->addSelectColumn($alias . '.COLOR_TRANSPARENCY_INDEX_G');
+			$criteria->addSelectColumn($alias . '.COLOR_TRANSPARENCY_INDEX_B');
+			$criteria->addSelectColumn($alias . '.RESULT_LIMIT');
+			$criteria->addSelectColumn($alias . '.NAGIOS_CHECK_COMMAND');
+		}
 	}
 
 	/**
@@ -336,7 +368,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -355,7 +387,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -409,7 +441,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 * @param      NagiosCgiConfiguration $value A NagiosCgiConfiguration object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosCgiConfiguration $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -477,6 +509,14 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_cgi_configuration
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -489,12 +529,26 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -507,18 +561,16 @@ abstract class BaseNagiosCgiConfigurationPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosCgiConfigurationPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosCgiConfigurationPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosCgiConfigurationPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosCgiConfigurationPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -528,6 +580,32 @@ abstract class BaseNagiosCgiConfigurationPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosCgiConfiguration object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosCgiConfigurationPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosCgiConfigurationPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosCgiConfigurationPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosCgiConfigurationPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosCgiConfigurationPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -541,21 +619,35 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosCgiConfigurationPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosCgiConfigurationPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosCgiConfigurationPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosCgiConfigurationTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosCgiConfiguration or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosCgiConfigurationPeer::CLASS_DEFAULT : NagiosCgiConfigurationPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosCgiConfiguration or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosCgiConfiguration object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -598,7 +690,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosCgiConfiguration or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosCgiConfiguration or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosCgiConfiguration object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -618,7 +710,12 @@ abstract class BaseNagiosCgiConfigurationPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosCgiConfigurationPeer::ID);
-			$selectCriteria->add(NagiosCgiConfigurationPeer::ID, $criteria->remove(NagiosCgiConfigurationPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosCgiConfigurationPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosCgiConfigurationPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosCgiConfigurationPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosCgiConfiguration object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -632,11 +729,12 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_cgi_configuration table.
+	 * Deletes all rows from the nagios_cgi_configuration table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosCgiConfigurationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -646,7 +744,12 @@ abstract class BaseNagiosCgiConfigurationPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosCgiConfigurationPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosCgiConfigurationPeer::TABLE_NAME, $con, NagiosCgiConfigurationPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosCgiConfigurationPeer::clearInstancePool();
+			NagiosCgiConfigurationPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -656,7 +759,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosCgiConfiguration or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosCgiConfiguration or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosCgiConfiguration object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -677,24 +780,18 @@ abstract class BaseNagiosCgiConfigurationPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosCgiConfigurationPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosCgiConfiguration) {
+		} elseif ($values instanceof NagiosCgiConfiguration) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosCgiConfigurationPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosCgiConfigurationPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosCgiConfigurationPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -710,7 +807,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosCgiConfigurationPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -731,7 +828,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosCgiConfiguration $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -809,14 +906,7 @@ abstract class BaseNagiosCgiConfigurationPeer {
 
 } // BaseNagiosCgiConfigurationPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosCgiConfigurationPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosCgiConfigurationPeer class:
-//
-// Propel::getDatabaseMap(NagiosCgiConfigurationPeer::DATABASE_NAME)->addTableBuilder(NagiosCgiConfigurationPeer::TABLE_NAME, NagiosCgiConfigurationPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosCgiConfigurationPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosCgiConfigurationPeer::TABLE_NAME, BaseNagiosCgiConfigurationPeer::getMapBuilder());
+BaseNagiosCgiConfigurationPeer::buildTableMap();
 

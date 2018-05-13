@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_escalation' table.
  *
  * Nagios Escalation
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
+abstract class BaseNagiosEscalation extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosEscalationPeer';
 
 	/**
 	 * The Peer class.
@@ -162,19 +168,9 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	protected $collNagiosEscalationContacts;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosEscalationContacts.
-	 */
-	private $lastNagiosEscalationContactCriteria = null;
-
-	/**
 	 * @var        array NagiosEscalationContactgroup[] Collection to store aggregation of NagiosEscalationContactgroup objects.
 	 */
 	protected $collNagiosEscalationContactgroups;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosEscalationContactgroups.
-	 */
-	private $lastNagiosEscalationContactgroupCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -189,26 +185,6 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosEscalation object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -635,15 +611,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationPeriod()
 
 	/**
-	 * Set the value of [escalation_options_up] column.
+	 * Sets the value of the [escalation_options_up] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsUp($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_up !== $v) {
@@ -655,15 +639,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsUp()
 
 	/**
-	 * Set the value of [escalation_options_down] column.
+	 * Sets the value of the [escalation_options_down] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsDown($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_down !== $v) {
@@ -675,15 +667,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsDown()
 
 	/**
-	 * Set the value of [escalation_options_unreachable] column.
+	 * Sets the value of the [escalation_options_unreachable] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsUnreachable($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_unreachable !== $v) {
@@ -695,15 +695,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsUnreachable()
 
 	/**
-	 * Set the value of [escalation_options_ok] column.
+	 * Sets the value of the [escalation_options_ok] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsOk($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_ok !== $v) {
@@ -715,15 +723,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsOk()
 
 	/**
-	 * Set the value of [escalation_options_warning] column.
+	 * Sets the value of the [escalation_options_warning] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsWarning($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_warning !== $v) {
@@ -735,15 +751,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsWarning()
 
 	/**
-	 * Set the value of [escalation_options_unknown] column.
+	 * Sets the value of the [escalation_options_unknown] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsUnknown($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_unknown !== $v) {
@@ -755,15 +779,23 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	} // setEscalationOptionsUnknown()
 
 	/**
-	 * Set the value of [escalation_options_critical] column.
+	 * Sets the value of the [escalation_options_critical] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosEscalation The current object (for fluent API support)
 	 */
 	public function setEscalationOptionsCritical($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->escalation_options_critical !== $v) {
@@ -784,11 +816,6 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -837,8 +864,7 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 18; // 18 = NagiosEscalationPeer::NUM_COLUMNS - NagiosEscalationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 18; // 18 = NagiosEscalationPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosEscalation object", $e);
@@ -925,10 +951,8 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 			$this->aNagiosHostgroup = null;
 			$this->aNagiosTimeperiod = null;
 			$this->collNagiosEscalationContacts = null;
-			$this->lastNagiosEscalationContactCriteria = null;
 
 			$this->collNagiosEscalationContactgroups = null;
-			$this->lastNagiosEscalationContactgroupCriteria = null;
 
 		} // if (deep)
 	}
@@ -951,12 +975,20 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosEscalationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosEscalationPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosEscalationQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -985,12 +1017,29 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosEscalationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosEscalationPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosEscalationPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -1069,13 +1118,14 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosEscalationPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosEscalationPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosEscalationPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows += 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
 					$affectedRows += NagiosEscalationPeer::doUpdate($this, $con);
@@ -1328,13 +1378,21 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosEscalation'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosEscalation'][$this->getPrimaryKey()] = true;
 		$keys = NagiosEscalationPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1356,6 +1414,32 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 			$keys[16] => $this->getEscalationOptionsUnknown(),
 			$keys[17] => $this->getEscalationOptionsCritical(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->aNagiosHostTemplate) {
+				$result['NagiosHostTemplate'] = $this->aNagiosHostTemplate->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosHost) {
+				$result['NagiosHost'] = $this->aNagiosHost->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosServiceTemplate) {
+				$result['NagiosServiceTemplate'] = $this->aNagiosServiceTemplate->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosService) {
+				$result['NagiosService'] = $this->aNagiosService->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosHostgroup) {
+				$result['NagiosHostgroup'] = $this->aNagiosHostgroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosTimeperiod) {
+				$result['NagiosTimeperiod'] = $this->aNagiosTimeperiod->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collNagiosEscalationContacts) {
+				$result['NagiosEscalationContacts'] = $this->collNagiosEscalationContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosEscalationContactgroups) {
+				$result['NagiosEscalationContactgroups'] = $this->collNagiosEscalationContactgroups->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -1526,7 +1610,6 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosEscalationPeer::ID, $this->id);
 
 		return $criteria;
@@ -1553,6 +1636,15 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -1560,45 +1652,28 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 *
 	 * @param      object $copyObj An object of NagiosEscalation (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setDescription($this->description);
-
-		$copyObj->setHostTemplate($this->host_template);
-
-		$copyObj->setHost($this->host);
-
-		$copyObj->setHostgroup($this->hostgroup);
-
-		$copyObj->setServiceTemplate($this->service_template);
-
-		$copyObj->setService($this->service);
-
-		$copyObj->setFirstNotification($this->first_notification);
-
-		$copyObj->setLastNotification($this->last_notification);
-
-		$copyObj->setNotificationInterval($this->notification_interval);
-
-		$copyObj->setEscalationPeriod($this->escalation_period);
-
-		$copyObj->setEscalationOptionsUp($this->escalation_options_up);
-
-		$copyObj->setEscalationOptionsDown($this->escalation_options_down);
-
-		$copyObj->setEscalationOptionsUnreachable($this->escalation_options_unreachable);
-
-		$copyObj->setEscalationOptionsOk($this->escalation_options_ok);
-
-		$copyObj->setEscalationOptionsWarning($this->escalation_options_warning);
-
-		$copyObj->setEscalationOptionsUnknown($this->escalation_options_unknown);
-
-		$copyObj->setEscalationOptionsCritical($this->escalation_options_critical);
-
+		$copyObj->setDescription($this->getDescription());
+		$copyObj->setHostTemplate($this->getHostTemplate());
+		$copyObj->setHost($this->getHost());
+		$copyObj->setHostgroup($this->getHostgroup());
+		$copyObj->setServiceTemplate($this->getServiceTemplate());
+		$copyObj->setService($this->getService());
+		$copyObj->setFirstNotification($this->getFirstNotification());
+		$copyObj->setLastNotification($this->getLastNotification());
+		$copyObj->setNotificationInterval($this->getNotificationInterval());
+		$copyObj->setEscalationPeriod($this->getEscalationPeriod());
+		$copyObj->setEscalationOptionsUp($this->getEscalationOptionsUp());
+		$copyObj->setEscalationOptionsDown($this->getEscalationOptionsDown());
+		$copyObj->setEscalationOptionsUnreachable($this->getEscalationOptionsUnreachable());
+		$copyObj->setEscalationOptionsOk($this->getEscalationOptionsOk());
+		$copyObj->setEscalationOptionsWarning($this->getEscalationOptionsWarning());
+		$copyObj->setEscalationOptionsUnknown($this->getEscalationOptionsUnknown());
+		$copyObj->setEscalationOptionsCritical($this->getEscalationOptionsCritical());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1619,11 +1694,10 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1701,15 +1775,13 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosHostTemplate(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHostTemplate === null && ($this->host_template !== null)) {
-			$c = new Criteria(NagiosHostTemplatePeer::DATABASE_NAME);
-			$c->add(NagiosHostTemplatePeer::ID, $this->host_template);
-			$this->aNagiosHostTemplate = NagiosHostTemplatePeer::doSelectOne($c, $con);
+			$this->aNagiosHostTemplate = NagiosHostTemplateQuery::create()->findPk($this->host_template, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHostTemplate->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHostTemplate->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosHostTemplate;
@@ -1752,15 +1824,13 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosHost(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHost === null && ($this->host !== null)) {
-			$c = new Criteria(NagiosHostPeer::DATABASE_NAME);
-			$c->add(NagiosHostPeer::ID, $this->host);
-			$this->aNagiosHost = NagiosHostPeer::doSelectOne($c, $con);
+			$this->aNagiosHost = NagiosHostQuery::create()->findPk($this->host, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHost->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHost->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosHost;
@@ -1803,15 +1873,13 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosServiceTemplate(PropelPDO $con = null)
 	{
 		if ($this->aNagiosServiceTemplate === null && ($this->service_template !== null)) {
-			$c = new Criteria(NagiosServiceTemplatePeer::DATABASE_NAME);
-			$c->add(NagiosServiceTemplatePeer::ID, $this->service_template);
-			$this->aNagiosServiceTemplate = NagiosServiceTemplatePeer::doSelectOne($c, $con);
+			$this->aNagiosServiceTemplate = NagiosServiceTemplateQuery::create()->findPk($this->service_template, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosServiceTemplate->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosServiceTemplate->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosServiceTemplate;
@@ -1854,15 +1922,13 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosService(PropelPDO $con = null)
 	{
 		if ($this->aNagiosService === null && ($this->service !== null)) {
-			$c = new Criteria(NagiosServicePeer::DATABASE_NAME);
-			$c->add(NagiosServicePeer::ID, $this->service);
-			$this->aNagiosService = NagiosServicePeer::doSelectOne($c, $con);
+			$this->aNagiosService = NagiosServiceQuery::create()->findPk($this->service, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosService->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosService->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosService;
@@ -1905,15 +1971,13 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosHostgroup(PropelPDO $con = null)
 	{
 		if ($this->aNagiosHostgroup === null && ($this->hostgroup !== null)) {
-			$c = new Criteria(NagiosHostgroupPeer::DATABASE_NAME);
-			$c->add(NagiosHostgroupPeer::ID, $this->hostgroup);
-			$this->aNagiosHostgroup = NagiosHostgroupPeer::doSelectOne($c, $con);
+			$this->aNagiosHostgroup = NagiosHostgroupQuery::create()->findPk($this->hostgroup, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosHostgroup->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosHostgroup->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosHostgroup;
@@ -1956,22 +2020,39 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	public function getNagiosTimeperiod(PropelPDO $con = null)
 	{
 		if ($this->aNagiosTimeperiod === null && ($this->escalation_period !== null)) {
-			$c = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-			$c->add(NagiosTimeperiodPeer::ID, $this->escalation_period);
-			$this->aNagiosTimeperiod = NagiosTimeperiodPeer::doSelectOne($c, $con);
+			$this->aNagiosTimeperiod = NagiosTimeperiodQuery::create()->findPk($this->escalation_period, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosTimeperiod->addNagiosEscalations($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosTimeperiod->addNagiosEscalations($this);
 			 */
 		}
 		return $this->aNagiosTimeperiod;
 	}
 
+
 	/**
-	 * Clears out the collNagiosEscalationContacts collection (array).
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name 
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('NagiosEscalationContact' == $relationName) {
+			return $this->initNagiosEscalationContacts();
+		}
+		if ('NagiosEscalationContactgroup' == $relationName) {
+			return $this->initNagiosEscalationContactgroups();
+		}
+	}
+
+	/**
+	 * Clears out the collNagiosEscalationContacts collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -1985,69 +2066,56 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosEscalationContacts collection (array).
+	 * Initializes the collNagiosEscalationContacts collection.
 	 *
 	 * By default this just sets the collNagiosEscalationContacts collection to an empty array (like clearcollNagiosEscalationContacts());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosEscalationContacts()
+	public function initNagiosEscalationContacts($overrideExisting = true)
 	{
-		$this->collNagiosEscalationContacts = array();
+		if (null !== $this->collNagiosEscalationContacts && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosEscalationContacts = new PropelObjectCollection();
+		$this->collNagiosEscalationContacts->setModel('NagiosEscalationContact');
 	}
 
 	/**
 	 * Gets an array of NagiosEscalationContact objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosEscalation has previously been saved, it will retrieve
-	 * related NagiosEscalationContacts from storage. If this NagiosEscalation is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosEscalation is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosEscalationContact[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosEscalationContact[] List of NagiosEscalationContact objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosEscalationContacts($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosEscalationContacts = array();
+		if(null === $this->collNagiosEscalationContacts || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContacts) {
+				// return empty collection
+				$this->initNagiosEscalationContacts();
 			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-				NagiosEscalationContactPeer::addSelectColumns($criteria);
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-				NagiosEscalationContactPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-					$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelect($criteria, $con);
+				$collNagiosEscalationContacts = NagiosEscalationContactQuery::create(null, $criteria)
+					->filterByNagiosEscalation($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosEscalationContacts;
 				}
+				$this->collNagiosEscalationContacts = $collNagiosEscalationContacts;
 			}
 		}
-		$this->lastNagiosEscalationContactCriteria = $criteria;
 		return $this->collNagiosEscalationContacts;
 	}
 
@@ -2062,47 +2130,21 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosEscalationContacts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosEscalationContacts || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContacts) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-				$count = NagiosEscalationContactPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-				if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-					$count = NagiosEscalationContactPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosEscalationContacts);
+				$query = NagiosEscalationContactQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosEscalationContacts);
+				return $query
+					->filterByNagiosEscalation($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosEscalationContacts);
 		}
-		return $count;
 	}
 
 	/**
@@ -2118,8 +2160,8 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 		if ($this->collNagiosEscalationContacts === null) {
 			$this->initNagiosEscalationContacts();
 		}
-		if (!in_array($l, $this->collNagiosEscalationContacts, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosEscalationContacts, $l);
+		if (!$this->collNagiosEscalationContacts->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosEscalationContacts[]= $l;
 			$l->setNagiosEscalation($this);
 		}
 	}
@@ -2135,44 +2177,22 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosEscalation.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalationContact[] List of NagiosEscalationContact objects
 	 */
 	public function getNagiosEscalationContactsJoinNagiosContact($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationContactQuery::create(null, $criteria);
+		$query->joinWith('NagiosContact', $join_behavior);
 
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalationContacts = array();
-			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelectJoinNagiosContact($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationContactPeer::ESCALATION, $this->id);
-
-			if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelectJoinNagiosContact($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationContactCriteria = $criteria;
-
-		return $this->collNagiosEscalationContacts;
+		return $this->getNagiosEscalationContacts($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosEscalationContactgroups collection (array).
+	 * Clears out the collNagiosEscalationContactgroups collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2186,69 +2206,56 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosEscalationContactgroups collection (array).
+	 * Initializes the collNagiosEscalationContactgroups collection.
 	 *
 	 * By default this just sets the collNagiosEscalationContactgroups collection to an empty array (like clearcollNagiosEscalationContactgroups());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosEscalationContactgroups()
+	public function initNagiosEscalationContactgroups($overrideExisting = true)
 	{
-		$this->collNagiosEscalationContactgroups = array();
+		if (null !== $this->collNagiosEscalationContactgroups && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosEscalationContactgroups = new PropelObjectCollection();
+		$this->collNagiosEscalationContactgroups->setModel('NagiosEscalationContactgroup');
 	}
 
 	/**
 	 * Gets an array of NagiosEscalationContactgroup objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosEscalation has previously been saved, it will retrieve
-	 * related NagiosEscalationContactgroups from storage. If this NagiosEscalation is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosEscalation is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosEscalationContactgroup[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosEscalationContactgroup[] List of NagiosEscalationContactgroup objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosEscalationContactgroups($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosEscalationContactgroups = array();
+		if(null === $this->collNagiosEscalationContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContactgroups) {
+				// return empty collection
+				$this->initNagiosEscalationContactgroups();
 			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-				NagiosEscalationContactgroupPeer::addSelectColumns($criteria);
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-				NagiosEscalationContactgroupPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-					$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelect($criteria, $con);
+				$collNagiosEscalationContactgroups = NagiosEscalationContactgroupQuery::create(null, $criteria)
+					->filterByNagiosEscalation($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosEscalationContactgroups;
 				}
+				$this->collNagiosEscalationContactgroups = $collNagiosEscalationContactgroups;
 			}
 		}
-		$this->lastNagiosEscalationContactgroupCriteria = $criteria;
 		return $this->collNagiosEscalationContactgroups;
 	}
 
@@ -2263,47 +2270,21 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosEscalationContactgroups(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosEscalationContactgroups || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContactgroups) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-				$count = NagiosEscalationContactgroupPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-				if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-					$count = NagiosEscalationContactgroupPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosEscalationContactgroups);
+				$query = NagiosEscalationContactgroupQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosEscalationContactgroups);
+				return $query
+					->filterByNagiosEscalation($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosEscalationContactgroups);
 		}
-		return $count;
 	}
 
 	/**
@@ -2319,8 +2300,8 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 		if ($this->collNagiosEscalationContactgroups === null) {
 			$this->initNagiosEscalationContactgroups();
 		}
-		if (!in_array($l, $this->collNagiosEscalationContactgroups, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosEscalationContactgroups, $l);
+		if (!$this->collNagiosEscalationContactgroups->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosEscalationContactgroups[]= $l;
 			$l->setNagiosEscalation($this);
 		}
 	}
@@ -2336,74 +2317,118 @@ abstract class BaseNagiosEscalation extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosEscalation.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalationContactgroup[] List of NagiosEscalationContactgroup objects
 	 */
 	public function getNagiosEscalationContactgroupsJoinNagiosContactGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosEscalationPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationContactgroupQuery::create(null, $criteria);
+		$query->joinWith('NagiosContactGroup', $join_behavior);
 
-		if ($this->collNagiosEscalationContactgroups === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalationContactgroups = array();
-			} else {
-
-				$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelectJoinNagiosContactGroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationContactgroupPeer::ESCALATION, $this->id);
-
-			if (!isset($this->lastNagiosEscalationContactgroupCriteria) || !$this->lastNagiosEscalationContactgroupCriteria->equals($criteria)) {
-				$this->collNagiosEscalationContactgroups = NagiosEscalationContactgroupPeer::doSelectJoinNagiosContactGroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationContactgroupCriteria = $criteria;
-
-		return $this->collNagiosEscalationContactgroups;
+		return $this->getNagiosEscalationContactgroups($query, $con);
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->description = null;
+		$this->host_template = null;
+		$this->host = null;
+		$this->hostgroup = null;
+		$this->service_template = null;
+		$this->service = null;
+		$this->first_notification = null;
+		$this->last_notification = null;
+		$this->notification_interval = null;
+		$this->escalation_period = null;
+		$this->escalation_options_up = null;
+		$this->escalation_options_down = null;
+		$this->escalation_options_unreachable = null;
+		$this->escalation_options_ok = null;
+		$this->escalation_options_warning = null;
+		$this->escalation_options_unknown = null;
+		$this->escalation_options_critical = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collNagiosEscalationContacts) {
-				foreach ((array) $this->collNagiosEscalationContacts as $o) {
+				foreach ($this->collNagiosEscalationContacts as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosEscalationContactgroups) {
-				foreach ((array) $this->collNagiosEscalationContactgroups as $o) {
+				foreach ($this->collNagiosEscalationContactgroups as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collNagiosEscalationContacts instanceof PropelCollection) {
+			$this->collNagiosEscalationContacts->clearIterator();
+		}
 		$this->collNagiosEscalationContacts = null;
+		if ($this->collNagiosEscalationContactgroups instanceof PropelCollection) {
+			$this->collNagiosEscalationContactgroups->clearIterator();
+		}
 		$this->collNagiosEscalationContactgroups = null;
-			$this->aNagiosHostTemplate = null;
-			$this->aNagiosHost = null;
-			$this->aNagiosServiceTemplate = null;
-			$this->aNagiosService = null;
-			$this->aNagiosHostgroup = null;
-			$this->aNagiosTimeperiod = null;
+		$this->aNagiosHostTemplate = null;
+		$this->aNagiosHost = null;
+		$this->aNagiosServiceTemplate = null;
+		$this->aNagiosService = null;
+		$this->aNagiosHostgroup = null;
+		$this->aNagiosTimeperiod = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosEscalationPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosEscalation

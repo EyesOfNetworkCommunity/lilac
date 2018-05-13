@@ -1,5 +1,29 @@
 <?php
 
+/*
+ Lilac - A Nagios Configuration Tool
+Copyright (C) 2013 Rene Hadler
+Copyright (C) 2007 Taylor Dondich
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+/*
+ Lilac Auto Discovery Classes
+*/
+
 abstract class AutoDiscoverer {
 	private $engine;
 	
@@ -149,10 +173,14 @@ final class AutodiscoveryMatchMaker {
 		$templates = NagiosHostTemplatePeer::doSelect(new Criteria());
 		$templateMatches = array();
 		foreach($templates as $template) {
+			$serviceFilters = array();
 			$templateValues = $template->getValues();			
 			$complexity = 0;
 			$match = 0;
-			$serviceFilters = $template->getNagiosHostTemplateAutodiscoveryServices();
+			$serviceFilterObjects = $template->getNagiosHostTemplateAutodiscoveryServices();
+			foreach($serviceFilterObjects as $serviceFilterObject)
+				$serviceFilters[] = $serviceFilterObject;
+			
 			$inheritedServiceFilters = $template->getInheritedNagiosAutodiscoveryServiceFilters();
 			$serviceFilters = array_merge($serviceFilters, $inheritedServiceFilters);
 			
@@ -186,10 +214,13 @@ final class AutodiscoveryMatchMaker {
 					$match++;
 				}
 			}
+			
 			// Checked bases, let's now check service filters
 			$complexity += count($serviceFilters);
 			foreach($serviceFilters as $filter) {
+			
 				foreach($device->getAutodiscoveryDeviceServices() as $service) {
+					
 					if($filter->getPort() == $service->getPort() && $filter->getProtocol() == $service->getProtocol()) {
 						// Okay, we're ALMOST found...let's see if we have any other additional filters.
 						$tempMatch = true;					

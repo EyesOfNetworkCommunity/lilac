@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_service_template_inheritance' table.
  *
  * Nagios service Template Inheritance
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosServiceTemplateInheritancePeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_service_template_inheritance';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosServiceTemplateInheritance';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosServiceTemplateInheritance';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosServiceTemplateInheritanceTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 5;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 5;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_service_template_inheritance.ID';
@@ -39,6 +49,9 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/** the column name for the ORDER field */
 	const ORDER = 'nagios_service_template_inheritance.ORDER';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosServiceTemplateInheritance objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -47,11 +60,6 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -59,10 +67,11 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'SourceService', 'SourceTemplate', 'TargetTemplate', 'Order', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'sourceService', 'sourceTemplate', 'targetTemplate', 'order', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::SOURCE_SERVICE, self::SOURCE_TEMPLATE, self::TARGET_TEMPLATE, self::ORDER, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SOURCE_SERVICE', 'SOURCE_TEMPLATE', 'TARGET_TEMPLATE', 'ORDER', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'source_service', 'source_template', 'target_template', 'order', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
@@ -73,25 +82,15 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'SourceService' => 1, 'SourceTemplate' => 2, 'TargetTemplate' => 3, 'Order' => 4, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'sourceService' => 1, 'sourceTemplate' => 2, 'targetTemplate' => 3, 'order' => 4, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::SOURCE_SERVICE => 1, self::SOURCE_TEMPLATE => 2, self::TARGET_TEMPLATE => 3, self::ORDER => 4, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SOURCE_SERVICE' => 1, 'SOURCE_TEMPLATE' => 2, 'TARGET_TEMPLATE' => 3, 'ORDER' => 4, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'source_service' => 1, 'source_template' => 2, 'target_template' => 3, 'order' => 4, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosServiceTemplateInheritanceMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -153,23 +152,26 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::ID);
-
-		$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE);
-
-		$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE);
-
-		$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE);
-
-		$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::ORDER);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::ID);
+			$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE);
+			$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE);
+			$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE);
+			$criteria->addSelectColumn(NagiosServiceTemplateInheritancePeer::ORDER);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.SOURCE_SERVICE');
+			$criteria->addSelectColumn($alias . '.SOURCE_TEMPLATE');
+			$criteria->addSelectColumn($alias . '.TARGET_TEMPLATE');
+			$criteria->addSelectColumn($alias . '.ORDER');
+		}
 	}
 
 	/**
@@ -216,7 +218,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -235,7 +237,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -289,7 +291,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 * @param      NagiosServiceTemplateInheritance $value A NagiosServiceTemplateInheritance object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosServiceTemplateInheritance $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -357,6 +359,14 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_service_template_inheritance
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -369,12 +379,26 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -387,18 +411,16 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosServiceTemplateInheritancePeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -408,11 +430,37 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosServiceTemplateInheritance object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosServiceTemplateInheritancePeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosService table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -445,7 +493,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -461,7 +510,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosServiceTemplateRelatedBySourceTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -494,7 +543,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -510,7 +560,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosServiceTemplateRelatedByTargetTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -543,7 +593,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -558,41 +609,41 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with their NagiosService objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosService(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosServicePeer::addSelectColumns($c);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
+		NagiosServicePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -603,9 +654,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj2 = NagiosServicePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosServicePeer::getOMClass();
+					$cls = NagiosServicePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosServicePeer::addInstanceToPool($obj2, $key2);
@@ -625,41 +675,41 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with their NagiosServiceTemplate objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosServiceTemplateRelatedBySourceTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosServiceTemplateRelatedBySourceTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosServiceTemplatePeer::addSelectColumns($c);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -670,9 +720,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj2 = NagiosServiceTemplatePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosServiceTemplatePeer::getOMClass();
+					$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -692,41 +741,41 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with their NagiosServiceTemplate objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosServiceTemplateRelatedByTargetTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosServiceTemplateRelatedByTargetTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosServiceTemplatePeer::addSelectColumns($c);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -737,9 +786,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj2 = NagiosServiceTemplatePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosServiceTemplatePeer::getOMClass();
+					$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -760,7 +808,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -793,9 +841,12 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-		$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -810,50 +861,52 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol2 = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol2 = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServiceTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosServiceTemplatePeer::NUM_COLUMNS - NagiosServiceTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosServiceTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServiceTemplatePeer::addSelectColumns($c);
-		$startcol5 = $startcol4 + (NagiosServiceTemplatePeer::NUM_COLUMNS - NagiosServiceTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + NagiosServiceTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-		$c->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -866,10 +919,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj2 = NagiosServicePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosServicePeer::getOMClass();
+					$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosServicePeer::addInstanceToPool($obj2, $key2);
@@ -886,10 +937,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj3 = NagiosServiceTemplatePeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$omClass = NagiosServiceTemplatePeer::getOMClass();
+					$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -906,10 +955,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 				$obj4 = NagiosServiceTemplatePeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$omClass = NagiosServiceTemplatePeer::getOMClass();
+					$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj4, $key4);
@@ -929,7 +976,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosService table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -962,8 +1009,10 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-				$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -979,7 +1028,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosServiceTemplateRelatedBySourceTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1012,7 +1061,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1028,7 +1078,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosServiceTemplateRelatedByTargetTemplate table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1061,7 +1111,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-				$criteria->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -1077,49 +1128,50 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with all related objects except NagiosService.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosService(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosService(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol2 = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol2 = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServiceTemplatePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosServiceTemplatePeer::NUM_COLUMNS - NagiosServiceTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosServiceTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServiceTemplatePeer::addSelectColumns($c);
-		$startcol4 = $startcol3 + (NagiosServiceTemplatePeer::NUM_COLUMNS - NagiosServiceTemplatePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplatePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + NagiosServiceTemplatePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
-				$c->addJoin(array(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE,), array(NagiosServiceTemplatePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::TARGET_TEMPLATE, NagiosServiceTemplatePeer::ID, $join_behavior);
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -1132,10 +1184,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 					$obj2 = NagiosServiceTemplatePeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosServiceTemplatePeer::getOMClass();
+						$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj2, $key2);
@@ -1153,10 +1203,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 					$obj3 = NagiosServiceTemplatePeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$omClass = NagiosServiceTemplatePeer::getOMClass();
+						$cls = NagiosServiceTemplatePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
 					NagiosServiceTemplatePeer::addInstanceToPool($obj3, $key3);
@@ -1177,45 +1225,45 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with all related objects except NagiosServiceTemplateRelatedBySourceTemplate.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosServiceTemplateRelatedBySourceTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosServiceTemplateRelatedBySourceTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol2 = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol2 = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -1228,10 +1276,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 					$obj2 = NagiosServicePeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosServicePeer::getOMClass();
+						$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosServicePeer::addInstanceToPool($obj2, $key2);
@@ -1252,45 +1298,45 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	/**
 	 * Selects a collection of NagiosServiceTemplateInheritance objects pre-filled with all related objects except NagiosServiceTemplateRelatedByTargetTemplate.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosServiceTemplateInheritance objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptNagiosServiceTemplateRelatedByTargetTemplate(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptNagiosServiceTemplateRelatedByTargetTemplate(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		// $c->getDbName() will return the same object if not set to another value
+		// $criteria->getDbName() will return the same object if not set to another value
 		// so == check is okay and faster
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosServiceTemplateInheritancePeer::addSelectColumns($c);
-		$startcol2 = (NagiosServiceTemplateInheritancePeer::NUM_COLUMNS - NagiosServiceTemplateInheritancePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServiceTemplateInheritancePeer::addSelectColumns($criteria);
+		$startcol2 = NagiosServiceTemplateInheritancePeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosServicePeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosServicePeer::NUM_COLUMNS - NagiosServicePeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosServicePeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosServicePeer::NUM_HYDRATE_COLUMNS;
 
-				$c->addJoin(array(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE,), array(NagiosServicePeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, NagiosServicePeer::ID, $join_behavior);
 
-		$stmt = BasePeer::doSelect($c, $con);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosServiceTemplateInheritancePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosServiceTemplateInheritancePeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosServiceTemplateInheritancePeer::getOMClass();
+				$cls = NagiosServiceTemplateInheritancePeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosServiceTemplateInheritancePeer::addInstanceToPool($obj1, $key1);
@@ -1303,10 +1349,8 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 					$obj2 = NagiosServicePeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$omClass = NagiosServicePeer::getOMClass();
+						$cls = NagiosServicePeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosServicePeer::addInstanceToPool($obj2, $key2);
@@ -1336,21 +1380,35 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosServiceTemplateInheritancePeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosServiceTemplateInheritancePeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosServiceTemplateInheritancePeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosServiceTemplateInheritanceTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosServiceTemplateInheritance or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosServiceTemplateInheritancePeer::CLASS_DEFAULT : NagiosServiceTemplateInheritancePeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosServiceTemplateInheritance or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosServiceTemplateInheritance object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1393,7 +1451,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosServiceTemplateInheritance or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosServiceTemplateInheritance or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosServiceTemplateInheritance object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1413,7 +1471,12 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosServiceTemplateInheritancePeer::ID);
-			$selectCriteria->add(NagiosServiceTemplateInheritancePeer::ID, $criteria->remove(NagiosServiceTemplateInheritancePeer::ID), $comparison);
+			$value = $criteria->remove(NagiosServiceTemplateInheritancePeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosServiceTemplateInheritancePeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosServiceTemplateInheritancePeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosServiceTemplateInheritance object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -1427,11 +1490,12 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_service_template_inheritance table.
+	 * Deletes all rows from the nagios_service_template_inheritance table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosServiceTemplateInheritancePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1441,7 +1505,12 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosServiceTemplateInheritancePeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosServiceTemplateInheritancePeer::TABLE_NAME, $con, NagiosServiceTemplateInheritancePeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosServiceTemplateInheritancePeer::clearInstancePool();
+			NagiosServiceTemplateInheritancePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1451,7 +1520,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosServiceTemplateInheritance or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosServiceTemplateInheritance or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosServiceTemplateInheritance object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1472,24 +1541,18 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosServiceTemplateInheritancePeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosServiceTemplateInheritance) {
+		} elseif ($values instanceof NagiosServiceTemplateInheritance) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosServiceTemplateInheritancePeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosServiceTemplateInheritancePeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosServiceTemplateInheritancePeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -1505,7 +1568,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosServiceTemplateInheritancePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1526,7 +1589,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosServiceTemplateInheritance $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -1604,14 +1667,7 @@ abstract class BaseNagiosServiceTemplateInheritancePeer {
 
 } // BaseNagiosServiceTemplateInheritancePeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosServiceTemplateInheritancePeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosServiceTemplateInheritancePeer class:
-//
-// Propel::getDatabaseMap(NagiosServiceTemplateInheritancePeer::DATABASE_NAME)->addTableBuilder(NagiosServiceTemplateInheritancePeer::TABLE_NAME, NagiosServiceTemplateInheritancePeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosServiceTemplateInheritancePeer::DATABASE_NAME)->addTableBuilder(BaseNagiosServiceTemplateInheritancePeer::TABLE_NAME, BaseNagiosServiceTemplateInheritancePeer::getMapBuilder());
+BaseNagiosServiceTemplateInheritancePeer::buildTableMap();
 

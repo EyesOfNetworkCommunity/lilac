@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosHostTemplateInheritance.php';
 
 
 /**
@@ -12,10 +11,10 @@ require 'om/BaseNagiosHostTemplateInheritance.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
-
+	
 	/**
 	 * Initializes internal state of NagiosHostTemplateInheritance object.
 	 * @see        parent::__construct()
@@ -52,13 +51,20 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 		}
 		return false;
 	}
-
+	
     public function delete(PropelPDO $con = null) {
+
+		$templateInheritance = $this;
+        $JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->getInheritances($templateInheritance,"delete");
+		}
+
         parent::delete($con);
+
         // Check our service dependencies
         $targetTemplate = $this->getNagiosHostTemplateRelatedByTargetTemplate();
         $targetTemplate->integrityCheck(); 
-               
     }
 	
 	public function save(PropelPDO $con = null) {
@@ -66,7 +72,12 @@ class NagiosHostTemplateInheritance extends BaseNagiosHostTemplateInheritance {
 			throw new Exception("Adding that inheritance would create a circular chain.");
 		}
 		else {
-			parent::save($con);	// Okay, we've saved
+			$templateInheritance = $this;
+			$JobExport=new EoN_Job_Exporter();
+			if($con == null || $con == ""){
+				$JobExport->getInheritances($templateInheritance,"add");
+			}
+			return parent::save($con);	// Okay, we've saved
 		}
 	}
 

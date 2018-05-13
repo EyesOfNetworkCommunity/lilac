@@ -1,94 +1,99 @@
 <?php
 
-/*
-*  $Id: DBMSSQL.php 1111 2009-07-20 17:00:25Z KRavEN $
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-* OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-* THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-* This software consists of voluntary contributions made by many individuals
-* and is licensed under the LGPL. For more information please see
-* <http://propel.phpdb.org>.
-*/
+/**
+ * This file is part of the Propel package.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @license    MIT License
+ */
 
 /**
  * This is used to connect to a MSSQL database.
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
- * @version    $Revision: 1111 $
- * @package    propel.adapter
+ * @version    $Revision: 2295 $
+ * @package    propel.runtime.adapter
  */
-class DBMSSQL extends DBAdapter {
-
+class DBMSSQL extends DBAdapter
+{
 	/**
-	 * This method is used to ignore case.
+	 * MS SQL Server does not support SET NAMES
 	 *
-	 * @param      in The string to transform to upper case.
-	 * @return     The upper case string.
+	 * @see       DBAdapter::setCharset()
+	 *
+	 * @param     PDO     $con
+	 * @param     string  $charset
 	 */
-	public function toUpperCase($in)
+	public function setCharset(PDO $con, $charset)
 	{
-		return "UPPER(" . $in . ")";
 	}
 
 	/**
 	 * This method is used to ignore case.
 	 *
-	 * @param      in The string whose case to ignore.
-	 * @return     The string in a case that can be ignored.
+	 * @param     string $in The string to transform to upper case.
+	 * @return    string The upper case string.
+	 */
+	public function toUpperCase($in)
+	{
+		return $this->ignoreCase($in);
+	}
+
+	/**
+	 * This method is used to ignore case.
+	 *
+	 * @param     string $in The string whose case to ignore.
+	 * @return    string The string in a case that can be ignored.
 	 */
 	public function ignoreCase($in)
 	{
-		return "UPPER(" . $in . ")";
+		return 'UPPER(' . $in . ')';
 	}
 
 	/**
 	 * Returns SQL which concatenates the second string to the first.
 	 *
-	 * @param      string String to concatenate.
-	 * @param      string String to append.
-	 * @return     string
+	 * @param     string  $s1  String to concatenate.
+	 * @param     string  $s2  String to append.
+	 *
+	 * @return    string
 	 */
 	public function concatString($s1, $s2)
 	{
-		return "($s1 + $s2)";
+		return '(' . $s1 . ' + ' . $s2 . ')';
 	}
 
 	/**
 	 * Returns SQL which extracts a substring.
 	 *
-	 * @param      string String to extract from.
-	 * @param      int Offset to start from.
-	 * @param      int Number of characters to extract.
-	 * @return     string
+	 * @param     string   $s  String to extract from.
+	 * @param     integer  $pos  Offset to start from.
+	 * @param     integer  $len  Number of characters to extract.
+	 *
+	 * @return    string
 	 */
 	public function subString($s, $pos, $len)
 	{
-		return "SUBSTRING($s, $pos, $len)";
+		return 'SUBSTRING(' . $s . ', ' . $pos . ', ' . $len . ')';
 	}
 
 	/**
 	 * Returns SQL which calculates the length (in chars) of a string.
 	 *
-	 * @param      string String to calculate length of.
-	 * @return     string
+	 * @param     string  $s  String to calculate length of.
+	 * @return    string
 	 */
 	public function strLength($s)
 	{
-		return "LEN($s)";
+		return 'LEN(' . $s . ')';
 	}
 
 	/**
-	 * @see        DBAdapter::quoteIdentifier()
+	 * @see       DBAdapter::quoteIdentifier()
+	 *
+	 * @param     string  $text
+	 * @return    string
 	 */
 	public function quoteIdentifier($text)
 	{
@@ -96,99 +101,205 @@ class DBMSSQL extends DBAdapter {
 	}
 
 	/**
-	 * @see        DBAdapter::random()
+	 * @see       DBAdapter::quoteIdentifierTable()
+	 *
+	 * @param     string  $table
+	 * @return    string
+	 */
+	public function quoteIdentifierTable($table)
+	{
+		// e.g. 'database.table alias' should be escaped as '[database].[table] [alias]'
+		return '[' . strtr($table, array('.' => '].[', ' ' => '] [')) . ']';
+	}
+
+	/**
+	 * @see       DBAdapter::random()
+	 *
+	 * @param     string  $seed
+	 * @return    string
 	 */
 	public function random($seed = null)
 	{
-		return 'rand('.((int) $seed).')';
+		return 'RAND(' . ((int)$seed) . ')';
 	}
 
-  /**
-   * Simulated Limit/Offset
-   * This rewrites the $sql query to apply the offset and limit.
-   * @see        DBAdapter::applyLimit()
-   * @author     Justin Carlson <justin.carlson@gmail.com>
-   * @author     Benjamin Runnels <kraven@kraven.org>
-   */
-  public function applyLimit(&$sql, $offset, $limit)
-  {
-    // make sure offset and limit are numeric
-    if (!is_numeric($offset) || !is_numeric($limit))
-    {
-      throw new Exception("DBMSSQL::applyLimit() expects a number for argument 2 and 3");
-    }
+	/**
+	 * Simulated Limit/Offset
+	 *
+	 * This rewrites the $sql query to apply the offset and limit.
+	 * some of the ORDER BY logic borrowed from Doctrine MsSqlPlatform
+	 *
+	 * @see       DBAdapter::applyLimit()
+	 * @author    Benjamin Runnels <kraven@kraven.org>
+	 *
+	 * @param     string   $sql
+	 * @param     integer  $offset
+	 * @param     integer  $limit
+	 *
+	 * @return    void
+	 */
+	public function applyLimit(&$sql, $offset, $limit)
+	{
+		// make sure offset and limit are numeric
+		if(! is_numeric($offset) || ! is_numeric($limit))
+		{
+			throw new PropelException('DBMSSQL::applyLimit() expects a number for argument 2 and 3');
+		}
 
-    //split the select and from clauses out of the original query
-    $selectSegment = array();
-    preg_match('/\Aselect(.*)from(.*)/si',$sql,$selectSegment);
-    if (count($selectSegment)==3)
-    {      
-      $selectStatement = trim($selectSegment[1]);
-      $fromStatement = trim($selectSegment[2]);      
-    }
-    else
-    {
-      throw new Exception("DBMSSQL::applyLimit() could not locate the select statement at the start of the query. ");
-    }
+		//split the select and from clauses out of the original query
+		$selectSegment = array();
 
-    //handle the ORDER BY clause if present
-    $orderSegment = array();
-    preg_match('/order by(.*)\Z/si',$fromStatement,$orderSegment);
-    if (count($orderSegment)==2)
-    {
-      //remove the ORDER BY from $sql
-      $fromStatement = trim(str_replace($orderSegment[0], '', $fromStatement));
-      //the ORDER BY clause is used in our inner select ROW_NUMBER() clause
-      $countColumn = trim($orderSegment[1]);
-    }
+		$selectText = 'SELECT ';
 
-    //setup inner and outer select selects
-    $innerSelect = '';
-    $outerSelect = '';
-    foreach(explode(', ',$selectStatement) as $selCol) {
-      @list($column,,$alias) = explode(' ', $selCol);
-      //make sure the current column isn't * or an aggregate
-      if ($column!='*' && !strstr($column,'(')) {
-        //we can use the first non-aggregate column for ROW_NUMBER() if it wasn't already set from an order by clause
-        if(!isset($countColumn)) {
-          $countColumn = $column;
-        }
+		preg_match('/\Aselect(.*)from(.*)/si', $sql, $selectSegment);
+		if(count($selectSegment) == 3) {
+			$selectStatement = trim($selectSegment[1]);
+			$fromStatement = trim($selectSegment[2]);
+		} else {
+			throw new Exception('DBMSSQL::applyLimit() could not locate the select statement at the start of the query.');
+		}
 
-        //add an alias to the inner select so all columns will be unique
-        $innerSelect .= $column." AS [$column],";
-        
-        //use the alias in the outer select if one was present on the original select column
-        if(isset($alias)) {
-          $outerSelect .= "[$column] AS $alias,";
-        } else {
-          $outerSelect .= "[$column],";
-        }        
-      } else {
-        //agregate columns must always have an alias clause
-        if(!isset($alias)) {
-          throw new Exception("DBMSSQL::applyLimit() requires aggregate columns to have an Alias clause");
-        }
-        //use the whole aggregate column in the inner select
-        $innerSelect .= "$selCol,";
-        //only add the alias for the aggregate to the outer select
-        $outerSelect .= "$alias,";
-      }
-    }
+		if (preg_match('/\Aselect(\s+)distinct/i', $sql)) {
+			$selectText .= 'DISTINCT ';
+			$selectStatement = str_ireplace('distinct ', '', $selectStatement);
+		}
 
-    //check if we got this far and still don't have a viable column to user with ROW_NUMBER()
-    if(!isset($countColumn)) {
-      throw new Exception("DBMSSQL::applyLimit() requires an ORDER BY clause or at least one non-aggregate column in the select statement");
-    }
+		// if we're starting at offset 0 then theres no need to simulate limit,
+		// just grab the top $limit number of rows
+		if($offset == 0) {
+			$sql = $selectText . 'TOP ' . $limit . ' ' . $selectStatement . ' FROM ' . $fromStatement;
+			return;
+		}
 
-    //ROW_NUMBER() starts at 1 not 0
-    $from = ($offset+1);
-    $to = ($limit+$offset);
-       
-    //substring our select strings to get rid of the last comma and add our FROM and SELECT clauses
-    $innerSelect = "SELECT ROW_NUMBER() OVER(ORDER BY $countColumn) AS RowNumber, ".substr($innerSelect,0,-1).' FROM';
-    $outerSelect = 'SELECT '.substr($outerSelect,0,-1).' FROM';
+		//get the ORDER BY clause if present
+		$orderStatement = stristr($fromStatement, 'ORDER BY');
+		$orders = '';
 
-    // build the query
-    $sql = "$outerSelect ($innerSelect $fromStatement) AS derivedb WHERE RowNumber BETWEEN $from AND $to";
-  }
+		if($orderStatement !== false) {
+			//remove order statement from the from statement
+			$fromStatement = trim(str_replace($orderStatement, '', $fromStatement));
+
+			$order = str_ireplace('ORDER BY', '', $orderStatement);
+			$orders = explode(',', $order);
+
+			for($i = 0; $i < count($orders); $i ++) {
+				$orderArr[trim(preg_replace('/\s+(ASC|DESC)$/i', '', $orders[$i]))] = array(
+					'sort' => (stripos($orders[$i], ' DESC') !== false) ? 'DESC' : 'ASC',
+					'key' => $i
+				);
+			}
+		}
+
+		//setup inner and outer select selects
+		$innerSelect = '';
+		$outerSelect = '';
+		foreach(explode(', ', $selectStatement) as $selCol) {
+			$selColArr = explode(' ', $selCol);
+			$selColCount = count($selColArr) - 1;
+
+			//make sure the current column isn't * or an aggregate
+			if($selColArr[0] != '*' && ! strstr($selColArr[0], '(')) {
+				if(isset($orderArr[$selColArr[0]])) {
+					$orders[$orderArr[$selColArr[0]]['key']] = $selColArr[0] . ' ' . $orderArr[$selColArr[0]]['sort'];
+				}
+
+				//use the alias if one was present otherwise use the column name
+				$alias = (! stristr($selCol, ' AS ')) ? $selColArr[0] : $selColArr[$selColCount];
+				//don't quote the identifier if it is already quoted
+				if($alias[0] != '[') $alias = $this->quoteIdentifier($alias);
+
+				//save the first non-aggregate column for use in ROW_NUMBER() if required
+				if(! isset($firstColumnOrderStatement)) {
+					$firstColumnOrderStatement = 'ORDER BY ' . $selColArr[0];
+				}
+
+				//add an alias to the inner select so all columns will be unique
+				$innerSelect .= $selColArr[0] . ' AS ' . $alias . ', ';
+				$outerSelect .= $alias . ', ';
+			} else {
+				//agregate columns must always have an alias clause
+				if(! stristr($selCol, ' AS ')) {
+					throw new Exception('DBMSSQL::applyLimit() requires aggregate columns to have an Alias clause');
+				}
+
+				//aggregate column alias can't be used as the count column you must use the entire aggregate statement
+				if(isset($orderArr[$selColArr[$selColCount]])) {
+					$orders[$orderArr[$selColArr[$selColCount]]['key']] = str_replace($selColArr[$selColCount - 1] . ' ' . $selColArr[$selColCount], '', $selCol) . $orderArr[$selColArr[$selColCount]]['sort'];
+				}
+
+				//quote the alias
+				$alias = $selColArr[$selColCount];
+				//don't quote the identifier if it is already quoted
+				if($alias[0] != '[') $alias = $this->quoteIdentifier($alias);
+				$innerSelect .= str_replace($selColArr[$selColCount], $alias, $selCol) . ', ';
+				$outerSelect .= $alias . ', ';
+			}
+		}
+
+		if(is_array($orders)) {
+			$orderStatement = 'ORDER BY ' . implode(', ', $orders);
+		} else {
+			//use the first non aggregate column in our select statement if no ORDER BY clause present
+			if(isset($firstColumnOrderStatement)) {
+				$orderStatement = $firstColumnOrderStatement;
+			} else {
+				throw new Exception('DBMSSQL::applyLimit() unable to find column to use with ROW_NUMBER()');
+			}
+		}
+
+		//substring the select strings to get rid of the last comma and add our FROM and SELECT clauses
+		$innerSelect = $selectText . 'ROW_NUMBER() OVER(' . $orderStatement . ') AS [RowNumber], ' . substr($innerSelect, 0, - 2) . ' FROM';
+		//outer select can't use * because of the RowNumber column
+		$outerSelect = 'SELECT ' . substr($outerSelect, 0, - 2) . ' FROM';
+
+		//ROW_NUMBER() starts at 1 not 0
+		$sql = $outerSelect . ' (' . $innerSelect . ' ' . $fromStatement . ') AS derivedb WHERE RowNumber BETWEEN ' . ($offset + 1) . ' AND ' . ($limit + $offset);
+	}
+
+	/**
+	 * @see       parent::cleanupSQL()
+	 *
+	 * @param     string       $sql
+	 * @param     array        $params
+	 * @param     Criteria     $values
+	 * @param     DatabaseMap  $dbMap
+	 */
+	public function cleanupSQL(&$sql, array &$params, Criteria $values, DatabaseMap $dbMap)
+	{
+		$i = 1;
+		$paramCols = array();
+		foreach ($params as $param) {
+			if (null !== $param['table']) {
+				$column = $dbMap->getTable($param['table'])->getColumn($param['column']);
+				/* MSSQL pdo_dblib and pdo_mssql blob values must be converted to hex and then the hex added
+				 * to the query string directly.  If it goes through PDOStatement::bindValue quotes will cause
+				 * an error with the insert or update.
+				 */
+				if (is_resource($param['value']) && $column->isLob()) {
+					// we always need to make sure that the stream is rewound, otherwise nothing will
+					// get written to database.
+					rewind($param['value']);
+					$hexArr = unpack('H*hex', stream_get_contents($param['value']));
+					$sql = str_replace(":p$i", '0x' . $hexArr['hex'], $sql);
+					unset($hexArr);
+					fclose($param['value']);
+				} else {
+					$paramCols[] = $param;
+				}
+			}
+			$i++;
+		}
+
+		//if we made changes re-number the params
+		if($params != $paramCols)
+		{
+			$params = $paramCols;
+			unset($paramCols);
+			preg_match_all('/:p\d/', $sql, $matches);
+			foreach($matches[0] as $key => $match)
+			{
+				$sql = str_replace($match, ':p'.($key+1), $sql);
+			}
+		}
+	}
 }

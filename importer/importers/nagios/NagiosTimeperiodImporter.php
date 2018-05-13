@@ -267,8 +267,6 @@ class NagiosTimeperiodImporter extends NagiosImporter {
 		$segment = $this->getSegment();
 				
 	
-		$timePeriod->save();
-
 		// First check if we have a use
 		$useTemplate = $segment->get("use");
 		if($useTemplate) {
@@ -293,7 +291,7 @@ class NagiosTimeperiodImporter extends NagiosImporter {
 					$tempExclusion->setNagiosTimeperiodRelatedByTimeperiodId($timePeriod);
 					$tempExclusion->setNagiosTimeperiodRelatedByExcludedTimeperiod($exclusion->getNagiosTimeperiodRelatedByExcludedTimePeriod);
 				}
-				$dependent->clearAllReferences(true);
+				$dependant->clearAllReferences(true);
 			}
 		}
 				
@@ -305,54 +303,50 @@ class NagiosTimeperiodImporter extends NagiosImporter {
 				if($key == "exclude") {
 					continue;
 				}
-
 				$value = $entry['value'];
-				$lineNumOld=$lineNum;
 				$lineNum = $entry['line'];
-			
+				
 				if($key == "use") {
 					continue;
 				}
 				
-				if(key_exists($key, $this->fieldMethods) && $this->fieldMethods[$key] != '') {
-					// Okay, let's check that the method DOES exist
-					if(!method_exists($timePeriod, $this->fieldMethods[$key])) {
-						$job->addError("Method " . $this->fieldMethods[$key] . " does not exist for variable: " . $key . " on line " . $lineNum . " in file " . $fileName);
-						if(!$config->getVar('continue_error')) {
-							return false;
-						}	
+					if(key_exists($key, $this->fieldMethods) && $this->fieldMethods[$key] != '') {
+						// Okay, let's check that the method DOES exist
+						if(!method_exists($timePeriod, $this->fieldMethods[$key])) {
+							$job->addError("Method " . $this->fieldMethods[$key] . " does not exist for variable: " . $key . " on line " . $lineNum . " in file " . $fileName);
+							if(!$config->getVar('continue_error')) {
+								return false;
+							}	
+						}
+						else {
+							call_user_func(array($timePeriod, $this->fieldMethods[$key]), $value);
+						}
 					}
 					else {
-						call_user_method($this->fieldMethods[$key], $timePeriod, $value);
+						// It's an entry. Let's rebuild the string and grab the entry and value
+						// This is pretty hackish
+						$pos = $this->preg_pos("/[0-9]{1,2}:[0-9]{1,2}/", $entry['text']);	// Look for the first 00:00
+						$tempLabel = trim(substr($entry['text'], 0, $pos - 1));
+						
+						$commentPos = strpos($entry['text'], ";");
+						if(($commentPos === false)) {
+							$commentLength = 0;
+						}
+						else {
+							$commentLength = strlen(substr($entry['text'], $commentPos));
+						}
+						$valLength = strlen($entry['text']) - ($commentLength + $pos);
+						$tempValue = trim(substr($entry['text'], $pos, $valLength));
+						$tempEntry = new NagiosTimeperiodEntry();
+						$tempEntry->setEntry($tempLabel);
+						$tempEntry->setValue($tempValue);
+						$timePeriod->addNagiosTimeperiodEntry($tempEntry);
+						
+						/*
+						 * Must not be set, otherwise reference to NagiosTimeperiod() is also cleared 
+						 */
+						//$tempEntry->clearAllReferences(true);
 					}
-				}
-				else {
-					// It's an entry. Let's rebuild the string and grab the entry and value
-					// This is pretty hackish
-					$pos = $this->preg_pos("/[0-9]{1,2}:[0-9]{1,2}/", $entry['text']);	// Look for the first 00:00
-					
-					$commentPos = strpos($entry['text'], ";");
-					if(($commentPos === false)) {
-						$commentLength = 0;
-					}
-					else {
-						$commentLength = strlen(substr($entry['text'], $commentPos));
-					}
-
-					$valLength = strlen($entry['text']) - ($commentLength + $pos);
-		
-					if($lineNum.trim(substr($entry['text'], 0, $pos - 1)).trim(substr($entry['text'], $pos, $valLength))==$lineNumOld.$tempLabel.$tempValue)
-						continue;
-
-					$tempLabel = trim(substr($entry['text'], 0, $pos - 1));
-					$tempValue = trim(substr($entry['text'], $pos, $valLength));
-					$tempEntry = new NagiosTimeperiodEntry();
-					$tempEntry->setEntry($tempLabel);
-					$tempEntry->setValue($tempValue);
-
-					$timePeriod->addNagiosTimeperiodEntry($tempEntry);
-					$tempEntry->clearAllReferences(true);
-				}
 			}
 		}
 		
@@ -378,7 +372,11 @@ class NagiosTimeperiodImporter extends NagiosImporter {
 						$exclusion->setNagiosTimeperiodRelatedByTimeperiodId($timePeriod);
 						$exclusion->setNagiosTimeperiodRelatedByExcludedTimeperiod($target);
 						$exclusion->clearAllReferences(true);
-						$target->clearAllReferences(true);
+						
+						/*
+						 * Must not be set, otherwise reference to NagiosTimeperiod() is also cleared
+						 */
+						//$target->clearAllReferences(true);
 					}
 				}
 			}

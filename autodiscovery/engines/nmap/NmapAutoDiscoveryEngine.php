@@ -1,4 +1,29 @@
 <?php
+
+/*
+ Lilac - A Nagios Configuration Tool
+Copyright (C) 2013 Rene Hadler
+Copyright (C) 2007 Taylor Dondich
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
+/*
+ Lilac Auto Discovery Engine
+*/
+
 require_once('Net/Traceroute.php');
 
 class NmapAutoDiscoveryEngine extends AutoDiscoveryEngine {
@@ -27,7 +52,7 @@ class NmapAutoDiscoveryEngine extends AutoDiscoveryEngine {
 		// Each target is valid		
 	
 		// We have a list of targets
-		$nmap_flags = "--max-rtt-timeout 100ms --max-retries 1 -sS -O -A -v --open -oX " . $this->xmlFile;
+		$nmap_flags = "--max-rtt-timeout 100ms --max-retries 0 -sS -O -A -v -oX " . $this->xmlFile;
 		
 		$exec_line = "sudo " . $config->getVar("nmap_binary") . " " . $nmap_flags . " ";
 		foreach($targets as $target) {
@@ -56,7 +81,15 @@ class NmapAutoDiscoveryEngine extends AutoDiscoveryEngine {
 		// Read in hosts
 		$job->addNotice("Number of hosts: " . count($nmapXML->host));
 		
-		foreach($nmapXML->host as $host) {
+		foreach($nmapXML->host as $host) 
+		{
+
+			if($host->status[0]['state'] == "down")
+			{
+				$job->addNotice('Host ' . $host->address[0]['addr'] . ' seems down, skipping');
+				continue;
+			}
+			
 			$job->addNotice('Found ' . $host->address[0]['addr'] . ':' . $host->hostnames[0]->hostname[0]['name'] . '.');
 			
 			$c = new Criteria();

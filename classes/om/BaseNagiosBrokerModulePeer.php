@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_broker_module' table.
  *
  * Event Broker Modules
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosBrokerModulePeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosBrokerModulePeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_broker_module';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosBrokerModule';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosBrokerModule';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosBrokerModuleTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 2;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 2;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_broker_module.ID';
@@ -30,6 +40,9 @@ abstract class BaseNagiosBrokerModulePeer {
 	/** the column name for the LINE field */
 	const LINE = 'nagios_broker_module.LINE';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosBrokerModule objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -38,11 +51,6 @@ abstract class BaseNagiosBrokerModulePeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -50,10 +58,11 @@ abstract class BaseNagiosBrokerModulePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'Line', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'line', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::LINE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LINE', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'line', ),
 		BasePeer::TYPE_NUM => array (0, 1, )
 	);
@@ -64,25 +73,15 @@ abstract class BaseNagiosBrokerModulePeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Line' => 1, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'line' => 1, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::LINE => 1, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LINE' => 1, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'line' => 1, ),
 		BasePeer::TYPE_NUM => array (0, 1, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosBrokerModuleMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -144,17 +143,20 @@ abstract class BaseNagiosBrokerModulePeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosBrokerModulePeer::ID);
-
-		$criteria->addSelectColumn(NagiosBrokerModulePeer::LINE);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosBrokerModulePeer::ID);
+			$criteria->addSelectColumn(NagiosBrokerModulePeer::LINE);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.LINE');
+		}
 	}
 
 	/**
@@ -201,7 +203,7 @@ abstract class BaseNagiosBrokerModulePeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -220,7 +222,7 @@ abstract class BaseNagiosBrokerModulePeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -274,7 +276,7 @@ abstract class BaseNagiosBrokerModulePeer {
 	 * @param      NagiosBrokerModule $value A NagiosBrokerModule object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosBrokerModule $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -342,6 +344,14 @@ abstract class BaseNagiosBrokerModulePeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_broker_module
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -354,12 +364,26 @@ abstract class BaseNagiosBrokerModulePeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -372,18 +396,16 @@ abstract class BaseNagiosBrokerModulePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosBrokerModulePeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosBrokerModulePeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosBrokerModulePeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosBrokerModulePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -393,6 +415,32 @@ abstract class BaseNagiosBrokerModulePeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosBrokerModule object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosBrokerModulePeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosBrokerModulePeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosBrokerModulePeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosBrokerModulePeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosBrokerModulePeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 	/**
 	 * Returns the TableMap related to this peer.
 	 * This method is not needed for general use but a specific application could have a need.
@@ -406,21 +454,35 @@ abstract class BaseNagiosBrokerModulePeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosBrokerModulePeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosBrokerModulePeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosBrokerModulePeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosBrokerModuleTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosBrokerModule or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosBrokerModulePeer::CLASS_DEFAULT : NagiosBrokerModulePeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosBrokerModule or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosBrokerModule object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -463,7 +525,7 @@ abstract class BaseNagiosBrokerModulePeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosBrokerModule or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosBrokerModule or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosBrokerModule object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -483,7 +545,12 @@ abstract class BaseNagiosBrokerModulePeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosBrokerModulePeer::ID);
-			$selectCriteria->add(NagiosBrokerModulePeer::ID, $criteria->remove(NagiosBrokerModulePeer::ID), $comparison);
+			$value = $criteria->remove(NagiosBrokerModulePeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosBrokerModulePeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosBrokerModulePeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosBrokerModule object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -497,11 +564,12 @@ abstract class BaseNagiosBrokerModulePeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_broker_module table.
+	 * Deletes all rows from the nagios_broker_module table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosBrokerModulePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -511,7 +579,12 @@ abstract class BaseNagiosBrokerModulePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosBrokerModulePeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosBrokerModulePeer::TABLE_NAME, $con, NagiosBrokerModulePeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosBrokerModulePeer::clearInstancePool();
+			NagiosBrokerModulePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -521,7 +594,7 @@ abstract class BaseNagiosBrokerModulePeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosBrokerModule or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosBrokerModule or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosBrokerModule object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -542,24 +615,18 @@ abstract class BaseNagiosBrokerModulePeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosBrokerModulePeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosBrokerModule) {
+		} elseif ($values instanceof NagiosBrokerModule) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosBrokerModulePeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosBrokerModulePeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosBrokerModulePeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -575,7 +642,7 @@ abstract class BaseNagiosBrokerModulePeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosBrokerModulePeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -596,7 +663,7 @@ abstract class BaseNagiosBrokerModulePeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosBrokerModule $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -674,14 +741,7 @@ abstract class BaseNagiosBrokerModulePeer {
 
 } // BaseNagiosBrokerModulePeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosBrokerModulePeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosBrokerModulePeer class:
-//
-// Propel::getDatabaseMap(NagiosBrokerModulePeer::DATABASE_NAME)->addTableBuilder(NagiosBrokerModulePeer::TABLE_NAME, NagiosBrokerModulePeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosBrokerModulePeer::DATABASE_NAME)->addTableBuilder(BaseNagiosBrokerModulePeer::TABLE_NAME, BaseNagiosBrokerModulePeer::getMapBuilder());
+BaseNagiosBrokerModulePeer::buildTableMap();
 

@@ -77,7 +77,12 @@ if(!$engine->init()) {
 	$exportJob->save();
 	exit(40);
 }
-if(!$engine->export()) {
+if($config->getVar('export_diff')) {
+	$export_result = $engine->exportDiff();
+} else {
+	$export_result = $engine->export();
+}
+if(!$export_result) {
 	$exportJob->addError("Engine export process failed to complete successfully.");
 	$exportJob->setEndTime(time());
 	$exportJob->setStatus("Engine export process failed to complete successfully.");
@@ -86,6 +91,9 @@ if(!$engine->export()) {
 	exit(40);
 }
 else {
+	//reinitialize DB of ExportDiff
+	sqlrequest('lilac', "DELETE FROM export_job_history");
+	
 	$exportJob->setStatusCode(ExportJob::STATUS_FINISHED);
 	$exportJob->setEndTime(time());
 	$exportJob->setStatus("Complete");

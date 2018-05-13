@@ -1,11 +1,12 @@
 <?php
 
+
 /**
  * Base static class for performing query and update operations on the 'nagios_timeperiod_entry' table.
  *
  * Time Period Entries
  *
- * @package    .om
+ * @package    propel.generator..om
  */
 abstract class BaseNagiosTimeperiodEntryPeer {
 
@@ -15,14 +16,23 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	/** the table name for this class */
 	const TABLE_NAME = 'nagios_timeperiod_entry';
 
+	/** the related Propel class for this table */
+	const OM_CLASS = 'NagiosTimeperiodEntry';
+
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'NagiosTimeperiodEntry';
 
+	/** the related TableMap class for this table */
+	const TM_CLASS = 'NagiosTimeperiodEntryTableMap';
+	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 4;
 
 	/** the column name for the ID field */
 	const ID = 'nagios_timeperiod_entry.ID';
@@ -36,6 +46,9 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	/** the column name for the VALUE field */
 	const VALUE = 'nagios_timeperiod_entry.VALUE';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+	
 	/**
 	 * An identiy map to hold any loaded instances of NagiosTimeperiodEntry objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -44,11 +57,6 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 */
 	public static $instances = array();
 
-	/**
-	 * The MapBuilder instance for this peer.
-	 * @var        MapBuilder
-	 */
-	private static $mapBuilder = null;
 
 	/**
 	 * holds an array of fieldnames
@@ -56,10 +64,11 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'TimeperiodId', 'Entry', 'Value', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'timeperiodId', 'entry', 'value', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::TIMEPERIOD_ID, self::ENTRY, self::VALUE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TIMEPERIOD_ID', 'ENTRY', 'VALUE', ),
 		BasePeer::TYPE_FIELDNAME => array ('id', 'timeperiod_id', 'entry', 'value', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
@@ -70,25 +79,15 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'TimeperiodId' => 1, 'Entry' => 2, 'Value' => 3, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'timeperiodId' => 1, 'entry' => 2, 'value' => 3, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::TIMEPERIOD_ID => 1, self::ENTRY => 2, self::VALUE => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TIMEPERIOD_ID' => 1, 'ENTRY' => 2, 'VALUE' => 3, ),
 		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'timeperiod_id' => 1, 'entry' => 2, 'value' => 3, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
-	/**
-	 * Get a (singleton) instance of the MapBuilder for this peer class.
-	 * @return     MapBuilder The map builder for this peer
-	 */
-	public static function getMapBuilder()
-	{
-		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new NagiosTimeperiodEntryMapBuilder();
-		}
-		return self::$mapBuilder;
-	}
 	/**
 	 * Translates a fieldname to another type
 	 *
@@ -150,21 +149,24 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 * XML schema will not be added to the select list and only loaded
 	 * on demand.
 	 *
-	 * @param      criteria object containing the columns to add.
+	 * @param      Criteria $criteria object containing the columns to add.
+	 * @param      string   $alias    optional table alias
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function addSelectColumns(Criteria $criteria)
+	public static function addSelectColumns(Criteria $criteria, $alias = null)
 	{
-
-		$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::ID);
-
-		$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID);
-
-		$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::ENTRY);
-
-		$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::VALUE);
-
+		if (null === $alias) {
+			$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::ID);
+			$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID);
+			$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::ENTRY);
+			$criteria->addSelectColumn(NagiosTimeperiodEntryPeer::VALUE);
+		} else {
+			$criteria->addSelectColumn($alias . '.ID');
+			$criteria->addSelectColumn($alias . '.TIMEPERIOD_ID');
+			$criteria->addSelectColumn($alias . '.ENTRY');
+			$criteria->addSelectColumn($alias . '.VALUE');
+		}
 	}
 
 	/**
@@ -211,7 +213,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -230,7 +232,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -284,7 +286,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 * @param      NagiosTimeperiodEntry $value A NagiosTimeperiodEntry object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(NagiosTimeperiodEntry $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -352,6 +354,14 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	}
 	
 	/**
+	 * Method to invalidate the instance pool of all tables related to nagios_timeperiod_entry
+	 * by a foreign key with ON DELETE CASCADE
+	 */
+	public static function clearRelatedInstancePool()
+	{
+	}
+
+	/**
 	 * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
 	 *
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
@@ -364,12 +374,26 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
 	{
 		// If the PK cannot be derived from the row, return NULL.
-		if ($row[$startcol + 0] === null) {
+		if ($row[$startcol] === null) {
 			return null;
 		}
-		return (string) $row[$startcol + 0];
+		return (string) $row[$startcol];
 	}
 
+	/**
+	 * Retrieves the primary key from the DB resultset row 
+	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+	 * a multi-column primary key, an array of the primary key columns will be returned.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @return     mixed The primary key of the row
+	 */
+	public static function getPrimaryKeyFromRow($row, $startcol = 0)
+	{
+		return (int) $row[$startcol];
+	}
+	
 	/**
 	 * The returned array will contain objects of the default type or
 	 * objects that inherit from the default.
@@ -382,18 +406,16 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = NagiosTimeperiodEntryPeer::getOMClass();
-		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
+		$cls = NagiosTimeperiodEntryPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key = NagiosTimeperiodEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj = NagiosTimeperiodEntryPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
 				$results[] = $obj;
 			} else {
-		
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
@@ -403,11 +425,37 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 		$stmt->closeCursor();
 		return $results;
 	}
+	/**
+	 * Populates an object of the default type or an object that inherit from the default.
+	 *
+	 * @param      array $row PropelPDO resultset row.
+	 * @param      int $startcol The 0-based offset for reading from the resultset row.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 * @return     array (NagiosTimeperiodEntry object, last column rank)
+	 */
+	public static function populateObject($row, $startcol = 0)
+	{
+		$key = NagiosTimeperiodEntryPeer::getPrimaryKeyHashFromRow($row, $startcol);
+		if (null !== ($obj = NagiosTimeperiodEntryPeer::getInstanceFromPool($key))) {
+			// We no longer rehydrate the object, since this can cause data loss.
+			// See http://www.propelorm.org/ticket/509
+			// $obj->hydrate($row, $startcol, true); // rehydrate
+			$col = $startcol + NagiosTimeperiodEntryPeer::NUM_HYDRATE_COLUMNS;
+		} else {
+			$cls = NagiosTimeperiodEntryPeer::OM_CLASS;
+			$obj = new $cls();
+			$col = $obj->hydrate($row, $startcol);
+			NagiosTimeperiodEntryPeer::addInstanceToPool($obj, $key);
+		}
+		return array($obj, $col);
+	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related NagiosTimeperiod table
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -440,7 +488,8 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			$con = Propel::getConnection(NagiosTimeperiodEntryPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -455,41 +504,41 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 
 	/**
 	 * Selects a collection of NagiosTimeperiodEntry objects pre-filled with their NagiosTimeperiod objects.
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosTimeperiodEntry objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinNagiosTimeperiod(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinNagiosTimeperiod(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosTimeperiodEntryPeer::addSelectColumns($c);
-		$startcol = (NagiosTimeperiodEntryPeer::NUM_COLUMNS - NagiosTimeperiodEntryPeer::NUM_LAZY_LOAD_COLUMNS);
-		NagiosTimeperiodPeer::addSelectColumns($c);
+		NagiosTimeperiodEntryPeer::addSelectColumns($criteria);
+		$startcol = NagiosTimeperiodEntryPeer::NUM_HYDRATE_COLUMNS;
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
 
-		$c->addJoin(array(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosTimeperiodEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosTimeperiodEntryPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = NagiosTimeperiodEntryPeer::getOMClass();
+				$cls = NagiosTimeperiodEntryPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosTimeperiodEntryPeer::addInstanceToPool($obj1, $key1);
@@ -500,9 +549,8 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 				$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -523,7 +571,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
-	 * @param      Criteria $c
+	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -556,7 +604,8 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			$con = Propel::getConnection(NagiosTimeperiodEntryPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
+		$criteria->addJoin(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, NagiosTimeperiodPeer::ID, $join_behavior);
+
 		$stmt = BasePeer::doCount($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -571,42 +620,42 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	/**
 	 * Selects a collection of NagiosTimeperiodEntry objects pre-filled with all related objects.
 	 *
-	 * @param      Criteria  $c
+	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     array Array of NagiosTimeperiodEntry objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$c = clone $c;
+		$criteria = clone $criteria;
 
 		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		NagiosTimeperiodEntryPeer::addSelectColumns($c);
-		$startcol2 = (NagiosTimeperiodEntryPeer::NUM_COLUMNS - NagiosTimeperiodEntryPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodEntryPeer::addSelectColumns($criteria);
+		$startcol2 = NagiosTimeperiodEntryPeer::NUM_HYDRATE_COLUMNS;
 
-		NagiosTimeperiodPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (NagiosTimeperiodPeer::NUM_COLUMNS - NagiosTimeperiodPeer::NUM_LAZY_LOAD_COLUMNS);
+		NagiosTimeperiodPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + NagiosTimeperiodPeer::NUM_HYDRATE_COLUMNS;
 
-		$c->addJoin(array(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID,), array(NagiosTimeperiodPeer::ID,), $join_behavior);
-		$stmt = BasePeer::doSelect($c, $con);
+		$criteria->addJoin(NagiosTimeperiodEntryPeer::TIMEPERIOD_ID, NagiosTimeperiodPeer::ID, $join_behavior);
+
+		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$key1 = NagiosTimeperiodEntryPeer::getPrimaryKeyHashFromRow($row, 0);
 			if (null !== ($obj1 = NagiosTimeperiodEntryPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
+				// See http://www.propelorm.org/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = NagiosTimeperiodEntryPeer::getOMClass();
+				$cls = NagiosTimeperiodEntryPeer::getOMClass(false);
 
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
 				NagiosTimeperiodEntryPeer::addInstanceToPool($obj1, $key1);
@@ -619,10 +668,8 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 				$obj2 = NagiosTimeperiodPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = NagiosTimeperiodPeer::getOMClass();
+					$cls = NagiosTimeperiodPeer::getOMClass(false);
 
-
-					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
 					NagiosTimeperiodPeer::addInstanceToPool($obj2, $key2);
@@ -651,21 +698,35 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	}
 
 	/**
-	 * The class that the Peer will make instances of.
-	 *
-	 * This uses a dot-path notation which is tranalted into a path
-	 * relative to a location on the PHP include_path.
-	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
-	 *
-	 * @return     string path.to.ClassName
+	 * Add a TableMap instance to the database for this peer class.
 	 */
-	public static function getOMClass()
+	public static function buildTableMap()
 	{
-		return NagiosTimeperiodEntryPeer::CLASS_DEFAULT;
+	  $dbMap = Propel::getDatabaseMap(BaseNagiosTimeperiodEntryPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseNagiosTimeperiodEntryPeer::TABLE_NAME))
+	  {
+	    $dbMap->addTableObject(new NagiosTimeperiodEntryTableMap());
+	  }
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a NagiosTimeperiodEntry or Criteria object.
+	 * The class that the Peer will make instances of.
+	 *
+	 * If $withPrefix is true, the returned path
+	 * uses a dot-path notation which is tranalted into a path
+	 * relative to a location on the PHP include_path.
+	 * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+	 *
+	 * @param      boolean $withPrefix Whether or not to return the path with the class name
+	 * @return     string path.to.ClassName
+	 */
+	public static function getOMClass($withPrefix = true)
+	{
+		return $withPrefix ? NagiosTimeperiodEntryPeer::CLASS_DEFAULT : NagiosTimeperiodEntryPeer::OM_CLASS;
+	}
+
+	/**
+	 * Performs an INSERT on the database, given a NagiosTimeperiodEntry or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiodEntry object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -708,7 +769,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a NagiosTimeperiodEntry or Criteria object.
+	 * Performs an UPDATE on the database, given a NagiosTimeperiodEntry or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiodEntry object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -728,7 +789,12 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			$criteria = clone $values; // rename for clarity
 
 			$comparison = $criteria->getComparison(NagiosTimeperiodEntryPeer::ID);
-			$selectCriteria->add(NagiosTimeperiodEntryPeer::ID, $criteria->remove(NagiosTimeperiodEntryPeer::ID), $comparison);
+			$value = $criteria->remove(NagiosTimeperiodEntryPeer::ID);
+			if ($value) {
+				$selectCriteria->add(NagiosTimeperiodEntryPeer::ID, $value, $comparison);
+			} else {
+				$selectCriteria->setPrimaryTableName(NagiosTimeperiodEntryPeer::TABLE_NAME);
+			}
 
 		} else { // $values is NagiosTimeperiodEntry object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -742,11 +808,12 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the nagios_timeperiod_entry table.
+	 * Deletes all rows from the nagios_timeperiod_entry table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosTimeperiodEntryPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -756,7 +823,12 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(NagiosTimeperiodEntryPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(NagiosTimeperiodEntryPeer::TABLE_NAME, $con, NagiosTimeperiodEntryPeer::DATABASE_NAME);
+			// Because this db requires some delete cascade/set null emulation, we have to
+			// clear the cached instance *after* the emulation has happened (since
+			// instances get re-added by the select statement contained therein).
+			NagiosTimeperiodEntryPeer::clearInstancePool();
+			NagiosTimeperiodEntryPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -766,7 +838,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a NagiosTimeperiodEntry or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a NagiosTimeperiodEntry or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or NagiosTimeperiodEntry object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -787,24 +859,18 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
 			NagiosTimeperiodEntryPeer::clearInstancePool();
-
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof NagiosTimeperiodEntry) {
+		} elseif ($values instanceof NagiosTimeperiodEntry) { // it's a model object
 			// invalidate the cache for this single object
 			NagiosTimeperiodEntryPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
-		} else {
-			// it must be the primary key
-
-
-
+		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
 			$criteria->add(NagiosTimeperiodEntryPeer::ID, (array) $values, Criteria::IN);
-
+			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				// we can invalidate the cache for this single object
 				NagiosTimeperiodEntryPeer::removeInstanceFromPool($singleval);
 			}
 		}
@@ -820,7 +886,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
+			NagiosTimeperiodEntryPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -841,7 +907,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(NagiosTimeperiodEntry $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 
@@ -919,14 +985,7 @@ abstract class BaseNagiosTimeperiodEntryPeer {
 
 } // BaseNagiosTimeperiodEntryPeer
 
-// This is the static code needed to register the MapBuilder for this table with the main Propel class.
+// This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the NagiosTimeperiodEntryPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the NagiosTimeperiodEntryPeer class:
-//
-// Propel::getDatabaseMap(NagiosTimeperiodEntryPeer::DATABASE_NAME)->addTableBuilder(NagiosTimeperiodEntryPeer::TABLE_NAME, NagiosTimeperiodEntryPeer::getMapBuilder());
-//
-// Doing so will effectively overwrite the registration below.
-
-Propel::getDatabaseMap(BaseNagiosTimeperiodEntryPeer::DATABASE_NAME)->addTableBuilder(BaseNagiosTimeperiodEntryPeer::TABLE_NAME, BaseNagiosTimeperiodEntryPeer::getMapBuilder());
+BaseNagiosTimeperiodEntryPeer::buildTableMap();
 

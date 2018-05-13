@@ -180,7 +180,9 @@ class EoN_Importer {
 					}
 					else {
 						// --- Update each field
-						$object_sql=call_user_func(array($object_class.'Peer','getByName'),$name);
+						$tmp_object_name=$object_class."Peer";
+						$tmp_object=new $tmp_object_name();
+						$object_sql=$tmp_object->getByName($name);
 						foreach($result as $result_field => $result_value) {
 							$function="set".$result_field;
 							$object_sql->$function($result_value);
@@ -319,36 +321,42 @@ class EoN_Importer {
 		global $lilac;
 
 		// Get Link Host ID in XML
-		$link_service_id=$result["Host"];		
-		if($link_service_id!="") {
-			// Get Link Name in XML
-			$link_object=$this->xml_xpath->query("//Host[@id='".$link_service_id."']");
-			$link_service_name=$link_object->item(0)->getElementsByTagName("Name")->item(0)->nodeValue;
-			// Get Link ID in SQL
-			$link_service_created_id=NagiosHostPeer::getByName($link_service_name);
-			$link_service_created_id=$link_service_created_id->getId();
-			$result["Host"]=$link_service_created_id;
+		if(isset($result["Host"])) {
+			$link_service_id=$result["Host"];		
+			if($link_service_id!="") {
+				// Get Link Name in XML
+				$link_object=$this->xml_xpath->query("//Host[@id='".$link_service_id."']");
+				$link_service_name=$link_object->item(0)->getElementsByTagName("Name")->item(0)->nodeValue;
+				// Get Link ID in SQL
+				$link_service_created_id=NagiosHostPeer::getByName($link_service_name);
+				$link_service_created_id=$link_service_created_id->getId();
+				$result["Host"]=$link_service_created_id;
+			}
 		}
 		
 		// Get Link HostTemplate ID in XML
-		$link_service_id=$result["HostTemplate"];		
-		if($link_service_id!="") {
-			// Get Link Name in XML
-			$link_object=$this->xml_xpath->query("//HostTemplate[@id='".$link_service_id."']");
-			$link_service_name=$link_object->item(0)->getElementsByTagName("Name")->item(0)->nodeValue;
-			// Get Link ID in SQL
-			$link_service_created_id=NagiosHostTemplatePeer::getByName($link_service_name);
-			$link_service_created_id=$link_service_created_id->getId();
-			$result["HostTemplate"]=$link_service_created_id;
+		if(isset($result["HostTemplate"])) {
+			$link_service_id=$result["HostTemplate"];		
+			if($link_service_id!="") {
+				// Get Link Name in XML
+				$link_object=$this->xml_xpath->query("//HostTemplate[@id='".$link_service_id."']");
+				$link_service_name=$link_object->item(0)->getElementsByTagName("Name")->item(0)->nodeValue;
+				// Get Link ID in SQL
+				$link_service_created_id=NagiosHostTemplatePeer::getByName($link_service_name);
+				$link_service_created_id=$link_service_created_id->getId();
+				$result["HostTemplate"]=$link_service_created_id;
+			}
 		}
-
+		
 		// Delete existing service
-		$service_id=$lilac->service_exists($name,$result["Host"],$result["HostTemplate"]);
-		if($service_id!=false) {
-			$service = NagiosServicePeer::retrieveByPK($service_id);
-			if($service) {
-				$service->delete();
-				$this->import_msg[]=$this->EoN_Msg_Success("Service","delete","black",$name);
+		if(isset($result["Host"]) && isset($result["HostTemplate"])) {
+			$service_id=$lilac->service_exists($name,$result["Host"],$result["HostTemplate"]);
+			if($service_id!=false) {
+				$service = NagiosServicePeer::retrieveByPK($service_id);
+				if($service) {
+					$service->delete();
+					$this->import_msg[]=$this->EoN_Msg_Success("Service","delete","black",$name);
+				}
 			}
 		}
 		
@@ -424,8 +432,11 @@ class EoN_Importer {
 								// No Options
 								else {					
 									// Get Link ID in SQL
-									$link_created=call_user_func(array('Nagios'.$zero_value.'Peer','getByName'),$link_name);
+				                                        $tmp_object_name='Nagios'.$zero_value.'Peer';
+                                                			$tmp_object=new $tmp_object_name();
+									$link_created=$tmp_object->getByName($link_name);
 									$link_created_id=$link_created->getId();
+
 									// Set Link
 									$link_function="set".$zero_field;
 									$object_sql->$link_function($link_created_id);
@@ -488,8 +499,10 @@ class EoN_Importer {
 										$this->import_msg[]=$this->EoN_Msg_Success($type,"nolink","blue",$name);
 									}
 									// No Options
-									else {				
-										$link_created=call_user_func(array('Nagios'.$type.'Peer','getByName'),$name);
+									else {	
+                                                                        	$tmp_object_name='Nagios'.$type.'Peer';
+                                                                        	$tmp_object=new $tmp_object_name();
+										$link_created=$tmp_object->getByName($name);	
 										$link_created_id=$link_created->getId();
 									}
 								}

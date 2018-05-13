@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <database name="lilac" defaultIdMethod="native">
 
-	<table name="lilac_configuration" description="Lilac Configuration">
-		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-		<column name="version" type="varchar" size="255" />
-	</table>
+    <table name="lilac_configuration" description="Lilac Configuration">
+        <column name="key" type="varchar" size="255" primaryKey="true" />
+        <column name="value" type="varchar" size="255" />
+    </table>
 
 	<table name="import_job" description="Import Job Information">
  		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
@@ -94,11 +94,17 @@
 		<column name="service_warning_sound" type="varchar" size="255" required="false" />
 		<column name="service_unknown_sound" type="varchar" size="255" required="false" />
 		<column name="ping_syntax" type="varchar" size="255" required="false" />		
-		<column name="escape_html_tags" type="boolean" />
-	        <column name="notes_url_target" type="varchar" size="255" />
-        	<column name="action_url_target" type="varchar" size="255" />
-	        <column name="enable_splunk_integration" type="boolean" />
-        	<column name="splunk_url" type="varchar" size="255" />
+        <column name="escape_html_tags" type="boolean" />
+        <column name="notes_url_target" type="varchar" size="255" />
+        <column name="action_url_target" type="varchar" size="255" />
+        <column name="enable_splunk_integration" type="boolean" />
+        <column name="splunk_url" type="varchar" size="255" />
+        <column name="authorized_for_read_only" type="varchar" size="255" required="false" />
+        <column name="color_transparency_index_r" type="integer" required="false" />
+        <column name="color_transparency_index_g" type="integer" required="false" />
+        <column name="color_transparency_index_b" type="integer" required="false" />
+        <column name="result_limit" type="integer" required="false" />
+        <column name="nagios_check_command" type="varchar" size="255" required="false" />
 	</table>
 
 	<table name="nagios_command" description="Nagios Command">
@@ -216,20 +222,15 @@
  		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
 		<column name="name" type="varchar" size="255" required="true" />
 		<column name="description" type="varchar" size="255" required="false" />
-	    <columm name="display_name" type="varchar" size="255" required="true" />	
-
-        <column name="initial_state" type="varchar" size="1" />
-		
+		<column name="display_name" type="varchar" size="255" required="true" />
+		<column name="initial_state" type="varchar" size="1" />
 		<column name="check_command" type="integer" />
-
-        <column name="retry_interval" type="integer" />
-        <column name="first_notification_delay" type="integer" />
-		
+		<column name="retry_interval" type="integer" />
+		<column name="first_notification_delay" type="integer" />
 		<column name="maximum_check_attempts" type="integer" />
 		<column name="check_interval" type="integer" />
 		<column name="passive_checks_enabled" type="boolean" />
 		<column name="check_period" type="integer" />
-
 		<column name="obsess_over_host" type="boolean" />
 		<column name="check_freshness" type="boolean" />
 		<column name="freshness_threshold" type="integer" />
@@ -243,7 +244,6 @@
 		<foreign-key foreignTable="nagios_command" onDelete="setnull">
 			<reference local="event_handler" foreign="id" />
 		</foreign-key>
-		
 		<column name="low_flap_threshold" type="integer" />
 		<column name="high_flap_threshold" type="integer" />
 		<column name="flap_detection_enabled" type="boolean" />
@@ -378,13 +378,13 @@
  		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
 		<column name="name" type="varchar" size="255" required="true" />
 		<column name="description" type="varchar" size="255" required="false" />
-		<column name="initial_state" type="varchar" size="1" />
+        <column name="initial_state" type="varchar" size="1" />
 		<column name="is_volatile" type="boolean" />
 		<column name="check_command" type="integer" />
 		<column name="maximum_check_attempts" type="integer" />
 		<column name="normal_check_interval" type="integer" />
 		<column name="retry_interval" type="integer" />
-		<column name="first_notification_delay" type="integer" />
+        <column name="first_notification_delay" type="integer" />
 		<column name="active_checks_enabled" type="boolean" />
 		<column name="passive_checks_enabled" type="boolean" />
 		<column name="check_period" type="integer" />
@@ -403,10 +403,10 @@
 		<column name="low_flap_threshold" type="integer" />
 		<column name="high_flap_threshold" type="integer" />
 		<column name="flap_detection_enabled" type="boolean" />
-		<column name="flap_detection_on_ok" type="boolean" />
-		<column name="flap_detection_on_warning" type="boolean" />
-		<column name="flap_detection_on_critical" type="boolean" />
-		<column name="flap_detection_on_unknown" type="boolean" />
+        <column name="flap_detection_on_ok" type="boolean" />
+        <column name="flap_detection_on_warning" type="boolean" />
+        <column name="flap_detection_on_critical" type="boolean" />
+        <column name="flap_detection_on_unknown" type="boolean" />
 		<column name="process_perf_data" type="boolean" />
 		<column name="retain_status_information" type="boolean" />
 		<column name="retain_nonstatus_information" type="boolean" />
@@ -417,15 +417,15 @@
 		<column name="notification_on_critical" type="boolean" />
 		<column name="notification_on_recovery" type="boolean" />
 		<column name="notification_on_flapping" type="boolean" />
-		<column name="notification_on_scheduled_downtime" type="boolean" />
-		<column name="notifications_enabled" type="boolean" />
+        <column name="notification_on_scheduled_downtime" type="boolean" />
+        <column name="notifications_enabled" type="boolean" />
 		<column name="stalking_on_ok" type="boolean" />
 		<column name="stalking_on_warning" type="boolean" />
 		<column name="stalking_on_unknown" type="boolean" />
 		<column name="stalking_on_critical" type="boolean" />
 		<column name="failure_prediction_enabled" type="boolean" />
 
-		<column name="notes" type="varchar" size="255" required="false" />
+        <column name="notes" type="varchar" size="255" required="false" />
 		<column name="notes_url" type="varchar" size="255" required="false" />
 		<column name="action_url" type="varchar" size="255" required="false" />
 		<column name="icon_image" type="varchar" size="255" required="false" />
@@ -972,9 +972,17 @@
         <column name="debug_level" type="integer" />
         <column name="debug_verbosity" type="integer" />
         <column name="max_debug_file_size" type="integer" />
-
+        <column name="temp_path" type="varchar" size="255" />
+        <column name="check_for_updates" type="boolean" />
+        <column name="check_for_orphaned_hosts" type="boolean" />
+        <column name="bare_update_check" type="boolean" />
         <!-- End new in Nagios 3.x -->
 
+        <!-- New in Nagios 4.x -->
+        <column name="log_current_states" type="boolean" />
+        <column name="check_workers" type="integer" />
+        <column name="query_socket" type="varchar" size="255" />
+        <!-- End new in Nagios 4.x -->
 
 		<foreign-key foreignTable="nagios_command" onDelete="cascade">
 			<reference local="ocsp_command" foreign="id" />
@@ -1077,7 +1085,7 @@
 		<column name="osfamily" type="varchar" size="255" />
 		<column name="osgen" type="varchar" size="255" />
 		<column name="host_template" type="integer" required="true"  />
-		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+		<foreign-key foreignTable="nagios_host_template" onDelete="setnull">
 			<reference local="host_template" foreign="id" />
 		</foreign-key>
 		
@@ -1114,6 +1122,79 @@
 		</foreign-key>
 		<column name="percent" type="float" required="true" />
 		<column name="complexity" type="integer" required="true" />
+	</table>
+	
+	<table name="nagios_host_custom_object_var" description="Custom Object Variables for Host">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="host" type="integer" />
+ 		<column name="host_template" type="integer" />
+		<foreign-key foreignTable="nagios_host" onDelete="cascade">
+			<reference local="host" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_host_template" onDelete="cascade">
+			<reference local="host_template" foreign="id" />
+		</foreign-key>
+		<column name="var_name" type="varchar" size="255" required="true" />
+		<column name="var_value" type="varchar" size="255" required="true" />
+		<unique>
+  			<unique-column name="host" />
+  			<unique-column name="var_name" />
+		</unique>
+		<unique>
+  			<unique-column name="host_template" />
+  			<unique-column name="var_name" />
+		</unique>
+		<index>
+  			<index-column name="host" />
+  		</index>
+		<index>
+  			<index-column name="host_template" />
+  		</index>
+	</table>
+	
+	<table name="nagios_service_custom_object_var" description="Custom Object Variables for Service">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="service" type="integer" />
+ 		<column name="service_template" type="integer" />
+		<foreign-key foreignTable="nagios_service" onDelete="cascade">
+			<reference local="service" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="nagios_service_template" onDelete="cascade">
+			<reference local="service_template" foreign="id" />
+		</foreign-key>
+		<column name="var_name" type="varchar" size="255" required="true" />
+		<column name="var_value" type="varchar" size="255" required="true" />
+		<unique>
+  			<unique-column name="service" />
+  			<unique-column name="var_name" />
+		</unique>
+		<unique>
+  			<unique-column name="service_template" />
+  			<unique-column name="var_name" />
+		</unique>
+		<index>
+  			<index-column name="service" />
+  		</index>
+		<index>
+  			<index-column name="service_template" />
+  		</index>
+	</table>
+	
+	<table name="nagios_contact_custom_object_var" description="Custom Object Variables for Contact">
+		<column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+ 		<column name="contact" type="integer" />
+		<foreign-key foreignTable="nagios_contact" onDelete="cascade">
+			<reference local="contact" foreign="id" />
+		</foreign-key>
+		<column name="var_name" type="varchar" size="255" required="true" />
+		<column name="var_value" type="varchar" size="255" required="true" />
+		<unique>
+  			<unique-column name="contact" />
+  			<unique-column name="var_name" />
+		</unique>
+		<index>
+  			<index-column name="contact" />
+  		</index>
 	</table>
 
 </database>

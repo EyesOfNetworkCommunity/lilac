@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_contact' table.
  *
  * Nagios Contact
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosContact extends BaseObject  implements Persistent {
+abstract class BaseNagiosContact extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosContactPeer';
 
 	/**
 	 * The Peer class.
@@ -166,19 +172,9 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	protected $collNagiosContactAddresss;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactAddresss.
-	 */
-	private $lastNagiosContactAddressCriteria = null;
-
-	/**
 	 * @var        array NagiosContactGroupMember[] Collection to store aggregation of NagiosContactGroupMember objects.
 	 */
 	protected $collNagiosContactGroupMembers;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactGroupMembers.
-	 */
-	private $lastNagiosContactGroupMemberCriteria = null;
 
 	/**
 	 * @var        array NagiosContactNotificationCommand[] Collection to store aggregation of NagiosContactNotificationCommand objects.
@@ -186,19 +182,9 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	protected $collNagiosContactNotificationCommands;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosContactNotificationCommands.
-	 */
-	private $lastNagiosContactNotificationCommandCriteria = null;
-
-	/**
 	 * @var        array NagiosHostContactMember[] Collection to store aggregation of NagiosHostContactMember objects.
 	 */
 	protected $collNagiosHostContactMembers;
-
-	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosHostContactMembers.
-	 */
-	private $lastNagiosHostContactMemberCriteria = null;
 
 	/**
 	 * @var        array NagiosServiceContactMember[] Collection to store aggregation of NagiosServiceContactMember objects.
@@ -206,19 +192,14 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	protected $collNagiosServiceContactMembers;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosServiceContactMembers.
-	 */
-	private $lastNagiosServiceContactMemberCriteria = null;
-
-	/**
 	 * @var        array NagiosEscalationContact[] Collection to store aggregation of NagiosEscalationContact objects.
 	 */
 	protected $collNagiosEscalationContacts;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collNagiosEscalationContacts.
+	 * @var        array NagiosContactCustomObjectVar[] Collection to store aggregation of NagiosContactCustomObjectVar objects.
 	 */
-	private $lastNagiosEscalationContactCriteria = null;
+	protected $collNagiosContactCustomObjectVars;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -233,26 +214,6 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosContact object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -575,15 +536,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setPager()
 
 	/**
-	 * Set the value of [host_notifications_enabled] column.
+	 * Sets the value of the [host_notifications_enabled] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationsEnabled($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notifications_enabled !== $v) {
@@ -595,15 +564,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationsEnabled()
 
 	/**
-	 * Set the value of [service_notifications_enabled] column.
+	 * Sets the value of the [service_notifications_enabled] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationsEnabled($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notifications_enabled !== $v) {
@@ -663,15 +640,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationPeriod()
 
 	/**
-	 * Set the value of [host_notification_on_down] column.
+	 * Sets the value of the [host_notification_on_down] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationOnDown($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notification_on_down !== $v) {
@@ -683,15 +668,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationOnDown()
 
 	/**
-	 * Set the value of [host_notification_on_unreachable] column.
+	 * Sets the value of the [host_notification_on_unreachable] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationOnUnreachable($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notification_on_unreachable !== $v) {
@@ -703,15 +696,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationOnUnreachable()
 
 	/**
-	 * Set the value of [host_notification_on_recovery] column.
+	 * Sets the value of the [host_notification_on_recovery] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationOnRecovery($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notification_on_recovery !== $v) {
@@ -723,15 +724,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationOnRecovery()
 
 	/**
-	 * Set the value of [host_notification_on_flapping] column.
+	 * Sets the value of the [host_notification_on_flapping] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationOnFlapping($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notification_on_flapping !== $v) {
@@ -743,15 +752,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationOnFlapping()
 
 	/**
-	 * Set the value of [host_notification_on_scheduled_downtime] column.
+	 * Sets the value of the [host_notification_on_scheduled_downtime] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setHostNotificationOnScheduledDowntime($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->host_notification_on_scheduled_downtime !== $v) {
@@ -763,15 +780,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setHostNotificationOnScheduledDowntime()
 
 	/**
-	 * Set the value of [service_notification_on_warning] column.
+	 * Sets the value of the [service_notification_on_warning] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationOnWarning($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notification_on_warning !== $v) {
@@ -783,15 +808,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationOnWarning()
 
 	/**
-	 * Set the value of [service_notification_on_unknown] column.
+	 * Sets the value of the [service_notification_on_unknown] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationOnUnknown($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notification_on_unknown !== $v) {
@@ -803,15 +836,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationOnUnknown()
 
 	/**
-	 * Set the value of [service_notification_on_critical] column.
+	 * Sets the value of the [service_notification_on_critical] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationOnCritical($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notification_on_critical !== $v) {
@@ -823,15 +864,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationOnCritical()
 
 	/**
-	 * Set the value of [service_notification_on_recovery] column.
+	 * Sets the value of the [service_notification_on_recovery] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationOnRecovery($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notification_on_recovery !== $v) {
@@ -843,15 +892,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationOnRecovery()
 
 	/**
-	 * Set the value of [service_notification_on_flapping] column.
+	 * Sets the value of the [service_notification_on_flapping] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setServiceNotificationOnFlapping($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->service_notification_on_flapping !== $v) {
@@ -863,15 +920,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setServiceNotificationOnFlapping()
 
 	/**
-	 * Set the value of [can_submit_commands] column.
+	 * Sets the value of the [can_submit_commands] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setCanSubmitCommands($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->can_submit_commands !== $v) {
@@ -883,15 +948,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setCanSubmitCommands()
 
 	/**
-	 * Set the value of [retain_status_information] column.
+	 * Sets the value of the [retain_status_information] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setRetainStatusInformation($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->retain_status_information !== $v) {
@@ -903,15 +976,23 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	} // setRetainStatusInformation()
 
 	/**
-	 * Set the value of [retain_nonstatus_information] column.
+	 * Sets the value of the [retain_nonstatus_information] column. 
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     NagiosContact The current object (for fluent API support)
 	 */
 	public function setRetainNonstatusInformation($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
 		if ($this->retain_nonstatus_information !== $v) {
@@ -932,11 +1013,6 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -989,8 +1065,7 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 22; // 22 = NagiosContactPeer::NUM_COLUMNS - NagiosContactPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 22; // 22 = NagiosContactPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosContact object", $e);
@@ -1061,22 +1136,18 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 			$this->aNagiosTimeperiodRelatedByHostNotificationPeriod = null;
 			$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod = null;
 			$this->collNagiosContactAddresss = null;
-			$this->lastNagiosContactAddressCriteria = null;
 
 			$this->collNagiosContactGroupMembers = null;
-			$this->lastNagiosContactGroupMemberCriteria = null;
 
 			$this->collNagiosContactNotificationCommands = null;
-			$this->lastNagiosContactNotificationCommandCriteria = null;
 
 			$this->collNagiosHostContactMembers = null;
-			$this->lastNagiosHostContactMemberCriteria = null;
 
 			$this->collNagiosServiceContactMembers = null;
-			$this->lastNagiosServiceContactMemberCriteria = null;
 
 			$this->collNagiosEscalationContacts = null;
-			$this->lastNagiosEscalationContactCriteria = null;
+
+			$this->collNagiosContactCustomObjectVars = null;
 
 		} // if (deep)
 	}
@@ -1099,12 +1170,20 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosContactPeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosContactQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -1133,12 +1212,29 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosContactPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosContactPeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosContactPeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -1189,13 +1285,14 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosContactPeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosContactPeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosContactPeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows += 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
 					$affectedRows += NagiosContactPeer::doUpdate($this, $con);
@@ -1246,6 +1343,14 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 
 			if ($this->collNagiosEscalationContacts !== null) {
 				foreach ($this->collNagiosEscalationContacts as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
+			if ($this->collNagiosContactCustomObjectVars !== null) {
+				foreach ($this->collNagiosContactCustomObjectVars as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -1389,6 +1494,14 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 					}
 				}
 
+				if ($this->collNagiosContactCustomObjectVars !== null) {
+					foreach ($this->collNagiosContactCustomObjectVars as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
 
 			$this->alreadyInValidation = false;
 		}
@@ -1500,13 +1613,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['NagiosContact'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosContact'][$this->getPrimaryKey()] = true;
 		$keys = NagiosContactPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1532,6 +1653,35 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 			$keys[20] => $this->getRetainStatusInformation(),
 			$keys[21] => $this->getRetainNonstatusInformation(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->aNagiosTimeperiodRelatedByHostNotificationPeriod) {
+				$result['NagiosTimeperiodRelatedByHostNotificationPeriod'] = $this->aNagiosTimeperiodRelatedByHostNotificationPeriod->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->aNagiosTimeperiodRelatedByServiceNotificationPeriod) {
+				$result['NagiosTimeperiodRelatedByServiceNotificationPeriod'] = $this->aNagiosTimeperiodRelatedByServiceNotificationPeriod->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collNagiosContactAddresss) {
+				$result['NagiosContactAddresss'] = $this->collNagiosContactAddresss->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosContactGroupMembers) {
+				$result['NagiosContactGroupMembers'] = $this->collNagiosContactGroupMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosContactNotificationCommands) {
+				$result['NagiosContactNotificationCommands'] = $this->collNagiosContactNotificationCommands->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosHostContactMembers) {
+				$result['NagiosHostContactMembers'] = $this->collNagiosHostContactMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosServiceContactMembers) {
+				$result['NagiosServiceContactMembers'] = $this->collNagiosServiceContactMembers->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosEscalationContacts) {
+				$result['NagiosEscalationContacts'] = $this->collNagiosEscalationContacts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collNagiosContactCustomObjectVars) {
+				$result['NagiosContactCustomObjectVars'] = $this->collNagiosContactCustomObjectVars->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -1722,7 +1872,6 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-
 		$criteria->add(NagiosContactPeer::ID, $this->id);
 
 		return $criteria;
@@ -1749,6 +1898,15 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -1756,53 +1914,32 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 *
 	 * @param      object $copyObj An object of NagiosContact (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setName($this->name);
-
-		$copyObj->setAlias($this->alias);
-
-		$copyObj->setEmail($this->email);
-
-		$copyObj->setPager($this->pager);
-
-		$copyObj->setHostNotificationsEnabled($this->host_notifications_enabled);
-
-		$copyObj->setServiceNotificationsEnabled($this->service_notifications_enabled);
-
-		$copyObj->setHostNotificationPeriod($this->host_notification_period);
-
-		$copyObj->setServiceNotificationPeriod($this->service_notification_period);
-
-		$copyObj->setHostNotificationOnDown($this->host_notification_on_down);
-
-		$copyObj->setHostNotificationOnUnreachable($this->host_notification_on_unreachable);
-
-		$copyObj->setHostNotificationOnRecovery($this->host_notification_on_recovery);
-
-		$copyObj->setHostNotificationOnFlapping($this->host_notification_on_flapping);
-
-		$copyObj->setHostNotificationOnScheduledDowntime($this->host_notification_on_scheduled_downtime);
-
-		$copyObj->setServiceNotificationOnWarning($this->service_notification_on_warning);
-
-		$copyObj->setServiceNotificationOnUnknown($this->service_notification_on_unknown);
-
-		$copyObj->setServiceNotificationOnCritical($this->service_notification_on_critical);
-
-		$copyObj->setServiceNotificationOnRecovery($this->service_notification_on_recovery);
-
-		$copyObj->setServiceNotificationOnFlapping($this->service_notification_on_flapping);
-
-		$copyObj->setCanSubmitCommands($this->can_submit_commands);
-
-		$copyObj->setRetainStatusInformation($this->retain_status_information);
-
-		$copyObj->setRetainNonstatusInformation($this->retain_nonstatus_information);
-
+		$copyObj->setName($this->getName());
+		$copyObj->setAlias($this->getAlias());
+		$copyObj->setEmail($this->getEmail());
+		$copyObj->setPager($this->getPager());
+		$copyObj->setHostNotificationsEnabled($this->getHostNotificationsEnabled());
+		$copyObj->setServiceNotificationsEnabled($this->getServiceNotificationsEnabled());
+		$copyObj->setHostNotificationPeriod($this->getHostNotificationPeriod());
+		$copyObj->setServiceNotificationPeriod($this->getServiceNotificationPeriod());
+		$copyObj->setHostNotificationOnDown($this->getHostNotificationOnDown());
+		$copyObj->setHostNotificationOnUnreachable($this->getHostNotificationOnUnreachable());
+		$copyObj->setHostNotificationOnRecovery($this->getHostNotificationOnRecovery());
+		$copyObj->setHostNotificationOnFlapping($this->getHostNotificationOnFlapping());
+		$copyObj->setHostNotificationOnScheduledDowntime($this->getHostNotificationOnScheduledDowntime());
+		$copyObj->setServiceNotificationOnWarning($this->getServiceNotificationOnWarning());
+		$copyObj->setServiceNotificationOnUnknown($this->getServiceNotificationOnUnknown());
+		$copyObj->setServiceNotificationOnCritical($this->getServiceNotificationOnCritical());
+		$copyObj->setServiceNotificationOnRecovery($this->getServiceNotificationOnRecovery());
+		$copyObj->setServiceNotificationOnFlapping($this->getServiceNotificationOnFlapping());
+		$copyObj->setCanSubmitCommands($this->getCanSubmitCommands());
+		$copyObj->setRetainStatusInformation($this->getRetainStatusInformation());
+		$copyObj->setRetainNonstatusInformation($this->getRetainNonstatusInformation());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1845,13 +1982,18 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 				}
 			}
 
+			foreach ($this->getNagiosContactCustomObjectVars() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addNagiosContactCustomObjectVar($relObj->copy($deepCopy));
+				}
+			}
+
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1929,15 +2071,13 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	public function getNagiosTimeperiodRelatedByHostNotificationPeriod(PropelPDO $con = null)
 	{
 		if ($this->aNagiosTimeperiodRelatedByHostNotificationPeriod === null && ($this->host_notification_period !== null)) {
-			$c = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-			$c->add(NagiosTimeperiodPeer::ID, $this->host_notification_period);
-			$this->aNagiosTimeperiodRelatedByHostNotificationPeriod = NagiosTimeperiodPeer::doSelectOne($c, $con);
+			$this->aNagiosTimeperiodRelatedByHostNotificationPeriod = NagiosTimeperiodQuery::create()->findPk($this->host_notification_period, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosTimeperiodRelatedByHostNotificationPeriod->addNagiosContactsRelatedByHostNotificationPeriod($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosTimeperiodRelatedByHostNotificationPeriod->addNagiosContactsRelatedByHostNotificationPeriod($this);
 			 */
 		}
 		return $this->aNagiosTimeperiodRelatedByHostNotificationPeriod;
@@ -1980,22 +2120,54 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	public function getNagiosTimeperiodRelatedByServiceNotificationPeriod(PropelPDO $con = null)
 	{
 		if ($this->aNagiosTimeperiodRelatedByServiceNotificationPeriod === null && ($this->service_notification_period !== null)) {
-			$c = new Criteria(NagiosTimeperiodPeer::DATABASE_NAME);
-			$c->add(NagiosTimeperiodPeer::ID, $this->service_notification_period);
-			$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod = NagiosTimeperiodPeer::doSelectOne($c, $con);
+			$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod = NagiosTimeperiodQuery::create()->findPk($this->service_notification_period, $con);
 			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aNagiosTimeperiodRelatedByServiceNotificationPeriod->addNagiosContactsRelatedByServiceNotificationPeriod($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod->addNagiosContactsRelatedByServiceNotificationPeriod($this);
 			 */
 		}
 		return $this->aNagiosTimeperiodRelatedByServiceNotificationPeriod;
 	}
 
+
 	/**
-	 * Clears out the collNagiosContactAddresss collection (array).
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name 
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('NagiosContactAddress' == $relationName) {
+			return $this->initNagiosContactAddresss();
+		}
+		if ('NagiosContactGroupMember' == $relationName) {
+			return $this->initNagiosContactGroupMembers();
+		}
+		if ('NagiosContactNotificationCommand' == $relationName) {
+			return $this->initNagiosContactNotificationCommands();
+		}
+		if ('NagiosHostContactMember' == $relationName) {
+			return $this->initNagiosHostContactMembers();
+		}
+		if ('NagiosServiceContactMember' == $relationName) {
+			return $this->initNagiosServiceContactMembers();
+		}
+		if ('NagiosEscalationContact' == $relationName) {
+			return $this->initNagiosEscalationContacts();
+		}
+		if ('NagiosContactCustomObjectVar' == $relationName) {
+			return $this->initNagiosContactCustomObjectVars();
+		}
+	}
+
+	/**
+	 * Clears out the collNagiosContactAddresss collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2009,69 +2181,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosContactAddresss collection (array).
+	 * Initializes the collNagiosContactAddresss collection.
 	 *
 	 * By default this just sets the collNagiosContactAddresss collection to an empty array (like clearcollNagiosContactAddresss());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactAddresss()
+	public function initNagiosContactAddresss($overrideExisting = true)
 	{
-		$this->collNagiosContactAddresss = array();
+		if (null !== $this->collNagiosContactAddresss && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactAddresss = new PropelObjectCollection();
+		$this->collNagiosContactAddresss->setModel('NagiosContactAddress');
 	}
 
 	/**
 	 * Gets an array of NagiosContactAddress objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosContactAddresss from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContactAddress[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContactAddress[] List of NagiosContactAddress objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactAddresss($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactAddresss === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactAddresss = array();
+		if(null === $this->collNagiosContactAddresss || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactAddresss) {
+				// return empty collection
+				$this->initNagiosContactAddresss();
 			} else {
-
-				$criteria->add(NagiosContactAddressPeer::CONTACT, $this->id);
-
-				NagiosContactAddressPeer::addSelectColumns($criteria);
-				$this->collNagiosContactAddresss = NagiosContactAddressPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactAddressPeer::CONTACT, $this->id);
-
-				NagiosContactAddressPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactAddressCriteria) || !$this->lastNagiosContactAddressCriteria->equals($criteria)) {
-					$this->collNagiosContactAddresss = NagiosContactAddressPeer::doSelect($criteria, $con);
+				$collNagiosContactAddresss = NagiosContactAddressQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactAddresss;
 				}
+				$this->collNagiosContactAddresss = $collNagiosContactAddresss;
 			}
 		}
-		$this->lastNagiosContactAddressCriteria = $criteria;
 		return $this->collNagiosContactAddresss;
 	}
 
@@ -2086,47 +2245,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosContactAddresss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactAddresss === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactAddresss || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactAddresss) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactAddressPeer::CONTACT, $this->id);
-
-				$count = NagiosContactAddressPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactAddressPeer::CONTACT, $this->id);
-
-				if (!isset($this->lastNagiosContactAddressCriteria) || !$this->lastNagiosContactAddressCriteria->equals($criteria)) {
-					$count = NagiosContactAddressPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactAddresss);
+				$query = NagiosContactAddressQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactAddresss);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactAddresss);
 		}
-		return $count;
 	}
 
 	/**
@@ -2142,14 +2275,14 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosContactAddresss === null) {
 			$this->initNagiosContactAddresss();
 		}
-		if (!in_array($l, $this->collNagiosContactAddresss, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactAddresss, $l);
+		if (!$this->collNagiosContactAddresss->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactAddresss[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
 
 	/**
-	 * Clears out the collNagiosContactGroupMembers collection (array).
+	 * Clears out the collNagiosContactGroupMembers collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2163,69 +2296,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosContactGroupMembers collection (array).
+	 * Initializes the collNagiosContactGroupMembers collection.
 	 *
 	 * By default this just sets the collNagiosContactGroupMembers collection to an empty array (like clearcollNagiosContactGroupMembers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactGroupMembers()
+	public function initNagiosContactGroupMembers($overrideExisting = true)
 	{
-		$this->collNagiosContactGroupMembers = array();
+		if (null !== $this->collNagiosContactGroupMembers && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactGroupMembers = new PropelObjectCollection();
+		$this->collNagiosContactGroupMembers->setModel('NagiosContactGroupMember');
 	}
 
 	/**
 	 * Gets an array of NagiosContactGroupMember objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosContactGroupMembers from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContactGroupMember[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContactGroupMember[] List of NagiosContactGroupMember objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactGroupMembers($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactGroupMembers = array();
+		if(null === $this->collNagiosContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactGroupMembers) {
+				// return empty collection
+				$this->initNagiosContactGroupMembers();
 			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-				NagiosContactGroupMemberPeer::addSelectColumns($criteria);
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-				NagiosContactGroupMemberPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-					$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelect($criteria, $con);
+				$collNagiosContactGroupMembers = NagiosContactGroupMemberQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactGroupMembers;
 				}
+				$this->collNagiosContactGroupMembers = $collNagiosContactGroupMembers;
 			}
 		}
-		$this->lastNagiosContactGroupMemberCriteria = $criteria;
 		return $this->collNagiosContactGroupMembers;
 	}
 
@@ -2240,47 +2360,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosContactGroupMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactGroupMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactGroupMembers) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-				$count = NagiosContactGroupMemberPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-				if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-					$count = NagiosContactGroupMemberPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactGroupMembers);
+				$query = NagiosContactGroupMemberQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactGroupMembers);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactGroupMembers);
 		}
-		return $count;
 	}
 
 	/**
@@ -2296,8 +2390,8 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosContactGroupMembers === null) {
 			$this->initNagiosContactGroupMembers();
 		}
-		if (!in_array($l, $this->collNagiosContactGroupMembers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactGroupMembers, $l);
+		if (!$this->collNagiosContactGroupMembers->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactGroupMembers[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
@@ -2313,44 +2407,22 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosContactGroupMember[] List of NagiosContactGroupMember objects
 	 */
 	public function getNagiosContactGroupMembersJoinNagiosContactGroup($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosContactGroupMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosContactGroup', $join_behavior);
 
-		if ($this->collNagiosContactGroupMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosContactGroupMembers = array();
-			} else {
-
-				$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelectJoinNagiosContactGroup($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosContactGroupMemberPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosContactGroupMemberCriteria) || !$this->lastNagiosContactGroupMemberCriteria->equals($criteria)) {
-				$this->collNagiosContactGroupMembers = NagiosContactGroupMemberPeer::doSelectJoinNagiosContactGroup($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosContactGroupMemberCriteria = $criteria;
-
-		return $this->collNagiosContactGroupMembers;
+		return $this->getNagiosContactGroupMembers($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosContactNotificationCommands collection (array).
+	 * Clears out the collNagiosContactNotificationCommands collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2364,69 +2436,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosContactNotificationCommands collection (array).
+	 * Initializes the collNagiosContactNotificationCommands collection.
 	 *
 	 * By default this just sets the collNagiosContactNotificationCommands collection to an empty array (like clearcollNagiosContactNotificationCommands());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosContactNotificationCommands()
+	public function initNagiosContactNotificationCommands($overrideExisting = true)
 	{
-		$this->collNagiosContactNotificationCommands = array();
+		if (null !== $this->collNagiosContactNotificationCommands && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactNotificationCommands = new PropelObjectCollection();
+		$this->collNagiosContactNotificationCommands->setModel('NagiosContactNotificationCommand');
 	}
 
 	/**
 	 * Gets an array of NagiosContactNotificationCommand objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosContactNotificationCommands from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosContactNotificationCommand[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContactNotificationCommand[] List of NagiosContactNotificationCommand objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosContactNotificationCommands($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosContactNotificationCommands === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosContactNotificationCommands = array();
+		if(null === $this->collNagiosContactNotificationCommands || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactNotificationCommands) {
+				// return empty collection
+				$this->initNagiosContactNotificationCommands();
 			} else {
-
-				$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-				NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
-				$this->collNagiosContactNotificationCommands = NagiosContactNotificationCommandPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-				NagiosContactNotificationCommandPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosContactNotificationCommandCriteria) || !$this->lastNagiosContactNotificationCommandCriteria->equals($criteria)) {
-					$this->collNagiosContactNotificationCommands = NagiosContactNotificationCommandPeer::doSelect($criteria, $con);
+				$collNagiosContactNotificationCommands = NagiosContactNotificationCommandQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactNotificationCommands;
 				}
+				$this->collNagiosContactNotificationCommands = $collNagiosContactNotificationCommands;
 			}
 		}
-		$this->lastNagiosContactNotificationCommandCriteria = $criteria;
 		return $this->collNagiosContactNotificationCommands;
 	}
 
@@ -2441,47 +2500,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosContactNotificationCommands(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosContactNotificationCommands === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosContactNotificationCommands || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactNotificationCommands) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-				$count = NagiosContactNotificationCommandPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-				if (!isset($this->lastNagiosContactNotificationCommandCriteria) || !$this->lastNagiosContactNotificationCommandCriteria->equals($criteria)) {
-					$count = NagiosContactNotificationCommandPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosContactNotificationCommands);
+				$query = NagiosContactNotificationCommandQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosContactNotificationCommands);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosContactNotificationCommands);
 		}
-		return $count;
 	}
 
 	/**
@@ -2497,8 +2530,8 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosContactNotificationCommands === null) {
 			$this->initNagiosContactNotificationCommands();
 		}
-		if (!in_array($l, $this->collNagiosContactNotificationCommands, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosContactNotificationCommands, $l);
+		if (!$this->collNagiosContactNotificationCommands->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactNotificationCommands[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
@@ -2514,44 +2547,22 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosContactNotificationCommand[] List of NagiosContactNotificationCommand objects
 	 */
 	public function getNagiosContactNotificationCommandsJoinNagiosCommand($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosContactNotificationCommandQuery::create(null, $criteria);
+		$query->joinWith('NagiosCommand', $join_behavior);
 
-		if ($this->collNagiosContactNotificationCommands === null) {
-			if ($this->isNew()) {
-				$this->collNagiosContactNotificationCommands = array();
-			} else {
-
-				$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-				$this->collNagiosContactNotificationCommands = NagiosContactNotificationCommandPeer::doSelectJoinNagiosCommand($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosContactNotificationCommandPeer::CONTACT_ID, $this->id);
-
-			if (!isset($this->lastNagiosContactNotificationCommandCriteria) || !$this->lastNagiosContactNotificationCommandCriteria->equals($criteria)) {
-				$this->collNagiosContactNotificationCommands = NagiosContactNotificationCommandPeer::doSelectJoinNagiosCommand($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosContactNotificationCommandCriteria = $criteria;
-
-		return $this->collNagiosContactNotificationCommands;
+		return $this->getNagiosContactNotificationCommands($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosHostContactMembers collection (array).
+	 * Clears out the collNagiosHostContactMembers collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2565,69 +2576,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosHostContactMembers collection (array).
+	 * Initializes the collNagiosHostContactMembers collection.
 	 *
 	 * By default this just sets the collNagiosHostContactMembers collection to an empty array (like clearcollNagiosHostContactMembers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosHostContactMembers()
+	public function initNagiosHostContactMembers($overrideExisting = true)
 	{
-		$this->collNagiosHostContactMembers = array();
+		if (null !== $this->collNagiosHostContactMembers && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosHostContactMembers = new PropelObjectCollection();
+		$this->collNagiosHostContactMembers->setModel('NagiosHostContactMember');
 	}
 
 	/**
 	 * Gets an array of NagiosHostContactMember objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosHostContactMembers from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosHostContactMember[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosHostContactMember[] List of NagiosHostContactMember objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosHostContactMembers($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosHostContactMembers === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosHostContactMembers = array();
+		if(null === $this->collNagiosHostContactMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostContactMembers) {
+				// return empty collection
+				$this->initNagiosHostContactMembers();
 			} else {
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				NagiosHostContactMemberPeer::addSelectColumns($criteria);
-				$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				NagiosHostContactMemberPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosHostContactMemberCriteria) || !$this->lastNagiosHostContactMemberCriteria->equals($criteria)) {
-					$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelect($criteria, $con);
+				$collNagiosHostContactMembers = NagiosHostContactMemberQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosHostContactMembers;
 				}
+				$this->collNagiosHostContactMembers = $collNagiosHostContactMembers;
 			}
 		}
-		$this->lastNagiosHostContactMemberCriteria = $criteria;
 		return $this->collNagiosHostContactMembers;
 	}
 
@@ -2642,47 +2640,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosHostContactMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosHostContactMembers === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosHostContactMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosHostContactMembers) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				$count = NagiosHostContactMemberPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				if (!isset($this->lastNagiosHostContactMemberCriteria) || !$this->lastNagiosHostContactMemberCriteria->equals($criteria)) {
-					$count = NagiosHostContactMemberPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosHostContactMembers);
+				$query = NagiosHostContactMemberQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosHostContactMembers);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosHostContactMembers);
 		}
-		return $count;
 	}
 
 	/**
@@ -2698,8 +2670,8 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosHostContactMembers === null) {
 			$this->initNagiosHostContactMembers();
 		}
-		if (!in_array($l, $this->collNagiosHostContactMembers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosHostContactMembers, $l);
+		if (!$this->collNagiosHostContactMembers->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosHostContactMembers[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
@@ -2715,40 +2687,18 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostContactMember[] List of NagiosHostContactMember objects
 	 */
 	public function getNagiosHostContactMembersJoinNagiosHost($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostContactMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosHost', $join_behavior);
 
-		if ($this->collNagiosHostContactMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostContactMembers = array();
-			} else {
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosHostContactMemberCriteria) || !$this->lastNagiosHostContactMemberCriteria->equals($criteria)) {
-				$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelectJoinNagiosHost($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostContactMemberCriteria = $criteria;
-
-		return $this->collNagiosHostContactMembers;
+		return $this->getNagiosHostContactMembers($query, $con);
 	}
 
 
@@ -2762,44 +2712,22 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosHostContactMember[] List of NagiosHostContactMember objects
 	 */
 	public function getNagiosHostContactMembersJoinNagiosHostTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosHostContactMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosHostTemplate', $join_behavior);
 
-		if ($this->collNagiosHostContactMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosHostContactMembers = array();
-			} else {
-
-				$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-				$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosHostContactMemberPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosHostContactMemberCriteria) || !$this->lastNagiosHostContactMemberCriteria->equals($criteria)) {
-				$this->collNagiosHostContactMembers = NagiosHostContactMemberPeer::doSelectJoinNagiosHostTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosHostContactMemberCriteria = $criteria;
-
-		return $this->collNagiosHostContactMembers;
+		return $this->getNagiosHostContactMembers($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosServiceContactMembers collection (array).
+	 * Clears out the collNagiosServiceContactMembers collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -2813,69 +2741,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosServiceContactMembers collection (array).
+	 * Initializes the collNagiosServiceContactMembers collection.
 	 *
 	 * By default this just sets the collNagiosServiceContactMembers collection to an empty array (like clearcollNagiosServiceContactMembers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosServiceContactMembers()
+	public function initNagiosServiceContactMembers($overrideExisting = true)
 	{
-		$this->collNagiosServiceContactMembers = array();
+		if (null !== $this->collNagiosServiceContactMembers && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosServiceContactMembers = new PropelObjectCollection();
+		$this->collNagiosServiceContactMembers->setModel('NagiosServiceContactMember');
 	}
 
 	/**
 	 * Gets an array of NagiosServiceContactMember objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosServiceContactMembers from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosServiceContactMember[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosServiceContactMember[] List of NagiosServiceContactMember objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosServiceContactMembers($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosServiceContactMembers === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosServiceContactMembers = array();
+		if(null === $this->collNagiosServiceContactMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceContactMembers) {
+				// return empty collection
+				$this->initNagiosServiceContactMembers();
 			} else {
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				NagiosServiceContactMemberPeer::addSelectColumns($criteria);
-				$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				NagiosServiceContactMemberPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosServiceContactMemberCriteria) || !$this->lastNagiosServiceContactMemberCriteria->equals($criteria)) {
-					$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelect($criteria, $con);
+				$collNagiosServiceContactMembers = NagiosServiceContactMemberQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosServiceContactMembers;
 				}
+				$this->collNagiosServiceContactMembers = $collNagiosServiceContactMembers;
 			}
 		}
-		$this->lastNagiosServiceContactMemberCriteria = $criteria;
 		return $this->collNagiosServiceContactMembers;
 	}
 
@@ -2890,47 +2805,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosServiceContactMembers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosServiceContactMembers === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosServiceContactMembers || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosServiceContactMembers) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				$count = NagiosServiceContactMemberPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				if (!isset($this->lastNagiosServiceContactMemberCriteria) || !$this->lastNagiosServiceContactMemberCriteria->equals($criteria)) {
-					$count = NagiosServiceContactMemberPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosServiceContactMembers);
+				$query = NagiosServiceContactMemberQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosServiceContactMembers);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosServiceContactMembers);
 		}
-		return $count;
 	}
 
 	/**
@@ -2946,8 +2835,8 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosServiceContactMembers === null) {
 			$this->initNagiosServiceContactMembers();
 		}
-		if (!in_array($l, $this->collNagiosServiceContactMembers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosServiceContactMembers, $l);
+		if (!$this->collNagiosServiceContactMembers->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosServiceContactMembers[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
@@ -2963,40 +2852,18 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceContactMember[] List of NagiosServiceContactMember objects
 	 */
 	public function getNagiosServiceContactMembersJoinNagiosService($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceContactMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosService', $join_behavior);
 
-		if ($this->collNagiosServiceContactMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceContactMembers = array();
-			} else {
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosServiceContactMemberCriteria) || !$this->lastNagiosServiceContactMemberCriteria->equals($criteria)) {
-				$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelectJoinNagiosService($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceContactMemberCriteria = $criteria;
-
-		return $this->collNagiosServiceContactMembers;
+		return $this->getNagiosServiceContactMembers($query, $con);
 	}
 
 
@@ -3010,44 +2877,22 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosServiceContactMember[] List of NagiosServiceContactMember objects
 	 */
 	public function getNagiosServiceContactMembersJoinNagiosServiceTemplate($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosServiceContactMemberQuery::create(null, $criteria);
+		$query->joinWith('NagiosServiceTemplate', $join_behavior);
 
-		if ($this->collNagiosServiceContactMembers === null) {
-			if ($this->isNew()) {
-				$this->collNagiosServiceContactMembers = array();
-			} else {
-
-				$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-				$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosServiceContactMemberPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosServiceContactMemberCriteria) || !$this->lastNagiosServiceContactMemberCriteria->equals($criteria)) {
-				$this->collNagiosServiceContactMembers = NagiosServiceContactMemberPeer::doSelectJoinNagiosServiceTemplate($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosServiceContactMemberCriteria = $criteria;
-
-		return $this->collNagiosServiceContactMembers;
+		return $this->getNagiosServiceContactMembers($query, $con);
 	}
 
 	/**
-	 * Clears out the collNagiosEscalationContacts collection (array).
+	 * Clears out the collNagiosEscalationContacts collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
@@ -3061,69 +2906,56 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes the collNagiosEscalationContacts collection (array).
+	 * Initializes the collNagiosEscalationContacts collection.
 	 *
 	 * By default this just sets the collNagiosEscalationContacts collection to an empty array (like clearcollNagiosEscalationContacts());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initNagiosEscalationContacts()
+	public function initNagiosEscalationContacts($overrideExisting = true)
 	{
-		$this->collNagiosEscalationContacts = array();
+		if (null !== $this->collNagiosEscalationContacts && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosEscalationContacts = new PropelObjectCollection();
+		$this->collNagiosEscalationContacts->setModel('NagiosEscalationContact');
 	}
 
 	/**
 	 * Gets an array of NagiosEscalationContact objects which contain a foreign key that references this object.
 	 *
-	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this NagiosContact has previously been saved, it will retrieve
-	 * related NagiosEscalationContacts from storage. If this NagiosContact is new, it will return
-	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
 	 *
-	 * @param      PropelPDO $con
-	 * @param      Criteria $criteria
-	 * @return     array NagiosEscalationContact[]
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosEscalationContact[] List of NagiosEscalationContact objects
 	 * @throws     PropelException
 	 */
 	public function getNagiosEscalationContacts($criteria = null, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
-
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-			   $this->collNagiosEscalationContacts = array();
+		if(null === $this->collNagiosEscalationContacts || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContacts) {
+				// return empty collection
+				$this->initNagiosEscalationContacts();
 			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-				NagiosEscalationContactPeer::addSelectColumns($criteria);
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelect($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return the collection.
-
-
-				$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-				NagiosEscalationContactPeer::addSelectColumns($criteria);
-				if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-					$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelect($criteria, $con);
+				$collNagiosEscalationContacts = NagiosEscalationContactQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosEscalationContacts;
 				}
+				$this->collNagiosEscalationContacts = $collNagiosEscalationContacts;
 			}
 		}
-		$this->lastNagiosEscalationContactCriteria = $criteria;
 		return $this->collNagiosEscalationContacts;
 	}
 
@@ -3138,47 +2970,21 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 */
 	public function countNagiosEscalationContacts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		} else {
-			$criteria = clone $criteria;
-		}
-
-		if ($distinct) {
-			$criteria->setDistinct();
-		}
-
-		$count = null;
-
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-				$count = 0;
+		if(null === $this->collNagiosEscalationContacts || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosEscalationContacts) {
+				return 0;
 			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-				$count = NagiosEscalationContactPeer::doCount($criteria, $con);
-			}
-		} else {
-			// criteria has no effect for a new object
-			if (!$this->isNew()) {
-				// the following code is to determine if a new query is
-				// called for.  If the criteria is the same as the last
-				// one, just return count of the collection.
-
-
-				$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-				if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-					$count = NagiosEscalationContactPeer::doCount($criteria, $con);
-				} else {
-					$count = count($this->collNagiosEscalationContacts);
+				$query = NagiosEscalationContactQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
 				}
-			} else {
-				$count = count($this->collNagiosEscalationContacts);
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
 			}
+		} else {
+			return count($this->collNagiosEscalationContacts);
 		}
-		return $count;
 	}
 
 	/**
@@ -3194,8 +3000,8 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 		if ($this->collNagiosEscalationContacts === null) {
 			$this->initNagiosEscalationContacts();
 		}
-		if (!in_array($l, $this->collNagiosEscalationContacts, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collNagiosEscalationContacts, $l);
+		if (!$this->collNagiosEscalationContacts->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosEscalationContacts[]= $l;
 			$l->setNagiosContact($this);
 		}
 	}
@@ -3211,94 +3017,278 @@ abstract class BaseNagiosContact extends BaseObject  implements Persistent {
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in NagiosContact.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array NagiosEscalationContact[] List of NagiosEscalationContact objects
 	 */
 	public function getNagiosEscalationContactsJoinNagiosEscalation($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($criteria === null) {
-			$criteria = new Criteria(NagiosContactPeer::DATABASE_NAME);
-		}
-		elseif ($criteria instanceof Criteria)
-		{
-			$criteria = clone $criteria;
-		}
+		$query = NagiosEscalationContactQuery::create(null, $criteria);
+		$query->joinWith('NagiosEscalation', $join_behavior);
 
-		if ($this->collNagiosEscalationContacts === null) {
-			if ($this->isNew()) {
-				$this->collNagiosEscalationContacts = array();
-			} else {
-
-				$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelectJoinNagiosEscalation($criteria, $con, $join_behavior);
-			}
-		} else {
-			// the following code is to determine if a new query is
-			// called for.  If the criteria is the same as the last
-			// one, just return the collection.
-
-			$criteria->add(NagiosEscalationContactPeer::CONTACT, $this->id);
-
-			if (!isset($this->lastNagiosEscalationContactCriteria) || !$this->lastNagiosEscalationContactCriteria->equals($criteria)) {
-				$this->collNagiosEscalationContacts = NagiosEscalationContactPeer::doSelectJoinNagiosEscalation($criteria, $con, $join_behavior);
-			}
-		}
-		$this->lastNagiosEscalationContactCriteria = $criteria;
-
-		return $this->collNagiosEscalationContacts;
+		return $this->getNagiosEscalationContacts($query, $con);
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears out the collNagiosContactCustomObjectVars collection
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @return     void
+	 * @see        addNagiosContactCustomObjectVars()
+	 */
+	public function clearNagiosContactCustomObjectVars()
+	{
+		$this->collNagiosContactCustomObjectVars = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collNagiosContactCustomObjectVars collection.
+	 *
+	 * By default this just sets the collNagiosContactCustomObjectVars collection to an empty array (like clearcollNagiosContactCustomObjectVars());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
+	 * @return     void
+	 */
+	public function initNagiosContactCustomObjectVars($overrideExisting = true)
+	{
+		if (null !== $this->collNagiosContactCustomObjectVars && !$overrideExisting) {
+			return;
+		}
+		$this->collNagiosContactCustomObjectVars = new PropelObjectCollection();
+		$this->collNagiosContactCustomObjectVars->setModel('NagiosContactCustomObjectVar');
+	}
+
+	/**
+	 * Gets an array of NagiosContactCustomObjectVar objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this NagiosContact is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array NagiosContactCustomObjectVar[] List of NagiosContactCustomObjectVar objects
+	 * @throws     PropelException
+	 */
+	public function getNagiosContactCustomObjectVars($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collNagiosContactCustomObjectVars || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactCustomObjectVars) {
+				// return empty collection
+				$this->initNagiosContactCustomObjectVars();
+			} else {
+				$collNagiosContactCustomObjectVars = NagiosContactCustomObjectVarQuery::create(null, $criteria)
+					->filterByNagiosContact($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collNagiosContactCustomObjectVars;
+				}
+				$this->collNagiosContactCustomObjectVars = $collNagiosContactCustomObjectVars;
+			}
+		}
+		return $this->collNagiosContactCustomObjectVars;
+	}
+
+	/**
+	 * Returns the number of related NagiosContactCustomObjectVar objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related NagiosContactCustomObjectVar objects.
+	 * @throws     PropelException
+	 */
+	public function countNagiosContactCustomObjectVars(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collNagiosContactCustomObjectVars || null !== $criteria) {
+			if ($this->isNew() && null === $this->collNagiosContactCustomObjectVars) {
+				return 0;
+			} else {
+				$query = NagiosContactCustomObjectVarQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByNagiosContact($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collNagiosContactCustomObjectVars);
+		}
+	}
+
+	/**
+	 * Method called to associate a NagiosContactCustomObjectVar object to this object
+	 * through the NagiosContactCustomObjectVar foreign key attribute.
+	 *
+	 * @param      NagiosContactCustomObjectVar $l NagiosContactCustomObjectVar
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addNagiosContactCustomObjectVar(NagiosContactCustomObjectVar $l)
+	{
+		if ($this->collNagiosContactCustomObjectVars === null) {
+			$this->initNagiosContactCustomObjectVars();
+		}
+		if (!$this->collNagiosContactCustomObjectVars->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collNagiosContactCustomObjectVars[]= $l;
+			$l->setNagiosContact($this);
+		}
+	}
+
+	/**
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->name = null;
+		$this->alias = null;
+		$this->email = null;
+		$this->pager = null;
+		$this->host_notifications_enabled = null;
+		$this->service_notifications_enabled = null;
+		$this->host_notification_period = null;
+		$this->service_notification_period = null;
+		$this->host_notification_on_down = null;
+		$this->host_notification_on_unreachable = null;
+		$this->host_notification_on_recovery = null;
+		$this->host_notification_on_flapping = null;
+		$this->host_notification_on_scheduled_downtime = null;
+		$this->service_notification_on_warning = null;
+		$this->service_notification_on_unknown = null;
+		$this->service_notification_on_critical = null;
+		$this->service_notification_on_recovery = null;
+		$this->service_notification_on_flapping = null;
+		$this->can_submit_commands = null;
+		$this->retain_status_information = null;
+		$this->retain_nonstatus_information = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
+	 *
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
+	 *
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collNagiosContactAddresss) {
-				foreach ((array) $this->collNagiosContactAddresss as $o) {
+				foreach ($this->collNagiosContactAddresss as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosContactGroupMembers) {
-				foreach ((array) $this->collNagiosContactGroupMembers as $o) {
+				foreach ($this->collNagiosContactGroupMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosContactNotificationCommands) {
-				foreach ((array) $this->collNagiosContactNotificationCommands as $o) {
+				foreach ($this->collNagiosContactNotificationCommands as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosHostContactMembers) {
-				foreach ((array) $this->collNagiosHostContactMembers as $o) {
+				foreach ($this->collNagiosHostContactMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosServiceContactMembers) {
-				foreach ((array) $this->collNagiosServiceContactMembers as $o) {
+				foreach ($this->collNagiosServiceContactMembers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collNagiosEscalationContacts) {
-				foreach ((array) $this->collNagiosEscalationContacts as $o) {
+				foreach ($this->collNagiosEscalationContacts as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
+			if ($this->collNagiosContactCustomObjectVars) {
+				foreach ($this->collNagiosContactCustomObjectVars as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collNagiosContactAddresss instanceof PropelCollection) {
+			$this->collNagiosContactAddresss->clearIterator();
+		}
 		$this->collNagiosContactAddresss = null;
+		if ($this->collNagiosContactGroupMembers instanceof PropelCollection) {
+			$this->collNagiosContactGroupMembers->clearIterator();
+		}
 		$this->collNagiosContactGroupMembers = null;
+		if ($this->collNagiosContactNotificationCommands instanceof PropelCollection) {
+			$this->collNagiosContactNotificationCommands->clearIterator();
+		}
 		$this->collNagiosContactNotificationCommands = null;
+		if ($this->collNagiosHostContactMembers instanceof PropelCollection) {
+			$this->collNagiosHostContactMembers->clearIterator();
+		}
 		$this->collNagiosHostContactMembers = null;
+		if ($this->collNagiosServiceContactMembers instanceof PropelCollection) {
+			$this->collNagiosServiceContactMembers->clearIterator();
+		}
 		$this->collNagiosServiceContactMembers = null;
+		if ($this->collNagiosEscalationContacts instanceof PropelCollection) {
+			$this->collNagiosEscalationContacts->clearIterator();
+		}
 		$this->collNagiosEscalationContacts = null;
-			$this->aNagiosTimeperiodRelatedByHostNotificationPeriod = null;
-			$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod = null;
+		if ($this->collNagiosContactCustomObjectVars instanceof PropelCollection) {
+			$this->collNagiosContactCustomObjectVars->clearIterator();
+		}
+		$this->collNagiosContactCustomObjectVars = null;
+		$this->aNagiosTimeperiodRelatedByHostNotificationPeriod = null;
+		$this->aNagiosTimeperiodRelatedByServiceNotificationPeriod = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosContactPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosContact

@@ -70,7 +70,7 @@ class NagiosDependencyExporter extends NagiosExporter {
 					fputs($fp, ",");
 			}
 			if($dependency->getExecutionFailureCriteriaOk()) {
-				fputs($fp, "Ok");
+				fputs($fp, "o");
 					if($dependency->getExecutionFailureCriteriaWarning() || $dependency->getExecutionFailureCriteriaUnknown() || $dependency->getExecutionFailureCriteriaCritical() || $dependency->getExecutionFailureCriteriaPending())
 						fputs($fp, ",");
 			}

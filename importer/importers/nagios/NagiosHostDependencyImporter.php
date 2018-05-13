@@ -232,7 +232,7 @@ class NagiosHostDependencyImporter extends NagiosImporter {
 					}	
 				}
 				else {
-					call_user_method($this->fieldMethods[$key], $dependency, $value);
+					call_user_func(array($dependency, $this->fieldMethods[$key]), $value);
 				}
 		
 			}

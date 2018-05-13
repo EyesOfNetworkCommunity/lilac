@@ -1,0 +1,4 @@
+ALTER TABLE `nagios_cgi_configuration`
+  ADD `nagios_check_command` VARCHAR(255);
+
+REPLACE INTO `label`(section, name, label)  VALUES('nagios_cgi_desc', 'nagios_check_command', 'This is an optional command that the CGIs can use to check the status of the Nagios process. This provides the CGIs (as well as yourself) with some idea of whether or not Nagios is still running. If you do not specify a command to be run, the CGIs will assume that the Nagios process is running. If you do define a process check command, it should follow the same guidelines that are required of standard plugins. If the command returns a non-OK status, the CGIs will think the Nagios process is not running and will refuse to allow you to commit any commands via the command CGI.');

@@ -1,6 +1,5 @@
 <?php
 
-require 'om/BaseNagiosServiceTemplateInheritance.php';
 
 
 /**
@@ -12,9 +11,30 @@ require 'om/BaseNagiosServiceTemplateInheritance.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    
+ * @package    propel.generator.
  */
 class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInheritance {
+
+	public function delete(PropelPDO $con = null) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			if($this->getSourceService() == null) {
+				$tmpTemplate = NagiosServiceTemplatePeer::retrieveByPK($this->getSourceTemplate());
+				$JobExport->insertAction($tmpTemplate->getName(),"servicetemplate","modify");
+			} else {
+				$tmpService = NagiosServicePeer::retrieveByPK($this->getSourceService());
+				if($tmpService->getNagiosHost() != null) {
+					$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHost()->getName(),'host');
+				}elseif($tmpService->getNagiosHostTemplate()  != null) {
+					$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHostTemplate()->getName(),'hosttemplate');
+				}
+			}
+		}
+
+		return parent::delete($con);
+		
+	}
 
 	/**
 	 * Initializes internal state of NagiosServiceTemplateInheritance object.
@@ -59,6 +79,20 @@ class NagiosServiceTemplateInheritance extends BaseNagiosServiceTemplateInherita
 			throw new Exception("Adding that inheritance would create a circular chain.");
 		}
 		else {
+			$JobExport=new EoN_Job_Exporter();
+			if($con == null || $con == ""){
+				if($this->getSourceService() == null) {
+					$tmpTemplate = NagiosServiceTemplatePeer::retrieveByPK($this->getSourceTemplate());
+					$JobExport->insertAction($tmpTemplate->getName(),"servicetemplate","modify");
+				} else {
+					$tmpService = NagiosServicePeer::retrieveByPK($this->getSourceService());
+					if($tmpService->getNagiosHost() != null) {
+						$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHost()->getName(),'host');
+					}elseif($tmpService->getNagiosHostTemplate()  != null) {
+						$JobExport->insertAction($tmpService->getDescription(),'service','modify',$tmpService->getNagiosHostTemplate()->getName(),'hosttemplate');
+					}
+				}
+			}
 			parent::save($con);	// Okay, we've saved
 		}
 	}

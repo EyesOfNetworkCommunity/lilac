@@ -1,14 +1,20 @@
 <?php
 
+
 /**
  * Base class that represents a row from the 'nagios_resource' table.
  *
  * Nagios Resource
  *
- * @package    .om
+ * @package    propel.generator..om
  */
-abstract class BaseNagiosResource extends BaseObject  implements Persistent {
+abstract class BaseNagiosResource extends BaseObject  implements Persistent
+{
 
+	/**
+	 * Peer class name
+	 */
+	const PEER = 'NagiosResourcePeer';
 
 	/**
 	 * The Peer class.
@@ -229,26 +235,6 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Initializes internal state of BaseNagiosResource object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -1250,11 +1236,6 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			// First, ensure that we don't have any columns that have been modified which aren't default columns.
-			if (array_diff($this->modifiedColumns, array())) {
-				return false;
-			}
-
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -1318,8 +1299,7 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 				$this->ensureConsistency();
 			}
 
-			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 33; // 33 = NagiosResourcePeer::NUM_COLUMNS - NagiosResourcePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 33; // 33 = NagiosResourcePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating NagiosResource object", $e);
@@ -1402,12 +1382,20 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosResourcePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
 		try {
-			NagiosResourcePeer::doDelete($this, $con);
-			$this->setDeleted(true);
-			$con->commit();
+			$ret = $this->preDelete($con);
+			if ($ret) {
+				NagiosResourceQuery::create()
+					->filterByPrimaryKey($this->getPrimaryKey())
+					->delete($con);
+				$this->postDelete($con);
+				$con->commit();
+				$this->setDeleted(true);
+			} else {
+				$con->commit();
+			}
 		} catch (PropelException $e) {
 			$con->rollBack();
 			throw $e;
@@ -1436,12 +1424,29 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 		if ($con === null) {
 			$con = Propel::getConnection(NagiosResourcePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		$con->beginTransaction();
+		$isInsert = $this->isNew();
 		try {
-			$affectedRows = $this->doSave($con);
+			$ret = $this->preSave($con);
+			if ($isInsert) {
+				$ret = $ret && $this->preInsert($con);
+			} else {
+				$ret = $ret && $this->preUpdate($con);
+			}
+			if ($ret) {
+				$affectedRows = $this->doSave($con);
+				if ($isInsert) {
+					$this->postInsert($con);
+				} else {
+					$this->postUpdate($con);
+				}
+				$this->postSave($con);
+				NagiosResourcePeer::addInstanceToPool($this);
+			} else {
+				$affectedRows = 0;
+			}
 			$con->commit();
-			NagiosResourcePeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -1473,16 +1478,17 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = NagiosResourcePeer::doInsert($this, $con);
-					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
-										 // should always be true here (even though technically
-										 // BasePeer::doInsert() can insert multiple rows).
+					$criteria = $this->buildCriteria();
+					if ($criteria->keyContainsValue(NagiosResourcePeer::ID) ) {
+						throw new PropelException('Cannot insert a value for auto-increment primary key ('.NagiosResourcePeer::ID.')');
+					}
 
+					$pk = BasePeer::doInsert($criteria, $con);
+					$affectedRows = 1;
 					$this->setId($pk);  //[IMV] update autoincrement primary key
-
 					$this->setNew(false);
 				} else {
-					$affectedRows += NagiosResourcePeer::doUpdate($this, $con);
+					$affectedRows = NagiosResourcePeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
@@ -1703,13 +1709,20 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	 * You can specify the key type of the array by passing one of the class
 	 * type constants.
 	 *
-	 * @param      string $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME
-	 *                        BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. Defaults to BasePeer::TYPE_PHPNAME.
-	 * @param      boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns.  Defaults to TRUE.
-	 * @return     an associative array containing the field names (as keys) and field values
+	 * @param     string  $keyType (optional) One of the class type constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME,
+	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
+	 *                    Defaults to BasePeer::TYPE_PHPNAME.
+	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 *
+	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
 	{
+		if (isset($alreadyDumpedObjects['NagiosResource'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['NagiosResource'][$this->getPrimaryKey()] = true;
 		$keys = NagiosResourcePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1991,7 +2004,6 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	public function buildPkeyCriteria()
 	{
 		$criteria = new Criteria(NagiosResourcePeer::DATABASE_NAME);
-
 		$criteria->add(NagiosResourcePeer::ID, $this->id);
 
 		return $criteria;
@@ -2018,6 +2030,15 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	}
 
 	/**
+	 * Returns true if the primary key for this object is null.
+	 * @return     boolean
+	 */
+	public function isPrimaryKeyNull()
+	{
+		return null === $this->getId();
+	}
+
+	/**
 	 * Sets contents of passed object to values from current object.
 	 *
 	 * If desired, this method can also make copies of all associated (fkey referrers)
@@ -2025,80 +2046,47 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	 *
 	 * @param      object $copyObj An object of NagiosResource (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-
-		$copyObj->setUser1($this->user1);
-
-		$copyObj->setUser2($this->user2);
-
-		$copyObj->setUser3($this->user3);
-
-		$copyObj->setUser4($this->user4);
-
-		$copyObj->setUser5($this->user5);
-
-		$copyObj->setUser6($this->user6);
-
-		$copyObj->setUser7($this->user7);
-
-		$copyObj->setUser8($this->user8);
-
-		$copyObj->setUser9($this->user9);
-
-		$copyObj->setUser10($this->user10);
-
-		$copyObj->setUser11($this->user11);
-
-		$copyObj->setUser12($this->user12);
-
-		$copyObj->setUser13($this->user13);
-
-		$copyObj->setUser14($this->user14);
-
-		$copyObj->setUser15($this->user15);
-
-		$copyObj->setUser16($this->user16);
-
-		$copyObj->setUser17($this->user17);
-
-		$copyObj->setUser18($this->user18);
-
-		$copyObj->setUser19($this->user19);
-
-		$copyObj->setUser20($this->user20);
-
-		$copyObj->setUser21($this->user21);
-
-		$copyObj->setUser22($this->user22);
-
-		$copyObj->setUser23($this->user23);
-
-		$copyObj->setUser24($this->user24);
-
-		$copyObj->setUser25($this->user25);
-
-		$copyObj->setUser26($this->user26);
-
-		$copyObj->setUser27($this->user27);
-
-		$copyObj->setUser28($this->user28);
-
-		$copyObj->setUser29($this->user29);
-
-		$copyObj->setUser30($this->user30);
-
-		$copyObj->setUser31($this->user31);
-
-		$copyObj->setUser32($this->user32);
-
-
-		$copyObj->setNew(true);
-
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
-
+		$copyObj->setUser1($this->getUser1());
+		$copyObj->setUser2($this->getUser2());
+		$copyObj->setUser3($this->getUser3());
+		$copyObj->setUser4($this->getUser4());
+		$copyObj->setUser5($this->getUser5());
+		$copyObj->setUser6($this->getUser6());
+		$copyObj->setUser7($this->getUser7());
+		$copyObj->setUser8($this->getUser8());
+		$copyObj->setUser9($this->getUser9());
+		$copyObj->setUser10($this->getUser10());
+		$copyObj->setUser11($this->getUser11());
+		$copyObj->setUser12($this->getUser12());
+		$copyObj->setUser13($this->getUser13());
+		$copyObj->setUser14($this->getUser14());
+		$copyObj->setUser15($this->getUser15());
+		$copyObj->setUser16($this->getUser16());
+		$copyObj->setUser17($this->getUser17());
+		$copyObj->setUser18($this->getUser18());
+		$copyObj->setUser19($this->getUser19());
+		$copyObj->setUser20($this->getUser20());
+		$copyObj->setUser21($this->getUser21());
+		$copyObj->setUser22($this->getUser22());
+		$copyObj->setUser23($this->getUser23());
+		$copyObj->setUser24($this->getUser24());
+		$copyObj->setUser25($this->getUser25());
+		$copyObj->setUser26($this->getUser26());
+		$copyObj->setUser27($this->getUser27());
+		$copyObj->setUser28($this->getUser28());
+		$copyObj->setUser29($this->getUser29());
+		$copyObj->setUser30($this->getUser30());
+		$copyObj->setUser31($this->getUser31());
+		$copyObj->setUser32($this->getUser32());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -2140,19 +2128,94 @@ abstract class BaseNagiosResource extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Clears the current object and sets all attributes to their default values
+	 */
+	public function clear()
+	{
+		$this->id = null;
+		$this->user1 = null;
+		$this->user2 = null;
+		$this->user3 = null;
+		$this->user4 = null;
+		$this->user5 = null;
+		$this->user6 = null;
+		$this->user7 = null;
+		$this->user8 = null;
+		$this->user9 = null;
+		$this->user10 = null;
+		$this->user11 = null;
+		$this->user12 = null;
+		$this->user13 = null;
+		$this->user14 = null;
+		$this->user15 = null;
+		$this->user16 = null;
+		$this->user17 = null;
+		$this->user18 = null;
+		$this->user19 = null;
+		$this->user20 = null;
+		$this->user21 = null;
+		$this->user22 = null;
+		$this->user23 = null;
+		$this->user24 = null;
+		$this->user25 = null;
+		$this->user26 = null;
+		$this->user27 = null;
+		$this->user28 = null;
+		$this->user29 = null;
+		$this->user30 = null;
+		$this->user31 = null;
+		$this->user32 = null;
+		$this->alreadyInSave = false;
+		$this->alreadyInValidation = false;
+		$this->clearAllReferences();
+		$this->resetModified();
+		$this->setNew(true);
+		$this->setDeleted(false);
+	}
+
+	/**
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 		} // if ($deep)
 
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(NagiosResourcePeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
+	 * Catches calls to virtual methods
+	 */
+	public function __call($name, $params)
+	{
+		if (preg_match('/get(\w+)/', $name, $matches)) {
+			$virtualColumn = $matches[1];
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+			// no lcfirst in php<5.3...
+			$virtualColumn[0] = strtolower($virtualColumn[0]);
+			if ($this->hasVirtualColumn($virtualColumn)) {
+				return $this->getVirtualColumn($virtualColumn);
+			}
+		}
+		return parent::__call($name, $params);
 	}
 
 } // BaseNagiosResource
