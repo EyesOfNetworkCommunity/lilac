@@ -1,7 +1,7 @@
 <?php
 /*
 Lilac - A Nagios Configuration Tool
-Copyright (C) 2007 Taylor Dondich
+Copyright (C) 2018 EyesOfNetwork Team
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@ if(isset($exportJob)) {
     		showToggleBtn: false, //show or hide column toggle popup
     		useRp: true,
     		rp: 20,
-    		height: 200
+    		height: 400
     	});
     	<?php
     	if(!in_array($exportJob->getStatusCode(), array(ExportJob::STATUS_FINISHED, ExportJob::STATUS_FAILED))) {

@@ -1,7 +1,7 @@
 <?php
 /*
 Lilac - A Nagios Configuration Tool
-Copyright (C) 2007 Taylor Dondich
+Copyright (C) 2018 EyesOfNetwork Team
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 /*
  * service.php
- * Author:	Taylor Dondich (tdondich at gmail.com)
+ * Author:	EyesOfNetwork Team (eyesofnetwork@eyesofnetwork.com)
  * Description:
  * 	Provides interface to maintain service template
  *

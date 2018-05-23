@@ -310,7 +310,13 @@ class EoN_Job_Exporter {
 	
 	function ModifyCfgFile($job, $MainConfigDir, $name, $type, $parent_name=false, $parent_type=false){
 		
-		$file = $MainConfigDir."/objects/".$type."s.cfg";
+		if($type == 'host') {
+			$file = $MainConfigDir."/objects/hosts/$name.cfg";
+		} elseif($type == 'service') {
+			$file = $MainConfigDir."/objects/hosts/$parent_name.cfg";
+		} else {
+			$file = $MainConfigDir."/objects/".$type."s.cfg";
+		}
 		$lecture=file_get_contents($file);
 		$writer=$lecture;		
 		
