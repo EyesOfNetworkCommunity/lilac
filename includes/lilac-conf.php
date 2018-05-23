@@ -12,7 +12,7 @@ $conf = array (
       'adapter' => 'mysql',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=localhost;port=3306;dbname=lilac',
+        'dsn' => 'mysql:host=localhost;dbname=lilac',
         'user' => 'lilac',
         'password' => 'root66',
         'options' => 
