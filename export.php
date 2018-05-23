@@ -60,6 +60,7 @@ if(isset($_GET['id'])) {
 		$exportJob->setStartTime(time());
 		$exportJob->setStatus("Starting...");
 		$exportJob->save();
+		exec("pkill -f 'php exporter/export.php' > /dev/null");
 		exec("php exporter/export.php " . $exportJob->getId() . " > /dev/null", $tempOutput, $retVal);
 		if($retVal != 42) {
 			$error = "Failed to run external exporter script. Return value: " . $retVal . "<br /> Error:";
@@ -74,6 +75,7 @@ if(isset($_GET['id'])) {
 	}
 	if(isset($_GET['delete'])) {
 		// We want to delete the job!
+		exec("pkill -f 'php exporter/export.php ".$exportJob->getId()."' > /dev/null");
 		$exportJob->delete();
 		unset($_GET['id']);
 		unset($exportJob);
@@ -169,6 +171,7 @@ if(isset($_POST['request'])) {
 		$exportJob->save();
 		
 		// Attempt to execute the external exporter script, fork it, and love it.
+		exec("pkill -f 'php exporter/export.php ".$exportJob->getId()."' > /dev/null");
 		exec("php exporter/export.php " . $exportJob->getId() . " > /dev/null", $tempOutput, $retVal);
 		if($retVal != 42) {
 			$error = "Failed to run external exporter script. Return value: " . $retVal . "<br /> Error:";

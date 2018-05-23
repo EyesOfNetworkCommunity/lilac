@@ -56,20 +56,29 @@ class NagiosExportEngine extends ExportEngine {
 		
 			<legend>Options</legend>
 			<p>
-			<input type="checkbox" id="export_diff" name="export_diff" />
-			<label for="export_diff">Differential export</label>
+				<input type="checkbox" id="export_diff" name="export_diff" />
+				<label for="export_diff">Differential export</label>
 			</p>
 			<p>
-			<input type="checkbox" id="backup_existing" name="backup_existing" />
-			<label for="backup_existing">Backup Existing Files</label>
+			<p>
+				<input type="checkbox" id="export_dep" name="export_dep" />
+				<label for="export_dep">Export dependencies</label>
 			</p>
 			<p>
-			<input type="checkbox" id="preflight_check" name="preflight_check" checked="checked" />
-			<label for="preflight_check">Perform a Configuration Sanity Check</label>
+				<input type="checkbox" id="export_esc" name="export_esc" />
+				<label for="export_esc">Export escalations</label>
 			</p>
 			<p>
-			<input type="checkbox" id="restart_nagios" name="restart_nagios" checked="checked" />
-			<label for="restart_nagios">Restart Nagios</label>
+				<input type="checkbox" id="backup_existing" name="backup_existing" />
+				<label for="backup_existing">Backup Existing Files</label>
+			</p>
+			<p>
+				<input type="checkbox" id="preflight_check" name="preflight_check" checked="checked" />
+				<label for="preflight_check">Perform a Configuration Sanity Check</label>
+			</p>
+			<p>
+				<input type="checkbox" id="restart_nagios" name="restart_nagios" checked="checked" />
+				<label for="restart_nagios">Restart Nagios</label>
 			</p>
 		</fieldset>
 		</p>
@@ -101,6 +110,18 @@ class NagiosExportEngine extends ExportEngine {
 		}
 		else {
 			$config->setVar("export_diff", false);
+		}
+		if(isset($_POST['export_dep'])) {
+			$config->setVar("export_dep", true);
+		}
+		else {
+			$config->setVar("export_dep", false);
+		}
+		if(isset($_POST['export_esc'])) {
+			$config->setVar("export_esc", true);
+		}
+		else {
+			$config->setVar("export_esc", false);
 		}
 		if(isset($_POST['backup_existing'])) {
 			$config->setVar("backup_existing", true);
@@ -138,7 +159,13 @@ class NagiosExportEngine extends ExportEngine {
 			?><li>Exporting CGI Configuration</li><?php
 		}
 		if($config->getVar("export_diff")) {
-		   ?><li><strong>Do differential export</strong></li><?php
+			?><li><strong>Do differential export</strong></li><?php
+		}
+		if($config->getVar("export_dep")) {
+			?><li><strong>Export dependencies</strong></li><?php
+		}
+		if($config->getVar("export_esc")) {
+			?><li><strong>Export escalations</strong></li><?php
 		}
 		if($config->getVar("backup_existing")) {
 		   ?><li><strong>Backing Up Existing Configuration Files</strong></li><?php
@@ -818,43 +845,51 @@ class NagiosExportEngine extends ExportEngine {
 		}
 		
 		// Dependency Configuration
-		$fp = @fopen($this->exportDir . "/objects/dependencies.cfg", "w");
-		if(!$fp) {
-			$job->addError("Unable to open " . $this->exportDir . "/objects/dependencies.cfg for writing.");
-			return false;
-		}
-		$exporter = new NagiosDependencyExporter($this, $fp);
-		$exporter->init();
-		
-		if(!$exporter->valid()) {
-			$this->addQueuedExporter($exporter);
-			$job->addNotice("NagiosImportEngine queueing up Dependency exporter until dependencies are valid.");
-		}
-		else {
-			if(!$exporter->export()) {
-				$job->addError("Dependency Exporter failed export.  Bailing out of job...");
+		if($config->getVar("export_dep")) {
+			$fp = @fopen($this->exportDir . "/objects/dependencies.cfg", "w");
+			if(!$fp) {
+				$job->addError("Unable to open " . $this->exportDir . "/objects/dependencies.cfg for writing.");
 				return false;
 			}
+			$exporter = new NagiosDependencyExporter($this, $fp);
+			$exporter->init();
+			
+			if(!$exporter->valid()) {
+				$this->addQueuedExporter($exporter);
+				$job->addNotice("NagiosImportEngine queueing up Dependency exporter until dependencies are valid.");
+			}
+			else {
+				if(!$exporter->export()) {
+					$job->addError("Dependency Exporter failed export.  Bailing out of job...");
+					return false;
+				}
+			}
+		} else {
+			$job->addNotice("NagiosDependencyExporter disabled.");
 		}
 		
 		// Escalation Configuration
-		$fp = @fopen($this->exportDir . "/objects/escalations.cfg", "w");
-		if(!$fp) {
-			$job->addError("Unable to open " . $this->exportDir . "/objects/escalations.cfg for writing.");
-			return false;
-		}
-		$exporter = new NagiosEscalationExporter($this, $fp);
-		$exporter->init();
-		
-		if(!$exporter->valid()) {
-			$this->addQueuedExporter($exporter);
-			$job->addNotice("NagiosImportEngine queueing up Escalation exporter until dependencies are valid.");
-		}
-		else {
-			if(!$exporter->export()) {
-				$job->addError("Escalation Exporter failed export.  Bailing out of job...");
+		if($config->getVar("export_esc")) {
+			$fp = @fopen($this->exportDir . "/objects/escalations.cfg", "w");
+			if(!$fp) {
+				$job->addError("Unable to open " . $this->exportDir . "/objects/escalations.cfg for writing.");
 				return false;
 			}
+			$exporter = new NagiosEscalationExporter($this, $fp);
+			$exporter->init();
+			
+			if(!$exporter->valid()) {
+				$this->addQueuedExporter($exporter);
+				$job->addNotice("NagiosImportEngine queueing up Escalation exporter until dependencies are valid.");
+			}
+			else {
+				if(!$exporter->export()) {
+					$job->addError("Escalation Exporter failed export.  Bailing out of job...");
+					return false;
+				}
+			}
+		} else {
+			$job->addNotice("NagiosEscalationExporter disabled.");
 		}
 		
 		$job->addNotice("Finished exporting objects.");
