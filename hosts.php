@@ -1743,8 +1743,9 @@ if(isset($host)) {
 		$inherited_list = $host->getInheritedContacts();
 		$numOfInheritedContacts = count($inherited_list);
 
-		$contacts_list = $host->getNagiosHostContactMembers();
-
+		$c = new Criteria();
+		$c->add(NagiosHostContactMemberPeer::HOST , $_GET['id']);
+		$contacts_list = NagiosHostContactMemberPeer::doSelect($c);
 		$numOfContacts = count($contacts_list);
 		?>
 			<table width="100%" border="0">

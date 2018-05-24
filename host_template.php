@@ -1657,8 +1657,9 @@ print_header("Host Template Editor");
 			$inherited_list = $hostTemplate->getInheritedContacts();
 			$numOfInheritedContacts = count($inherited_list);
 
-			$contacts_list = $hostTemplate->getNagiosHostContactMembers();
-
+			$c = new Criteria();
+			$c->add(NagiosHostContactMemberPeer::TEMPLATE , $_GET['id']);
+			$contacts_list = NagiosHostContactMemberPeer::doSelect($c);
 			$numOfContacts = count($contacts_list);
 			?>
 			<table width="100%" border="0">
