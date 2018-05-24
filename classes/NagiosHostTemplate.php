@@ -73,21 +73,23 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 	 * @param unknown_type $hosttemplateinfoSources
 	 * @return unknown
 	 */
-	public function getValues($inherited = false) {
+	public function getValues($inherited = false, $notinherited = false) {
 		$values = array();
+	
+		if(!$notinherited) {	
+			$c = new Criteria();
+			$c->add(NagiosHostTemplateInheritancePeer::SOURCE_TEMPLATE, $this->getId());
+			$c->addAscendingOrderByColumn(NagiosHostTemplateInheritancePeer::ORDER);
 		
-		$c = new Criteria();
-		$c->add(NagiosHostTemplateInheritancePeer::SOURCE_TEMPLATE, $this->getId());
-		$c->addAscendingOrderByColumn(NagiosHostTemplateInheritancePeer::ORDER);
+			$inheritanceTemplates = NagiosHostTemplateInheritancePeer::doSelect($c);
 		
-		$inheritanceTemplates = NagiosHostTemplateInheritancePeer::doSelect($c);
-		
-		if(count($inheritanceTemplates)) {
-			// This template has inherited templates, let's bring their values in
-			foreach($inheritanceTemplates as $inheritanceItem) {
-				$hostTemplate = $inheritanceItem->getNagiosHostTemplateRelatedByTargetTemplate();
-				$templateValues = $hostTemplate->getValues(true);
-				$values = array_merge($values, $templateValues);
+			if(count($inheritanceTemplates)) {
+				// This template has inherited templates, let's bring their values in
+				foreach($inheritanceTemplates as $inheritanceItem) {
+					$hostTemplate = $inheritanceItem->getNagiosHostTemplateRelatedByTargetTemplate();
+					$templateValues = $hostTemplate->getValues(true);
+					$values = array_merge($values, $templateValues);
+				}
 			}
 		}
 		foreach(NagiosHostTemplatePeer::getFieldNames() as $fieldName) {

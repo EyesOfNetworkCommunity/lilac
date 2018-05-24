@@ -41,6 +41,8 @@ class NagiosExportEngine extends ExportEngine {
 	public $MainConfigDir = null;
 	private $exportDir = null;
 	private $hostDir = null;
+	private $hosttemplateDir = null;
+	private $servicetemplateDir = null;
 
 	public function getDisplayName() {
 		return "Nagios Exporter";
@@ -57,10 +59,21 @@ class NagiosExportEngine extends ExportEngine {
 		
 			<legend>Options</legend>
 			<p>
+				<input type="checkbox" id="preflight_check" name="preflight_check" checked="checked" />
+				<label for="preflight_check">Perform a Configuration Sanity Check</label>
+			</p>
+			<p>
+				<input type="checkbox" id="restart_nagios" name="restart_nagios" checked="checked" />
+				<label for="restart_nagios">Restart Nagios</label>
+			</p>
+			<p>
+				<input type="checkbox" id="backup_existing" name="backup_existing" />
+				<label for="backup_existing">Backup Existing Files</label>
+			</p>
+			<p>
 				<input type="checkbox" id="export_diff" name="export_diff" />
 				<label for="export_diff">Differential export</label>
 			</p>
-			<p>
 			<p>
 				<input type="checkbox" id="export_dep" name="export_dep" />
 				<label for="export_dep">Export dependencies</label>
@@ -70,16 +83,8 @@ class NagiosExportEngine extends ExportEngine {
 				<label for="export_esc">Export escalations</label>
 			</p>
 			<p>
-				<input type="checkbox" id="backup_existing" name="backup_existing" />
-				<label for="backup_existing">Backup Existing Files</label>
-			</p>
-			<p>
-				<input type="checkbox" id="preflight_check" name="preflight_check" checked="checked" />
-				<label for="preflight_check">Perform a Configuration Sanity Check</label>
-			</p>
-			<p>
-				<input type="checkbox" id="restart_nagios" name="restart_nagios" checked="checked" />
-				<label for="restart_nagios">Restart Nagios</label>
+				<input type="checkbox" id="export_debug" name="export_debug" />
+				<label for="export_debug">Debug</label>
 			</p>
 		</fieldset>
 		</p>
@@ -106,6 +111,12 @@ class NagiosExportEngine extends ExportEngine {
 	}
 
 	public function buildConfig($config) {
+		if(isset($_POST['export_debug'])) {
+			$config->setVar("export_debug", true);
+		}
+		else {
+			$config->setVar("export_debug", false);
+		}
 		if(isset($_POST['export_diff'])) {
 			$config->setVar("export_diff", true);
 		}
@@ -159,6 +170,15 @@ class NagiosExportEngine extends ExportEngine {
 		if($config->getVar("overwrite_cgi")) {
 			?><li>Exporting CGI Configuration</li><?php
 		}
+		if($config->getVar("preflight_check")) {
+			?><li><strong>Performing Preflight Check With Command: <?php echo $config->getVar("nagios_path");?></li><?php
+		}
+		if($config->getVar("restart_nagios")) {
+			?><li><strong>Performing Nagios Restart With Command: <?php echo $config->getVar("restart_command");?></li><?php
+		}
+		if($config->getVar("backup_existing")) {
+			?><li><strong>Backing Up Existing Configuration Files</strong></li><?php
+		}
 		if($config->getVar("export_diff")) {
 			?><li><strong>Do differential export</strong></li><?php
 		}
@@ -168,22 +188,15 @@ class NagiosExportEngine extends ExportEngine {
 		if($config->getVar("export_esc")) {
 			?><li><strong>Export escalations</strong></li><?php
 		}
-		if($config->getVar("backup_existing")) {
-		   ?><li><strong>Backing Up Existing Configuration Files</strong></li><?php
+		if($config->getVar("export_debug")) {
+			?><li><strong>Debug</strong></li><?php
 		}
-		if($config->getVar("preflight_check")) {
-			?><li><strong>Performing Preflight Check With Command: <?php echo $config->getVar("nagios_path");?></li><?php
-		}
-		if($config->getVar("restart_nagios")) {
-			?><li><strong>Performing Nagios Restart With Command: <?php echo $config->getVar("restart_command");?></li><?php
-		}
-
 		?></ul><?php
 	}
 	
 	public function init() {
 		$job = $this->getJob();
-		$job->addNotice("NagiosExportEngine Starting...");
+		$job->addNotice("NagiosExportEngine Starting...",true);
 		$config = $this->getConfig();
 		
 		// First determine, do we need to make backups?
@@ -215,6 +228,7 @@ class NagiosExportEngine extends ExportEngine {
 				mkdir($this->exportDir . "/objects");
 			}
 		}
+		
 		$this->hostDir = $this->exportDir."/objects/hosts";
 		if(!file_exists($this->hostDir)) {
 			$result = @mkdir($this->hostDir);
@@ -225,6 +239,29 @@ class NagiosExportEngine extends ExportEngine {
 		} else {
 			exec("rm -rf ".$this->hostDir."/*");
 		}
+		
+		$this->hosttemplateDir = $this->exportDir."/objects/hosttemplates";
+		if(!file_exists($this->hosttemplateDir)) {
+			$result = @mkdir($this->hosttemplateDir);
+			if(!$result) {
+				$job->addError("Unable to create temporary export host templates directory at: " . $this->hosttemplateDir);
+				return false;
+			}
+		} else {
+			exec("rm -rf ".$this->hosttemplateDir."/*");
+		}
+		
+		$this->servicetemplateDir = $this->exportDir."/objects/servicetemplates";
+		if(!file_exists($this->servicetemplateDir)) {
+			$result = @mkdir($this->servicetemplateDir);
+			if(!$result) {
+				$job->addError("Unable to create temporary export host templates directory at: " . $this->servicetemplateDir);
+				return false;
+			}
+		} else {
+			exec("rm -rf ".$this->servicetemplateDir."/*");
+		}
+		
 		if(!@touch($this->exportDir . "/touch")) {
 			$job->addError("Unable to write into export directory at: " . $this->exportDir);
 			return false;
@@ -249,7 +286,7 @@ class NagiosExportEngine extends ExportEngine {
 		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
 		$MainConfigDir = $mainConfiguration->getConfigDir();
 		$job = $this->getJob();
-		$job->addNotice("NagiosExportEngine beginning diff export...");
+		$job->addNotice("NagiosExportEngine beginning diff export...", true);
 		exec("rm -rf ".$this->exportDir."/*");
 		exec("cp -arf ".$MainConfigDir."/* ".$this->exportDir."/");
 		$config = $this->getConfig();
@@ -347,10 +384,11 @@ class NagiosExportEngine extends ExportEngine {
 							$job->addNotice("Host ".$row["name"]." has been added");
 						}
 
-						// Create all services
+						// Create all inherited services
 						$tmpHost = NagiosHostPeer::getByName($row["name"]);
-						if($tmpHost->getInheritedServices() !== null) {
-							foreach($tmpHost->getInheritedServices() as $tmpService) {
+						$getInheritedServices = $tmpHost->getInheritedServices();
+						if($getInheritedServices !== null) {
+						foreach($getInheritedServices as $tmpService) {
 								$fp = @fopen($this->hostDir."/".$row["name"].".cfg", "a");
 								$objectExporter = new NagiosServiceExporter($this, $fp);
 								if($tmpService && $tmpHost) {
@@ -359,8 +397,12 @@ class NagiosExportEngine extends ExportEngine {
 								}
 							}
 						}
-						if($tmpHost->getNagiosServices() !== null) {
-							foreach($tmpHost->getNagiosServices() as $tmpService) {								
+						$getInheritedServices = null;
+						
+						// Create all services
+						$getNagiosServices = $tmpHost->getNagiosServices();
+						if($getNagiosServices !== null) {
+							foreach($getNagiosServices as $tmpService) {								
 								$fp = @fopen($this->hostDir."/".$row["name"].".cfg", "a");
 								$objectExporter = new NagiosServiceExporter($this, $fp);
 								if($tmpService && $tmpHost) {
@@ -369,6 +411,7 @@ class NagiosExportEngine extends ExportEngine {
 								}
 							}
 						}
+						$getNagiosServices = null;
 					}
 					// Service linked to Host Template
 					elseif($row["type"] == "service") {
@@ -378,10 +421,11 @@ class NagiosExportEngine extends ExportEngine {
 								// Delete Services
 								$ExportDiff->ModifyCfgFile($job,$this->exportDir, false, "service", $tmpHostInheritance->getNagiosHost()->getName(), 'host');	
 								
-								// Create all services
+								// Create inheritedServices all services
 								$tmpHost = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());
-								if($tmpHost->getInheritedServices() !== null) {
-									foreach($tmpHost->getInheritedServices() as $tmpService) {
+								$getInheritedServices = $tmpHost->getInheritedServices();
+								if($getInheritedServices !== null) {
+									foreach($getInheritedServices as $tmpService) {
 										$fp = @fopen($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg", "a");
 										$objectExporter = new NagiosServiceExporter($this, $fp);
 										$object = NagiosServicePeer::getByHostTemplateAndDescription($tmpService->getNagiosHostTemplate()->getName(),$tmpService->getDescription());
@@ -392,8 +436,12 @@ class NagiosExportEngine extends ExportEngine {
 										}
 									}
 								}
-								if($tmpHost->getNagiosServices() !== null) {
-									foreach($tmpHost->getNagiosServices() as $tmpService) {
+								$getInheritedServices = null;
+								
+								// Create all services
+								$getNagiosServices = $tmpHost->getNagiosServices();
+								if($getNagiosServices !== null) {
+									foreach($getNagiosServices as $tmpService) {
 										$fp = @fopen($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg", "a");
 										$objectExporter = new NagiosServiceExporter($this, $fp);
 										$object = NagiosServicePeer::getByHostAndDescription($tmpHost->getName(),$tmpService->getDescription());
@@ -403,7 +451,8 @@ class NagiosExportEngine extends ExportEngine {
 											$job->addNotice("Service ".$tmpService->getDescription()." has been added on host ".$tmpHostInheritance->getNagiosHost()->getName());
 										}
 									}
-								}	
+								}
+								$getNagiosServices = null;
 							}
 						}
 					}
@@ -426,18 +475,24 @@ class NagiosExportEngine extends ExportEngine {
 								$job->addNotice("Host ".$tmpHostInheritance->getNagiosHost()->getName()." has been added");
 							}
 							
-							// Delete And Create Services 
+							// Delete And Create Inherited Services 
 							$tmpHost = NagiosHostPeer::getByName($tmpHostInheritance->getNagiosHost()->getName());
-							if($tmpHost->getInheritedServices() !== null) {
-								foreach($tmpHost->getInheritedServices() as $tmpService) {
+							$getInheritedServices = $tmpHost->getInheritedServices();
+							if($getInheritedServices !== null) {
+								foreach($getInheritedServices as $tmpService) {
 									$ExportDiff->ModifyCfgFile($job,$this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
 								}
 							}
-							if($tmpHost->getNagiosServices() !== null) {
-								foreach($tmpHost->getNagiosServices() as $tmpService) {
+							$getInheritedServices = null;
+							
+							// Delete And Create Services 
+							$getNagiosServices = $tmpHost->getNagiosServices();
+							if($getNagiosServices !== null) {
+								foreach($getNagiosServices as $tmpService) {
 									$ExportDiff->ModifyCfgFile($job,$this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
 								}
 							}
+							$getNagiosServices = null;
 						}
 					}
 				}
@@ -451,8 +506,9 @@ class NagiosExportEngine extends ExportEngine {
 							// Service in Host
 							if($service->getNagiosHost() != null) {
 								// Delete if exists
-								$ExportDiff->ModifyCfgFile($job,$this->exportDir, $service->getDescription(), 'service', $service->getNagiosHost()->getName(), "host");
-							
+								unlink($this->servicetemplateDir."/".$service->getDescription().".cfg");
+								$job->addNotice(ucfirst($row["type"])." ".$service->getDescription()." has been deleted");
+								
 								// Create object
 								if($row["action"]=='add' || $row["action"]=='modify'){
 									$fp = @fopen($this->hostDir."/".$service->getNagiosHost()->getName().".cfg", "a");
@@ -474,7 +530,8 @@ class NagiosExportEngine extends ExportEngine {
 								foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance) {
 									if($tmpHostInheritance->getNagiosHost() != null) {
 										// Delete if exists
-										$ExportDiff->ModifyCfgFile($job,$this->exportDir, $service->getDescription(), 'service', $tmpHostInheritance->getNagiosHost()->getName(), "host");			
+										unlink($this->servicetemplateDir."/".$service->getDescription().".cfg");
+										$job->addNotice(ucfirst($row["type"])." ".$service->getDescription()." has been deleted");
 										
 										// Create object
 										if($row["action"]=='add' || $row["action"]=='modify'){
@@ -502,6 +559,14 @@ class NagiosExportEngine extends ExportEngine {
 						unlink($this->hostDir."/".$row["name"].".cfg");
 						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
 					}
+					elseif($row["type"]=='hosttemplate') {
+						unlink($this->hosttemplateDir."/".$row["name"].".cfg");
+						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+					}
+					elseif($row["type"]=='servicetemplate') {
+						unlink($this->servicetemplateDir."/".$row["name"].".cfg");
+						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+					}
 					elseif(isset($row["parent_name"]) && isset($row["parent_type"])) {
 						$ExportDiff->ModifyCfgFile($job, $this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			
 					} else {
@@ -523,6 +588,10 @@ class NagiosExportEngine extends ExportEngine {
 						$classname='Nagios'.$objectName.'Exporter';
 						if($row["type"]=='host') {
 							$fp = @fopen($this->hostDir."/".$row["name"].".cfg", "a");
+						} elseif($row["type"]=='hosttemplate') {
+							$fp = @fopen($this->hosttemplateDir."/".$row["name"].".cfg", "a");
+						} elseif($row["type"]=='servicetemplate') {
+							$fp = @fopen($this->servicetemplateDir."/".$row["name"].".cfg", "a");
 						} elseif($row["type"]=='service') {
 							$fp = @fopen($this->hostDir."/".$row["parent_name"].".cfg", "a");
 						} else {
@@ -560,7 +629,7 @@ class NagiosExportEngine extends ExportEngine {
 			}
 		}
 		
-		$job->addNotice("Finished exporting objects.");
+		$job->addNotice("Finished exporting objects.",true);
 
 		// Finished exporting, let's check if we need to do the preflight
 		if($config->getVar("preflight_check")) {
@@ -579,7 +648,7 @@ class NagiosExportEngine extends ExportEngine {
 				return false;
 			}
 			else {
-				$job->addNotice("Nagios Sanity Check Passed.");
+				$job->addNotice("Nagios Sanity Check Passed.",true);
 			}
 		}
 
@@ -628,7 +697,7 @@ class NagiosExportEngine extends ExportEngine {
 				$job->addError("Restart failed.");
 				return false;
 			}
-			$job->addNotice("Nagios Restarted Successfully.");
+			$job->addNotice("Nagios Restarted Successfully.",true);
 			
 		}
 		
@@ -637,10 +706,9 @@ class NagiosExportEngine extends ExportEngine {
 	
 	public function export() {
 		$job = $this->getJob();
-		$job->addNotice("NagiosExportEngine beginning export...");
+		$job->addNotice("NagiosExportEngine beginning export...", true);
 		
 		$config = $this->getConfig();
-
 		
 		// Main Configuration
 		$fp = @fopen($this->exportDir . "/nagios.cfg", "w");
@@ -822,43 +890,96 @@ class NagiosExportEngine extends ExportEngine {
 				return false;
 			}
 		}
+
+		// Host Template Configuration
+		$hosttemplates = NagiosHostTemplateQuery::create()->find();
+		$job->addNotice("Total host templates found: " . count($hosttemplates));
+		foreach($hosttemplates as $hosttemplate) {
+			// Create Host Template
+			$fp = fopen($this->hosttemplateDir."/".$hosttemplate->getName().".cfg", "w");
+			if(!$fp) {
+				$job->addError("Unable to open " . $this->hosttemplateDir."/".$hosttemplate->getName().".cfg for writing.");
+				return false;
+			}
+			$objectExporter = new NagiosHostTemplateExporter($this, $fp);
+			$objectExporter->export($hosttemplate);
+			$job->addNotice('Host template '.$hosttemplate->getName().' has been added');
+			$objectExporter = null;
+			$hosttemplate = null;
+			
+			// Close file
+			fclose($fp);
+		}
+		
+		// Service Template Configuration
+		$servicetemplates = NagiosServiceTemplateQuery::create()->find();
+		$job->addNotice("Total service templates found: " . count($servicetemplates));
+		foreach($servicetemplates as $servicetemplate) {
+			// Create Service Template
+			$fp = fopen($this->servicetemplateDir."/".$servicetemplate->getName().".cfg", "w");
+			if(!$fp) {
+				$job->addError("Unable to open " . $this->servicetemplateDir."/".$servicetemplate->getName().".cfg for writing.");
+				return false;
+			}
+			$objectExporter = new NagiosServiceTemplateExporter($this, $fp);
+			$objectExporter->_exportService($servicetemplate);
+			$job->addNotice('Service template '.$servicetemplate->getName().' has been added');
+			$objectExporter = null;
+			$servicetemplate = null;
+			
+			// Close file
+			fclose($fp);
+		}
 		
 		// Host Configuration
 		$hosts = NagiosHostQuery::create()->find();
-		$job->addNotice("Total hosts found: " . count($hosts));
+		$job->addNotice('Total hosts found: ' . count($hosts));
+		
 		foreach($hosts as $host) {
+			$Services_count = 0;
+			
 			// Create Host
-			$fp = @fopen($this->hostDir."/".$host->getName().".cfg", "w");
+			$fp = fopen($this->hostDir."/".$host->getName().".cfg", "w");
 			if(!$fp) {
-				$job->addError("Unable to open " . $this->hostDir."/".$host->getName().".cfg for writing.");
+				$job->addError('Unable to open ' . $this->hostDir.'/'.$host->getName().'.cfg for writing.');
 				return false;
 			}
 			$objectExporter = new NagiosHostExporter($this, $fp);
-			$object = NagiosHostPeer::getByName($host->getName());
-			if($object) {
-				$objectExporter->export($object);
-				$job->addNotice("Host ".$host->getName()." has been added");
+			$objectExporter->export($host);
+			$objectExporter = null;
+			
+			// Create all inherited services
+			$getInheritedServices = $host->getInheritedServices();
+			if($getInheritedServices !== null) {
+				$Services_count += count($getInheritedServices);
+				foreach($getInheritedServices as $tmpService) {
+					$objectExporter = new NagiosServiceExporter($this, $fp);
+					if($tmpService && $host) {
+						$objectExporter->_exportService($tmpService, 'host', $host);
+					}
+					$objectExporter = null;
+				}
 			}
+			$getInheritedServices = null;
 			
 			// Create all services
-			if($host->getInheritedServices() !== null) {
-				foreach($host->getInheritedServices() as $tmpService) {
+			$getNagiosServices = $host->getNagiosServices();
+			if($getNagiosServices !== null) {
+				$Services_count += count($getNagiosServices);
+				foreach($getNagiosServices as $tmpService) {
 					$objectExporter = new NagiosServiceExporter($this, $fp);
 					if($tmpService && $host) {
 						$objectExporter->_exportService($tmpService, 'host', $host);
-						$job->addNotice("Service ".$tmpService->getDescription()." has been added on host ".$host->getName());
 					}
+					$objectExporter = null;
 				}
 			}
-			if($host->getNagiosServices() !== null) {
-				foreach($host->getNagiosServices() as $tmpService) {								
-					$objectExporter = new NagiosServiceExporter($this, $fp);
-					if($tmpService && $host) {
-						$objectExporter->_exportService($tmpService, 'host', $host);
-						$job->addNotice("Service ".$tmpService->getDescription()." has been added on host ".$host->getName());
-					}
-				}
-			}
+			$getNagiosServices = null;
+			
+			$job->addNotice('Host '.$host->getName().' has been added with '.$Services_count.' services');
+			$host = null;
+			
+			// Close file
 			fclose($fp);
 		}
 		
@@ -929,7 +1050,7 @@ class NagiosExportEngine extends ExportEngine {
 				return false;
 			}
 			else {
-				$job->addNotice("Nagios Sanity Check Passed.");
+				$job->addNotice("Nagios Sanity Check Passed.",true);
 			}
 		}
 
@@ -956,11 +1077,14 @@ class NagiosExportEngine extends ExportEngine {
 		// Move the configuration files to the appropriate place.
 
 		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
+		
+		exec("rm -rf ".$mainConfiguration->getConfigDir()."/objects/hosts/*");
 		if(!$this->dir_copy($this->exportDir, $mainConfiguration->getConfigDir())) {
 			$job->addError("Unable to copy configuration files to : " . $mainConfiguration->getConfigDir());
 			$job->addError("Export failed.");
 			return false;
 		}
+		
 		// Check if we have to restart
 		if($config->getVar("restart_nagios")) {
 			$output = null;
@@ -978,7 +1102,7 @@ class NagiosExportEngine extends ExportEngine {
 				$job->addError("Restart failed.");
 				return false;
 			}
-			$job->addNotice("Nagios Restarted Successfully.");
+			$job->addNotice("Nagios Restarted Successfully.",true);
 			
 		}
 				
@@ -1031,7 +1155,9 @@ require_once($path . 'exporters/nagios/NagiosContactGroupExporter.php');
 require_once($path . 'exporters/nagios/NagiosHostGroupExporter.php');
 require_once($path . 'exporters/nagios/NagiosServiceGroupExporter.php');
 require_once($path . 'exporters/nagios/NagiosHostExporter.php');
+require_once($path . 'exporters/nagios/NagiosHostTemplateExporter.php');
 require_once($path . 'exporters/nagios/NagiosServiceExporter.php');
+require_once($path . 'exporters/nagios/NagiosServiceTemplateExporter.php');
 require_once($path . 'exporters/nagios/NagiosDependencyExporter.php');
 require_once($path . 'exporters/nagios/NagiosEscalationExporter.php');
 ?>

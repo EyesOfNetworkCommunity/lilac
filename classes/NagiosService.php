@@ -81,23 +81,25 @@ class NagiosService extends BaseNagiosService {
 		return null;
 	}
 	
-	public function getValues($inherited = false) {
+	public function getValues($inherited = false, $notinherited = false) {
 		$values = array();
 		
-		$c = new Criteria();
-		$c->add(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, $this->getId());
-		$c->addAscendingOrderByColumn(NagiosServiceTemplateInheritancePeer::ORDER);
+		if(!$notinherited) {	
+			$c = new Criteria();
+			$c->add(NagiosServiceTemplateInheritancePeer::SOURCE_SERVICE, $this->getId());
+			$c->addAscendingOrderByColumn(NagiosServiceTemplateInheritancePeer::ORDER);
 		
-		$inheritanceTemplates = NagiosServiceTemplateInheritancePeer::doSelect($c);
+			$inheritanceTemplates = NagiosServiceTemplateInheritancePeer::doSelect($c);
 		
-		if(count($inheritanceTemplates)) {
-			// This template has inherited templates, let's bring their values in
-			foreach($inheritanceTemplates as $inheritanceItem) {
-				$serviceTemplate = $inheritanceItem->getNagiosServiceTemplateRelatedByTargetTemplate();
-				if($serviceTemplate)
-				{
-					$templateValues = $serviceTemplate->getValues(true);
-					$values = array_merge($values, $templateValues);
+			if(count($inheritanceTemplates)) {
+				// This template has inherited templates, let's bring their values in
+				foreach($inheritanceTemplates as $inheritanceItem) {
+					$serviceTemplate = $inheritanceItem->getNagiosServiceTemplateRelatedByTargetTemplate();
+					if($serviceTemplate)
+					{
+						$templateValues = $serviceTemplate->getValues(true);
+						$values = array_merge($values, $templateValues);
+					}
 				}
 			}
 		}

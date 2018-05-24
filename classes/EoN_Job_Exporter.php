@@ -312,6 +312,10 @@ class EoN_Job_Exporter {
 		
 		if($type == 'host') {
 			$file = $MainConfigDir."/objects/hosts/$name.cfg";
+		} elseif($type == 'hosttemplate') {
+			$file = $MainConfigDir."/objects/hosttemplates/$name.cfg";
+		} elseif($type == 'servicetemplate') {
+			$file = $MainConfigDir."/objects/servicetemplates/$name.cfg";
 		} elseif($type == 'service') {
 			$file = $MainConfigDir."/objects/hosts/$parent_name.cfg";
 		} else {

@@ -20,7 +20,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-class NagiosHostExporter extends NagiosExporter {
+class NagiosHostTemplateExporter extends NagiosExporter {
 	
 	public function init() {
 		return true;
@@ -35,38 +35,42 @@ class NagiosHostExporter extends NagiosExporter {
 		// Grab our export job
 		$engine = $this->getEngine();
 		$job = $engine->getJob();
-		$job->addNotice("NagiosHostExporter attempting to export host configuration.");
+		$job->addNotice("NagiosHostTemplateExporter attempting to export hosttemplate configuration.");
 
 		$fp = $this->getOutputFile();
 		
 		if(!$objectDiff){
-			fputs($fp, "# Written by NagiosHostExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
-			$hosts = NagiosHostPeer::doSelect(new Criteria());
+			fputs($fp, "# Written by NagiosHostTemplateExporter from " . LILAC_NAME . " " . LILAC_VERSION . " on " . date("F j, Y, g:i a") . "\n\n");		
+			$hosttemplates = NagiosHostTemplatePeer::doSelect(new Criteria());
 		} else {
-			$hosts[] = $objectDiff;
+			$hosttemplates[] = $objectDiff;
 		}
 		
-		foreach($hosts as $host) {
+		foreach($hosttemplates as $hosttemplate) {
 			
 			fputs($fp, "define host {\n");
 			$finalArray = array();
+			$finalArray['register'] = '0';
 			$finalArray['use'] = null;
 			
-			$templateInheritances = $host->getNagiosHostTemplateInheritances();
-			if(count($templateInheritances)) {
+			$c = new Criteria();
+			$c->add(NagiosHostTemplateInheritancePeer::SOURCE_TEMPLATE, $hosttemplate->getId());
+			$c->addAscendingOrderByColumn(NagiosHostTemplateInheritancePeer::ORDER);
+			$inheritanceTemplates = NagiosHostTemplateInheritancePeer::doSelect($c);
+			if(count($inheritanceTemplates)) {
 				// This template has inherited templates, let's bring their values in
-				foreach($templateInheritances as $inheritanceItem) {
-					$finalArray['use'] .= $inheritanceItem->getName().',';
+				foreach($inheritanceTemplates as $inheritanceItem) {
+					$hostTemplate = $inheritanceItem->getNagiosHostTemplateRelatedByTargetTemplate();
+					$finalArray['use'] .= $hostTemplate->getName().',';
 				}
 			}
-
 			if($finalArray['use'] !== null) {
 				$finalArray['use'] = substr($finalArray['use'], 0, -1);
 			} else {
 				unset($finalArray['use']);
 			}
 			
-			$values = $host->getValues(false,true);		
+			$values = $hosttemplate->getValues(false,true);		
 			foreach($values as $key => $valArray) {
 				$value = $valArray['value'];
 				
@@ -94,9 +98,6 @@ class NagiosHostExporter extends NagiosExporter {
                 if($key == 'display_name' && empty($value))
                     continue;
 
-				if($key == 'name') {
-					$key = 'host_name';
-				}
 				if($key == 'maximum_check_attempts') {
 					$key = 'max_check_attempts';
 				}
@@ -128,7 +129,7 @@ class NagiosHostExporter extends NagiosExporter {
 					$value = $command->getName();
 					
 					if($key == "check_command") {
-						$cmdObj = $host->getInheritedCommandWithParameters();
+						$cmdObj = $hosttemplate->getInheritedCommandWithParameters();
 						foreach($cmdObj['parameters'] as $parameterArray) {
 								$value .= "!" . $parameterArray['parameter']->getParameter();
 						}						
@@ -200,31 +201,10 @@ class NagiosHostExporter extends NagiosExporter {
 					}
 				fputs($fp, "\n");
 			}
-
-
-			// Parents
-			$c = new Criteria();
-			$c->add(NagiosHostParentPeer::CHILD_HOST, $host->getId());
-			$parents = NagiosHostParentPeer::doSelectJoinNagiosHostRelatedByParentHost($c);
-
-			if(count($parents)) {
-				fputs($fp, "\tparents\t");
-				$first = true;
-				foreach($parents as $parent) {
-					if(!$first) {
-						fputs($fp, ",");
-					}
-					else {
-						$first = false;
-					}
-					fputs($fp, $parent->getNagiosHostRelatedByParentHost()->getName());
-				}
-				fputs($fp, "\n");
-			}
-
+			
 			// Contact Groups
 			$groupList = array();
-			$lilac->return_host_contactgroups_list($host->getId(), $contactgroups_list);		
+			$lilac->return_host_template_contactgroups_list($hosttemplate->getId(), $contactgroups_list);
 			foreach($contactgroups_list as $group) {
 				$group = $group->getNagiosContactgroup();
 				if(!key_exists($group->getName(), $groupList)) {
@@ -248,7 +228,7 @@ class NagiosHostExporter extends NagiosExporter {
 			
 			// Contacts
 			$contactList = array();
-			$contact_list = $host->getNagiosHostContactMembers();
+			$contact_list = $hosttemplate->getNagiosHostContactMembers();
 			foreach($contact_list as $contact) {
 				$contact = $contact->getNagiosContact();
 				if(!key_exists($contact->getName(), $contactList)) {
@@ -273,11 +253,14 @@ class NagiosHostExporter extends NagiosExporter {
 
 			// Host Groups
 			$groupList = array();
-			$hostgroups_list = $host->getNagiosHostgroupMemberships();
-			foreach($hostgroups_list as $group) {
-				$group = $group->getNagiosHostgroup();
-				if(!key_exists($group->getName(), $groupList)) {
-					$groupList[$group->getName()] = $group;
+			$hostgroups_list = null;
+			$lilac->get_host_template_membership_list($hosttemplate->getId(),$hostgroups_list);
+			if(count($hostgroups_list)) {
+				foreach($hostgroups_list as $group) {
+					$group = $group->getNagiosHostgroup();
+					if(!key_exists($group->getName(), $groupList)) {
+						$groupList[$group->getName()] = $group;
+					}
 				}
 			}
 			if(count($groupList)) {
@@ -296,7 +279,7 @@ class NagiosHostExporter extends NagiosExporter {
 			}
 			
 			// Custom Object Variables
-			$hostcov_list = $host->getNagiosHostCustomObjectVariables();
+			$hostcov_list = $hosttemplate->getNagiosHostTemplateCustomObjectVariables();
 			$cov_list = array();
 			foreach($hostcov_list as $cov)
 				$cov_list[] = $cov;
@@ -317,7 +300,7 @@ class NagiosHostExporter extends NagiosExporter {
 			fputs($fp, "\n");
 		}
 		
-		$job->addNotice("NagiosHostExporter complete.");
+		$job->addNotice("NagiosHostTemplateExporter complete.");
 		return true;
 	}
 	

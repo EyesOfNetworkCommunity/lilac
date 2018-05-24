@@ -60,8 +60,12 @@ class ExportJob extends BaseExportJob {
 		$this->addLogEntry($text, ImportLogEntry::TYPE_WARNING);
 	}
 	
-	public function addNotice($text) {
-		$this->addLogEntry($text, ImportLogEntry::TYPE_NOTICE);
+	public function addNotice($text, $verbose=false) {
+		$config = unserialize($this->getConfig());
+		if($config->getVar("export_debug") or $verbose==true)
+			$this->addLogEntry($text, ImportLogEntry::TYPE_NOTICE);
+		else
+			return true;
 	}
 
 } // ExportJob

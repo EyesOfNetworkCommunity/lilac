@@ -25,7 +25,7 @@ Description:
 The class definition and methods for the NagiosServiceExporter class
 */
 
-class NagiosServiceExporter extends NagiosExporter {
+class NagiosServiceTemplateExporter extends NagiosExporter {
 	
 	public function init() {
 		return true;
@@ -35,58 +35,30 @@ class NagiosServiceExporter extends NagiosExporter {
 		return true;
 	}
 	
-	public function _exportService($service, $type, $targetObj) {
+	public function _exportService($service) {
 		global $lilac;
 		$fp = $this->getOutputFile();
 		
 		fputs($fp, "define service {\n");
 		$finalArray = array();
+		$finalArray['register'] = '0';
 		$finalArray['use'] = null;
 		
-		$templateInheritances = $service->getNagiosServiceTemplateInheritances();
-		if(count($templateInheritances)) {
+		$c = new Criteria();
+		$c->add(NagiosServiceTemplateInheritancePeer::SOURCE_TEMPLATE, $service->getId());
+		$c->addAscendingOrderByColumn(NagiosServiceTemplateInheritancePeer::ORDER);
+		$inheritanceTemplates = NagiosServiceTemplateInheritancePeer::doSelect($c);
+		if(count($inheritanceTemplates)) {
 			// This template has inherited templates, let's bring their values in
-			foreach($templateInheritances as $inheritanceItem) {
-				$finalArray['use'] .= $inheritanceItem->getName().',';
+			foreach($inheritanceTemplates as $inheritanceItem) {
+				$serviceTMP = $inheritanceItem->getNagiosServiceTemplateRelatedByTargetTemplate();
+				$finalArray['use'] .= $serviceTMP->getName().',';
 			}
 		}
-
 		if($finalArray['use'] !== null) {
 			$finalArray['use'] = substr($finalArray['use'], 0, -1);
 		} else {
 			unset($finalArray['use']);
-		}
-		
-		switch($type) {
-			case 'host':
-				fputs($fp, "\thost_name\t" . $targetObj->getName() . "\n");
-				break;
-			
-			case 'hostgroup':
-				fputs($fp, "\thostgroup_name\t" . $targetObj->getName() . "\n");
-
-				$ignoreHosts = array();
-				//error_log("Children for ". $targetObj->getName());
-				$getMembers = $targetObj->getMembers();
-				foreach($getMembers as $childHost) {
-					//error_log($childHost->getName());
-					$getNagiosServices = $childHost->getNagiosServices();
-					foreach($getNagiosServices as $childService) {
-						//error_log($childService->getDescription() ." compare to ". $service->getDescription());
-						if($childService->getDescription() == $service->getDescription()) {
-							//error_log("Overriding service ". $service->getDescription() ." in template ". $targetObj->getName() ." for host ". $childHost->getName());
-							array_push($ignoreHosts, "!". $childHost->getName());
-						}
-					}
-					$getNagiosServices = null;
-				}
-				$getMembers = null;
-				
-				if(count($ignoreHosts) > 0) {
-					fputs($fp, "\thost_name\t" . implode(",",$ignoreHosts) . "\n");
-				}
-
-				break;
 		}
 		
 		$values = $service->getValues(false,true);		
@@ -95,7 +67,7 @@ class NagiosServiceExporter extends NagiosExporter {
 			$value = $valArray['value'];
 
 			if($key == 'id' || 
-			   $key == 'name' ||
+				$key == 'description' ||
 				$key == 'host' || 
 				$key == 'host_template' || 
 				$key == 'hostgroup' ||
@@ -116,9 +88,6 @@ class NagiosServiceExporter extends NagiosExporter {
 				$key == '' || 
 				$key == "parent_host") {
 				continue;
-			}
-			if($key == 'description') {
-				$key = 'service_description';
 			}
 			if($key == 'maximum_check_attempts') {
 				$key = 'max_check_attempts';
@@ -163,10 +132,9 @@ class NagiosServiceExporter extends NagiosExporter {
 		// Notifications
 		//if(isset($values['notification_on_warning']['value'])) {
 			if(!isset($values['notification_on_warning']) && !isset($values['notification_on_unknown']) && !isset($values['notification_on_critical']) && !isset($values['notification_on_recovery']) && !isset($values['notification_on_flapping'])) {
-				//fputs($fp, "\tnotification_options\tn\n");
-			} 
-			elseif(!$values['notification_on_warning']['value'] && !$values['notification_on_unknown']['value'] && !$values['notification_on_critical']['value'] && !$values['notification_on_recovery']['value'] && !$values['notification_on_flapping']['value']) {
-				//fputs($fp, "\tnotification_options\tn\n");
+				fputs($fp, "\tnotification_options\tn\n");
+			} elseif(!$values['notification_on_warning']['value'] && !$values['notification_on_unknown']['value'] && !$values['notification_on_critical']['value'] && !$values['notification_on_recovery']['value'] && !$values['notification_on_flapping']['value']) {
+				fputs($fp, "\tnotification_options\tn\n");
 			}
 			else {
 				fputs($fp, "\tnotification_options\t");
@@ -314,7 +282,7 @@ class NagiosServiceExporter extends NagiosExporter {
 		}
 		
 		// Custom Object Variables
-		$servicecov_list = $service->getNagiosServiceCustomObjectVariables();
+		$servicecov_list = $service->getNagiosServiceTemplateCustomObjectVariables();
 		$cov_list = array();
 		foreach($servicecov_list as $cov)
 			$cov_list[] = $cov;

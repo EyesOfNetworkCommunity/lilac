@@ -208,7 +208,7 @@ if(isset($exportJob)) {
     		showToggleBtn: false, //show or hide column toggle popup
     		useRp: true,
     		rp: 20,
-    		height: 400
+    		height: 200
     	});
     	<?php
     	if(!in_array($exportJob->getStatusCode(), array(ExportJob::STATUS_FINISHED, ExportJob::STATUS_FAILED))) {

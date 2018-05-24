@@ -58,21 +58,23 @@ class NagiosHost extends BaseNagiosHost {
 	
 	}
 
-	public function getValues($inherited = false) {
+	public function getValues($inherited = false, $notinherited = false) {
 		$values = array();
+	
+		if(!$notinherited) {	
+			$c = new Criteria();
+			$c->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, $this->getId());
+			$c->addAscendingOrderByColumn(NagiosHostTemplateInheritancePeer::ORDER);
 		
-		$c = new Criteria();
-		$c->add(NagiosHostTemplateInheritancePeer::SOURCE_HOST, $this->getId());
-		$c->addAscendingOrderByColumn(NagiosHostTemplateInheritancePeer::ORDER);
+			$inheritanceTemplates = NagiosHostTemplateInheritancePeer::doSelect($c);
 		
-		$inheritanceTemplates = NagiosHostTemplateInheritancePeer::doSelect($c);
-		
-		if(count($inheritanceTemplates)) {
-			// This template has inherited templates, let's bring their values in
-			foreach($inheritanceTemplates as $inheritanceItem) {
-				$hostTemplate = $inheritanceItem->getNagiosHostTemplateRelatedByTargetTemplate();
-				$templateValues = $hostTemplate->getValues(true);
-				$values = array_merge($values, $templateValues);
+			if(count($inheritanceTemplates)) {
+				// This template has inherited templates, let's bring their values in
+				foreach($inheritanceTemplates as $inheritanceItem) {
+					$hostTemplate = $inheritanceItem->getNagiosHostTemplateRelatedByTargetTemplate();
+					$templateValues = $hostTemplate->getValues(true);
+					$values = array_merge($values, $templateValues);
+				}
 			}
 		}
 		foreach(NagiosHostPeer::getFieldNames() as $fieldName) {
@@ -199,8 +201,7 @@ class NagiosHost extends BaseNagiosHost {
 		$servicesList = array();
 		
 		$inheritanceTemplates = $this->getNagiosHostTemplateInheritances();
-
-		if(count($inheritanceTemplates)) {
+		if($inheritanceTemplates !== null) {
 			// This template has inherited templates, let's bring their values in
 			foreach($inheritanceTemplates as $hostTemplate) {
 				$services = $hostTemplate->getInheritedServices(false);
@@ -209,7 +210,7 @@ class NagiosHost extends BaseNagiosHost {
 		}
 		
 		$inheritanceTemplates = $this->getInheritedHostGroups();
-		if(count($inheritanceTemplates)) {
+		if($inheritanceTemplates !== null) {
 			foreach($inheritanceTemplates as $hostgroup) {
 				$c = new Criteria();
 				$c->add(NagiosServicePeer::HOSTGROUP, $hostgroup->getId());
@@ -217,9 +218,8 @@ class NagiosHost extends BaseNagiosHost {
 				$servicesList = array_merge($servicesList, $services);
 			}
 		}
-			
-		$hostgroupMemberships =
-		$this->getNagiosHostgroupMemberships();
+		
+		$hostgroupMemberships = $this->getNagiosHostgroupMemberships();
 		foreach($hostgroupMemberships as $membership) {
 			$hostgroup = $membership->getNagiosHostGroup();
 			$c = new Criteria();
@@ -241,7 +241,8 @@ class NagiosHost extends BaseNagiosHost {
 		foreach($services as $service) {
 			$servicenames[$service->getDescription()]=1;
 		}
-		foreach(array_keys(array_reverse($servicesList, true)) as $key) {
+		$keys = array_keys(array_reverse($servicesList, true));
+		foreach($keys as $key) {
 			$description=$servicesList[$key]->getDescription();
 			if(array_key_exists($description, $servicenames)) {
 				unset($servicesList[$key]);
@@ -249,6 +250,13 @@ class NagiosHost extends BaseNagiosHost {
 				$servicenames[$description]=1;
 			}
 		}
+		
+		$inheritanceTemplates = null;
+		$hostgroupMemberships = null;
+		$services = null;
+		$keys = null;
+		$servicenames = null;
+		gc_collect_cycles();
 		
 		return array_unique($servicesList);
 	}
