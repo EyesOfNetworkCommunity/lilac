@@ -458,13 +458,13 @@ class NagiosExportEngine extends ExportEngine {
 					}
 				}
 				// Host Template
-				elseif($row["type"]=="hosttemplate"){
+				elseif($row["type"]=="hosttemplate" && $row["action"]!="delete"){
 					$tmpHostTemplate = NagiosHostTemplatePeer::getByName($row["name"]);
 					foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance){
 						if($tmpHostInheritance->getNagiosHost()!=null){
 							// Delete Host
 							unlink($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg");
-							$job->addNotice(ucfirst($type)." ".$tmpHostInheritance->getNagiosHost()->getName()." has been deleted");
+							$job->addNotice(ucfirst($row["type"])." ".$tmpHostInheritance->getNagiosHost()->getName()." has been deleted");
 							
 							// Create Host
 							$fp = @fopen($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg", "a");
@@ -497,7 +497,7 @@ class NagiosExportEngine extends ExportEngine {
 					}
 				}
 				// Service Template
-				elseif($row["type"]=="servicetemplate"){
+				elseif($row["type"]=="servicetemplate" && $row["action"]!="delete"){
 					$tmpServiceTemplate = NagiosServiceTemplatePeer::getByName($row["name"]);
 					foreach($tmpServiceTemplate->getNagiosServiceTemplateInheritancesRelatedByTargetTemplate() as $tmpServiceInheritance){
 						if($tmpServiceInheritance->getNagiosService() != null){
@@ -557,15 +557,15 @@ class NagiosExportEngine extends ExportEngine {
 					// Delete if exists
 					if($row["type"]=='host') {
 						unlink($this->hostDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
 					}
 					elseif($row["type"]=='hosttemplate') {
 						unlink($this->hosttemplateDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
 					}
 					elseif($row["type"]=='servicetemplate') {
 						unlink($this->servicetemplateDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
 					}
 					elseif(isset($row["parent_name"]) && isset($row["parent_type"])) {
 						$ExportDiff->ModifyCfgFile($job, $this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			

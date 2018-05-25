@@ -19,6 +19,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getName(),'hosttemplate','delete');
 			foreach($this->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
 				$JobExport->getInheritances($template_in,"delete");
 			}

@@ -377,7 +377,6 @@ else {
 	<strong>Job Id:</strong> <?php echo $exportJob->getId();?><br />
 	<?php echo $exportJob->getDescription();?>
 	<br />
-	<br />
 	<strong>Start Time:</strong> <?php echo $exportJob->getStartTime();?><br />
 	<br />
 	<?php
