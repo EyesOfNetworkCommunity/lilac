@@ -21,7 +21,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		$action = ($this->isNew()) ? "add" : "modify";
 		
 		if($action == "modify" && $v!=$this->getName()){
-			$JobExport->renameAction($v,$this->getName(),'host');
+			$JobExport->renameAction($v,$this->getName(),'hosttemplate');
 		}
 		
 		return parent::setName($v);
@@ -33,7 +33,7 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 		if($con == null || $con == ""){
 			$JobExport->insertAction($this->getName(),'hosttemplate','delete');
 			foreach($this->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
-				$JobExport->getInheritances($template_in,"delete");
+				$JobExport->getInheritances($template_in,false);
 			}
 		}
 
@@ -45,8 +45,10 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
+			$action = ($this->isNew()) ? "add" : "modify";
+			$JobExport->insertAction($this->getName(),'hosttemplate',$action);
 			foreach($this->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
-				$JobExport->getInheritances($template_in,"add");
+				$JobExport->getInheritances($template_in,false);
 			}
 		}
 

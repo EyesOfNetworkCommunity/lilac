@@ -459,12 +459,20 @@ class NagiosExportEngine extends ExportEngine {
 				}
 				// Host Template
 				elseif($row["type"]=="hosttemplate" && $row["action"]!="delete"){
+
+					// Add Host Template
 					$tmpHostTemplate = NagiosHostTemplatePeer::getByName($row["name"]);
+					$fp = @fopen($this->hosttemplateDir."/".$row["name"].".cfg", "w");
+					$objectExporter = new NagiosHostTemplateExporter($this, $fp);
+					$objectExporter->export($tmpHostTemplate);
+					$job->addNotice(ucfirst($row["type"]).' '.$row["name"].' has been added');
+					
+					// Update Hosts
 					foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance){
 						if($tmpHostInheritance->getNagiosHost()!=null){
 							// Delete Host
 							unlink($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg");
-							$job->addNotice(ucfirst($row["type"])." ".$tmpHostInheritance->getNagiosHost()->getName()." has been deleted");
+							$job->addNotice("Host ".$tmpHostInheritance->getNagiosHost()->getName()." has been deleted");
 							
 							// Create Host
 							$fp = @fopen($this->hostDir."/".$tmpHostInheritance->getNagiosHost()->getName().".cfg", "a");
@@ -498,7 +506,15 @@ class NagiosExportEngine extends ExportEngine {
 				}
 				// Service Template
 				elseif($row["type"]=="servicetemplate" && $row["action"]!="delete"){
+					
+					// Add Service Template
 					$tmpServiceTemplate = NagiosServiceTemplatePeer::getByName($row["name"]);
+					$fp = @fopen($this->servicetemplateDir."/".$row["name"].".cfg", "w");
+					$objectExporter = new NagiosServiceTemplateExporter($this, $fp);
+					$objectExporter->_exportService($tmpServiceTemplate);
+					$job->addNotice(ucfirst($row["type"]).' '.$row["name"].' has been added');
+					
+					// Update Services
 					foreach($tmpServiceTemplate->getNagiosServiceTemplateInheritancesRelatedByTargetTemplate() as $tmpServiceInheritance){
 						if($tmpServiceInheritance->getNagiosService() != null){
 							$service = $tmpServiceInheritance->getNagiosService();
@@ -506,8 +522,7 @@ class NagiosExportEngine extends ExportEngine {
 							// Service in Host
 							if($service->getNagiosHost() != null) {
 								// Delete if exists
-								unlink($this->servicetemplateDir."/".$service->getDescription().".cfg");
-								$job->addNotice(ucfirst($row["type"])." ".$service->getDescription()." has been deleted");
+								$ExportDiff->ModifyCfgFile($job, $this->exportDir, $service->getDescription(), 'service', $service->getNagiosHost()->getName(), 'host');
 								
 								// Create object
 								if($row["action"]=='add' || $row["action"]=='modify'){
@@ -530,8 +545,7 @@ class NagiosExportEngine extends ExportEngine {
 								foreach($tmpHostTemplate->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $tmpHostInheritance) {
 									if($tmpHostInheritance->getNagiosHost() != null) {
 										// Delete if exists
-										unlink($this->servicetemplateDir."/".$service->getDescription().".cfg");
-										$job->addNotice(ucfirst($row["type"])." ".$service->getDescription()." has been deleted");
+										$ExportDiff->ModifyCfgFile($job, $this->exportDir, $service->getDescription(), 'service', $tmpHostInheritance->getNagiosHost()->getName(), 'host');
 										
 										// Create object
 										if($row["action"]=='add' || $row["action"]=='modify'){

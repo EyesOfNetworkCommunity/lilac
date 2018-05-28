@@ -307,6 +307,7 @@ class EoN_Job_Exporter {
 		
 		if($type == 'service' && $name){
 			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\\n\\tservice_description\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
+			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\\n\\tuse\\t.*\\n\\tservice_description\\t".$name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}elseif($type == 'service'){
 			preg_match_all("#define service {\\n\\thost_name\\t".$parent_name."\n#", $writer, $matches, PREG_OFFSET_CAPTURE);
 		}else{
