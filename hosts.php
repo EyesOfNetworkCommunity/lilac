@@ -1769,7 +1769,7 @@ if(isset($host)) {
 			<br />
 			<br />
 			<form name="add_custom_object_variable" method="post" action="hosts.php?section=customobjectvars&id=<?php echo $_GET['id'];?>">
-			<input class="btn btn-success" type="hidden" name="request" value="custom_object_variable_add" />
+			<input class="btn btn-primary" type="hidden" name="request" value="custom_object_variable_add" />
 			New Custom Object Variable Name: <input type="text" name="host_manage[custom_variable_name]" />
 			Value: <input type="text" name="host_manage[custom_variable_value]" /> 
 			<input type="submit" value="Add Variable" />

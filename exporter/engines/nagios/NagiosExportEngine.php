@@ -674,6 +674,7 @@ class NagiosExportEngine extends ExportEngine {
 
 		// Move the configuration files to the appropriate place.
 		$mainConfiguration = NagiosMainConfigurationPeer::doSelectOne(new Criteria());
+		exec("rm -rf ".$mainConfiguration->getConfigDir()."/objects/*/*");
 		if(!$this->dir_copy($this->exportDir, $mainConfiguration->getConfigDir())) {
 			$job->addError("Unable to copy configuration files to : " . $mainConfiguration->getConfigDir());
 			$job->addError("Export failed.");

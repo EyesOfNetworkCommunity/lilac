@@ -1685,7 +1685,7 @@ print_header("Host Template Editor");
 					<input type="hidden" name="request" value="custom_object_variable_add" />
 					New Custom Object Variable Name: <input type="text" name="host_manage[custom_variable_name]" />
 					Value: <input type="text" name="host_manage[custom_variable_value]" /> 
-					<input class="btn btn-success" type="submit" value="Add Variable" />
+					<input class="btn btn-primary" type="submit" value="Add Variable" />
 					</form>
 					</td>
 					</tr>
