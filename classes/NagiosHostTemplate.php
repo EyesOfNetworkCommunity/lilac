@@ -15,6 +15,18 @@
  */
 class NagiosHostTemplate extends BaseNagiosHostTemplate {
 	
+	public function setName($v) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		$action = ($this->isNew()) ? "add" : "modify";
+		
+		if($action == "modify" && $v!=$this->getName()){
+			$JobExport->renameAction($v,$this->getName(),'host');
+		}
+		
+		return parent::setName($v);
+	}
+	
 	public function delete(PropelPDO $con = null) {
 		
 		$JobExport=new EoN_Job_Exporter();

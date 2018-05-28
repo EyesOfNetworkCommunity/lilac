@@ -93,7 +93,7 @@ class EoN_Job_Exporter {
 							$parent_type="host";
 						} elseif($tmpService->getHostTemplate() !== null) {
 							$parent=NagiosHostTemplatePeer::retrieveByPK($tmpService->getHostTemplate());
-							foreach($tmpObj->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
+							foreach($parent->getNagiosHostTemplateInheritancesRelatedByTargetTemplate() as $template_in) {
 								$this->getInheritances($template_in,"modify");
 							}
 							$parent_type="hosttemplate";
@@ -246,25 +246,6 @@ class EoN_Job_Exporter {
 					WHERE parent_name='".$oldname."'
 					AND parent_type='".$type."'"
 				);
-				
-				// Get Services List
-				$tmpHost = NagiosHostPeer::getByName($oldname);
-				if($tmpHost->getInheritedServices() !== null) {
-					foreach($tmpHost->getInheritedServices() as $tmpService) {
-						if($action=="add") {
-							$this->insertAction($tmpService->getDescription(),"service","delete",$oldname,$type);
-						}
-						$this->insertAction($tmpService->getDescription(),"service",$action,$newname,$type);
-					}
-				}
-				if($tmpHost->getNagiosServices() !== null) {
-					foreach($tmpHost->getNagiosServices() as $tmpService) {
-						if($action=="add") {
-							$this->insertAction($tmpService->getDescription(),"service","delete",$oldname,$type);
-						}
-						$this->insertAction($tmpService->getDescription(),"service",$action,$newname,$type);
-					}
-				}
 				break;
 		}
 		
