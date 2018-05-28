@@ -1041,7 +1041,7 @@ if(isset($host)) {
 					<td height="20" width="80" class="altLeft"><?php if($numOfTemplates > 1 && $counter > 0) { ?><a class="btn btn-primary btn-xs" href="hosts.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=moveup&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Up</a><?php }?></td>
 					<td height="20" width="100" class="altLeft"><?php if($numOfTemplates > 1 && $counter < ($numOfTemplates -1)) { ?><a class="btn btn-primary btn-xs" href="hosts.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=movedown&template_id=<?php echo $templateInheritances[$counter]->getId();?>">Move Down</a><?php }?></td>
 					<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="hosts.php?id=<?php echo $_GET['id'];?>&section=inheritance&request=delete&template_id=<?php echo $templateInheritances[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
-					<td height="20" class="altRight"><b><?php echo $templateInheritances[$counter]->getName();?></b></td>
+					<td height="20" class="altRight"><a href="host_template.php?id=<?php echo $templateInheritances[$counter]->getId();?>"><b><?php echo $templateInheritances[$counter]->getName();?></b></a></td>
 					</tr>
 					<?php
 				}
@@ -1757,7 +1757,7 @@ if(isset($host)) {
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="hosts.php?id=<?php echo $_GET['id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="hosts.php?id=<?php echo $_GET['id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b>$_HOST<?php echo $customObjectVariable->getVarName();?>$:</b> <?php echo $customObjectVariable->getVarValue();?></td>
 						</tr>
 						<?php
@@ -1769,7 +1769,7 @@ if(isset($host)) {
 			<br />
 			<br />
 			<form name="add_custom_object_variable" method="post" action="hosts.php?section=customobjectvars&id=<?php echo $_GET['id'];?>">
-			<input type="hidden" name="request" value="custom_object_variable_add" />
+			<input class="btn btn-success" type="hidden" name="request" value="custom_object_variable_add" />
 			New Custom Object Variable Name: <input type="text" name="host_manage[custom_variable_name]" />
 			Value: <input type="text" name="host_manage[custom_variable_value]" /> 
 			<input type="submit" value="Add Variable" />

@@ -1931,7 +1931,7 @@ print_header("Service Editor");
 									<?php
 								}
 								?>
-								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="service.php?id=<?php echo $_GET['id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="service.php?id=<?php echo $_GET['id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 								<td height="20" class="altRight"><b>$_SERVICE<?php echo $customObjectVariable->getVarName();?>$:</b> <?php echo $customObjectVariable->getVarValue();?></td>
 								</tr>
 								<?php
@@ -1946,7 +1946,7 @@ print_header("Service Editor");
 					<input type="hidden" name="request" value="custom_object_variable_add" />
 					New Custom Object Variable Name: <input type="text" name="service_manage[custom_variable_name]" />
 					Value: <input type="text" name="service_manage[custom_variable_value]" /> 
-					<input type="submit" value="Add Variable" />
+					<input class="btn btn-success" type="submit" value="Add Variable" />
 					</form>
 					</td>
 					</tr>
