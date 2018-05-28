@@ -52,7 +52,7 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 			// This template has inherited templates, let's bring their values in
 			foreach($inheritanceTemplates as $inheritanceItem) {
 				$serviceTMP = $inheritanceItem->getNagiosServiceTemplateRelatedByTargetTemplate();
-				$finalArray['use'] .= $serviceTMP->getName().',';
+				$finalArray['use'] = $serviceTMP->getName().','.$finalArray['use'];
 			}
 		}
 		if($finalArray['use'] !== null) {

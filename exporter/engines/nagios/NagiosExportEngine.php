@@ -373,7 +373,7 @@ class NagiosExportEngine extends ExportEngine {
 						
 						// Delete Host
 						unlink($this->hostDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($type)." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
 
 						// Create Host
 						$fp = @fopen($this->hostDir."/".$row["name"].".cfg", "a");
@@ -557,15 +557,15 @@ class NagiosExportEngine extends ExportEngine {
 					// Delete if exists
 					if($row["type"]=='host') {
 						unlink($this->hostDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
 					}
 					elseif($row["type"]=='hosttemplate') {
 						unlink($this->hosttemplateDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
 					}
 					elseif($row["type"]=='servicetemplate') {
 						unlink($this->servicetemplateDir."/".$row["name"].".cfg");
-						$job->addNotice(ucfirst($row["type"])." ".$name." has been deleted");
+						$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been deleted");
 					}
 					elseif(isset($row["parent_name"]) && isset($row["parent_type"])) {
 						$ExportDiff->ModifyCfgFile($job, $this->exportDir, $row["name"], $row["type"], $row["parent_name"], $row["parent_type"]);			

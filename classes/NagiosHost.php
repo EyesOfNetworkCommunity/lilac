@@ -31,7 +31,7 @@ class NagiosHost extends BaseNagiosHost {
 		
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->renameAction($this->getName(),$this->getName(),'host','delete');
+			$JobExport->insertAction($this->getName(),'host','delete');
 		}
 
 		return parent::delete($con);

@@ -56,7 +56,7 @@ class NagiosHostExporter extends NagiosExporter {
 			if(count($templateInheritances)) {
 				// This template has inherited templates, let's bring their values in
 				foreach($templateInheritances as $inheritanceItem) {
-					$finalArray['use'] .= $inheritanceItem->getName().',';
+					$finalArray['use'] = $inheritanceItem->getName().','.$finalArray['use'];
 				}
 			}
 
