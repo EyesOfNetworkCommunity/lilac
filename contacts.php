@@ -84,6 +84,13 @@ if(isset($_GET['request'])) {
 			$success = "Contact address deleted.";
 			unset($tempData);
 		}
+		else if($_GET['request'] == "delete" && $_GET['section'] == 'customobjectvars') {
+			$customObjectVar = NagiosContactCustomObjectVarPeer::retrieveByPK($_GET['customobjectvariable_id']);
+			if($customObjectVar) {
+				$customObjectVar->delete();
+			}
+			$success = "Custom Object Variable Deleted.";
+		}
 		
 }
 
@@ -254,6 +261,18 @@ if(isset($_POST['request'])) {
 		unset($tempData);
 		$success = "Contact Address added.";
 	}
+	else if($_POST['request'] == 'custom_object_variable_add') {
+		try
+		{
+			// All is well for error checking, modify the command.
+			$lilac->add_contact_custom_object_variable($_GET['contact_id'], $tempData);
+			$success = "Custom object variable added.";
+		}
+		catch(Exception $e)
+		{
+			$error = $e->getMessage();
+		}
+	}
 }
 
 if(isset($_GET['contact_id'])) {
@@ -285,8 +304,8 @@ print_header("Contact Editor");
 			'general' => 'General',
 			'notification' => 'Notification Commands',
 			'groups' => 'Group Membership',
-			'addresses' => 'Addresses'
-			
+			'addresses' => 'Addresses',
+			'customobjectvars' => 'Custom Object Variables'
 			);
 		
 	// PLACEHOLDER TO PUT CONTACT INFO
@@ -698,6 +717,56 @@ print_header("Contact Editor");
 			</table>
 			<?php
 		}
+		else if($_GET['section'] == "customobjectvars") {
+			// Get List Of Custom object variables for this contact and check
+			$contact = new NagiosContact();
+			$customObjectVariables = $contact->getNagiosContactCustomObjectVariables($_GET['contact_id']);
+		
+			$parameterCounter = 0;
+			?>
+					<table width="90%" align="center" border="0">
+					<tr>
+					<td>
+						<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
+							<tr class="altTop">
+							<td colspan="2">Custom Object Variables:</td>
+							</tr>
+							<?php
+							$counter = 0;
+							foreach($customObjectVariables as $customObjectVariable) {
+								if($counter % 2) {
+									?>
+									<tr class="altRow1">
+									<?php
+								}
+								else {
+									?>
+									<tr class="altRow2">
+									<?php
+								}
+								?>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;[ <a href="contacts.php?contact_id=<?php echo $_GET['contact_id'];?>&section=customobjectvars&request=delete&customobjectvariable_id=<?php echo $customObjectVariable->getId();?>" onClick="javascript:return confirmDelete();">Delete</a> ]</td>
+								<td height="20" class="altRight"><b>$_CONTACT<?php echo $customObjectVariable->getVarName();?>$:</b> <?php echo $customObjectVariable->getVarValue();?></td>
+								</tr>
+								<?php
+								
+								$counter++;
+							}
+							?>
+						</table>
+					<br />
+					<br />
+					<form name="add_custom_object_variable" method="post" action="contacts.php?section=customobjectvars&contact_id=<?php echo $_GET['contact_id'];?>">
+					<input type="hidden" name="request" value="custom_object_variable_add" />
+					New Custom Object Variable Name: <input type="text" name="contact_manage[custom_variable_name]" />
+					Value: <input type="text" name="contact_manage[custom_variable_value]" /> 
+					<input type="submit" value="Add Variable" />
+					</form>
+					</td>
+					</tr>
+					</table>
+					<?php
+				}
 		print_window_footer();
 		?>
 		<br />

@@ -15,7 +15,29 @@
  */
 class NagiosContactCustomObjectVar extends BaseNagiosContactCustomObjectVar 
 {
+	
+	public function delete(PropelPDO $con = null) {
+		
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+		}
 
+		return parent::delete($con);
+		
+	}
+
+	public function save(PropelPDO $con = null) {
+
+		$JobExport=new EoN_Job_Exporter();
+		if($con == null || $con == ""){
+			$JobExport->insertAction($this->getNagiosContact()->getName(),'contact','modify');
+		}
+
+		return parent::save($con);
+
+	}
+	
 	// We modify setVarName($v) to save all values uppercase
 	public function setVarName($v)
 	{
