@@ -820,7 +820,7 @@ CREATE TABLE `nagios_cgi_configuration` (
 
 LOCK TABLES `nagios_cgi_configuration` WRITE;
 /*!40000 ALTER TABLE `nagios_cgi_configuration` DISABLE KEYS */;
-INSERT INTO `nagios_cgi_configuration` VALUES (3,'/srv/eyesofnetwork/nagios/share','/nagios',1,'admin','admin','admin','admin','admin','admin','admin','admin',NULL,NULL,5,NULL,4,90,NULL,NULL,NULL,NULL,NULL,'/bin/ping',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `nagios_cgi_configuration` VALUES (3,'/srv/eyesofnetwork/nagios/share','/nagios',1,'','admin','admin','admin','admin','admin','admin','admin',NULL,NULL,5,NULL,4,90,NULL,NULL,NULL,NULL,NULL,'/bin/ping',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `nagios_cgi_configuration` ENABLE KEYS */;
 UNLOCK TABLES;
 
