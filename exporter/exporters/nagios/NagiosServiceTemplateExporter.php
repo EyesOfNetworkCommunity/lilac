@@ -89,6 +89,9 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 				$key == "parent_host") {
 				continue;
 			}
+			if($key == 'normal_check_interval') {
+				$key = 'check_interval';
+			}
 			if($key == 'maximum_check_attempts') {
 				$key = 'max_check_attempts';
 			}			

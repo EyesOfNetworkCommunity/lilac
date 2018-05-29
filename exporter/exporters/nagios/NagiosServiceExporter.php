@@ -120,6 +120,9 @@ class NagiosServiceExporter extends NagiosExporter {
 			if($key == 'description') {
 				$key = 'service_description';
 			}
+			if($key == 'normal_check_interval') {
+				$key = 'check_interval';
+			}
 			if($key == 'maximum_check_attempts') {
 				$key = 'max_check_attempts';
 			}			
