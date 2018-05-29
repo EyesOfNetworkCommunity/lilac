@@ -29,8 +29,7 @@ Currently the focus is on the Lilac Configurator, a configuration tool written t
 * Auto-Discovery tool to quickly add your infrastructure into your Nagios installation
 
 %prep
-%setup -n %{name}-master -T -b 0
-%setup -n %{name}-eon -T -b 1
+%setup -q -n %{name}-master
 
 %install
 cd ..
@@ -38,12 +37,10 @@ rm -rf %{buildroot}
 install -d -m0755 %{buildroot}%{datadir}
 install -d -m0755 %{buildroot}%{_sysconfdir}/httpd/conf.d
 cp -afpvr %{name}-master/* %{buildroot}%{datadir}
-
-# eon - specific
 install -d -m0755 %{buildroot}%{eonconfdir}
-cp -afpvr appliance/* %{buildroot}%{eonconfdir}
+cp -afpvr %{name}-master/appliance/* %{buildroot}%{eonconfdir}
+cp -afpv %{name}-master/appliance/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
 rm -rf %{buildroot}%{datadir}/appliance
-cp -afpv %{name}-eon/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
 
 %post
 
