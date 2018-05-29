@@ -1,13 +1,12 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.0
-Release: 0.eon
+Release: 1.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
 
-Source0: https://github.com/EyesOfNetworkCommunity/%{name}/archive/master.tar.gz#/%{name}-%{version}.tar.gz
-Source1: %{name}-eon.tar.gz
+Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/master.tar.gz#/%{name}-%{version}.tar.gz
 
 Requires: httpd, mariadb-server, php, php-mysql, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
@@ -22,7 +21,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 The Lilac Platform is a collection of tools to enhance existing open source monitoring applications, written by Lilac Networks. 
 Currently the focus is on the Lilac Configurator, a configuration tool written to configure Nagios, a popular Network monitoring application which features:
 
-* Enhanced Nagios 3 timeperiod support
+* Enhanced Nagios timeperiod support
 * Multiple template inheritance
 * Host templates able to contain services, dependencies, escalations
 * Importer which can import existing Nagios configurations and import from a Fruity installation
@@ -42,9 +41,9 @@ cp -afpvr %{name}-master/* %{buildroot}%{datadir}
 
 # eon - specific
 install -d -m0755 %{buildroot}%{eonconfdir}
-cp -afpvr %{name}-eon/* %{buildroot}%{eonconfdir}
+cp -afpvr appliance/* %{buildroot}%{eonconfdir}
+rm -rf %{buildroot}%{datadir}/appliance
 cp -afpv %{name}-eon/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
-cp -afpv %{name}-eon/%{name}-conf.php  %{buildroot}%{datadir}/includes/
 
 %post
 
@@ -59,6 +58,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Tue May 29 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-1.eon
+- add appliance folder
+
 * Mon May 28 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-0.eon
 - packaged for EyesOfNetwork appliance 5.2
 
