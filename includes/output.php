@@ -754,7 +754,7 @@ function form_text_element_with_enabler($size, $maxLength, $formName, $fieldName
 	<div class="formbox">
 		<div class="formelement">
 			<div class="formcontent toggle">
-			<strong><?php echo $label;?>:</strong> <input type="text" size="<?php echo $size;?>" maxlength="<?php echo $maxLength;?>" name="<?php echo $formName . "[" . $fieldName . "]";?>" value="<?php echo $value;?>" <?php if(!$enabled) print("DISABLED");?> />
+			<strong><?php echo $label;?>:</strong> <input type="text" size="<?php echo $size;?>" maxlength="<?php echo $maxLength;?>" name="<?php echo $formName . "[" . $fieldName . "]";?>" value="<?php echo htmlspecialchars($value);?>" <?php if(!$enabled) print("DISABLED");?> />
 			<?php echo $description;?>
 			</div>
 		</div>
