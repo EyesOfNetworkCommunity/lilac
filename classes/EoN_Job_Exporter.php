@@ -23,6 +23,21 @@
 include_once("/srv/eyesofnetwork/eonweb/include/config.php");
 include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
+// sanitizeFileName
+function sanitizeFileName($dangerous_filename, $platform = 'Unix'){
+	if (in_array(strtolower($platform), array('unix', 'linux'))) {
+		// our list of "dangerous characters", add/remove characters if necessary
+		$dangerous_characters = array(" ", '"', "'", "&", "/", "\\", "?", "#", ".");
+	}
+	else {
+	// no OS matched? return the original filename then...
+		return $dangerous_filename;
+	}
+
+	// every forbidden character is replace by an underscore
+	return str_replace($dangerous_characters, '_', $dangerous_filename);
+}
+
 class EoN_Job_Exporter {
 
 	public function getInheritances($templateInheritance,$continue=true) {
@@ -292,15 +307,15 @@ class EoN_Job_Exporter {
 	function ModifyCfgFile($job, $MainConfigDir, $name, $type, $parent_name=false, $parent_type=false){
 		
 		if($type == 'host') {
-			$file = $MainConfigDir."/objects/hosts/$name.cfg";
+			$file = $MainConfigDir.'/objects/hosts/'.sanitizeFileName($name).'.cfg';
 		} elseif($type == 'hosttemplate') {
-			$file = $MainConfigDir."/objects/hosttemplates/$name.cfg";
+			$file = $MainConfigDir.'/objects/hosttemplates/'.sanitizeFileName($name).'.cfg';
 		} elseif($type == 'servicetemplate') {
-			$file = $MainConfigDir."/objects/servicetemplates/$name.cfg";
+			$file = $MainConfigDir.'/objects/servicetemplates/'.sanitizeFileName($name).'.cfg';
 		} elseif($type == 'service') {
-			$file = $MainConfigDir."/objects/hosts/$parent_name.cfg";
+			$file = $MainConfigDir.'/objects/hosts/'.sanitizeFileName($parent_name).'.cfg';
 		} else {
-			$file = $MainConfigDir."/objects/".$type."s.cfg";
+			$file = $MainConfigDir.'/objects/'.$type.'s.cfg';
 		}
 		$lecture=file_get_contents($file);
 		$writer=$lecture;		
