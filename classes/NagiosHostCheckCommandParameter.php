@@ -19,7 +19,12 @@ class NagiosHostCheckCommandParameter extends BaseNagiosHostCheckCommandParamete
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			if($this->getHostTemplate() != null){
+				$object = NagiosHostTemplatePeer::retrieveByPK($this->getHostTemplate());
+				$JobExport->insertAction($object->getName(),'hosttemplate','modify');
+			} else {
+				$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			}
 		}
 		
 		return parent::delete($con);
@@ -30,7 +35,12 @@ class NagiosHostCheckCommandParameter extends BaseNagiosHostCheckCommandParamete
 
 		$JobExport=new EoN_Job_Exporter();
 		if($con == null || $con == ""){
-			$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			if($this->getHostTemplate() != null){
+				$object = NagiosHostTemplatePeer::retrieveByPK($this->getHostTemplate());
+				$JobExport->insertAction($object->getName(),'hosttemplate','modify');
+			} else {
+				$JobExport->insertAction($this->getNagiosHost()->getName(),'host','modify');
+			}
 		}
 
 		return parent::save($con);

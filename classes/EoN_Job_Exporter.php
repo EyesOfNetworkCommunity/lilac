@@ -38,6 +38,7 @@ function sanitizeFileName($dangerous_filename, $platform = 'Unix'){
 	return str_replace($dangerous_characters, '_', $dangerous_filename);
 }
 
+// Class EoN_Job_Exporter
 class EoN_Job_Exporter {
 
 	public function getInheritances($templateInheritance,$continue=true) {

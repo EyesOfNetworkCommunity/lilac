@@ -68,6 +68,15 @@ class NagiosServiceTemplate extends BaseNagiosServiceTemplate {
 					$values = array_merge($values, $templateValues);
 				}
 			}
+		} else {
+			$cmdObj = $this->getInheritedCommandWithParameters();
+			if(count($cmdObj['command'])) {
+				$values["check_command"] = array(
+					'inherited' => $inherited,
+					'source' => array('id' => $this->getId(), 'name' => $this->getName()),
+					'value' => $cmdObj['command']['command']->getId()
+				);
+			}
 		}
 		foreach(NagiosServiceTemplatePeer::getFieldNames() as $fieldName) {
 			$colName = NagiosServiceTemplatePeer::translateFieldName($fieldName, BasePeer::TYPE_PHPNAME, BasePeer::TYPE_COLNAME);

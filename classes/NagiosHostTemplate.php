@@ -106,6 +106,15 @@ class NagiosHostTemplate extends BaseNagiosHostTemplate {
 					$values = array_merge($values, $templateValues);
 				}
 			}
+		} else {
+			$cmdObj = $this->getInheritedCommandWithParameters();
+			if(count($cmdObj['command'])) {
+				$values["check_command"] = array(
+					'inherited' => $inherited,
+					'source' => array('id' => $this->getId(), 'name' => $this->getName()),
+					'value' => $cmdObj['command']['command']->getId()
+				);
+			}
 		}
 		foreach(NagiosHostTemplatePeer::getFieldNames() as $fieldName) {
 			$colName = NagiosHostTemplatePeer::translateFieldName($fieldName, BasePeer::TYPE_PHPNAME, BasePeer::TYPE_COLNAME);

@@ -1311,7 +1311,7 @@ print_header("Service Template Editor");
 								}
 								?>
 								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;</td>
-								<td height="20" class="altRight"><b>$ARG<?php echo ++$parameterCounter;?>$:</b> <?php echo $parameter['parameter'];?></td>
+								<td height="20" class="altRight"><b>$ARG<?php echo ++$parameterCounter;?>$:</b> <?php echo $parameter->getParameter();?></td>
 								</tr>
 								<?php
 							}

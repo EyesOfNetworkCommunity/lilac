@@ -102,6 +102,15 @@ class NagiosService extends BaseNagiosService {
 					}
 				}
 			}
+		} else {
+			$cmdObj = $this->getInheritedCommandWithParameters();
+			if(count($cmdObj['command'])) {
+				$values["check_command"] = array(
+					'inherited' => $inherited,
+					'source' => array('id' => $this->getId(), 'name' => $this->getDescription()),
+					'value' => $cmdObj['command']['command']->getId()
+				);
+			}
 		}
 		foreach(NagiosServicePeer::getFieldNames() as $fieldName) {
 			$colName = NagiosServicePeer::translateFieldName($fieldName, BasePeer::TYPE_PHPNAME, BasePeer::TYPE_COLNAME);
@@ -123,10 +132,10 @@ class NagiosService extends BaseNagiosService {
 
 					// Yay, let's populate
 					$values[$colName] = array(
-							'inherited' => $inherited,
-							'source' => array('id' => $this->getId(), 'name' => $this->getDescription()),
-							'value' => $val
-						);
+						'inherited' => $inherited,
+						'source' => array('id' => $this->getId(), 'name' => $this->getDescription()),
+						'value' => $val
+					);
 				}
 			}
 			

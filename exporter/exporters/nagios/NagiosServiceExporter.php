@@ -37,8 +37,12 @@ class NagiosServiceExporter extends NagiosExporter {
 	
 	public function _exportService($service, $type, $targetObj) {
 		global $lilac;
-		$fp = $this->getOutputFile();
 		
+		// Grab our export job
+		$engine = $this->getEngine();
+		$job = $engine->getJob();
+		
+		$fp = $this->getOutputFile();
 		fputs($fp, "define service {\n");
 		$finalArray = array();
 		$finalArray['use'] = null;
