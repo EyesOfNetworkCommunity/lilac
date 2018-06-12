@@ -488,7 +488,11 @@ class NagiosExportEngine extends ExportEngine {
 							$getInheritedServices = $tmpHost->getInheritedServices();
 							if($getInheritedServices !== null) {
 								foreach($getInheritedServices as $tmpService) {
-									$ExportDiff->ModifyCfgFile($job,$this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
+									$tmpServiceExporter = new NagiosServiceExporter($this, $fp);
+									if($tmpService && $tmpHost) {
+										$tmpServiceExporter->_exportService($tmpService, 'host', $tmpHost);
+									}
+									$tmpServiceExporter = null;
 								}
 							}
 							$getInheritedServices = null;
@@ -497,7 +501,11 @@ class NagiosExportEngine extends ExportEngine {
 							$getNagiosServices = $tmpHost->getNagiosServices();
 							if($getNagiosServices !== null) {
 								foreach($getNagiosServices as $tmpService) {
-									$ExportDiff->ModifyCfgFile($job,$this->exportDir, $tmpService->getDescription(), "service",$tmpHostInheritance->getNagiosHost()->getName(), 'host');			
+									$tmpServiceExporter = new NagiosServiceExporter($this, $fp);
+									if($tmpService && $tmpHost) {
+										$tmpServiceExporter->_exportService($tmpService, 'host', $tmpHost);
+									}
+									$tmpServiceExporter = null;
 								}
 							}
 							$getNagiosServices = null;
