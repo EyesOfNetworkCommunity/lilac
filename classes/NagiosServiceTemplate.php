@@ -70,7 +70,7 @@ class NagiosServiceTemplate extends BaseNagiosServiceTemplate {
 			}
 		} else {
 			$cmdObj = $this->getInheritedCommandWithParameters();
-			if(count($cmdObj['command'])) {
+			if(!empty($cmdObj['command'])) {
 				$values["check_command"] = array(
 					'inherited' => $inherited,
 					'source' => array('id' => $this->getId(), 'name' => $this->getName()),
