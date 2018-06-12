@@ -140,6 +140,9 @@ class NagiosService extends BaseNagiosService {
 			}
 			
 		}
+		$service_description = $values["description"];
+		unset($values["description"]);
+		$values = array("description" => $service_description) + $values;
 		return $values;
 	}
 	
