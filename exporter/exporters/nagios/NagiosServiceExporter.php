@@ -168,12 +168,9 @@ class NagiosServiceExporter extends NagiosExporter {
 		}
 		
 		// Notifications
-		//if(isset($values['notification_on_warning']['value'])) {
-			if(!isset($values['notification_on_warning']) && !isset($values['notification_on_unknown']) && !isset($values['notification_on_critical']) && !isset($values['notification_on_recovery']) && !isset($values['notification_on_flapping'])) {
-				//fputs($fp, "\tnotification_options\tn\n");
-			} 
-			elseif(!$values['notification_on_warning']['value'] && !$values['notification_on_unknown']['value'] && !$values['notification_on_critical']['value'] && !$values['notification_on_recovery']['value'] && !$values['notification_on_flapping']['value']) {
-				//fputs($fp, "\tnotification_options\tn\n");
+		if(isset($values['notification_on_warning']['value'])) {
+			if(!$values['notification_on_warning']['value'] && !$values['notification_on_unknown']['value'] && !$values['notification_on_critical']['value'] && !$values['notification_on_recovery']['value'] && !$values['notification_on_flapping']['value']) {
+				fputs($fp, "\tnotification_options\tn\n");
 			}
 			else {
 				fputs($fp, "\tnotification_options\t");
@@ -187,7 +184,7 @@ class NagiosServiceExporter extends NagiosExporter {
 				fputs($fp, implode(",", $tempValues));
 				fputs($fp, "\n");
 			}
-		//}
+		}
 
 		// Stalking
 		if(isset($values['flap_detection_on_ok']['value']) || isset($values['flap_detection_on_warning']['value']) || isset($values['flap_detection_on_unknown']['value']) || isset($values['flap_detection_on_critical']['value'])) {
