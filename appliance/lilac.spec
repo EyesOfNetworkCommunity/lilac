@@ -1,7 +1,7 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.0
-Release: 3.eon
+Release: 4.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Mon Jul 02 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-4.eon
+- Fix export : notifications options in service templates 
+
 * Tue Jun 12 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-3.eon
 - Fix export : service deletion
 - Fix export : create services in hosts when templates modified
