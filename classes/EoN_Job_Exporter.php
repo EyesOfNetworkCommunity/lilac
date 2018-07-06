@@ -268,7 +268,11 @@ class EoN_Job_Exporter {
 				);
 				$tmpHost = new NagiosHostPeer();
 				$tmpHost = $tmpHost->getByName($oldname);
-				$this->renameObject($child,"host",$tmpHost->getChildrenHosts());
+				$children_list = $tmpHost->getChildrenHosts();
+				$numOfChildren = count($children_list);
+				if($numOfChildren) {
+					$this->renameObject($child,"host",$tmpHost->getChildrenHosts());
+				}
 				break;
 		}
 		
