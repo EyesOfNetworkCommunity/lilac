@@ -262,6 +262,13 @@ class EoN_Job_Exporter {
 					WHERE parent_name='".$oldname."'
 					AND parent_type='".$type."'"
 				);
+				sqlrequest($database_lilac,"DELETE FROM export_job_history 
+					WHERE name='".$oldname."'
+					AND parent_type='hosttemplate'"
+				);
+				$tmpHost = new NagiosHostPeer();
+				$tmpHost = $tmpHost->getByName($oldname);
+				$this->renameObject($child,"host",$tmpHost->getChildrenHosts());
 				break;
 		}
 		

@@ -621,7 +621,7 @@ class NagiosExportEngine extends ExportEngine {
 						}
 						
 						$objectExporter = new $classname($this, $fp);
-						
+												
 						// Get Service and Host
 						if($row["type"]=='service') {
 							$object = NagiosServicePeer::getByHostAndDescription($row["parent_name"],$row["name"]);
@@ -643,6 +643,36 @@ class NagiosExportEngine extends ExportEngine {
 							if($object) {
 								$objectExporter->export($object);
 								$job->addNotice(ucfirst($row["type"])." ".$row["name"]." has been added");
+								
+								// If Host Create Services
+								if($row["type"]=='host') {
+									// Delete And Create Inherited Services 
+									$tmpHost = NagiosHostPeer::getByName($row["name"]);
+									$getInheritedServices = $tmpHost->getInheritedServices();
+									if($getInheritedServices !== null) {
+										foreach($getInheritedServices as $tmpService) {
+											$tmpServiceExporter = new NagiosServiceExporter($this, $fp);
+											if($tmpService && $tmpHost) {
+												$tmpServiceExporter->_exportService($tmpService, 'host', $tmpHost);
+											}
+											$tmpServiceExporter = null;
+										}
+									}
+									$getInheritedServices = null;
+									
+									// Delete And Create Services 
+									$getNagiosServices = $tmpHost->getNagiosServices();
+									if($getNagiosServices !== null) {
+										foreach($getNagiosServices as $tmpService) {
+											$tmpServiceExporter = new NagiosServiceExporter($this, $fp);
+											if($tmpService && $tmpHost) {
+												$tmpServiceExporter->_exportService($tmpService, 'host', $tmpHost);
+											}
+											$tmpServiceExporter = null;
+										}
+									}
+									$getNagiosServices = null;
+								}
 							}
 						}
 
