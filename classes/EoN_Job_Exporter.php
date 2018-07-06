@@ -271,7 +271,7 @@ class EoN_Job_Exporter {
 				$children_list = $tmpHost->getChildrenHosts();
 				$numOfChildren = count($children_list);
 				if($numOfChildren) {
-					$this->renameObject($child,"host",$tmpHost->getChildrenHosts());
+					$this->renameObject($tmpHost,"host",$children_list);
 				}
 				break;
 		}
