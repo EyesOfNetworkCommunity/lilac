@@ -241,7 +241,7 @@ class NagiosHostExporter extends NagiosExporter {
 					else {
 						$first = false;
 					}
-					fputs($fp, '+'+$group->getName());
+					fputs($fp, '+'.$group->getName());
 				}
 				fputs($fp, "\n");
 			}
