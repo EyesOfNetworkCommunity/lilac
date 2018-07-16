@@ -238,9 +238,7 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 		
 		// Contact Groups
 		$groupList = array();
-		$c = new Criteria();
-		$c->add(NagiosServiceContactGroupMemberPeer::SERVICE, $service->getId());
-		$contactgroups_list = NagiosServiceContactGroupMemberPeer::doSelect($c);
+		$lilac->return_service_template_contactgroups_list($service->getId(),$contactgroups_list);
 		foreach($contactgroups_list as $group) {
 			$group = $group->getNagiosContactgroup();
 			if(!key_exists($group->getName(), $groupList)) {
