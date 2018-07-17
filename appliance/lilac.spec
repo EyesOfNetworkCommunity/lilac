@@ -1,7 +1,7 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.0
-Release: 4.eon
+Release: 5.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
@@ -55,6 +55,12 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Tue Jul 17 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-5.eon
+- Fix export : copy only necessary files when using diff export 
+- Fix export : add + to merge inheriantes of contacts, contactgroups, hostgroups and servicegroups
+- Fix export : use correct function to export contact_groups 
+- Fix export : fix host rename 
+
 * Mon Jul 02 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-4.eon
 - Fix export : notifications options in service templates 
 
