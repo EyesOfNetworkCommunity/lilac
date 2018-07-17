@@ -229,9 +229,10 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 					fputs($fp, ",");
 				}
 				else {
+					fputs($fp, '+');
 					$first = false;
 				}
-				fputs($fp, '+'.$contact->getName());
+				fputs($fp, $contact->getName());
 			}
 			fputs($fp, "\n");
 		}
@@ -253,9 +254,10 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 					fputs($fp, ",");
 				}
 				else {
+					fputs($fp, '+');
 					$first = false;
 				}
-				fputs($fp, '+'.$group->getName());
+				fputs($fp, $group->getName());
 			}
 			fputs($fp, "\n");
 		}
@@ -277,9 +279,10 @@ class NagiosServiceTemplateExporter extends NagiosExporter {
 					fputs($fp, ",");
 				}
 				else {
+					fputs($fp, '+');
 					$first = false;
 				}
-				fputs($fp, '+'.$group->getName());
+				fputs($fp, $group->getName());
 			}
 			fputs($fp, "\n");
 		}
