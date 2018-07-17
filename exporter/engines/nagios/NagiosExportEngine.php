@@ -288,7 +288,8 @@ class NagiosExportEngine extends ExportEngine {
 		$job = $this->getJob();
 		$job->addNotice("NagiosExportEngine beginning diff export...", true);
 		exec("rm -rf ".$this->exportDir."/*");
-		exec("cp -arf ".$MainConfigDir."/* ".$this->exportDir."/");
+		exec("cp -arf ".$MainConfigDir."/*.cfg ".$this->exportDir."/");
+		exec("cp -arf ".$MainConfigDir."/objects ".$this->exportDir."/");
 		$config = $this->getConfig();
 		
 		//Export Main
