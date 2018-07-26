@@ -38,8 +38,8 @@ if(isset($_GET['host_template_id'])) {
 		$title = " for Host Template " . $hostTemplate->getName();
 		$sublink = "?host_template_id=" . $hostTemplate->getId();
 		$cancelLink = "host_template.php?id=" . $hostTemplate->getId() . "&section=services";
-		$inherited_list = $hostTemplate->getInheritedCommandParameters();
-		$numOfInheritedCommandParameters = count($inherited_list);
+		//$inherited_list = $hostTemplate->getInheritedCommandParameters();
+		//$numOfInheritedCommandParameters = count($inherited_list);
 	}
 }
 else if(isset($_GET['host_id'])) {
@@ -52,8 +52,8 @@ else if(isset($_GET['host_id'])) {
 		$title = " for Host " . $host->getName();
 		$sublink = "?host_id=" . $host->getId();
 		$cancelLink = "hosts.php?id=" . $host->getId() . "&section=services";
-		$inherited_list = $host->getInheritedCommandParameters();
-		$numOfInheritedCommandParameters = count($inherited_list);
+		//$inherited_list = $host->getInheritedCommandParameters();
+		//$numOfInheritedCommandParameters = count($inherited_list);
 	}
 }
 else if(isset($_GET['hostgroup_id'])) {
@@ -308,7 +308,7 @@ print_window_header("Add Service " . $title, "100%");
 	<tr bgcolor="eeeeee">
 		<td colspan="2" class="formcell">
 			<?php $_SESSION['num_cmd'] = 0;
-			if($numOfInheritedCommandParameters) {
+			/*if($numOfInheritedCommandParameters) {
 				echo '<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
 					<tr class="altTop">
 					<td colspan="2">Parameters Inherited By Templates:</td>
@@ -323,7 +323,7 @@ print_window_header("Add Service " . $title, "100%");
 						}
 					}
 				echo '</table><br />';
-			}
+			}*/
 		echo '</td></tr>';?>
 	<tr bgcolor="eeeeee">
 		<td colspan="2" class="formcell">
