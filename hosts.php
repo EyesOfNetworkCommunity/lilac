@@ -1418,8 +1418,10 @@ if(isset($host)) {
 	else if($_GET['section'] == 'groups') {
 		$inherited_list = $host->getInheritedHostGroups();
 		$numOfInheritedGroups = count($inherited_list);
-
-		$group_list = $host->getNagiosHostgroupMemberships();
+		
+		$c = new Criteria();
+		$c->add(NagiosHostgroupMembershipPeer::HOST , $_GET['id']);
+		$group_list = NagiosHostgroupMembershipPeer::doSelect($c);
 		$numOfGroups = count($group_list);
 		
 		// Get list of host groups
