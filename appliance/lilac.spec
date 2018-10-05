@@ -56,6 +56,8 @@ rm -rf %{buildroot}
 
 %changelog
 * Tue Jul 17 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-5.eon
+- Fix add hostgroup to host display
+- Fix add_service with host command parameters
 - Fix export : copy only necessary files when using diff export 
 - Fix export : add + to merge inheriantes of contacts, contactgroups, hostgroups and servicegroups
 - Fix export : use correct function to export contact_groups 
