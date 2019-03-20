@@ -67,6 +67,19 @@ if(isset($_GET['request'])) {
 				$success = "Membership Deleted";
 			}
 		}
+		else if($_GET['request'] == "duplicate" && $_GET['section'] == 'services') {
+			$old_service = NagiosServicePeer::retrieveByPK($_GET['service_id']);
+			if($old_service) {
+				$new_service = $old_service->duplicate();
+                                $name = $old_service->getDescription();
+                                $new_service->setDescription($name."-".rand(1000,9999));
+                                $new_service->save();
+				$success = "Service Duplicated";
+			}
+			else {
+				$error = "That service does not exist.";
+			}
+		}
 		else if($_GET['request'] == "delete" && $_GET['section'] == 'services') {
 			$service = NagiosServicePeer::retrieveByPK($_GET['service_id']);
 			if($service) {
@@ -1498,7 +1511,7 @@ print_header("Host Template Editor");
 							<?php
 						}
 						?>
-						<td height="20" width="80" nowrap="nowrap" class="altLeft"><a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostTemplateServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
+						<td height="20" width="120" nowrap="nowrap" class="altLeft"><a class="btn btn-primary btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=services&request=duplicate&service_id=<?php echo $hostTemplateServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Duplicate</a> <a class="btn btn-danger btn-xs" href="host_template.php?id=<?php echo $_GET['id'];?>&section=services&request=delete&service_id=<?php echo $hostTemplateServiceList[$counter]->getId();?>" onClick="javascript:return confirmDelete();">Delete</a></td>
 						<td height="20" class="altRight"><b><a href="service.php?id=<?php echo $hostTemplateServiceList[$counter]->getId();?>"><?php echo $hostTemplateServiceList[$counter]->getDescription();?></a></b></td>
 						</tr>
 						<?php
