@@ -131,7 +131,7 @@ print_header("Nagios Command Editor");
 			<?php echo $lilac->element_desc("command_name", "nagios_commands_desc"); ?><br />
 			<br />
 			<b>Command Line:</b><br />
-			<input type="text" size="100" name="command_manage[command_line]" value="<?php echo isset($command) ? htmlentities($command->getLine()) : '';?>">
+			<textarea cols="100" rows=4 name="command_manage[command_line]"><?php echo isset($command) ? htmlentities($command->getLine()) : '';?></textarea>
 			<?php echo $lilac->element_desc("command_line", "nagios_commands_desc"); ?><br />
 			<br />
 			<b>Command Description:</b><br />
