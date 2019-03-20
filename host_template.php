@@ -71,9 +71,9 @@ if(isset($_GET['request'])) {
 			$old_service = NagiosServicePeer::retrieveByPK($_GET['service_id']);
 			if($old_service) {
 				$new_service = $old_service->duplicate();
-                                $name = $old_service->getDescription();
-                                $new_service->setDescription($name."-".rand(1000,9999));
-                                $new_service->save();
+				$name = $old_service->getDescription();
+				$new_service->setDescription($name."-".rand(1000,9999));
+				$new_service->save();
 				$success = "Service Duplicated";
 			}
 			else {
