@@ -310,7 +310,7 @@ function print_header($title = null) {
 	}
 		
 	function confirmDelete() {
-		return confirm("Are you sure ?");
+		return confirm("Are you sure?");
   	}
 
 	function checkLine(lineid,checkid) {

@@ -73,6 +73,16 @@ if(isset($_GET['id'])) {
 			//$success = "Restarted Export Job";
 		}
 	}
+	if(isset($_GET['action']) && $_GET['action'] == "stop") {
+		if($exportJob->getStatusCode() < ExportJob::STATUS_FINISHED) {
+			$exportJob->setStatusCode(ExportJob::STATUS_FAILED);
+			$exportJob->setStatus("Stopped");
+			$exportJob->addWarning("Stopped Export Job");
+			$exportJob->save();
+			exec("pkill -f 'php exporter/export.php' > /dev/null");
+			$success = "Stopped Export Job";
+		}
+	}
 	if(isset($_GET['delete'])) {
 		// We want to delete the job!
 		exec("pkill -f 'php exporter/export.php ".$exportJob->getId()."' > /dev/null");
@@ -292,6 +302,13 @@ if(!isset($exportJob))	{
 				<td><?php echo $job->getStatus();?></td>
 				<td><a class="btn btn-info" href="export.php?id=<?php echo $job->getId();?>">View Job</td>
 				<td><a class="btn btn-primary" href="export.php?id=<?php echo $job->getId();?>&action=restart">Restart</a></td>
+				<?php
+				if($job->getStatusCode() < ExportJob::STATUS_FINISHED) {
+				?>
+					<td><a class="btn btn-warning" href="export.php?id=<?php echo $job->getId();?>&action=stop">Stop</a></td>
+				<?php
+				}
+				?>
 			</tr>
 			<?php
 		}
@@ -425,12 +442,15 @@ else {
 	<div id="completemsg" class="roundedcorner_success_box" <?php if($exportJob->getStatusCode() != ExportJob::STATUS_FINISHED ) { ?>style="display: none; margin-left:0px;"<?php } else { ?>style="margin-left:0px;"<?php } ?>>
 	   <div class="roundedcorner_success_top"><div></div></div>
 	      <div class="roundedcorner_success_content">
-	      Export Job Complete.  Content Exported Successfully.
+	      Export Job Complete. Content Exported Successfully.
 	      </div>
 	   <div class="roundedcorner_success_bottom"><div></div></div>
 	</div>
 
-	<a class="btn btn-primary" href="export.php?id=<?php echo $exportJob->getId();?>&action=restart">Restart Job</a> <a class="btn btn-danger" href="export.php?id=<?php echo $exportJob->getId();?>&delete=1" onclick="javascript:return confirmDelete();">Remove Job</a> <a class="btn btn-default" href="export.php">Return To Exporter</a>
+	<a class="btn btn-primary" href="export.php?id=<?php echo $exportJob->getId();?>&action=restart">Restart Job</a>
+	<a class="btn btn-warning" href="export.php?id=<?php echo $exportJob->getId();?>&action=stop">Stop Job</a>
+	<a class="btn btn-danger" href="export.php?id=<?php echo $exportJob->getId();?>&delete=1" onclick="javascript:return confirmDelete();">Remove Job</a>
+	<a class="btn btn-default" href="export.php">Return To Exporter</a>
 	<?php
 	print_window_footer();
 	print_window_header("Job Log");
