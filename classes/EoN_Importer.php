@@ -349,7 +349,7 @@ class EoN_Importer {
 		}
 		
 		// Delete existing service
-		if(isset($result["Host"]) && isset($result["HostTemplate"])) {
+		if(isset($result["Host"]) || isset($result["HostTemplate"])) {
 			$service_id=$lilac->service_exists($name,$result["Host"],$result["HostTemplate"]);
 			if($service_id!=false) {
 				$service = NagiosServicePeer::retrieveByPK($service_id);
