@@ -1,7 +1,7 @@
 Summary: Web configuration tool for nagios
 Name: lilac
-Version: 3.0
-Release: 6.eon
+Version: 3.1
+Release: 0.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
@@ -55,6 +55,14 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Mon Jul 22 2019 Sebastien DAVOULT <d@vou.lt> - 3.1-0.eon
+- Fix: Fixes xml import 
+- Improvement: Add dupliacte button on host 
+- Improvement: Add duplicate button on host template
+- Export Improvement: Add stop job button 
+- Improvement: replaced input text with html5 textarea field (multiline support) 
+
+
 * Fri Oct 05 2018 Jean-Philippe Levy <jeanphilippe.levy@gmail.com> - 3.0-6.eon
 - Fix : add hostgroup to host display
 - Fix export : add_service with host command parameters
