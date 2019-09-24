@@ -239,14 +239,19 @@ function print_redirect($redirect = "", $redirect_sec = 0, $redirect_text = "") 
 function print_window_header($title = null, $type = "top") {
 	?>
 	<div class="roundedcorner_lilac_box">
-	   <div class="roundedcorner_lilac_top"><div></div></div>
-	      <div class="roundedcorner_lilac_content">
+		<div class="roundedcorner_lilac_top"><div></div></div>
+		<div class="roundedcorner_lilac_content">
+		<?php
+			if(!empty($title)) {
+		?>
+		<h2><?php echo $title;?></h2>
+		<?php
+			}
+		?>
 			<div class="roundedcorner_inner_box">
-			   <div class="roundedcorner_inner_top"><div></div></div>
-			      <div class="roundedcorner_inner_content">
-	      
-	      
-	      
+			<div class="roundedcorner_inner_top"><div></div></div>
+			<div class="roundedcorner_inner_content">
+
 	<?php
 }
 
