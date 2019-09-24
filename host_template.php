@@ -1023,7 +1023,7 @@ print_header("Host Template Editor");
 				}
 			?>
 			<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="#" onClick="javascript:return confirmDelete();">Delete</a></td>
-			<td height="20" class="altRight"><b><?php echo $m->getName(); ?></b></td>
+			<td height="20" class="altRight"><b><a href="hosts.php?id=<?php echo $m->getId();?>"><?php echo $m->getName(); ?></a></b></td>
 			</tr>
 			<?php
 				$counter++;
