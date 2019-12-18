@@ -1,14 +1,14 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.1
-Release: 0.eon
+Release: 1.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
 
 Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/master.tar.gz#/%{name}-%{version}.tar.gz
 
-Requires: httpd, mariadb-server, php, php-mysql, php-pear, php-process, php-xml, nagios >= 3.0, nmap
+Requires: httpd, mariadb-server, php, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -55,6 +55,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Mon Oct 04 2019 Sebastien DAVOULT <d@vou.lt> - 3.1-1.eon
+- Replacing php-mysql by php-mysqlnd
+
 * Mon Jul 22 2019 Sebastien DAVOULT <d@vou.lt> - 3.1-0.eon
 - Fix: Fixes xml import 
 - Improvement: Add dupliacte button on host 
