@@ -41,7 +41,7 @@ if(isset($_GET['id'])) {
 	if(isset($_GET['action']) && $_GET['action'] == "restart") {
 		$autodiscoveryJob->setStatusCode(AutodiscoveryJob::STATUS_STARTING);
 		$autodiscoveryJob->save();
-		exec("php autodiscovery/autodiscover.php " . escapeshellarg ($autodiscoveryJob->getId()) . " > /dev/null", $tempOutput, $retVal);
+		exec("php autodiscovery/autodiscover.php " . $autodiscoveryJob->getId() . " > /dev/null", $tempOutput, $retVal);
 		if($retVal != 42) {
 			$error = "Failed to run external autodiscovery script. Return value: " . $retVal . "<br /> Error:";
 			foreach($tempOutput as $output) {
@@ -164,7 +164,7 @@ if(isset($_POST['request'])) {
 				ksort($_POST['target']);
 				$config = new AutodiscoveryConfig("NmapAutoDiscoveryEngine");		
 	
-				$config->setVar("targets", $_POST['target']);
+				$config->setVar("targets", escapeshellarg($_POST['target']));
 				$config->setVar("nmap_binary", $_POST['nmap_binary']);
 				$config->setVar("traceroute_enabled", (empty($_POST['traceroute_enabled'])) ? true : true);
 				$config->setVar("default_template", $_POST['default_template']);
@@ -179,7 +179,7 @@ if(isset($_POST['request'])) {
 				$autodiscoveryJob->save();
 				
 				// Attempt to execute the external auto-discovery script, fork it, and love it.
-				exec("php autodiscovery/autodiscover.php " . escapeshellarg($autodiscoveryJob->getId()) . " > /dev/null", $tempOutput, $retVal);
+				exec("php autodiscovery/autodiscover.php " . $autodiscoveryJob->getId() . " > /dev/null", $tempOutput, $retVal);
 				if($retVal != 42) {
 					$status_msg = "Failed to run external Autodiscovery script. Return value: " . $retVal . "<br /> Error:";
 					foreach($tempOutput as $output) {
