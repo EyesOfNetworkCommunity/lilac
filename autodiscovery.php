@@ -164,7 +164,7 @@ if(isset($_POST['request'])) {
 				ksort($_POST['target']);
 				$config = new AutodiscoveryConfig("NmapAutoDiscoveryEngine");		
 	
-				$config->setVar("targets", $_POST['target']);
+				$config->setVar("targets", escapeshellarg($_POST['target']));
 				$config->setVar("nmap_binary", $_POST['nmap_binary']);
 				$config->setVar("traceroute_enabled", (empty($_POST['traceroute_enabled'])) ? true : true);
 				$config->setVar("default_template", $_POST['default_template']);
