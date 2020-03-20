@@ -292,6 +292,16 @@ function print_header($title = null) {
 	 	<script type="text/javascript" src="js/jquery.timers.js"></script>
 	 	<script type="text/javascript" src="js/flexigrid.js"></script>
 		<script type="text/javascript" src="js/jquery.autocomplete.js"></script>
+	<?php
+		$dir = "/srv/eyesofnetwork/eonweb/themes/";
+		$listTheme = scandir($dir);
+		foreach($listTheme as $value)
+		{
+			if($value == $_SESSION["theme"]) {
+				echo '<link rel="stylesheet" type="text/css" href="/themes/'. $_SESSION["theme"] .'/lilac/style/custom-lilac.css" >';
+			}
+		}
+	?>
 	</head>	    
 	
 	
