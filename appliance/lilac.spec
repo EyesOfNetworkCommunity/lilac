@@ -1,7 +1,7 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.1
-Release: 1.eon
+Release: 2.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
@@ -55,6 +55,10 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Thu Apr 09 2020 Sebastien DAVOULT <d@vou.lt> - 3.1-2.eon
+- Fix Autodiscovery security issue (CVE-2020-8654)
+- Add Theme Manager
+
 * Mon Oct 04 2019 Sebastien DAVOULT <d@vou.lt> - 3.1-1.eon
 - Replacing php-mysql by php-mysqlnd
 
