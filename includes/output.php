@@ -298,7 +298,9 @@ function print_header($title = null) {
 		foreach($listTheme as $value)
 		{
 			if($value == $_SESSION["theme"]) {
-				echo '<link rel="stylesheet" type="text/css" href="/themes/'. $_SESSION["theme"] .'/lilac/style/custom-lilac.css" >';
+				if($_SESSION["theme"] != "Classic-v5") {
+					echo '<link rel="stylesheet" type="text/css" href="/themes/'. $_SESSION["theme"] .'/lilac/style/custom-lilac.css" >';
+				}			
 			}
 		}
 	?>
