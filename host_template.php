@@ -865,6 +865,7 @@ $initialState_list[] = array('value' => 'u', 'label' => 'Unreachable');
 $subnav = array(
 	'general' => 'General',
 	'inheritance' => 'Inheritance',
+	'hosts' => 'Hosts',
 	'checks' => 'Checks',
 	'flapping' => 'Flapping',
 	'logging' => 'Logging',
@@ -989,6 +990,46 @@ print_header("Host Template Editor");
 				<br />
 				</form>
 				</td>
+			</tr>
+			</table>
+			<?php
+		}
+		if($_GET['section'] == 'hosts') {
+			$members = $hostTemplate->getAffectedHosts();
+			$numOfMembers = count($members);
+			?>
+			<table width="100%" border="0">
+			<tr>
+			<td width="100" align="center" valign="top">
+			<img src="<?php echo $host_template_icon_image;?>" />
+			</td>
+			<td valign="top">
+			<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
+			<tr class="altTop">
+			<td colspan="4">Hosts using this template:</td>
+			</tr>
+			<?php
+				$counter = 0;
+				foreach($members as $m) {
+				if($counter % 2) {
+			?>
+			<tr class="altRow1">
+			<?php
+				}
+				else {
+			?>
+			<tr class="altRow2">
+			<?php
+				}
+			?>
+			<td height="20" width="80" nowrap="nowrap" class="altLeft"> <a class="btn btn-danger btn-xs" href="#" onClick="javascript:return confirmDelete();">Delete</a></td>
+			<td height="20" class="altRight"><b><a href="hosts.php?id=<?php echo $m->getId();?>"><?php echo $m->getName(); ?></a></b></td>
+			</tr>
+			<?php
+				$counter++;
+				}
+			?>
+			</table>
 			</tr>
 			</table>
 			<?php
