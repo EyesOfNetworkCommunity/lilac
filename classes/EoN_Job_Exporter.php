@@ -258,14 +258,8 @@ class EoN_Job_Exporter {
 				break;
 			
 			case "host":
-				sqlrequest($database_lilac,"DELETE FROM export_job_history 
-					WHERE parent_name='".$oldname."'
-					AND parent_type='".$type."'"
-				);
-				sqlrequest($database_lilac,"DELETE FROM export_job_history 
-					WHERE name='".$oldname."'
-					AND parent_type='hosttemplate'"
-				);
+				sql($database_lilac,"DELETE FROM export_job_history WHERE parent_name=? AND parent_type=?", array($oldname, $type));
+				sql($database_lilac,"DELETE FROM export_job_history WHERE name=? AND parent_type='hosttemplate'", array($oldname));
 				$tmpHost = new NagiosHostPeer();
 				$tmpHost = $tmpHost->getByName($oldname);
 				$children_list = $tmpHost->getChildrenHosts();
@@ -289,18 +283,18 @@ class EoN_Job_Exporter {
 			case "nagios_main_configuration":
 			case "nagios_cgi_configuration":
 			case "nagios_resource":
-				if(sqlrequest($database_lilac,"SELECT type FROM export_job_history WHERE type='".$type."'")->num_rows != 0){
+				if(sql($database_lilac,"SELECT type FROM export_job_history WHERE type=?", array($type))->num_rows != null){
 					$insert = false;
 				}
 		}
 
 		if($insert) {
-			sqlrequest($database_lilac,"DELETE FROM export_job_history 
-				WHERE name='".$name."'
-				AND type='".$type."'
-				AND parent_name='".$parent_name."'
-				AND parent_type='".$parent_type."'"
-			);
+			sql($database_lilac,"DELETE FROM export_job_history 
+				WHERE name=?
+				AND type=?
+				AND parent_name=?
+				AND parent_type=?"
+			, array($name, $type, $parent_name, $parent_type));
 		
 			if(isset($_COOKIE['user_name'])) {
 				$user_name = $_COOKIE['user_name'];	
@@ -308,9 +302,10 @@ class EoN_Job_Exporter {
 				$user_name = "admin";
 			}	
 	
-			sqlrequest($database_lilac,"INSERT INTO export_job_history 
+			sql($database_lilac,"INSERT INTO export_job_history 
 				(name,type,parent_name,parent_type,date,user,action) 
-				VALUES ('".$name."', '".$type."', '".$parent_name."', '".$parent_type."', '".$date."', '".$user_name."', '".$action."')"
+				VALUES (?, ?, ?, ?, ?, ?, ?)",
+				array($name, $type, $parent_name, $parent_type, $date, $user_name, $action)
 			);			
 		}
 
