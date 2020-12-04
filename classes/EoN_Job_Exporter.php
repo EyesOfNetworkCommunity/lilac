@@ -283,7 +283,7 @@ class EoN_Job_Exporter {
 			case "nagios_main_configuration":
 			case "nagios_cgi_configuration":
 			case "nagios_resource":
-				if(sql($database_lilac,"SELECT type FROM export_job_history WHERE type=?", array($type))->num_rows != null){
+				if(sql($database_lilac,"SELECT type FROM export_job_history WHERE type=?", array($type)) != null){
 					$insert = false;
 				}
 		}
