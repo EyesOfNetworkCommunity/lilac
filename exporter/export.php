@@ -92,7 +92,7 @@ if(!$export_result) {
 }
 else {
 	//reinitialize DB of ExportDiff
-	sqlrequest('lilac', "DELETE FROM export_job_history");
+	sql('lilac', "DELETE FROM export_job_history");
 	
 	$exportJob->setStatusCode(ExportJob::STATUS_FINISHED);
 	$exportJob->setEndTime(time());

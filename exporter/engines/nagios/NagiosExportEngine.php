@@ -316,9 +316,9 @@ class NagiosExportEngine extends ExportEngine {
 		}
 		
 		// Export the diffences
-		$requêteDiff = sqlrequest($database_lilac, "SELECT * FROM export_job_history ORDER BY id");
+		$requeteDiff = sql($database_lilac, "SELECT * FROM export_job_history ORDER BY id");
 	
-		while($row = mysqli_fetch_assoc($requêteDiff)){
+		foreach($requeteDiff as $row){
 			
 			// CGI Configuration
 			if($row["type"]=='nagios_cgi_configuration'){
