@@ -95,11 +95,6 @@ class NagiosExportEngine extends ExportEngine {
 			<label for="nagios_path">Nagios Sanity-Check Command (Required if Doing Sanity Check)</label>
 			<input type="text" size="100" maxlength="255" id="nagios_path" name="nagios_path" value="/srv/eyesofnetwork/nagios/bin/nagios -v /tmp/lilac-export-<?php echo $jobID; ?>/nagios.cfg" />
 			</p>
-			
-			<p>
-			<label for="nagios_path">Restart Nagios Command (Required if Restarting Nagios)</label>
-			<input type="text" size="100" maxlength="255" id="restart_command" name="restart_command" value="/usr/bin/sudo /bin/systemctl restart nagios" />
-			</p>
 		</fieldset>
 		</p>
 		<?php
@@ -154,7 +149,7 @@ class NagiosExportEngine extends ExportEngine {
 			$config->setVar("restart_nagios", false);
 		}
 		$config->setVar("nagios_path", $_POST['nagios_path']);
-		$config->setVar("restart_command", $_POST['restart_command']);
+		$config->setVar("restart_command", "/usr/bin/sudo /bin/systemctl restart nagios");
 	}
 
 	public function showJobSupplemental() {

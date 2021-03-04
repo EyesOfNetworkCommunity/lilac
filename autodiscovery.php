@@ -170,8 +170,8 @@ if(isset($_POST['request'])) {
 				$config->setVar("default_template", $_POST['default_template']);
 	
 				$autodiscoveryJob = new AutodiscoveryJob();
-				$autodiscoveryJob->setName($_POST['job_name']);
-				$autodiscoveryJob->setDescription($_POST['job_description']);
+				$autodiscoveryJob->setName(htmlspecialchars($_POST['job_name']));
+				$autodiscoveryJob->setDescription(htmlspecialchars($_POST['job_description']));
 				$autodiscoveryJob->setCmd(AutodiscoveryJob::CMD_START);
 				$autodiscoveryJob->setConfig(serialize($config));
 				$autodiscoveryJob->setStatus("Starting...");
