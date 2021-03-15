@@ -171,8 +171,8 @@ if(isset($_POST['request'])) {
 		$config = new ExportConfig($engineClass);		
 		$engine->buildConfig($config);
 		$exportJob = new ExportJob();
-		$exportJob->setName($_POST['job_name']);
-		$exportJob->setDescription($_POST['job_description']);
+		$exportJob->setName(htmlspecialchars($_POST['job_name']));
+		$exportJob->setDescription(htmlspecialchars($_POST['job_description']));
 		$exportJob->setCmd(ExportJob::CMD_START);
 		$exportJob->setConfig(serialize($config));
 		$exportJob->setStartTime(time());

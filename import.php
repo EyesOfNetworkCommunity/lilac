@@ -150,8 +150,8 @@ if(isset($_POST['request'])) {
 		$config = new ImportConfig($engineClass);
 		$engine->buildConfig($config);
 		$importJob = new ImportJob();
-		$importJob->setName($_POST['job_name']);
-		$importJob->setDescription($_POST['job_description']);
+		$importJob->setName(htmlspecialchars($_POST['job_name']));
+		$importJob->setDescription(htmlspecialchars($_POST['job_description']));
 		$importJob->setCmd(ImportJob::CMD_START);
 		$importJob->setConfig(serialize($config));
 		$importJob->setStartTime(time());
