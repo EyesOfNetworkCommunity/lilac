@@ -26,6 +26,17 @@ class NagiosHostPeer extends BaseNagiosHostPeer {
 		return $host;
 	}
 
+	static public function getById($id) {
+		$c = new Criteria();
+		$c->add(NagiosHostPeer::ID, $id);
+		//$c->setIgnoreCase(true);
+		$host = NagiosHostPeer::doSelectOne($c);
+		if(!$host)
+			return false;
+			
+		return $host;
+	}
+
 	static public function getTopLevelHosts() {
 		$con = Propel::getConnection(BaseNagiosHostPeer::DATABASE_NAME);
 		$sql = "SELECT * from nagios_host WHERE (select count(*) FROM nagios_host_parent WHERE nagios_host_parent.child_host = nagios_host.id) = 0 ORDER BY nagios_host.name";
