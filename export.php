@@ -44,7 +44,7 @@ if(isset($_GET['action']) && $_GET['action'] == "engineConfig") {
 	// Need to send over engine configuration
 	$engineClass = $_GET['className'];
 	$engine = new $engineClass(null); // Wonky, I know.
-	$engine->renderConfig($resultID->Auto_increment);
+	$engine->renderConfig();
 	die();
 }
 
@@ -169,7 +169,7 @@ if(isset($_POST['request'])) {
 	if(empty($error)) {
 		// All is good.  Let's create our job.
 		$config = new ExportConfig($engineClass);		
-		$engine->buildConfig($config);
+		$engine->buildConfig($config, $resultID->Auto_increment);
 		$exportJob = new ExportJob();
 		$exportJob->setName(htmlspecialchars($_POST['job_name']));
 		$exportJob->setDescription(htmlspecialchars($_POST['job_description']));
