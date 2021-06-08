@@ -218,25 +218,6 @@ class NagiosHost extends BaseNagiosHost {
 			}
 		}
 		
-		$inheritanceTemplates = $this->getInheritedHostGroups();
-		if($inheritanceTemplates !== null) {
-			foreach($inheritanceTemplates as $hostgroup) {
-				$c = new Criteria();
-				$c->add(NagiosServicePeer::HOSTGROUP, $hostgroup->getId());
-				$services = NagiosServicePeer::doSelect($c);
-				$servicesList = array_merge($servicesList, $services);
-			}
-		}
-		
-		$hostgroupMemberships = $this->getNagiosHostgroupMemberships();
-		foreach($hostgroupMemberships as $membership) {
-			$hostgroup = $membership->getNagiosHostGroup();
-			$c = new Criteria();
-			$c->add(NagiosServicePeer::HOSTGROUP, $hostgroup->getId());
-			$services = NagiosServicePeer::doSelect($c);
-			$servicesList = array_merge($servicesList, $services);
-		}
-		
 		if(!$self) {
 			$services = $this->getNagiosServices();
 			
@@ -261,7 +242,6 @@ class NagiosHost extends BaseNagiosHost {
 		}
 		
 		$inheritanceTemplates = null;
-		$hostgroupMemberships = null;
 		$services = null;
 		$keys = null;
 		$servicenames = null;
