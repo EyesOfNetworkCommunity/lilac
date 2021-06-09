@@ -1568,8 +1568,12 @@ if(isset($host)) {
 								<?php
 							}
 							?>
-							<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;</td>
-							<td height="20" class="altRight"><b><a href="service.php?id=<?php echo $service->getId();?>"><?php echo $service->getDescription();?></a></b> from <b><?php echo $service->getNagiosHostTemplate()->getName();?></b></td>
+							<?php
+							$testTemplateService = $service->getNagiosHostTemplate(); //test if a service is really herited by a template
+							if(!empty($testTemplateService)) { ?> 
+							    <td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;</td>
+							    <td height="20" class="altRight"><b><a href="service.php?id=<?php echo $service->getId();?>"><?php echo $service->getDescription();?></a></b> from <b><?php echo $service->getNagiosHostTemplate()->getName();?></b></td>
+							<?php } ?>
 							</tr>
 							<?php
 							$counter++;
@@ -1578,6 +1582,41 @@ if(isset($host)) {
 					?>
 				</table>
 				<br />
+				
+				<table width="100%" align="center" cellspacing="0" cellpadding="2" border="0">
+					<tr class="altTop">
+					<td colspan="2">Services Inherited By HostGroups:</td>
+					</tr>
+					<?php
+					$counter = 0;
+					if($numOfInheritedServices) {
+						foreach($inherited_list as $service) {
+							if($counter % 2) {
+								?>
+								<tr class="altRow1">
+								<?php
+							}
+							else {
+								?>
+								<tr class="altRow2">
+								<?php
+							}
+							?>
+							<?php
+							$testHostGroupService = $service->getNagiosHostGroup(); //test if a service is really herited by a hostGroup
+							if(!empty($testHostGroupService)) { ?>
+								<td height="20" width="80" nowrap="nowrap" class="altLeft">&nbsp;</td>
+							  	<td height="20" class="altRight"><b><a href="service.php?id=<?php echo $service->getId();?>"><?php echo $service->getDescription();?></a></b> from <b><?php echo $service->getNagiosHostGroup()->getName();?></b></td>
+							<?php } ?>
+							</tr>
+							<?php
+							$counter++;
+						}
+					}
+					?>
+				</table>
+				<br />
+				
 				<?php
 			}
 			?>
