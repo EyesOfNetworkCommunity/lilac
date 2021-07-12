@@ -71,8 +71,7 @@ class Log_sqlite extends Log
      * @param int    $level        Log messages up to and including this level.
      * @access public
      */
-    function Log_sqlite($name, $ident = '', &$conf, $level = PEAR_LOG_DEBUG)
-    {
+    function __construct($name, $ident = '', &$conf, $level = PEAR_LOG_DEBUG) {
         $this->_id = md5(microtime());
         $this->_table = $name;
         $this->_ident = $ident;
@@ -138,7 +137,7 @@ class Log_sqlite extends Log
 
         if ($this->_opened) {
             $this->_opened = false;
-            sqlite_close($this->_db);
+            $this->_db->close();
         }
 
         return ($this->_opened === false);
@@ -182,10 +181,10 @@ class Log_sqlite extends Log
                      "VALUES ('%s', '%s', %d, '%s')",
                      $this->_table,
                      strftime('%Y-%m-%d %H:%M:%S', time()),
-                     sqlite_escape_string($this->_ident),
+                     SQLite3::escapeString($this->_ident),
                      $priority,
-                     sqlite_escape_string($message));
-        if (!($res = @sqlite_unbuffered_query($this->_db, $q))) {
+                     SQLite3::escapeString($message));
+        if (!($res = $db->query($q))) {
             return false;
         }
         $this->_announce(array('priority' => $priority, 'message' => $message));
@@ -204,9 +203,9 @@ class Log_sqlite extends Log
         $q = "SELECT name FROM sqlite_master WHERE name='" . $this->_table .
              "' AND type='table'";
 
-        $res = sqlite_query($this->_db, $q);
+        $res = $this->$db->query($q);
 
-        if (sqlite_num_rows($res) == 0) {
+        if ($res->numColumns == 0) {
             $q = 'CREATE TABLE [' . $this->_table . '] (' .
                  'id INTEGER PRIMARY KEY NOT NULL, ' .
                  'logtime NOT NULL, ' .
@@ -214,7 +213,7 @@ class Log_sqlite extends Log
                  'priority INT NOT NULL, ' .
                  'message)';
 
-            if (!($res = sqlite_unbuffered_query($this->_db, $q))) {
+            if (!($res = $db->query($q))) {
                 return false;
             }
         }

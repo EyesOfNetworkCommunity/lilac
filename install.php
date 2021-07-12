@@ -131,18 +131,18 @@ if($stage == 2) {
 			// Check to see if we need to create the user and database
 			if($mysqlCreateUserDatabase) {
 				// Attempt to connect as admin
-				$dbConn = @mysql_connect($mysqlHostname, $mysqlRootUsername, $mysqlRootPassword);
+				$dbConn = @mysqli_connect($mysqlHostname, $mysqlRootUsername, $mysqlRootPassword);
 				if(!$dbConn) {
 					$error = "Failed to connect to MySQL server with Administrator login.";
 				}
 				else {
-					if(!mysql_select_db("mysql", $dbConn)) {
-						$error = "Failed creating user and database.  Check your Admin credentials.  Error was: <em>" . mysql_error($dbConn) . "</em>";
+					if(!mysqli_select_db("mysql", $dbConn)) {
+						$error = "Failed creating user and database.  Check your Admin credentials.  Error was: <em>" . mysqli_error($dbConn) . "</em>";
 					}
 					else {
 						// Create database
-						if(!mysql_query("create database " . $mysqlDatabase, $dbConn)) {
-							$error = "Failed to create database.  Error was: <em>" . mysql_error($dbConn) . "</em>";
+						if(!mysqli_query("create database " . $mysqlDatabase, $dbConn)) {
+							$error = "Failed to create database.  Error was: <em>" . mysqli_error($dbConn) . "</em>";
 						}
 						else {
 							// Okay, db is selected, let's grant privileges.
@@ -152,31 +152,31 @@ if($stage == 2) {
 							// k
 							if(in_array(strtolower($mysqlHostname), array('127.0.0.1', 'localhost'))) {
 								// Assign rights to localhost
-								if(!mysql_query("grant all privileges on " . $mysqlDatabase . ".* to '" . $mysqlUsername . "'@localhost identified by '" . $mysqlPassword . "'")) {
-									$error = "Failed to create user.  Error was: <em>" . mysql_error($dbConn) . "</em>";
+								if(!mysqli_query("grant all privileges on " . $mysqlDatabase . ".* to '" . $mysqlUsername . "'@localhost identified by '" . $mysqlPassword . "'")) {
+									$error = "Failed to create user.  Error was: <em>" . mysqli_error($dbConn) . "</em>";
 								}
 							}
 							else {
 								// Assign rights via our hostname
-								if(!mysql_query("grant all privileges on " . $mysqlDatabase . ".* to '" . $mysqlUsername . "'@'" . $_SERVER['SERVER_NAME'] . "' identified by '" . $mysqlPassword . "'")) {
-									$error = "Failed to create user.  Error was: <em>" . mysql_error($dbConn) . "</em>";
+								if(!mysqli_query("grant all privileges on " . $mysqlDatabase . ".* to '" . $mysqlUsername . "'@'" . $_SERVER['SERVER_NAME'] . "' identified by '" . $mysqlPassword . "'")) {
+									$error = "Failed to create user.  Error was: <em>" . mysqli_error($dbConn) . "</em>";
 								}
 							}
-							mysql_query("flush privileges");
+							mysqli_query("flush privileges");
 						}
 					}
 				}
 			}
 			if(!$error && $mysqlPopulate) {
 				// Okay, we need to populate the database.  Attempt to connect as our user.
-				$dbConn = @mysql_connect($mysqlHostname, $mysqlUsername, $mysqlPassword);
+				$dbConn = @mysqli_connect($mysqlHostname, $mysqlUsername, $mysqlPassword);
 				if(!$dbConn) {
 					$error = "Failed to connect to MySQL server with " . $mysqlUsername . " user.";
 				}
 				else {
 					// Select db.
-					if(!mysql_select_db($mysqlDatabase, $dbConn)) {
-						$error = "Failed to use " . $mysqlDatabase . " database.  Check your User credentials.  Error was: <em>" . mysql_error($dbConn) . "</em>";
+					if(!mysqli_select_db($mysqlDatabase, $dbConn)) {
+						$error = "Failed to use " . $mysqlDatabase . " database.  Check your User credentials.  Error was: <em>" . mysqli_error($dbConn) . "</em>";
 					}
 					else {
 						// Load the data
@@ -296,7 +296,7 @@ if($stage == 1) {
 	if($fail) $fatalErrors = true;
 	?>
 	<?php
-	$fail = get_magic_quotes_gpc();
+	$fail = addslashes($fail);
 	?>
 	<div class="<?php if($fail) echo "failure"; else echo "success";?>">
 	Magic Quotes GPC Set to Disabled

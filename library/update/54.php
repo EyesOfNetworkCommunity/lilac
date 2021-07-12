@@ -107,13 +107,13 @@ class updateLilac extends updateBase
 		
 		$dbConn = mysql_connect($dbConfig["db_host"], $dbConfig["db_username"], $dbConfig["db_password"]);
 		if(mysql_select_db($dbConfig["db_name"], $dbConn)) {
-			mysql_query("ALTER TABLE `nagios_main_configuration` ADD `temp_path` VARCHAR( 255 ) NOT NULL;", $dbConn);
-			mysql_query("ALTER TABLE `nagios_main_configuration` ADD `check_for_updates` TINYINT( 4 ) NOT NULL;", $dbConn);
-			mysql_query("ALTER TABLE `nagios_main_configuration` ADD `check_for_orphaned_hosts` TINYINT( 4 ) NOT NULL;", $dbConn);
-			mysql_query("ALTER TABLE `nagios_main_configuration` ADD `bare_update_check` TINYINT( 4 ) NOT NULL;", $dbConn);
+			mysqli_query("ALTER TABLE `nagios_main_configuration` ADD `temp_path` VARCHAR( 255 ) NOT NULL;", $dbConn);
+			mysqli_query("ALTER TABLE `nagios_main_configuration` ADD `check_for_updates` TINYINT( 4 ) NOT NULL;", $dbConn);
+			mysqli_query("ALTER TABLE `nagios_main_configuration` ADD `check_for_orphaned_hosts` TINYINT( 4 ) NOT NULL;", $dbConn);
+			mysqli_query("ALTER TABLE `nagios_main_configuration` ADD `bare_update_check` TINYINT( 4 ) NOT NULL;", $dbConn);
 			
 			// We add a default value for temp_path
-			mysql_query("UPDATE `nagios_main_configuration` SET `temp_path`='/tmp';", $dbConn);
+			mysqli_query("UPDATE `nagios_main_configuration` SET `temp_path`='/tmp';", $dbConn);
 		} else
 		{
 			return "Failed to write database update on updateLilacDB()";

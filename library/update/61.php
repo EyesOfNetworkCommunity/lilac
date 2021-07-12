@@ -74,9 +74,9 @@ class updateLilac extends updateBase
 			return "Failed to import database update-schema. Error message: " . $output[0];
 		}
 		
-		$dbConn = mysql_connect($dbConfig["db_host"] . ":" . $dbConfig["db_port"], $dbConfig["db_username"], $dbConfig["db_password"]);
-		if(mysql_select_db($dbConfig["db_name"], $dbConn)) {
-			mysql_query("UPDATE `lilac_configuration` SET `value`='" . $this->ut_version . "' WHERE `key`='db_build';", $dbConn);
+		$dbConn = mysqli_connect($dbConfig["db_host"] . ":" . $dbConfig["db_port"], $dbConfig["db_username"], $dbConfig["db_password"]);
+		if(mysqli_select_db($dbConfig["db_name"], $dbConn)) {
+			mysqli_query("UPDATE `lilac_configuration` SET `value`='" . $this->ut_version . "' WHERE `key`='db_build';", $dbConn);
 		} else
 		{
 			return "Failed to write database update on updateLilacDB()";
