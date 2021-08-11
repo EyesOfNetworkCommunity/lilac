@@ -270,7 +270,7 @@ class NagiosServiceImporter extends NagiosImporter {
 
 	}
 
-	private function __process($obj) {
+	private function process($obj) {
 		$job = $this->getEngine()->getJob();
 		$config = $this->getEngine()->getConfig();
 		$segment = $this->getSegment();
@@ -450,7 +450,7 @@ class NagiosServiceImporter extends NagiosImporter {
 		if(isset($values['name'])) {
 			// We're a template, just do a template process.
             $obj = new NagiosServiceTemplate();
-			$ret = $this->__process($obj);
+			$ret = $this->process($obj);
 			if(!$ret) {
 				return false;
 			}
@@ -469,7 +469,7 @@ class NagiosServiceImporter extends NagiosImporter {
 						return false;
 					// Okay, we got a proper host
 					$obj->setNagiosHost($host);
-					$ret = $this->__process($obj);
+					$ret = $this->process($obj);
 					if(!$ret) {
 						return false;
 					}
@@ -487,7 +487,7 @@ class NagiosServiceImporter extends NagiosImporter {
 						return false;
 					// Okay, we got a proper hostgroup
 					$obj->setNagiosHostgroup($hostgroup);
-					$ret = $this->__process($obj);
+					$ret = $this->process($obj);
 					if(!$ret) {
 						return false;
 					}
@@ -504,7 +504,7 @@ class NagiosServiceImporter extends NagiosImporter {
 						return false;
 					// Okay, we got a proper hostgroup
 					$obj->setNagiosHostgroup($hostgroup);
-					$ret = $this->__process($obj);
+					$ret = $this->process($obj);
 					if(!$ret) {
 						return false;
 					}

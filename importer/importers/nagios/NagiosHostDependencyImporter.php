@@ -157,7 +157,7 @@ class NagiosHostDependencyImporter extends NagiosImporter {
 		NagiosHostDependencyImporter::$templates[$name] = $segment;
 	}
 
-	private function __process($dependency) {
+	private function process($dependency) {
 		$job = $this->getEngine()->getJob();
 		$config = $this->getEngine()->getConfig();
 		$segment = $this->getSegment();
@@ -244,7 +244,7 @@ class NagiosHostDependencyImporter extends NagiosImporter {
 		return true;
 	}
 
-	public function __addTargets($dependency) {
+	public function addTargets($dependency) {
 		$job = $this->getEngine()->getJob();
 		$config = $this->getEngine()->getConfig();
 		$segment = $this->getSegment();
@@ -328,10 +328,10 @@ class NagiosHostDependencyImporter extends NagiosImporter {
 				if(!$host)
 					return false;
 				$dependency->setNagiosHost($host);
-				$ret = $this->__process($dependency);
+				$ret = $this->process($dependency);
 				if(!$ret)
 					return false;
-				$ret = $this->__addTargets($dependency);
+				$ret = $this->addTargets($dependency);
 				if(!$ret)
 					return false;
 				// Need to give it a temp name
@@ -350,10 +350,10 @@ class NagiosHostDependencyImporter extends NagiosImporter {
 				if(!$hostgroup)
 					return false;
 				$dependency->setNagiosHostgroup($hostgroup);
-				$ret = $this->__process($dependency);
+				$ret = $this->process($dependency);
 				if(!$ret)
 					return false;
-				$ret = $this->__addTargets($dependency);
+				$ret = $this->addTargets($dependency);
 				if(!$ret)
 					return false;
 				$dependency->save();
