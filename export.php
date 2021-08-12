@@ -32,10 +32,10 @@ include_once('ExportLogEntry.php');
 // Get Next Job Id
 include("/srv/eyesofnetwork/eonweb/include/config.php");
 $link = mysqli_connect( $database_host, $database_username, $database_password );
-mysqli_select_db( $database_lilac );
-$query = mysqli_query( "SHOW TABLE STATUS LIKE 'export_job';" );
+$link->select_db( $database_lilac );
+$query = $link->query( "SHOW TABLE STATUS LIKE 'export_job';" );
 $resultID = mysqli_fetch_object( $query );
-mysqli_close( $link );
+$link->close();
 
 // Better to load our engines!
 $availableEngines = ExportEngine::getAvailableEngines();
