@@ -113,7 +113,7 @@ class PropelPDO extends PDO
 	 */
 	protected static $defaultLogMethods = array(
 		'PropelPDO::exec',
-		'PropelPDO::query',
+		'PropelPDO::propel_query',
 		'DebugPDOStatement::execute',
 	);
 
@@ -421,7 +421,7 @@ class PropelPDO extends PDO
 	 *
 	 * @return    PDOStatement
 	 */
-	public function query()
+	public function propel_query()
 	{
 		if ($this->useDebug) {
 			$debug = $this->getDebugSnapshot();
