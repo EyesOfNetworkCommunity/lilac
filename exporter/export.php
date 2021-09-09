@@ -13,6 +13,7 @@ if(file_exists('exporter')) {
 include_once(dirname(__FILE__).'/../includes/config.inc');
 include_once('ExportJob.php');
 include_once('ExportLogEntry.php');
+include_once('dashboards/dash.php');
 
 ExportEngine::getAvailableEngines();
 
@@ -80,6 +81,7 @@ if(!$engine->init()) {
 if($config->getVar('export_diff')) {
 	$export_result = $engine->exportDiff();
 } else {
+	create_dashboard();
 	$export_result = $engine->export();
 }
 if(!$export_result) {

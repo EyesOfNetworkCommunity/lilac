@@ -1,0 +1,2284 @@
+[
+  {
+    "aliasColors": {
+      "/-crit": "#FF3727",
+      "/-crit-max": "#FF3727",
+      "/-crit-min": "#FF3727",
+      "/-value": "#085DFF",
+      "/-warn": "#FFFC15",
+      "/-warn-max": "#FFFC15",
+      "/-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 40
+    },
+    "hiddenSeries": false,
+    "id": 5,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/boot-crit": "#FF3727",
+      "/boot-crit-max": "#FF3727",
+      "/boot-crit-min": "#FF3727",
+      "/boot-value": "#085DFF",
+      "/boot-warn": "#FFFC15",
+      "/boot-warn-max": "#FFFC15",
+      "/boot-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 50
+    },
+    "hiddenSeries": false,
+    "id": 6,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/boot-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/boot-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/boot"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/boot"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /boot",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/dev/shm-crit": "#FF3727",
+      "/dev/shm-crit-max": "#FF3727",
+      "/dev/shm-crit-min": "#FF3727",
+      "/dev/shm-value": "#085DFF",
+      "/dev/shm-warn": "#FFFC15",
+      "/dev/shm-warn-max": "#FFFC15",
+      "/dev/shm-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 60
+    },
+    "hiddenSeries": false,
+    "id": 7,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/dev\\/shm-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/dev/shm-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/dev/shm"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/dev/shm"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /dev/shm",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/run-crit": "#FF3727",
+      "/run-crit-max": "#FF3727",
+      "/run-crit-min": "#FF3727",
+      "/run-value": "#085DFF",
+      "/run-warn": "#FFFC15",
+      "/run-warn-max": "#FFFC15",
+      "/run-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 70
+    },
+    "hiddenSeries": false,
+    "id": 8,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/run-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /run",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/run/user/0-crit": "#FF3727",
+      "/run/user/0-crit-max": "#FF3727",
+      "/run/user/0-crit-min": "#FF3727",
+      "/run/user/0-value": "#085DFF",
+      "/run/user/0-warn": "#FFFC15",
+      "/run/user/0-warn-max": "#FFFC15",
+      "/run/user/0-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 80
+    },
+    "hiddenSeries": false,
+    "id": 9,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/run\\/user\\/0-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/0-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run/user/0"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run/user/0"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /run/user/0",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/run/user/998-crit": "#FF3727",
+      "/run/user/998-crit-max": "#FF3727",
+      "/run/user/998-crit-min": "#FF3727",
+      "/run/user/998-value": "#085DFF",
+      "/run/user/998-warn": "#FFFC15",
+      "/run/user/998-warn-max": "#FFFC15",
+      "/run/user/998-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 90
+    },
+    "hiddenSeries": false,
+    "id": 10,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/run\\/user\\/998-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/run/user/998-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run/user/998"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/run/user/998"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /run/user/998",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  },
+  {
+    "aliasColors": {
+      "/sys/fs/cgroup-crit": "#FF3727",
+      "/sys/fs/cgroup-crit-max": "#FF3727",
+      "/sys/fs/cgroup-crit-min": "#FF3727",
+      "/sys/fs/cgroup-value": "#085DFF",
+      "/sys/fs/cgroup-warn": "#FFFC15",
+      "/sys/fs/cgroup-warn-max": "#FFFC15",
+      "/sys/fs/cgroup-warn-min": "#FFFC15",
+      "downtime": "#EEE"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "editable": true,
+    "fill": 0,
+    "fillGradient": 0,
+    "grid": {},
+    "gridPos": {
+      "h": 10,
+      "w": 24,
+      "x": 0,
+      "y": 100
+    },
+    "hiddenSeries": false,
+    "id": 11,
+    "legend": {
+      "alignAsTable": false,
+      "avg": false,
+      "current": false,
+      "hideEmpty": true,
+      "max": false,
+      "min": false,
+      "rightSide": false,
+      "show": "graph",
+      "total": false,
+      "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "nullPointMode": "connected",
+    "options": {
+      "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 2,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+      {
+        "alias": "downtime",
+        "fill": 3,
+        "legend": false,
+        "lines": true,
+        "linewidth": 3
+      },
+      {
+        "alias": "/\\/sys\\/fs\\/cgroup-value/",
+        "fill": 2
+      }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-value"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-warn"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-warn-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "warn-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-warn-max"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-crit"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-min"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-crit-min"
+              ],
+              "type": "alias"
+            }
+          ],
+          [
+            {
+              "params": [
+                "crit-max"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "/sys/fs/cgroup-crit-max"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/sys/fs/cgroup"
+          }
+        ]
+      },
+      {
+        "alias": "$col",
+        "datasource": "nagflux",
+        "dsType": "influxdb",
+        "measurement": "metrics",
+        "refId": "B",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            },
+            {
+              "params": [],
+              "type": "mean"
+            },
+            {
+              "params": [
+                "downtime"
+              ],
+              "type": "alias"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "host",
+            "operator": "=",
+            "value": "%hostname%"
+          },
+          {
+            "condition": "AND",
+            "key": "service",
+            "operator": "=",
+            "value": "%service%"
+          },
+          {
+            "condition": "AND",
+            "key": "command",
+            "operator": "=",
+            "value": "check_disk"
+          },
+          {
+            "condition": "AND",
+            "key": "performanceLabel",
+            "operator": "=",
+            "value": "/sys/fs/cgroup"
+          },
+          {
+            "condition": "AND",
+            "key": "downtime",
+            "operator": "=",
+            "value": "true"
+          }
+        ]
+      }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "%hostname% %service% check_disk /sys/fs/cgroup",
+    "tooltip": {
+      "avg": false,
+      "current": false,
+      "max": false,
+      "min": false,
+      "shared": true,
+      "show": false,
+      "sort": 0,
+      "total": false,
+      "value_type": "individual",
+      "values": false
+    },
+    "type": "graph",
+    "xaxis": {
+      "buckets": null,
+      "mode": "time",
+      "name": null,
+      "show": true,
+      "values": []
+    },
+    "yaxes": [
+      {
+        "format": "mbytes",
+        "show": true
+      },
+      {
+        "format": "short"
+      }
+    ],
+    "yaxis": {
+      "align": false,
+      "alignLevel": null
+    }
+  }
+]
