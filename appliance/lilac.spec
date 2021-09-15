@@ -6,7 +6,7 @@ License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
 
-Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/master.tar.gz#/%{name}-%{version}.tar.gz
+Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/%{version}-%{release}.tar.gz
 
 Requires: httpd, MariaDB-server, php, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
@@ -29,17 +29,17 @@ Currently the focus is on the Lilac Configurator, a configuration tool written t
 * Auto-Discovery tool to quickly add your infrastructure into your Nagios installation
 
 %prep
-%setup -q -n %{name}-master
+%setup -q -n %{name}-%{version}-%{release}
 
 %install
 cd ..
 rm -rf %{buildroot}
 install -d -m0755 %{buildroot}%{datadir}
 install -d -m0755 %{buildroot}%{_sysconfdir}/httpd/conf.d
-cp -afpvr %{name}-master/* %{buildroot}%{datadir}
+cp -afpvr %{name}-%{version}-%{release}/* %{buildroot}%{datadir}
 install -d -m0755 %{buildroot}%{eonconfdir}
-cp -afpvr %{name}-master/appliance/* %{buildroot}%{eonconfdir}
-cp -afpv %{name}-master/appliance/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
+cp -afpvR %{name}-%{version}-%{release}/appliance/* %{buildroot}%{eonconfdir}
+cp -afpv %{name}-%{version}-%{release}/appliance/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
 rm -rf %{buildroot}%{datadir}/appliance
 
 %post
