@@ -56,7 +56,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
-* Wed Sep 15 2021 Julien Gonzalez <julien.gonzalez1498@gmail.com> - 3.2-0.eon
+* Wed Sep 15 2021 Julien GONZALEZ <julien.gonzalez1498@gmail.com> - 3.2-0.eon
 - Update code compatibility for PHP 8
 - Add the creation of grafana dashboards with the API
 
