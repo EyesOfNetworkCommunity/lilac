@@ -346,7 +346,7 @@ if(isset($_POST['request'])) {
 		}
 		else {
 			// Field Error Checking
-			if(count($host)) {
+			if(is_countable($host)) {
 				foreach($host as $tempVariable)
 					$tempVariable = trim($tempVariable);
 			}
@@ -355,7 +355,7 @@ if(isset($_POST['request'])) {
 			}
 			// All is well for error checking, modify the host.
 			else {
-				$host->setName($_POST['host_manage']['host_name']);
+				$host->setName(preg_replace('/[^a-zA-Z0-9_ -]/s','', $_POST['host_manage']['host_name']));
 				$host->setAlias($_POST['host_manage']['alias']);
 				$host->setAddress($_POST['host_manage']['address']);
                                 if ( isset($_POST['host_manage']['display_name']) ) {
