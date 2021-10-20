@@ -44,6 +44,7 @@ rm -rf %{buildroot}%{datadir}/appliance
 
 %post
 /usr/bin/mysql -u root --password=root66 lilac < %{eonconfdir}/updates/3.2.sql 2>/dev/null
+sed -i "s/result_backend = EyesOfNetwork/spool_dir = \/var\/spool\/nagios\/checkresults/g" /etc/thruk/thruk_local.conf 2>/dev/null
 
 %clean
 rm -rf %{buildroot}
