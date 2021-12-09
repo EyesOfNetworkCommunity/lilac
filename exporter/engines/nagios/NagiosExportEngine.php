@@ -52,7 +52,7 @@ class NagiosExportEngine extends ExportEngine {
 		return "Exports configuration to Nagios configuration files.";
 	}
 
-	public function renderConfig($jobID=1) {
+	public function renderConfig() {
 		?>
 		<p>
 		<fieldset class="checks">
@@ -88,15 +88,6 @@ class NagiosExportEngine extends ExportEngine {
 			</p>
 		</fieldset>
 		</p>
-		<p>
-		<fieldset>
-			<legend>Path Locations</legend>
-			<p>
-			<label for="nagios_path">Nagios Sanity-Check Command (Required if Doing Sanity Check)</label>
-			<input type="text" size="100" maxlength="255" id="nagios_path" name="nagios_path" value="/srv/eyesofnetwork/nagios/bin/nagios -v /tmp/lilac-export-<?php echo $jobID; ?>/nagios.cfg" />
-			</p>
-		</fieldset>
-		</p>
 		<?php
 	}
 	
@@ -105,7 +96,7 @@ class NagiosExportEngine extends ExportEngine {
 		return $error;
 	}
 
-	public function buildConfig($config) {
+	public function buildConfig($config, $id=1) {
 		if(isset($_POST['export_debug'])) {
 			$config->setVar("export_debug", true);
 		}
@@ -148,7 +139,7 @@ class NagiosExportEngine extends ExportEngine {
 		else {
 			$config->setVar("restart_nagios", false);
 		}
-		$config->setVar("nagios_path", $_POST['nagios_path']);
+		$config->setVar("nagios_path", "/srv/eyesofnetwork/nagios/bin/nagios -v /tmp/lilac-export-" . $id . "/nagios.cfg");
 		$config->setVar("restart_command", "/usr/bin/sudo /bin/systemctl restart nagios");
 	}
 
