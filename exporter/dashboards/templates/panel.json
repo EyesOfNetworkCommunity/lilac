@@ -1,0 +1,197 @@
+[
+    {
+    "datasource": {
+      "type": "datasource",
+      "uid": "-- Mixed --"
+    },
+    "fieldConfig": {
+      "defaults": {
+        "color": {
+          "mode": "palette-classic"
+        },
+        "custom": {
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "drawStyle": "line",
+          "fillOpacity": 0,
+          "gradientMode": "none",
+          "hideFrom": {
+            "legend": false,
+            "tooltip": false,
+            "viz": false
+          },
+          "lineInterpolation": "linear",
+          "lineWidth": 2,
+          "pointSize": 5,
+          "scaleDistribution": {
+            "type": "linear"
+          },
+          "showPoints": "never",
+          "spanNulls": true,
+          "stacking": {
+            "group": "A",
+            "mode": "none"
+          },
+          "thresholdsStyle": {
+            "mode": "off"
+          }
+        },
+        "mappings": [],
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            {
+              "color": "green"
+            },
+            {
+              "color": "red",
+              "value": 80
+            }
+          ]
+        },
+        "unit": "%unit%"
+      },
+      "overrides": [
+        {
+          "matcher": {
+            "id": "byRegexp",
+            "options": "\\b\\w*-value\\w*\\b"
+          },
+          "properties": [
+            {
+              "id": "color",
+              "value": {
+                "fixedColor": "#085dff",
+                "mode": "fixed"
+              }
+            }
+          ]
+        },
+        {
+          "matcher": {
+            "id": "byRegexp",
+            "options": "\\b\\w*-warn-*\\w*\\b"
+          },
+          "properties": [
+            {
+              "id": "color",
+              "value": {
+                "fixedColor": "#fffc15",
+                "mode": "fixed"
+              }
+            }
+          ]
+        },
+        {
+          "matcher": {
+            "id": "byRegexp",
+            "options": "\\b\\w*-crit-*\\w*\\b"
+          },
+          "properties": [
+            {
+              "id": "color",
+              "value": {
+                "fixedColor": "#ff3727",
+                "mode": "fixed"
+              }
+            }
+          ]
+        },
+        {
+          "matcher": {
+            "id": "byRegexp",
+            "options": "\\b\\w*-value\\w*\\b"
+          },
+          "properties": [
+            {
+              "id": "custom.fillOpacity",
+              "value": 20
+            }
+          ]
+        }
+      ]
+    },
+    "gridPos": {
+      "h": 11,
+      "w": 24,
+      "x": 0,
+      "y": 0
+    },
+    "id": "%id%",
+    "options": {
+      "legend": {
+        "calcs": [],
+        "displayMode": "list",
+        "placement": "bottom"
+      },
+      "tooltip": {
+        "mode": "multi",
+        "sort": "none"
+      }
+    },
+    "pluginVersion": "8.1.1",
+    "targets": [
+      {
+        "alias": "$col",
+        "datasource": {
+          "uid": "000000001"
+        },
+        "dsType": "influxdb",
+        "groupBy": [
+          {
+            "params": [
+              "$__interval"
+            ],
+            "type": "time"
+          },
+          {
+            "params": [
+              "null"
+            ],
+            "type": "fill"
+          }
+        ],
+        "measurement": "metrics",
+        "orderByTime": "ASC",
+        "policy": "default",
+        "query": "SELECT mean(\"value\") AS \"%performanceLabel%-value\", mean(\"warn\") AS \"%performanceLabel%-warn\", mean(\"warn-min\") AS \"%performanceLabel%-warn-min\", mean(\"warn-max\") AS \"%performanceLabel%-warn-max\", mean(\"crit\") AS \"%performanceLabel%-crit\", mean(\"crit-min\") AS \"%performanceLabel%-crit-min\", mean(\"crit-max\") AS \"%performanceLabel%-crit-max\" FROM \"metrics\" WHERE (\"host\" = '%host%' AND \"service\" = '%service%' AND \"command\" = '%command%' AND \"performanceLabel\" = '%performanceLabel%') AND $timeFilter GROUP BY time($__interval) fill(null)",
+        "rawQuery": true,
+        "refId": "A",
+        "resultFormat": "time_series"
+      },
+      {
+        "alias": "$col",
+        "datasource": {
+          "type": "influxdb",
+          "uid": "000000001"
+        },
+        "dsType": "influxdb",
+        "groupBy": [
+          {
+            "params": [
+              "$__interval"
+            ],
+            "type": "time"
+          },
+          {
+            "params": [
+              "null"
+            ],
+            "type": "fill"
+          }
+        ],
+        "hide": false,
+        "measurement": "metrics",
+        "orderByTime": "ASC",
+        "policy": "default",
+        "query": "SELECT mean(\"value\") AS \"downtime\" FROM \"metrics\" WHERE (\"host\" = '%host%' AND \"service\" = '%service%' AND \"command\" = '%command%' AND \"performanceLabel\" = '%performanceLabel%' AND \"downtime\" = 'true') AND $timeFilter GROUP BY time($__interval) fill(null)",
+        "rawQuery": true,
+        "refId": "B",
+        "resultFormat": "time_series"
+      }
+    ],
+    "title": "%host% %service% %command% %performanceLabel%",
+    "type": "timeseries"
+  }
+]
