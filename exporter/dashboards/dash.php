@@ -261,8 +261,6 @@ function create_dashboard() {
 		foreach($arr_service["result"]["default"] as $service) {
 			if($host["name"] == $service["host_name"]) {
 				if(!empty($service["perf_data"])) {
-
-					print("<pre>".print_r($host["name"],true)."</pre>");
 					
 					$var = sql("lilac", "SELECT * FROM nagios_host_custom_object_var WHERE var_name = ? AND host = ? AND var_value = ?", array($service["description"] . "_PANELID", $id[0][0], $panelId));
 
@@ -370,6 +368,25 @@ function create_dashboard() {
 		curl_close($ch);
 		
 		sql("lilac", "INSERT INTO nagios_host_custom_object_var (host, var_name, var_value) VALUES (?, 'DASHID', ?)", array($id[0][0], $result["uid"]));
+
+		$uid = $result["uid"];
+		// API URL
+		$url = 'http://127.0.0.1:3000/api/dashboards/uid/'. $uid . '/permissions';
+		// Create a new cURL resource
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		// Setup request to send json via POST
+		$payload_service = '{"items": [{"role": "Viewer","permission": 1}]}';
+
+		// Attach encoded JSON string to the POST fields
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_service);
+		// Set the content type to application/json
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Authorization: Bearer ' . $grafana_api_token));
+		// Return response instead of outputting
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// Execute the POST request
+		$result = curl_exec($ch);
 	}
 }
 
