@@ -6,7 +6,7 @@ License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
 
-Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/%{version}-%{release}.tar.gz
+Source: /data/eonsrc/SOURCES/%{version}-%{release}.tar.gz
 
 Requires: httpd, MariaDB-server, php, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
