@@ -17,9 +17,6 @@
 #
 #########################################
 */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 include_once("/srv/eyesofnetwork/eonweb/include/config.php");
 include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 
@@ -32,7 +29,14 @@ if(!empty($_GET["host"])) {
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 	// Setup request to send json via POST
-	$payload_service = '{"object": "services", "columns": ["description", "perf_data"], "filters": ["host_name = ' . $_GET["host"] . '"]}';
+
+	if(!empty($_GET["service"])) {
+		$vars = sql("lilac", "select NHCO.var_value from nagios_host_custom_object_var as NHCO INNER JOIN nagios_host as NH ON NHCO.host = NH.id WHERE NH.name = ? AND NHCO.var_name = ?", array($_GET["host"], $_GET["service"] . "_PANELID"));
+		$payload_service = '{"object": "services", "columns": ["description", "perf_data"], "filters": ["host_name = ' . $_GET["host"] . '"]}';
+	} else {
+		$vars = sql("lilac", "select NHCO.var_value from nagios_host_custom_object_var as NHCO INNER JOIN nagios_host as NH ON NHCO.host = NH.id WHERE NH.name = ? AND NHCO.var_name = ?", array($_GET["host"], "hostcheck_PANELID"));
+		$payload_service = '{"object" : "hosts", "columns" : ["check_command", "perf_data", "name"], "filters": ["name = ' . $_GET["host"] . '"]}';
+	}
 
 	// Attach encoded JSON string to the POST fields
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_service);
@@ -45,7 +49,7 @@ if(!empty($_GET["host"])) {
 	$arr_service = json_decode($result, true);
 	// Close cURL resource
 	curl_close($ch);
-	$vars = sql("lilac", "select NHCO.var_value from nagios_host_custom_object_var as NHCO INNER JOIN nagios_host as NH ON NHCO.host = NH.id WHERE NH.name = ? AND NHCO.var_name = ?", array($_GET["host"], $_GET["service"] . "_PANELID"));
+	
 	$listLabel = array();
 	$listLabel["labels"] = array();
 	$listLabel["id"] = $vars[0][0];
@@ -55,7 +59,16 @@ if(!empty($_GET["host"])) {
 			$perfDatas = explode(" ", $service["perf_data"]);
 			$perfDataLabel = array();
 			foreach($perfDatas as $perfData) {
-				if($_GET["service"] == $service["description"]) {
+				$ser = 0;
+				if (isset($service["description"])) {
+					$ser = $service["description"];
+				}
+				if (isset($service["check_command"])) {
+					$ser = $service["check_command"];
+					$_GET["service"] = $ser;
+				}
+
+				if($_GET["service"] == $ser) {
 					$perfDataLabel = explode("=", $perfData)[0];
 					$perfDataLabelTrunc = $perfDataLabel;
 					$perfDataLabel = strtr($perfDataLabel, array("\\" => "\\\\\\\\"));
@@ -64,7 +77,6 @@ if(!empty($_GET["host"])) {
 					$perfDataLabel = strtr($perfDataLabel, array("'" => ""));
 					array_push($listLabel["labels"], $perfDataLabel);
 				}
-
 				$panelId++;
 			}
 		}
@@ -120,7 +132,7 @@ function convertUnit($unit) {
 }
 
 function getUnits() {
-// API URL
+	// API URL
 	$url = 'http://localhost:8086/query?pretty=true&db=nagflux&q=SHOW%20series';
 
 	// Create a new cURL resource
@@ -312,7 +324,15 @@ function create_dashboard() {
 		$perfDatas = explode(" ", $host["perf_data"]);
 
 		$perfDataLabel = array();
+		$var = sql("lilac", "SELECT * FROM nagios_host_custom_object_var WHERE var_name = ? AND host = ? AND var_value = ?", array("hostcheck_PANELID", $id[0][0], $panelId));
+
+		if($var != null) {
+			sql("lilac", "UPDATE nagios_host_custom_object_var SET var_value = ? WHERE var_name = ? AND host = ?", array("hostcheck_PANELID", $id[0][0]));
+		} else {
+			sql("lilac", "INSERT INTO nagios_host_custom_object_var (host, var_name, var_value) VALUES (?, ?, ?)", array($id[0][0], "hostcheck_PANELID", $panelId));
+		}
 		foreach($perfDatas as $perfData) {
+			
 			$payload_2 = file_get_contents("dashboards/templates/panel.json");
 			$perfDataLabel = explode("=", $perfData)[0];
 			$matches = array();
@@ -368,7 +388,7 @@ function create_dashboard() {
 		curl_close($ch);
 		
 		sql("lilac", "INSERT INTO nagios_host_custom_object_var (host, var_name, var_value) VALUES (?, 'DASHID', ?)", array($id[0][0], $result["uid"]));
-
+		
 		$uid = $result["uid"];
 		// API URL
 		$url = 'http://127.0.0.1:3000/api/dashboards/uid/'. $uid . '/permissions';
