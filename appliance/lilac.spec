@@ -8,7 +8,7 @@ URL: http://www.lilacplatform.com/
 
 Source: /data/eonsrc/SOURCES/%{version}-%{release}.tar.gz
 
-Requires: httpd, MariaDB-server, php, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
+Requires: httpd, MariaDB-server, php >= 8.0, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
