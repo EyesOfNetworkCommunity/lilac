@@ -135,7 +135,7 @@
       {
         "alias": "$col",
         "datasource": {
-          "uid": "000000001"
+          "type": "influxdb"
         },
         "dsType": "influxdb",
         "groupBy": [
@@ -163,8 +163,7 @@
       {
         "alias": "$col",
         "datasource": {
-          "type": "influxdb",
-          "uid": "000000001"
+          "type": "influxdb"
         },
         "dsType": "influxdb",
         "groupBy": [
