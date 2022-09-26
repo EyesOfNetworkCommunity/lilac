@@ -31,11 +31,11 @@ include_once('ExportLogEntry.php');
 
 // Get Next Job Id
 include("/srv/eyesofnetwork/eonweb/include/config.php");
-$link = mysql_connect( $database_host, $database_username, $database_password );
-mysql_select_db( $database_lilac );
-$query = mysql_query( "SHOW TABLE STATUS LIKE 'export_job';" );
-$resultID = mysql_fetch_object( $query );
-mysql_close( $link );
+$link = mysqli_connect( $database_host, $database_username, $database_password );
+$link->select_db( $database_lilac );
+$query = $link->query( "SHOW TABLE STATUS LIKE 'export_job';" );
+$resultID = mysqli_fetch_object( $query );
+$link->close();
 
 // Better to load our engines!
 $availableEngines = ExportEngine::getAvailableEngines();
@@ -44,7 +44,7 @@ if(isset($_GET['action']) && $_GET['action'] == "engineConfig") {
 	// Need to send over engine configuration
 	$engineClass = $_GET['className'];
 	$engine = new $engineClass(null); // Wonky, I know.
-	$engine->renderConfig($resultID->Auto_increment);
+	$engine->renderConfig();
 	die();
 }
 
@@ -169,7 +169,7 @@ if(isset($_POST['request'])) {
 	if(empty($error)) {
 		// All is good.  Let's create our job.
 		$config = new ExportConfig($engineClass);		
-		$engine->buildConfig($config);
+		$engine->buildConfig($config, $resultID->Auto_increment);
 		$exportJob = new ExportJob();
 		$exportJob->setName(htmlspecialchars($_POST['job_name']));
 		$exportJob->setDescription(htmlspecialchars($_POST['job_description']));

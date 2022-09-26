@@ -13,7 +13,9 @@ if(file_exists('exporter')) {
 include_once(dirname(__FILE__).'/../includes/config.inc');
 include_once('ExportJob.php');
 include_once('ExportLogEntry.php');
-
+include_once('dashboards/dash.php');
+include_once("/srv/eyesofnetwork/eonweb/include/config.php");
+include_once("/srv/eyesofnetwork/eonweb/include/function.php");
 ExportEngine::getAvailableEngines();
 
 
@@ -80,6 +82,38 @@ if(!$engine->init()) {
 if($config->getVar('export_diff')) {
 	$export_result = $engine->exportDiff();
 } else {
+	$export_result = $engine->export();
+
+	// API URL
+	$url = 'https://127.0.0.1/eonapi/listNagiosObjects?username=admin&apiKey=' . $eon_api_token;
+	// Create a new cURL resource
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	// Setup request to send json via POST
+	$payload_host = '{"object" : "hosts","columns" : ["name"]}';
+	// Attach encoded JSON string to the POST fields
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $payload_host);
+	// Set the content type to application/json
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+	// Return response instead of outputting
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	// Execute the POST request
+	$result = curl_exec($ch);
+	$arr_host = json_decode($result, true);
+	// Close cURL resource
+	curl_close($ch);
+	
+	
+	foreach($arr_host["result"]["default"] as $host) {
+		$date = new DateTime();
+		$timestamp = $date->getTimestamp();
+		$CommandFile="/srv/eyesofnetwork/nagios/var/log/rw/nagios.cmd";
+		$cmdline = '['.$timestamp.'] SCHEDULE_FORCED_HOST_SVC_CHECKS;'.$host["name"].';0;'.PHP_EOL;
+		
+		file_put_contents($CommandFile, $cmdline,FILE_APPEND);
+	}
+	create_dashboard();
 	$export_result = $engine->export();
 }
 if(!$export_result) {

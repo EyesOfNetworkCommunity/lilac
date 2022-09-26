@@ -168,7 +168,7 @@ class NagiosHostEscalationImporter extends NagiosImporter {
 		NagiosHostEscalationImporter::$templates[$name] = $segment;
 	}
 
-	private function __process($escalation) {
+	private function process($escalation) {
 		$job = $this->getEngine()->getJob();
 		$config = $this->getEngine()->getConfig();
 		$segment = $this->getSegment();
@@ -230,7 +230,7 @@ class NagiosHostEscalationImporter extends NagiosImporter {
 		return true;
 	}
 
-	private function __addContacts($escalation) {
+	private function addContacts($escalation) {
 		$job = $this->getEngine()->getJob();
 		$config = $this->getEngine()->getConfig();
 		$segment = $this->getSegment();
@@ -311,10 +311,10 @@ class NagiosHostEscalationImporter extends NagiosImporter {
 				if(!$host)
 					return false;
 				$escalation->setNagiosHost($host);
-				$ret = $this->__process($escalation);
+				$ret = $this->process($escalation);
 				if(!$ret)
 					return false;
-				$ret = $this->__addContacts($escalation);
+				$ret = $this->addContacts($escalation);
 				if(!$ret)
 					return false;
 				// Need to give it a temp name
@@ -334,10 +334,10 @@ class NagiosHostEscalationImporter extends NagiosImporter {
 				if(!$hostgroup)
 					return false;
 				$escalation->setNagiosHostgroup($hostgroup);
-				$ret = $this->__process($escalation);
+				$ret = $this->process($escalation);
 				if(!$ret)
 					return false;
-				$ret = $this->__addContacts($escalation);
+				$ret = $this->addContacts($escalation);
 				if(!$ret)
 					return false;
 				$escalation->save();

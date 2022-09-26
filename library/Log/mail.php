@@ -116,7 +116,7 @@ class Log_mail extends Log
      * @param int    $level     Log messages up to and including this level.
      * @access public
      */
-    function Log_mail($name, $ident = '', $conf = array(),
+    function __construct($name, $ident = '', $conf = array(),
                       $level = PEAR_LOG_DEBUG)
     {
         $this->_id = md5(microtime());
@@ -159,6 +159,8 @@ class Log_mail extends Log
         /* register the destructor */
         register_shutdown_function(array(&$this, '_Log_mail'));
     }
+
+    
 
     /**
      * Destructor. Calls close().

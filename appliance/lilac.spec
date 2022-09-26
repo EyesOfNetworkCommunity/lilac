@@ -1,14 +1,14 @@
 Summary: Web configuration tool for nagios
 Name: lilac
-Version: 3.1
-Release: 4.eon
+Version: 3.2
+Release: 0.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
 
-Source: https://github.com/EyesOfNetworkCommunity/%{name}/archive/master.tar.gz#/%{name}-%{version}.tar.gz
+Source: /data/eonsrc/SOURCES/%{version}-%{release}.tar.gz
 
-Requires: httpd, mariadb-server, php, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
+Requires: httpd, MariaDB-server, php >= 8.0, php-mysqlnd, php-pear, php-process, php-xml, nagios >= 3.0, nmap
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -29,20 +29,22 @@ Currently the focus is on the Lilac Configurator, a configuration tool written t
 * Auto-Discovery tool to quickly add your infrastructure into your Nagios installation
 
 %prep
-%setup -q -n %{name}-master
+%setup -q -n %{name}-%{version}-%{release}
 
 %install
 cd ..
 rm -rf %{buildroot}
 install -d -m0755 %{buildroot}%{datadir}
 install -d -m0755 %{buildroot}%{_sysconfdir}/httpd/conf.d
-cp -afpvr %{name}-master/* %{buildroot}%{datadir}
+cp -afpvr %{name}-%{version}-%{release}/* %{buildroot}%{datadir}
 install -d -m0755 %{buildroot}%{eonconfdir}
-cp -afpvr %{name}-master/appliance/* %{buildroot}%{eonconfdir}
-cp -afpv %{name}-master/appliance/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
+cp -afpvR %{name}-%{version}-%{release}/appliance/* %{buildroot}%{eonconfdir}
+cp -afpv %{name}-%{version}-%{release}/appliance/%{name}.conf  %{buildroot}%{_sysconfdir}/httpd/conf.d
 rm -rf %{buildroot}%{datadir}/appliance
 
 %post
+/usr/bin/mysql -u root --password=root66 lilac < %{eonconfdir}/updates/3.2.sql 2>/dev/null
+sed -i "s/result_backend = EyesOfNetwork/spool_dir = \/var\/spool\/nagios\/checkresults/g" /etc/thruk/thruk_local.conf 2>/dev/null
 
 %clean
 rm -rf %{buildroot}
@@ -55,6 +57,10 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Wed Sep 15 2021 Julien GONZALEZ <julien.gonzalez1498@gmail.com> - 3.2-0.eon
+- Update code compatibility for PHP 8
+- Add the creation of grafana dashboards with the API
+
 * Mon Mar 15 2021 Sebastien DAVOULT <d@vou.lt> - 3.1-4.eon
 - fix RCE & XSS [thanks to Ariane]
 

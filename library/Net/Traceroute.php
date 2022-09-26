@@ -119,7 +119,7 @@ class Net_Traceroute
     *
     * @access private
     */
-    function Net_Traceroute($traceroute_path, $sysname)
+    function __construct($traceroute_path, $sysname)
     {
         $this->_traceroute_path = $traceroute_path;
         $this->_sysname   = $sysname;
@@ -279,7 +279,7 @@ class Net_Traceroute
     * @param  mixed $error    a PEAR error or a string with the error message
     * @return bool            false
     * @access private
-    * @author Kai Schröder <k.schroeder@php.net>
+    * @author Kai SchrÃ¶der <k.schroeder@php.net>
     */
     function raiseError($error)
     {
@@ -369,7 +369,7 @@ class Net_Traceroute_Result
     *
     * @access private
     */
-    function Net_Traceroute_Result($result, $sysname)
+    function __construct($result, $sysname)
     {
         $this->_raw_data = $result;
         $this->_sysname  = $sysname;

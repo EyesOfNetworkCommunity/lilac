@@ -42,7 +42,7 @@ if(isset($_POST['request']) && $_POST['request'] == 'add_host') {
 		else {
 			// All is well for error checking, add the host into the db.
 			$tempHost = new NagiosHost();
-			$tempHost->setName($_POST['host_manage']['host_name']);
+			$tempHost->setName(preg_replace('/[^a-zA-Z0-9_ -]/s','', $_POST['host_manage']['host_name']));
 			$tempHost->setAlias($_POST['host_manage']['alias']);
 			if(isset($_GET['parent_id'])) {
 				// Get the host by that parent_id

@@ -146,7 +146,7 @@ class Join
 	 * @param string $rightTableAlias
 	 * @param string $operator The comparison operator of the join condition, default Join::EQUAL 
 	 */
-	public function addExplicitCondition($leftTableName, $leftColumnName, $leftTableAlias = null, $rightTableName, $rightColumnName, $rightTableAlias = null, $operator = self::EQUAL)
+	public function addExplicitCondition($leftTableName, $leftColumnName, $leftTableAlias = null, $rightTableName = null, $rightColumnName = null, $rightTableAlias = null, $operator = self::EQUAL)
 	{
 		$this->leftTableName   = $leftTableName;
 		$this->leftTableAlias  = $leftTableAlias;
@@ -515,7 +515,7 @@ class Join
 			for ($i=0; $i < $this->count; $i++) {
 				$conditions []= $this->getLeftColumn($i) . $this->getOperator($i) . $this->getRightColumn($i);
 			}
-			$joinCondition = sprintf('(%s)', implode($conditions, ' AND '));
+			$joinCondition = sprintf('(%s)', implode(' AND ', $conditions));
 		} else {
 			$joinCondition = '';
 			$this->getJoinCondition()->appendPsTo($joinCondition, $params);

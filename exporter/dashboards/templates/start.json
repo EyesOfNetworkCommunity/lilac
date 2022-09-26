@@ -1,0 +1,91 @@
+[{
+  "dashboard": {
+    "annotations": {
+      "enable": true,
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        },
+        {
+          "datasource": "nagflux",
+          "enable": false,
+          "iconColor": "#751975",
+          "iconSize": 13,
+          "lineColor": "#751975",
+          "name": "host_notification",
+          "query": "SELECT * FROM messages WHERE type = 'host_notification' AND host = '%hostname%' AND service = '%service%' AND $timeFilter",
+          "showLine": true,
+          "tagsColumn": "author",
+          "textColumn": "message",
+          "titleColumn": "type"
+        },
+        {
+          "datasource": "nagflux",
+          "enable": false,
+          "iconColor": "#198c19",
+          "iconSize": 13,
+          "lineColor": "#198c19",
+          "name": "service_notification",
+          "query": "SELECT * FROM messages WHERE type = 'service_notification' AND host = '%hostname%' AND service = '%service%' AND $timeFilter",
+          "showLine": true,
+          "tagsColumn": "author",
+          "textColumn": "message",
+          "titleColumn": "type"
+        },
+        {
+          "datasource": "nagflux",
+          "enable": false,
+          "iconColor": "#008080",
+          "iconSize": 13,
+          "lineColor": "#008080",
+          "name": "comment",
+          "query": "SELECT * FROM messages WHERE type = 'comment' AND host = '%hostname%' AND service = '%service%' AND $timeFilter",
+          "showLine": true,
+          "tagsColumn": "author",
+          "textColumn": "message",
+          "titleColumn": "type"
+        },
+        {
+          "datasource": "nagflux",
+          "enable": false,
+          "iconColor": "#ff64d0",
+          "iconSize": 13,
+          "lineColor": "#ff64d0",
+          "name": "acknowledgement",
+          "query": "SELECT * FROM messages WHERE type = 'acknowledgement' AND host = '%hostname%' AND service = '%service%' AND $timeFilter",
+          "showLine": true,
+          "tagsColumn": "author",
+          "textColumn": "message",
+          "titleColumn": "type"
+        },
+        {
+          "datasource": "nagflux",
+          "enable": false,
+          "iconColor": "#A218E8",
+          "iconSize": 13,
+          "lineColor": "#A218E8",
+          "name": "downtime",
+          "query": "SELECT * FROM messages WHERE type = 'downtime' AND host = '%hostname%' AND service = '%service%' AND $timeFilter",
+          "showLine": true,
+          "tagsColumn": "author",
+          "textColumn": "message",
+          "titleColumn": "type"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "panels": []
+  },
+  "folderUid": "dashboards-uid",
+  "overwrite": true
+}]
