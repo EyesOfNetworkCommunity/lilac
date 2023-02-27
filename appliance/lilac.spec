@@ -1,7 +1,7 @@
 Summary: Web configuration tool for nagios
 Name: lilac
 Version: 3.2
-Release: 0.eon
+Release: 1.eon
 License: GPL
 Group: Applications/System
 URL: http://www.lilacplatform.com/
@@ -26,7 +26,7 @@ Currently the focus is on the Lilac Configurator, a configuration tool written t
 * Host templates able to contain services, dependencies, escalations
 * Importer which can import existing Nagios configurations and import from a Fruity installation
 * Exporter with Nagios process control and backup existing configuration files
-* Auto-Discovery tool to quickly add your infrastructure into your Nagios installation
+* REMOVED : Auto-Discovery tool to quickly add your infrastructure into your Nagios installation
 
 %prep
 %setup -q -n %{name}-%{version}-%{release}
@@ -57,6 +57,8 @@ rm -rf %{buildroot}
 %{_sysconfdir}/httpd/conf.d/lilac.conf
 
 %changelog
+* Mon feb 27 2023 EyesOfnetwork <eyesofnetwork@eyesofnetwork.com> - 3.2-1.eon
+- Removed autodiscovery features
 * Wed Sep 15 2021 Julien GONZALEZ <julien.gonzalez1498@gmail.com> - 3.2-0.eon
 - Update code compatibility for PHP 8
 - Add the creation of grafana dashboards with the API
